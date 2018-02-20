@@ -1,11 +1,11 @@
 void showData(){
 
-	TFile* f = new TFile("/home/muzalevsky/expertroot/macro/muzalevsky/full.root");
+	TFile* f = new TFile("full.root");
 	TTree* t = (TTree*) f->Get("er");
 	TClonesArray* tracks = new TClonesArray("ERMCTrack",20);
 	t->SetBranchAddress("MCTrack", &tracks);
 
-	TFile *f1 = new TFile("/home/muzalevsky/expertroot/macro/muzalevsky/kin.root","RECREATE");
+	TFile *f1 = new TFile("kin.root","RECREATE");
 	TTree *tree = new TTree("tree","kin");
 
 	ERMCTrack *n1 = new ERMCTrack();
@@ -26,7 +26,7 @@ void showData(){
 
 
 	Int_t pdg,mID,tID,h3ID,h5ID;
-	Int_t nN,flag,nh3,nEvents;
+	Int_t nN,flag,nh3,nEvents,nh5,nhe3,nh2;
 	nEvents = 0;
 	for(Int_t i=0; i<t->GetEntries();i++){
 	// for(Int_t i=0; i<10;i++){
@@ -34,6 +34,9 @@ void showData(){
 		nN = 0; // number of neutrons
 		nh3 = 0;
 		flag = 0; // flag ( if 1 fill the tree, 0  - not)
+		nh5 = 0;
+		nhe3 = 0;
+		nh2=0;
 		t->GetEntry(i);
 
 		for (Int_t iTrack = 0; iTrack < tracks->GetEntriesFast(); iTrack++){
@@ -43,15 +46,12 @@ void showData(){
 	    	if(pdg == 1000010050) {
 	    		flag = 1; // if there is an H5 in steck this event is interesting
 	    		nEvents ++ ;
-	    		// track->Get4Momentum(*h5);
+	    		nh5++;
 	    		h5 = track;
 	    		h5ID = mID;
-	    		// cout << "found ";
 	    	}
-
-	    	// if( pdg == 1000010030 ) {h3ID = mID; nh3++;} // if i want to choose the right neutrons i need to know their motherID
 	    } 
-	    if(flag!=1) continue;
+	    if(flag!=1 && nh5!=1) continue;
 
 		for (Int_t iTrack = 0; iTrack < tracks->GetEntriesFast(); iTrack++){
 	    	ERMCTrack* track = (ERMCTrack*)tracks->At(iTrack);
@@ -60,7 +60,6 @@ void showData(){
 	    	if(pdg == 1000010030) { // if i want to choose the right neutrons i need to know their motherID
 	    		h3ID = mID; 
 	    		nh3++;
-	    		// track->Get4Momentum(*h3);
 	    		h3 = track;
 	    	} 
 	    } 
@@ -80,13 +79,15 @@ void showData(){
 	    	}
 	    	if((pdg == 1000020030) && (mID == h5ID)) he3 = track;
 
+	    	if(pdg == 1000010020) {
+	    		nh2++;
+	    		h2 = track;
+	    	}
+	    	
 	    	if(pdg == 1000020060) he6 = track;
-	    	if(pdg == 1000010020) h2 = track;
-	    	// if(pdg == 1000020060) track->Get4Momentum(*he6);
-	    	// cout << track->GetPdgCode() << endl;
+
 		}
-		if(nN!=2) {cout << nN << " wtf "<< i << endl;}
-		tree->Fill();
+		if((nN == 2) && (nh2 == 1)) tree->Fill();
 	} // t->GetEntries()
 
 	// cout << nEvents;
