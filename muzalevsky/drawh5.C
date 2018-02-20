@@ -70,7 +70,8 @@ void drawh5(){
 	TCut cHeLocus = "(h3->GetTheta())*TMath::RadToDeg() < 32 && (h3->GetEnergy() - h3->GetMass()) < 20";
 
 	TLorentzVector fn1,fn2,fh3,fh5,fhe3,fhe6,fh2,fn1CM,fn2CM,fh3CM,fh5CM,fhe3CM;
-
+	TLorentzVector temp,tempCM;
+	TVector3 bVect;
 //c1
 	// pad
 	TH1F *h5EX = new TH1F("h5EX","h5 spectrum",500,0,180);
@@ -97,13 +98,17 @@ void drawh5(){
 	TH2F *h5Theta2cut = new TH2F("h5Theta2cut","h5 theta vs CM cut",500,0,180,500,0,40);
 
 
-	for(Int_t i=0; i<tr->GetEntries();i++){
-	// for(Int_t i=0; i<10;i++){
+	// for(Int_t i=0; i<tr->GetEntries();i++){
+	for(Int_t i=0; i<10;i++){
 		tr->GetEntry(i);
 
 		fh5 = h5->GetVector();
 		fhe6 = he6->GetVector();
 		fh2 = h2->GetVector();
+		temp = h2->GetVector();
+		bVect = fh2.BoostVector();
+		temp.Boost(-bVect);
+		cout << temp.E() << " "<< h2->GetMass() << endl;
 
 		fn1CM = n1->GetVector();
 		fn2CM = n2->GetVector();

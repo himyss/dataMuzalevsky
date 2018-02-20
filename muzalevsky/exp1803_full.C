@@ -1,4 +1,4 @@
-void exp1803_full(Int_t nEvents = 100000) {
+void exp1803_full(Int_t nEvents = 100) {
   // --------------- Telescope T1 -------------------------------------------
   Double_t T1Dl = 0.5;         // [cm]      
   Double_t T1PosZ = 10.;       // [cm] 
@@ -61,7 +61,7 @@ void exp1803_full(Int_t nEvents = 100000) {
   cave->SetGeometryFileName("cave.geo");
   run->AddModule(cave);
    
-  Int_t verbose = 1;
+  Int_t verbose = 0;
   // -----  BeamDet Setup ---------------------------------------------------
   ERBeamDetSetup* setupBeamDet = ERBeamDetSetup::Instance();
   setupBeamDet->SetXmlParametersFile(paramFileBeamDet);
@@ -153,9 +153,10 @@ void exp1803_full(Int_t nEvents = 100000) {
   generator->SetPSigmaOverP(0);
   // Double32_t sigmaTheta = 0.004*TMath::RadToDeg();
   // generator->SetThetaSigma(0, sigmaTheta);
- generator->SetThetaRange(0., 0.);
+  generator->SetThetaRange(0., 0.);
   generator->SetPhiRange(0., 0.);
-  generator->SetBoxXYZ(5., 1., 0, 0, beamStartPosition);
+  generator->SetBoxXYZ(0., 0., 0., 0., beamStartPosition);
+  generator->SpreadingOnTarget();
 
   primGen->AddGenerator(generator);
   run->SetGenerator(primGen);
@@ -164,12 +165,14 @@ void exp1803_full(Int_t nEvents = 100000) {
   ERDecayEXP1803* targetDecay = new ERDecayEXP1803();
   targetDecay->SetTargetVolumeName("tubeH2");
   targetDecay->SetTargetThickness(targetH2Thickness);
+  Double_t massH5 = 4.8;  // [GeV]
   decayer->AddDecay(targetDecay);
   run->SetDecayer(decayer);
 
   // ------- Magnetic field -------------------------------------------------
   ERFieldMap* magField = new ERFieldMap("exp1803Field","A");
-  run->SetField(magField,"magnet");
+  magField->SetVolume("magnet");
+  run->SetField(magField);
     // ------- QTelescope Digitizer -------------------------------------------
   ERQTelescopeDigitizer* qtelescopeDigitizer = new ERQTelescopeDigitizer(verbose);
   qtelescopeDigitizer->SetSiElossThreshold(0);
