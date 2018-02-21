@@ -1,11 +1,11 @@
 void showData(){
 
-	TFile* f = new TFile("full.root");
+	TFile* f = new TFile("/store/ivan/EXP1803/Kinematics/sim_digi.root");
 	TTree* t = (TTree*) f->Get("er");
 	TClonesArray* tracks = new TClonesArray("ERMCTrack",20);
 	t->SetBranchAddress("MCTrack", &tracks);
 
-	TFile *f1 = new TFile("kin.root","RECREATE");
+	TFile *f1 = new TFile("/store/ivan/EXP1803/Kinematics/kin.root","RECREATE");
 	TTree *tree = new TTree("tree","kin");
 
 	ERMCTrack *n1 = new ERMCTrack();
@@ -14,7 +14,6 @@ void showData(){
 	ERMCTrack *h5 = new ERMCTrack();
 	ERMCTrack *he3 = new ERMCTrack();
 	ERMCTrack *he6 = new ERMCTrack();
-	ERMCTrack *h2 = new ERMCTrack();
 
 	tree->Bronch("n1.", "ERMCTrack", &n1);
 	tree->Bronch("n2.", "ERMCTrack", &n2);
@@ -22,22 +21,22 @@ void showData(){
 	tree->Bronch("h5.", "ERMCTrack", &h5);
 	tree->Bronch("he3.", "ERMCTrack", &he3);
 	tree->Bronch("he6.", "ERMCTrack", &he6);
-	tree->Bronch("h2.", "ERMCTrack", &h2);
-
 
 	Int_t pdg,mID,tID,h3ID,h5ID;
-	Int_t nN,flag,nh3,nEvents,nh5,nhe3,nh2;
+	Int_t nN,flag,nh3,nEvents,nh5,nhe3,nhe6,nout;
 	nEvents = 0;
-	for(Int_t i=0; i<t->GetEntries();i++){
-	// for(Int_t i=0; i<10;i++){
+	nout = 0;
+	// for(Int_t i=0; i<t->GetEntries();i++){
+	for(Int_t i=0; i<10000;i++){
 		// cout << " next event " << endl; 
 		nN = 0; // number of neutrons
 		nh3 = 0;
 		flag = 0; // flag ( if 1 fill the tree, 0  - not)
 		nh5 = 0;
 		nhe3 = 0;
-		nh2=0;
+		nhe6 = 0;
 		t->GetEntry(i);
+		if(i%1000 == 0) cout << i << " events done " << endl;
 
 		for (Int_t iTrack = 0; iTrack < tracks->GetEntriesFast(); iTrack++){
 	    	ERMCTrack* track = (ERMCTrack*)tracks->At(iTrack);
@@ -72,22 +71,20 @@ void showData(){
 
 	    	if((pdg == 2112) && (mID == h3ID)) {
 	    		nN++;
-	    		// if(nN == 1) track->Get4Momentum(*n1);
-	    		// if(nN == 2) track->Get4Momentum(*n2);
 	    		if(nN == 1) n1 = track;
 	    		if(nN == 2) n2 = track;
 	    	}
 	    	if((pdg == 1000020030) && (mID == h5ID)) he3 = track;
-
-	    	if(pdg == 1000010020) {
-	    		nh2++;
-	    		h2 = track;
-	    	}
 	    	
-	    	if(pdg == 1000020060) he6 = track;
+	    	if(pdg == 1000020060) {
+			he6 = track;
+			nhe6++;
+		}
 
 		}
-		if((nN == 2) && (nh2 == 1)) tree->Fill();
+		if((nN == 2) && (nhe6 == 1)) {
+			tree->Fill();
+		}
 	} // t->GetEntries()
 
 	// cout << nEvents;
@@ -95,38 +92,3 @@ void showData(){
 	f1->Close();
 	return;
 }
-	/*	t->GetEntry(1619);
-		for (Int_t iTrack = 0; iTrack < tracks->GetEntriesFast(); iTrack++){
-	    	ERMCTrack* track = (ERMCTrack*)tracks->At(iTrack);
-	    	pdg = track->GetPdgCode();
-	    	cout << pdg << endl;
-	    } 
-  		cout << endl << "next event " << endl;
-		t->GetEntry(2519);
-		for (Int_t iTrack = 0; iTrack < tracks->GetEntriesFast(); iTrack++){
-	    	ERMCTrack* track = (ERMCTrack*)tracks->At(iTrack);
-	    	pdg = track->GetPdgCode();
-	    	cout << pdg << endl;
-	    } 
-	    cout << endl << "next event " << endl;
-		t->GetEntry(3950);
-		for (Int_t iTrack = 0; iTrack < tracks->GetEntriesFast(); iTrack++){
-	    	ERMCTrack* track = (ERMCTrack*)tracks->At(iTrack);
-	    	pdg = track->GetPdgCode();
-	    	cout << pdg << endl;
-	    } 
-  		cout << endl << "next event " << endl;
-		t->GetEntry(5847);
-		for (Int_t iTrack = 0; iTrack < tracks->GetEntriesFast(); iTrack++){
-	    	ERMCTrack* track = (ERMCTrack*)tracks->At(iTrack);
-	    	pdg = track->GetPdgCode();
-	    	cout << pdg << endl;
-	    } 
-  		cout << endl << "next event " << endl;
-		t->GetEntry(6900);
-		for (Int_t iTrack = 0; iTrack < tracks->GetEntriesFast(); iTrack++){
-	    	ERMCTrack* track = (ERMCTrack*)tracks->At(iTrack);
-	    	pdg = track->GetPdgCode();
-	    	cout << pdg << endl;
-	    } 
-  		cout << endl << "next event " << endl;*/
