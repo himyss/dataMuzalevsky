@@ -1,11 +1,11 @@
 void showData(){
 
-	TFile* f = new TFile("/store/ivan/EXP1803/Kinematics/sim_digi.root");
+	TFile* f = new TFile("/store/ivan/EXP1803/Kinematics/sim_digi3.root");
 	TTree* t = (TTree*) f->Get("er");
 	TClonesArray* tracks = new TClonesArray("ERMCTrack",20);
 	t->SetBranchAddress("MCTrack", &tracks);
 
-	TFile *f1 = new TFile("/store/ivan/EXP1803/Kinematics/kin.root","RECREATE");
+	TFile *f1 = new TFile("/store/ivan/EXP1803/Kinematics/kin3.root","RECREATE");
 	TTree *tree = new TTree("tree","kin");
 
 	ERMCTrack *n1 = new ERMCTrack();
@@ -26,8 +26,8 @@ void showData(){
 	Int_t nN,flag,nh3,nEvents,nh5,nhe3,nhe6,nout;
 	nEvents = 0;
 	nout = 0;
-	// for(Int_t i=0; i<t->GetEntries();i++){
-	for(Int_t i=0; i<10000;i++){
+	for(Int_t i=0; i<t->GetEntries();i++){
+	//for(Int_t i=0; i<10000;i++){
 		// cout << " next event " << endl; 
 		nN = 0; // number of neutrons
 		nh3 = 0;

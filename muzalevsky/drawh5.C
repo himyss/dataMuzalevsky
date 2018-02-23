@@ -12,7 +12,7 @@ void drawh5(){
 	ERMCTrack *he3 = new ERMCTrack();
 	ERMCTrack *he6 = new ERMCTrack();
 
-	TFile *fr = new TFile("/store/ivan/EXP1803/Kinematics/kin.root", "READ");
+	TFile *fr = new TFile("/store/ivan/EXP1803/Kinematics/kin3.root", "READ");
 	TTree *tr = (TTree*)fr->Get("tree");
 
 	tr->SetBranchAddress("n1.",&n1);
@@ -22,55 +22,13 @@ void drawh5(){
 	tr->SetBranchAddress("he3.",&he3);
 	tr->SetBranchAddress("he6.",&he6);
 
-	// TH1F *n1E = new TH1F("n1E","n1 kinenergy",1000,0,100);
-	// TH1F *n2E = new TH1F("n2E","n2 kinenergy",1000,0,100);
-	// TH1F *h3E = new TH1F("h3E","h3 kinenergy",1000,0,100);
-	// TH1F *h5E = new TH1F("h5E","h5 kinenergy",1000,0,100);
-	// TH1F *he3E = new TH1F("he3E","he3 kinenergy",1000,0,100);
-	// TH1F *he6E = new TH1F("he6E","he6 kinenergy",1000,0,100);
-	// TH1F *h2E = new TH1F("h2E","h2 kinenergy",1000,0,100);
-
-	// TH1F *n1Thet = new TH1F("n1Thet","n1 theta lab",1000,0,100);
-	// TH1F *n2Thet = new TH1F("n2Thet","n2 theta lab",1000,0,100);
-	// TH1F *h3Thet = new TH1F("h3Thet","h3 theta lab",1000,0,100);
-	// TH1F *h5Thet = new TH1F("h5Thet","h5 theta lab",1000,0,100);
-	// TH1F *he3Thet = new TH1F("he3Thet","he3 theta lab",1000,0,100);
-	// TH1F *he6Thet = new TH1F("he6Thet","he6 theta lab",1000,0,100);
-	// TH1F *h2Thet = new TH1F("h2Thet","h2 theta lab",1000,0,100);
-
-	// TH1F *n1ThetСМ = new TH1F("n1ThetСМ","n1 theta CM",1000,0,100);
-	// TH1F *n2ThetСМ = new TH1F("n2ThetСМ","n2 theta CM",1000,0,100);
-	// TH1F *h3ThetСМ = new TH1F("h3ThetСМ","h3 theta CM",1000,0,100);
-	// TH1F *h5ThetСМ = new TH1F("h5ThetСМ","h5 theta CM",1000,0,100);
-	// TH1F *he3ThetСМ = new TH1F("he3ThetСМ","he3 theta CM",1000,0,100);
-
-	// TH1F *n1M= new TH1F("n1M","n1 mass",1000,0,100);
-	// TH1F *n2M = new TH1F("n2M","n2 mass",1000,0,100);
-	// TH1F *h3M = new TH1F("h3M","h3 mass",1000,0,100);
-	// TH1F *h5M = new TH1F("h5M","h5 mass",1000,0,100);
-	// TH1F *he3M = new TH1F("he3M","he3 mass",1000,0,100);
-	// TH1F *he6M = new TH1F("he6M","he6 mass",1000,0,100);
-	// TH1F *h2M = new TH1F("h2M","h2 mass",1000,0,100);
-
-	/*TLorentzVector *fn1 = new TLorentzVector();
-	TLorentzVector *fn2 = new TLorentzVector();
-	TLorentzVector *fh3 = new TLorentzVector();
-	TLorentzVector *fh5 = new TLorentzVector();
-	TLorentzVector *fhe3 = new TLorentzVector();
-	TLorentzVector *fhe6 = new TLorentzVector();
-	TLorentzVector *fh2 = new TLorentzVector();
-
-	TLorentzVector *fn1CM = new TLorentzVector();
-	TLorentzVector *fn2CM = new TLorentzVector();
-	TLorentzVector *fh3CM = new TLorentzVector();
-	TLorentzVector *fh5CM = new TLorentzVector();
-	TLorentzVector *fhe3CM = new TLorentzVector();*/
-	TCut cHeLocus = "(h3->GetTheta())*TMath::RadToDeg() < 32 && (h3->GetEnergy() - h3->GetMass()) < 20";
+	TCut cHeLocus = "(he3->GetTheta())*TMath::RadToDeg() < 32 && (he3->GetEnergy() - he3->GetMass())<0.02";
 	TCut cGS = "(1000*fh5it.Mag() - 2809.432 - 2*939.565)<2.6";
 
 	TLorentzVector fn1,fn2,fh3,fh5,fhe3,fhe6,fh2,fn1CM,fn2CM,fh3CM,fh5CM,fhe3CM,fh5it;
 	TLorentzVector temp,tempCM;
 	TVector3 bVect;
+	Double_t angle,angleCM;
 	fh2.SetXYZT(0,0,0,1.87612); 
 //c1
 	// pad
@@ -98,7 +56,7 @@ void drawh5(){
 	TH2F *h5Theta2cut = new TH2F("h5Theta2cut","h5 theta vs CM cut",500,0,180,500,0,40);
 
 //c3
-	TH1F *he3ThetaCMcut = new TH1F("he3t_thetCMcut","he3 t vs thetaCM cut",500,0,180);
+	TH1F *he3ThetaCMcut = new TH1F("he3t_thetCMcut","he3 t vs thetaCM cut",70,0,180);
 	TH1F *h3CMP = new TH1F("h3CMP","h3CMP",100,0,90);
 	TH1F *h3CMPcut = new TH1F("h3CMPcut","h3CMPcut",100,0,90);
 	TH1F *h3CMPcut1 = new TH1F("h3CMPcut1","h3CMPcut1",100,0,90);
@@ -111,10 +69,17 @@ void drawh5(){
 	TH1F *n2CMPcut = new TH1F("n2CMPcut","n2CMPcut",100,0,90);
 	TH1F *n2CMPcut1 = new TH1F("n2CMPcut1","n2CMPcut1",100,0,90);
 
+	TH1F *hn1 = new TH1F("hn1","theta between n1 and n2",50,0.,50.);
+	TH1F *hn1CM = new TH1F("hn1CM","thetaCM between n1 and n2",50,0.,180.);
+	TH1F *hn1cut = new TH1F("hn1cut","theta between n1 and n2 cut",50,0.,50.);
+	TH1F *hn1CMcut = new TH1F("hn1CMcut","thetaCM between n1 and n2 cut",50,0.,180.);
+
 	for(Int_t i=0; i<tr->GetEntries();i++){
 	//for(Int_t i=0; i<10;i++){
 		tr->GetEntry(i);
 
+		fn1 = n1->GetVector();
+		fn2 = n2->GetVector();
 		fh5 = h5->GetVector();
 		fhe6 = he6->GetVector();
 		temp = fh2;
@@ -156,11 +121,11 @@ void drawh5(){
 		he3t_thet->Fill(he3->GetTheta()*TMath::RadToDeg(),1000*(he3->GetEnergy() - he3->GetMass())/3.);
 		h5t_thet->Fill(fh5.Theta()*TMath::RadToDeg(),1000*(h5->GetEnergy() - h5->GetMass())/5.);
 
-		if((h3->GetTheta())*TMath::RadToDeg() < 32 && (h3->GetEnergy() - h3->GetMass()) < 20) {
+		if((he3->GetTheta())*TMath::RadToDeg() < 32 && (he3->GetEnergy() - he3->GetMass()) < 0.02) {
 			he3Theta2cut->Fill(fhe3CM.Theta()*TMath::RadToDeg(),he3->GetTheta()*TMath::RadToDeg());
 			h5Theta2cut->Fill(fh5CM.Theta()*TMath::RadToDeg(),h5->GetTheta()*TMath::RadToDeg());
 		}
-		if ((h3->GetTheta())*TMath::RadToDeg() < 32 && (h3->GetEnergy() - h3->GetMass()) < 20) {
+		if ((he3->GetTheta())*TMath::RadToDeg() < 32 && (he3->GetEnergy() - he3->GetMass()) < 0.02) {
 			he3ThetaCMcut->Fill(fhe3CM.Theta()*TMath::RadToDeg());
 		}
 
@@ -168,7 +133,7 @@ void drawh5(){
 		if((1000*fh5it.Mag() - 2809.432 - 2*939.565)<2.6) {
 			h3CMPcut->Fill(1000*fh3CM.P());
 		}
-		if((h3->GetTheta())*TMath::RadToDeg() < 32 && (h3->GetEnergy() - h3->GetMass()) < 20) {
+		if((he3->GetTheta())*TMath::RadToDeg() < 32 && (he3->GetEnergy() - he3->GetMass()) < 0.02) {
 			h3CMPcut1->Fill(1000*fh3CM.P());
 		}
 
@@ -176,7 +141,7 @@ void drawh5(){
 		if((1000*fh5it.Mag() - 2809.432 - 2*939.565)<2.6) {
 			n1CMPcut->Fill(1000*fn1CM.P());
 		}
-		if((h3->GetTheta())*TMath::RadToDeg() < 32 && (h3->GetEnergy() - h3->GetMass()) < 20) {
+		if((he3->GetTheta())*TMath::RadToDeg() < 32 && (he3->GetEnergy() - he3->GetMass()) < 0.02) {
 			n1CMPcut1->Fill(1000*fn1CM.P());
 		}
 
@@ -185,9 +150,19 @@ void drawh5(){
 		if((1000*fh5it.Mag() - 2809.432 - 2*939.565)<2.6) {
 			n2CMPcut->Fill(1000*fn2CM.P());
 		}
-		if((h3->GetTheta())*TMath::RadToDeg() < 32 && (h3->GetEnergy() - h3->GetMass()) < 20) {
+		if((he3->GetTheta())*TMath::RadToDeg() < 32 && (he3->GetEnergy() - he3->GetMass()) < 0.02) {
 			n2CMPcut1->Fill(1000*fn2CM.P());
 		}
+
+		angle = fn1.Angle(fn2.Vect())*TMath::RadToDeg();  // get angle between v1 and v2
+		angleCM = fn1CM.Angle(fn2CM.Vect())*TMath::RadToDeg();
+		hn1->Fill(angle);
+		hn1CM->Fill(angleCM);
+		if((he3->GetTheta())*TMath::RadToDeg() < 32 && (he3->GetEnergy() - he3->GetMass()) < 0.02) {
+			hn1cut->Fill(angle);
+			hn1CMcut->Fill(angleCM);
+		}
+
 	}
 	
 
@@ -197,7 +172,7 @@ void drawh5(){
 
 	TH1F *htemp;
 
-/*	TCanvas *cInt = new TCanvas("cInt", "Standard LISE++ output", ww, wh);
+	TCanvas *cInt = new TCanvas("cInt", "Standard LISE++ output", ww, wh);
 	cInt->Divide(3,2);
 
 	cInt->cd(1);
@@ -297,7 +272,7 @@ void drawh5(){
 	he3Theta2->SetTitle("binary reaction: no cut");
 
 	he3Theta2cut->SetMarkerColor(kGreen);
-	he3Theta2cut->Draw();
+	he3Theta2cut->Draw("same");
 	h5Theta2cut->SetMarkerColor(kGreen);
 	h5Theta2cut->Draw("same");
 
@@ -331,9 +306,8 @@ void drawh5(){
 	htemp->SetTitle("binary reaction: cut");
 
 	tr->SetMarkerColor(kGreen);
-	tr->Draw("1000*(he3->GetEnergy() - he3->GetMass())/3.:he3->GetTheta()*TMath::RadToDeg()", cHeLocus,"");
+	tr->Draw("1000*(he3->GetEnergy() - he3->GetMass())/3.:he3->GetTheta()*TMath::RadToDeg()", cHeLocus,"same");
 	tr->Draw("1000*(h5->GetEnergy() - h5->GetMass())/5.:h5->GetTheta()*TMath::RadToDeg()", cHeLocus, "same");
-
 
 	c1->cd(5);
 	tr->SetMarkerColor(kBlack);
@@ -357,7 +331,6 @@ void drawh5(){
 	htemp->GetXaxis()->SetTitle("\\Theta_{lab} (deg)");
 	htemp->SetTitle("triton: green cut");
 
-*/
 	TCanvas *c2 =  new TCanvas("c2", "CMS of 5H", ww, wh);
 	c2->Divide(4,2);
 
@@ -384,6 +357,7 @@ void drawh5(){
 
 	c2->cd(2);
 
+	h3CMP->SetLineColor(kBlack);
 	h3CMP->Draw();
 	h3CMPcut->SetLineColor(kRed);
 	h3CMPcut->Draw("same");
@@ -394,6 +368,7 @@ void drawh5(){
 
 	c2->cd(3);
 
+	n1CMP->SetLineColor(kBlack);
 	n1CMP->Draw();
 	n1CMPcut->SetLineColor(kRed);
 	n1CMPcut->Draw("same");
@@ -401,6 +376,7 @@ void drawh5(){
 	n1CMP->SetTitle("CMS of 5H: no cut");
 
 	c2->cd(4);
+	n2CMP->SetLineColor(kBlack);
 	n2CMP->Draw();
 	n2CMPcut->SetLineColor(kRed);
 	n2CMPcut->Draw("same");
@@ -427,13 +403,13 @@ void drawh5(){
 	htemp->SetTitle("kinematics: green cut");*/
 
 	c2->cd(6);
-	h3CMPcut->SetLineColor(kGreen);
+	h3CMPcut1->SetLineColor(kGreen);
 	h3CMPcut1->Draw();
 	h3CMPcut1->GetXaxis()->SetTitle("p_{5H CM}(^{3}H) (MeV/c)");
 	h3CMPcut1->SetTitle("CMS of 5H: green cut");
 
 	c2->cd(7);
-	n1CMPcut->SetLineColor(kGreen);
+	n1CMPcut1->SetLineColor(kGreen);
 	n1CMPcut1->Draw();
 	n1CMPcut1->GetXaxis()->SetTitle("p_{5H CM}(n_{1}) (MeV/c)");
 	n1CMPcut1->SetTitle("CMS of 5H: green cut");
@@ -441,17 +417,27 @@ void drawh5(){
 
 
 	c2->cd(8);
-	n2CMPcut->SetLineColor(kGreen);
+	n2CMPcut1->SetLineColor(kGreen);
 	n2CMPcut1->Draw();
 	n2CMPcut1->GetXaxis()->SetTitle("p_{5H CM}(n_{1}) (MeV/c)");
 	n2CMPcut1->SetTitle("CMS of 5H: green cut");
 
+	c2->cd(4);
+	hn1->Draw();
+	hn1cut->SetLineColor(8);
+	hn1cut->Draw("same");
+	c2->cd(8);
+	hn1CM->Draw();
+	hn1CMcut->SetLineColor(8);
+	hn1CMcut->Draw("same");
 
-	/*cInt->Print("output.pdf");
+
+	cInt->Print("output.pdf");
 	cInt->Print("output.pdf[");
 	cInt->Print("output.pdf");
 	c1->Print("output.pdf");
-	c1->Print("output.pdf]");*/
+	c2->Print("output.pdf");
+	c2->Print("output.pdf]");
 
 
 }

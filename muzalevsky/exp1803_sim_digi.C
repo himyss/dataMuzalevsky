@@ -1,4 +1,4 @@
-void exp1803_sim_digi(Int_t nEvents = 10000) {
+void exp1803_sim_digi(Int_t nEvents = 6000) {
   // --------------- Telescope T1 -------------------------------------------
   Double_t T1Dl = 0.5;         // [cm]      
   Double_t T1PosZ = 10.;       // [cm] 
@@ -17,10 +17,10 @@ void exp1803_sim_digi(Int_t nEvents = 10000) {
   // --------------- Beam start position ------------------------------------
   Double_t beamStartPosition = -45;  // [cm]
   // --------------- Target -------------------------------------------------
-  Double_t targetH2Thickness = 0.4;  // [cm] this parameter should coincide with target H2 thickness in /macro/geo/create_GadastEXP1803_geo.C
+  Double_t targetH2Thickness = 0.8;  // [cm] this parameter should coincide with target H2 thickness in /macro/geo/create_GadastEXP1803_geo.C
   //---------------------Files-----------------------------------------------
-  TString outFile= "/store/ivan/EXP1803/Kinematics/sim_digi.root";
-  TString parFile= "/store/ivan/EXP1803/Kinematics/par.root";
+  TString outFile= "/store/ivan/EXP1803/Kinematics/sim_digi3.root";
+  TString parFile= "/store/ivan/EXP1803/Kinematics/par3.root";
   TString workDirPath = gSystem->Getenv("VMCWORKDIR");
   TString paramFileQTelescope = workDirPath
                          + "/db/QTelescope/QTelescopeParts.xml";
@@ -153,7 +153,7 @@ void exp1803_sim_digi(Int_t nEvents = 10000) {
  // generator->SetThetaRange(0., 5.);
  // generator->SetPhiRange(0, 360);
   generator->SetBoxXYZ(0, 0, 0, 0, beamStartPosition);
-  generator->SpreadingOnTarget();
+  generator->SpreadingOnTarget(); 
 
   primGen->AddGenerator(generator);
   run->SetGenerator(primGen);
@@ -163,7 +163,7 @@ void exp1803_sim_digi(Int_t nEvents = 10000) {
   ERDecayer* decayer = new ERDecayer();
   ERDecayEXP1803* targetDecay = new ERDecayEXP1803();
   targetDecay->SetTargetVolumeName("tubeH2");
-  targetDecay->SetTargetThickness(targetH2Thickness);
+ // targetDecay->SetTargetThickness(targetH2Thickness);
   // targetDecay->SetH5Mass(massH5);
   decayer->AddDecay(targetDecay);
   run->SetDecayer(decayer);
@@ -192,6 +192,17 @@ void exp1803_sim_digi(Int_t nEvents = 10000) {
   // beamDetDigitizer->SetToFElossSigmaOverEloss(0);
   // beamDetDigitizer->SetToFTimeSigma(1e-10);
   run->AddTask(beamDetDigitizer);
+
+  ERBeamDetTrackFinder* trackFinder = new ERBeamDetTrackFinder(verbose);
+  run->AddTask(trackFinder);
+  // -----------------------BeamDetTrackPID----------------------------------
+  ERBeamDetPID* pid = new ERBeamDetPID(verbose);
+  pid->SetIonMassNumber(A);
+  pid->SetBoxPID(0., 1000., 0., 1000.);
+  pid->SetOffsetToF(0.);
+  pid->SetProbabilityThreshold(0);
+
+  run->AddTask(pid);  
   //-------Set visualisation flag to true------------------------------------
   run->SetStoreTraj(kTRUE);
   //-------Set LOG verbosity  ----------------------------------------------- 

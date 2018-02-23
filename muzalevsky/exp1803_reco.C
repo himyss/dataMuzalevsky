@@ -1,9 +1,9 @@
-void exp1803_reco(Int_t nEvents = 10000) {
+void exp1803_reco(Int_t nEvents = 100) {
   //---------------------Files-----------------------------------------------
-  TString inFile = "/store/ivan/EXP1803/Kinematics/sim_digi.root";
-  TString outFile = "/store/ivan/EXP1803/Kinematics/reco.root";
-  TString parFile = "/store/ivan/EXP1803/Kinematics/par.root";
-  TString parOutFile = "/store/ivan/EXP1803/Kinematics/parOut.root";
+  TString inFile = "sim_digi.root";
+  TString outFile = "reco.root";
+  TString parFile = "par.root";
+  TString parOutFile = "parOut.root";
   // -----   Timer   --------------------------------------------------------
   TStopwatch timer;
   timer.Start();  
