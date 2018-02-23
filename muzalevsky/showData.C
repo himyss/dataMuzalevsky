@@ -5,7 +5,7 @@ void showData(){
 	TClonesArray* tracks = new TClonesArray("ERMCTrack",20);
 	t->SetBranchAddress("MCTrack", &tracks);
 
-	TFile *f1 = new TFile("/store/ivan/EXP1803/Kinematics/kin3.root","RECREATE");
+	TFile *f1 = new TFile("/store/ivan/EXP1803/Kinematics/kin01.root","RECREATE");
 	TTree *tree = new TTree("tree","kin");
 
 	ERMCTrack *n1 = new ERMCTrack();

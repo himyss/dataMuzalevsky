@@ -12,7 +12,7 @@ void drawh5(){
 	ERMCTrack *he3 = new ERMCTrack();
 	ERMCTrack *he6 = new ERMCTrack();
 
-	TFile *fr = new TFile("/store/ivan/EXP1803/Kinematics/kin3.root", "READ");
+	TFile *fr = new TFile("/store/ivan/EXP1803/Kinematics/kin01.root", "READ");
 	TTree *tr = (TTree*)fr->Get("tree");
 
 	tr->SetBranchAddress("n1.",&n1);

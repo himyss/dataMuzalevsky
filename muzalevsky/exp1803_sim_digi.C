@@ -1,4 +1,4 @@
-void exp1803_sim_digi(Int_t nEvents = 6000) {
+void exp1803_sim_digi(Int_t nEvents = 10) {
   // --------------- Telescope T1 -------------------------------------------
   Double_t T1Dl = 0.5;         // [cm]      
   Double_t T1PosZ = 10.;       // [cm] 
@@ -17,10 +17,10 @@ void exp1803_sim_digi(Int_t nEvents = 6000) {
   // --------------- Beam start position ------------------------------------
   Double_t beamStartPosition = -45;  // [cm]
   // --------------- Target -------------------------------------------------
-  Double_t targetH2Thickness = 0.8;  // [cm] this parameter should coincide with target H2 thickness in /macro/geo/create_GadastEXP1803_geo.C
+  Double_t targetH2Thickness = 0.1;  // [cm] this parameter should coincide with target H2 thickness in /macro/geo/create_GadastEXP1803_geo.C
   //---------------------Files-----------------------------------------------
-  TString outFile= "/store/ivan/EXP1803/Kinematics/sim_digi3.root";
-  TString parFile= "/store/ivan/EXP1803/Kinematics/par3.root";
+  TString outFile= "/store/ivan/EXP1803/Kinematics/sim_digi.root";
+  TString parFile= "/store/ivan/EXP1803/Kinematics/par.root";
   TString workDirPath = gSystem->Getenv("VMCWORKDIR");
   TString paramFileQTelescope = workDirPath
                          + "/db/QTelescope/QTelescopeParts.xml";
