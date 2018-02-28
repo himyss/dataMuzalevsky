@@ -1,4 +1,4 @@
-void exp1803_sim_digi(Int_t nEvents = 10) {
+void exp1803_sim_digi(Int_t nEvents = 100) {
   // --------------- Telescope T1 -------------------------------------------
   Double_t T1Dl = 0.5;         // [cm]      
   Double_t T1PosZ = 10.;       // [cm] 
@@ -15,12 +15,12 @@ void exp1803_sim_digi(Int_t nEvents = 10) {
   Double_t BeamDetLMWPC = 32.;     // [cm]
   Double_t BeamDetPosZMWPC = -8;  // [cm]  
   // --------------- Beam start position ------------------------------------
-  Double_t beamStartPosition = -45;  // [cm]
+  Double_t beamStartPosition = 0.3;  // [cm]
   // --------------- Target -------------------------------------------------
-  Double_t targetH2Thickness = 0.1;  // [cm] this parameter should coincide with target H2 thickness in /macro/geo/create_GadastEXP1803_geo.C
+  Double_t targetH2Thickness = 0.4;  // [cm] this parameter should coincide with target H2 thickness in /macro/geo/create_GadastEXP1803_geo.C
   //---------------------Files-----------------------------------------------
-  TString outFile= "/store/ivan/EXP1803/Kinematics/sim_digi.root";
-  TString parFile= "/store/ivan/EXP1803/Kinematics/par.root";
+  TString outFile= "/store/ivan/EXP1803/Telescope1/sim.root";
+  TString parFile= "/store/ivan/EXP1803/Telescope1/par.root";
   TString workDirPath = gSystem->Getenv("VMCWORKDIR");
   TString paramFileQTelescope = workDirPath
                          + "/db/QTelescope/QTelescopeParts.xml";
@@ -150,10 +150,11 @@ void exp1803_sim_digi(Int_t nEvents = 10) {
   generator->SetPSigmaOverP(0);
   Double32_t sigmaTheta = 0.004*TMath::RadToDeg();
   generator->SetThetaSigma(0, 0);
+  generator->SetKinERange(0., 180.);
  // generator->SetThetaRange(0., 5.);
  // generator->SetPhiRange(0, 360);
-  generator->SetBoxXYZ(0, 0, 0, 0, beamStartPosition);
-  generator->SpreadingOnTarget(); 
+  generator->SetBoxXYZ(5., 5., 0, 0, beamStartPosition);
+  //generator->SpreadingOnTarget(); 
 
   primGen->AddGenerator(generator);
   run->SetGenerator(primGen);
@@ -163,7 +164,7 @@ void exp1803_sim_digi(Int_t nEvents = 10) {
   ERDecayer* decayer = new ERDecayer();
   ERDecayEXP1803* targetDecay = new ERDecayEXP1803();
   targetDecay->SetTargetVolumeName("tubeH2");
- // targetDecay->SetTargetThickness(targetH2Thickness);
+  targetDecay->SetTargetThickness(targetH2Thickness);
   // targetDecay->SetH5Mass(massH5);
   decayer->AddDecay(targetDecay);
   run->SetDecayer(decayer);

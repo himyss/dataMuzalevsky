@@ -1,6 +1,6 @@
 void drawbeam(){
 
-	TFile *fr = new TFile("kin.root", "READ");
+	TFile *fr = new TFile("/store/ivan/EXP1803/Kinematics/kin45.root", "READ");
 	TTree *tr = (TTree*)fr->Get("tree");
 
 	ERMCTrack *he6 = new ERMCTrack();
