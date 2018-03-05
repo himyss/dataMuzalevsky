@@ -4,11 +4,11 @@ void eventDisplay()
 
   FairRuntimeDb* rtdb = fRun->GetRuntimeDb();
   FairParRootFileIo*  parIo1 = new FairParRootFileIo();
-  parIo1->open("/store/ivan/EXP1803/Telescope1/par.root");
+  parIo1->open("par.root");
   rtdb->setFirstInput(parIo1);
   //rtdb->print();
 
-  fRun->SetInputFile("/store/ivan/EXP1803/Telescope1/sim.root");
+  fRun->SetInputFile("sim.root");
   fRun->SetOutputFile("EventDisplay.root");
 
   FairEventManager *fMan= new FairEventManager();

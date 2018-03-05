@@ -1,9 +1,14 @@
-void QTelescope_digi(Int_t nEvents = 5000){
+void QTelescope_digi(Int_t nEvents = 3000){
   //---------------------Files-----------------------------------------------
-  TString inFile = "/store/ivan/EXP1803/Telescope1/sim.root";
-  TString outFile = "/store/ivan/EXP1803/Telescope1/digiQTele.root";
-  TString parFile = "/store/ivan/EXP1803/Telescope1/par.root";
-  TString parOutFile = "/store/ivan/EXP1803/Telescope1/parOut.root";
+  TString inFile = "/store/ivan/EXP1803/Telescope1/simtest.root";
+  TString outFile = "/store/ivan/EXP1803/Telescope1/digiQTeletest.root";
+  TString parFile = "/store/ivan/EXP1803/Telescope1/partest.root";
+  TString parOutFile = "/store/ivan/EXP1803/Telescope1/parOuttest.root";
+
+  /*TString inFile = "sim.root";
+  TString outFile = "digiQTele.root";
+  TString parFile = "par.root";
+  TString parOutFile = "parOut.root";*/
   // ------------------------------------------------------------------------
   // -----   Timer   --------------------------------------------------------
   TStopwatch timer;

@@ -1,7 +1,7 @@
-void exp1803_sim_digi(Int_t nEvents = 100) {
+void exp1803_sim_digi(Int_t nEvents = 10000) {
   // --------------- Telescope T1 -------------------------------------------
-  Double_t T1Dl = 0.5;         // [cm]      
-  Double_t T1PosZ = 10.;       // [cm] 
+  Double_t T1Dl = 1.;         // [cm]      
+  Double_t T1PosZ = 17.7402;       // [cm] 
   Double_t T1D1Thick = 0.002;  // [cm]  
   Double_t T1D2Thick = 0.1;    // [cm] 
   Double_t T1Side = 6.2;       // [cm]  this parameter should coincide with SD1 side length from /db/QTelescope/QTelescopeParts.xml
@@ -15,12 +15,12 @@ void exp1803_sim_digi(Int_t nEvents = 100) {
   Double_t BeamDetLMWPC = 32.;     // [cm]
   Double_t BeamDetPosZMWPC = -8;  // [cm]  
   // --------------- Beam start position ------------------------------------
-  Double_t beamStartPosition = 0.3;  // [cm]
+  Double_t beamStartPosition = 5.;  // [cm]
   // --------------- Target -------------------------------------------------
-  Double_t targetH2Thickness = 0.4;  // [cm] this parameter should coincide with target H2 thickness in /macro/geo/create_GadastEXP1803_geo.C
+  Double_t targetH2Thickness = 0.4;  // [cm] this parameter should coincide with target H2 thickness in /macro/geo/create_target_h2_geo.C
   //---------------------Files-----------------------------------------------
-  TString outFile= "/store/ivan/EXP1803/Telescope1/sim.root";
-  TString parFile= "/store/ivan/EXP1803/Telescope1/par.root";
+  TString outFile= "/store/ivan/EXP1803/Telescope1/simAngle.root";
+  TString parFile= "/store/ivan/EXP1803/Telescope1/parAngle.root";
   TString workDirPath = gSystem->Getenv("VMCWORKDIR");
   TString paramFileQTelescope = workDirPath
                          + "/db/QTelescope/QTelescopeParts.xml";
@@ -93,41 +93,45 @@ void exp1803_sim_digi(Int_t nEvents = 100) {
   // -----  QTelescope Setup ------------------------------------------------
   ERQTelescopeSetup* setupQTelescope = ERQTelescopeSetup::Instance();
   setupQTelescope->SetXmlParametersFile(paramFileQTelescope);
-
   // ----- T1 parameters ----------------------------------------------------
+  TVector3 T1Rotation(0., 27.5, 0);
+  TVector3 T2Rotation(0., -27.5, 0);
+  Double_t xPos, yPos, zPos;
+  TVector3* T1Translation;
   // ----- T1.1--------------------------------------------------------------
-  setupQTelescope->AddSi("DoubleSi_SD1", TVector3( T1Side/2 + T1Aperture/2, 
-                                                   T1Side/2 - T1Aperture/2,  
-                                                   T1PosZ + T1D1Thick/2), "X");
-  setupQTelescope->AddSi("DoubleSi_SD2", TVector3( T1Side/2 + T1Aperture/2, 
-                                                   T1Side/2 - T1Aperture/2,  
-                                                   T1PosZ + T1D1Thick +T1Dl + T1D2Thick/2), "X");
-  // ----- T1.2--------------------------------------------------------------
+  setupQTelescope->AddSi("DoubleSi_SD1", TVector3(9.23497, 0., 17.7402), T1Rotation,"X");
+  setupQTelescope->AddSi("DoubleSi_SD2", TVector3(9.69672, 0., 18.6272), T1Rotation, "X");
+
+  setupQTelescope->AddSi("DoubleSi_SD1", TVector3(-9.23497, 0., 17.7402), T2Rotation,"X");
+  setupQTelescope->AddSi("DoubleSi_SD2", TVector3(-9.69672, 0., 18.6272), T2Rotation, "X");
+
+  /*// ----- T1.2--------------------------------------------------------------
   setupQTelescope->AddSi("DoubleSi_SD1", TVector3( T1Side/2 - T1Aperture/2, 
                                                   -T1Side/2 - T1Aperture/2,  
-                                                   T1PosZ + T1D1Thick/2), "X");
+                                                   T1PosZ + T1D1Thick/2), T1Rotation, "X");
   setupQTelescope->AddSi("DoubleSi_SD2", TVector3( T1Side/2 - T1Aperture/2, 
                                                   -T1Side/2 - T1Aperture/2,  
-                                                   T1PosZ + T1D1Thick +T1Dl + T1D2Thick/2), "X");
+                                                   T1PosZ   + T1D1Thick +T1Dl + T1D2Thick/2), T1Rotation, "X");
   // ----- T1.3 -------------------------------------------------------------
   setupQTelescope->AddSi("DoubleSi_SD1", TVector3(-T1Side/2 - T1Aperture/2, 
                                                   -T1Side/2 + T1Aperture/2,  
-                                                   T1PosZ + T1D1Thick/2), "X");
+                                                   T1PosZ   + T1D1Thick/2), T1Rotation, "X");
   setupQTelescope->AddSi("DoubleSi_SD2", TVector3(-T1Side/2 - T1Aperture/2, 
                                                   -T1Side/2 + T1Aperture/2,  
-                                                   T1PosZ + T1D1Thick +T1Dl + T1D2Thick/2), "X");
+                                                   T1PosZ + T1D1Thick +T1Dl + T1D2Thick/2), T1Rotation, "X");
   // ----- T1.4--------------------------------------------------------------
   setupQTelescope->AddSi("DoubleSi_SD1", TVector3(-T1Side/2 + T1Aperture/2, 
                                                    T1Side/2 + T1Aperture/2,  
-                                                   T1PosZ + T1D1Thick/2), "X");
+                                                   T1PosZ + T1D1Thick/2), T1Rotation, "X");
   setupQTelescope->AddSi("DoubleSi_SD2", TVector3(-T1Side/2 + T1Aperture/2, 
                                                    T1Side/2 + T1Aperture/2,  
-                                                   T1PosZ + T1D1Thick +T1Dl + T1D2Thick/2), "X");
+                                                   T1PosZ + T1D1Thick +T1Dl + T1D2Thick/2), T1Rotation, "X");*/
 
   // ----- D1 parameters ----------------------------------------------------
+ /* TVector3* D1Rotation = new TVector3(0., 5., 0);
   setupQTelescope->AddSi("DoubleSi_D1", TVector3( 0, 
                                                   0,  
-                                                  D1PosZ + D1Thick/2), "X");
+                                                  D1PosZ + D1Thick/2), *D1Rotation, "X");*/
 
   // ------QTelescope -------------------------------------------------------
   ERQTelescope* qtelescope= new ERQTelescope("ERQTelescope", kTRUE,verbose);
@@ -146,15 +150,21 @@ void exp1803_sim_digi(Int_t nEvents = 100) {
   TString ionName = "6He";
   ERIonMixGenerator* generator = new ERIonMixGenerator(ionName, Z, A, Q, 1);
   Double32_t kin_energy = kinE_MevPerNucleon * 1e-3 * A; //GeV
-  generator->SetKinE(kin_energy);
-  generator->SetPSigmaOverP(0);
+  //generator->SetKinE(kin_energy);
+  generator->SetKinERange(0.006, kin_energy);
+  //generator->SetPSigmaOverP(0);
   Double32_t sigmaTheta = 0.004*TMath::RadToDeg();
   generator->SetThetaSigma(0, 0);
-  generator->SetKinERange(0., 180.);
+
+  generator->AddBackgroundIon("Triton", 1, 3, 1, 0.2 / 0.20);
+  generator->AddBackgroundIon("Alpha", 1, 4, 1, 0.4 / 0.60);
+  generator->AddBackgroundIon("HE3", 2, 3, 2, 0.4 / 0.20);
+
+
  // generator->SetThetaRange(0., 5.);
  // generator->SetPhiRange(0, 360);
-  generator->SetBoxXYZ(5., 5., 0, 0, beamStartPosition);
-  //generator->SpreadingOnTarget(); 
+  generator->SetBoxXYZ(9.,0., 9., 0, beamStartPosition);
+  generator->SpreadingOnTarget(); 
 
   primGen->AddGenerator(generator);
   run->SetGenerator(primGen);
@@ -193,7 +203,7 @@ void exp1803_sim_digi(Int_t nEvents = 100) {
   // beamDetDigitizer->SetToFElossSigmaOverEloss(0);
   // beamDetDigitizer->SetToFTimeSigma(1e-10);
   run->AddTask(beamDetDigitizer);
-
+  // ------- BeamDet TrackFinder -------------------------------------------
   ERBeamDetTrackFinder* trackFinder = new ERBeamDetTrackFinder(verbose);
   run->AddTask(trackFinder);
   // -----------------------BeamDetTrackPID----------------------------------
@@ -202,8 +212,17 @@ void exp1803_sim_digi(Int_t nEvents = 100) {
   pid->SetBoxPID(0., 1000., 0., 1000.);
   pid->SetOffsetToF(0.);
   pid->SetProbabilityThreshold(0);
-
   run->AddTask(pid);  
+  // ------- QTelescope TrackFinder -------------------------------------------
+  ERQTelescopeTrackFinder* qtelescopeTrackFinder = new ERQTelescopeTrackFinder(verbose);
+  qtelescopeTrackFinder->SetHitStation("DoubleSi_SD2_XY_1");
+  qtelescopeTrackFinder->SetHitStation("DoubleSi_SD2_XY_3");
+  qtelescopeTrackFinder->SetStripEdepRange(0., 100.);          // [GeV]
+  qtelescopeTrackFinder->SetTargetPoint(0., 0., 0.);
+  // qtelescopeTrackFinder->SetStripEdepRange(0.0097, 100.);   // [GeV]
+  // qtelescopeTrackFinder->SetEdepDiffXY(5.);                 // [GeV]
+  qtelescopeTrackFinder->SetEdepMaxDiffXY(0.5); 
+  run->AddTask(qtelescopeTrackFinder); 
   //-------Set visualisation flag to true------------------------------------
   run->SetStoreTraj(kTRUE);
   //-------Set LOG verbosity  ----------------------------------------------- 
