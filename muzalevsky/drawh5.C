@@ -12,7 +12,7 @@ void drawh5(){
 	ERMCTrack *he3 = new ERMCTrack();
 	ERMCTrack *he6 = new ERMCTrack();
 
-	TFile *fr = new TFile("kin.root", "READ");
+	TFile *fr = new TFile("/store/ivan/EXP1803/temp/kin.root", "READ");
 	TTree *tr = (TTree*)fr->Get("tree");
 
 	tr->SetBranchAddress("n1.",&n1);
@@ -22,7 +22,9 @@ void drawh5(){
 	tr->SetBranchAddress("he3.",&he3);
 	tr->SetBranchAddress("he6.",&he6);
 
-	TCut cHeLocus = "(he3->GetTheta())*TMath::RadToDeg() < 32 && (he3->GetEnergy() - he3->GetMass())<0.02";
+
+	//TCut cVol = "(he3->GetThetaCM())*TMath::RadToDeg() > 16 && (he3->GetThetaCM())*TMath::RadToDeg() <39";
+	//TCut cVol = "(he3->GetTheta())*TMath::RadToDeg() < 32 && (he3->GetEnergy() - he3->GetMass())<0.02";
 	TCut cGS = "(1000*fh5it.Mag() - 2809.432 - 2*939.565)<2.6";
 
 	TLorentzVector fn1,fn2,fh3,fh5,fhe3,fhe6,fh2,fn1CM,fn2CM,fh3CM,fh5CM,fhe3CM,fh5it;
@@ -74,6 +76,14 @@ void drawh5(){
 	TH1F *hn1cut = new TH1F("hn1cut","theta between n1 and n2 cut",50,0.,50.);
 	TH1F *hn1CMcut = new TH1F("hn1CMcut","thetaCM between n1 and n2 cut",50,0.,180.);
 
+	TH2F *he3tThetcut = new TH2F("he3tThetcut","he3 t vs thethaCMcut",1000,0.,50.,1000,0.,50.);
+	TH2F *h5tThetcut = new TH2F("h5tThetcut","h5 t vs thethaCMcut",1000,0.,50.,1000,0.,50.);
+	TH2F *n1tThetcut = new TH2F("n1tThetcut","n1 t vs thethaCMcut",1000,0.,100.,1000,0.,100.);
+	TH2F *n2tThetcut = new TH2F("n2tThetcut","n2 t vs thethaCMcut",1000,0.,100.,1000,0.,100.);
+	TH2F *h3tThetcut = new TH2F("h3tThetcut","h3 t vs thethaCMcut",1000,0.,100.,1000,0.,100.);
+
+
+//1000*(h3->GetEnergy() - h3->GetMass())/3.:h3->GetTheta()*TMath::RadToDeg()
 	for(Int_t i=0; i<tr->GetEntries();i++){
 	//for(Int_t i=0; i<10;i++){
 		tr->GetEntry(i);
@@ -121,11 +131,11 @@ void drawh5(){
 		he3t_thet->Fill(he3->GetTheta()*TMath::RadToDeg(),1000*(he3->GetEnergy() - he3->GetMass())/3.);
 		h5t_thet->Fill(fh5.Theta()*TMath::RadToDeg(),1000*(h5->GetEnergy() - h5->GetMass())/5.);
 
-		if((he3->GetTheta())*TMath::RadToDeg() < 32 && (he3->GetEnergy() - he3->GetMass()) < 0.02) {
+		if((fhe3CM.Theta())*TMath::RadToDeg() > 16 && (fhe3CM.Theta())*TMath::RadToDeg() <39) {
 			he3Theta2cut->Fill(fhe3CM.Theta()*TMath::RadToDeg(),he3->GetTheta()*TMath::RadToDeg());
 			h5Theta2cut->Fill(fh5CM.Theta()*TMath::RadToDeg(),h5->GetTheta()*TMath::RadToDeg());
-		}
-		if ((he3->GetTheta())*TMath::RadToDeg() < 32 && (he3->GetEnergy() - he3->GetMass()) < 0.02) {
+		}fh5it
+		if ((fhe3CM.Theta())*TMath::RadToDeg() > 16 && (fhe3CM.Theta())*TMath::RadToDeg() <39) {
 			he3ThetaCMcut->Fill(fhe3CM.Theta()*TMath::RadToDeg());
 		}
 
@@ -133,7 +143,7 @@ void drawh5(){
 		if((1000*fh5it.Mag() - 2809.432 - 2*939.565)<2.6) {
 			h3CMPcut->Fill(1000*fh3CM.P());
 		}
-		if((he3->GetTheta())*TMath::RadToDeg() < 32 && (he3->GetEnergy() - he3->GetMass()) < 0.02) {
+		if((fhe3CM.Theta())*TMath::RadToDeg() > 16 && (fhe3CM.Theta())*TMath::RadToDeg() <39) {
 			h3CMPcut1->Fill(1000*fh3CM.P());
 		}
 
@@ -141,7 +151,7 @@ void drawh5(){
 		if((1000*fh5it.Mag() - 2809.432 - 2*939.565)<2.6) {
 			n1CMPcut->Fill(1000*fn1CM.P());
 		}
-		if((he3->GetTheta())*TMath::RadToDeg() < 32 && (he3->GetEnergy() - he3->GetMass()) < 0.02) {
+		if((fhe3CM.Theta())*TMath::RadToDeg() > 16 && (fhe3CM.Theta())*TMath::RadToDeg() <39) {
 			n1CMPcut1->Fill(1000*fn1CM.P());
 		}
 
@@ -150,7 +160,7 @@ void drawh5(){
 		if((1000*fh5it.Mag() - 2809.432 - 2*939.565)<2.6) {
 			n2CMPcut->Fill(1000*fn2CM.P());
 		}
-		if((he3->GetTheta())*TMath::RadToDeg() < 32 && (he3->GetEnergy() - he3->GetMass()) < 0.02) {
+		if((fhe3CM.Theta())*TMath::RadToDeg() > 16 && (fhe3CM.Theta())*TMath::RadToDeg() <39) {
 			n2CMPcut1->Fill(1000*fn2CM.P());
 		}
 
@@ -158,11 +168,15 @@ void drawh5(){
 		angleCM = fn1CM.Angle(fn2CM.Vect())*TMath::RadToDeg();
 		hn1->Fill(angle);
 		hn1CM->Fill(angleCM);
-		if((he3->GetTheta())*TMath::RadToDeg() < 32 && (he3->GetEnergy() - he3->GetMass()) < 0.02) {
+		if((fhe3CM.Theta())*TMath::RadToDeg() > 16 && (fhe3CM.Theta())*TMath::RadToDeg() <39) {
 			hn1cut->Fill(angle);
 			hn1CMcut->Fill(angleCM);
+			he3tThetcut->Fill(he3->GetTheta()*TMath::RadToDeg(),1000*(he3->GetEnergy() - he3->GetMass())/3.);
+			h5tThetcut->Fill(h5->GetTheta()*TMath::RadToDeg(),1000*(h5->GetEnergy() - h5->GetMass())/5.);
+			n1tThetcut->Fill(n1->GetTheta()*TMath::RadToDeg(),1000*(n1->GetEnergy() - n1->GetMass()));
+			n2tThetcut->Fill(n2->GetTheta()*TMath::RadToDeg(),1000*(n2->GetEnergy() - n2->GetMass()));
+			h3tThetcut->Fill(h3->GetTheta()*TMath::RadToDeg(),1000*(h3->GetEnergy() - h3->GetMass())/3.);
 		}
-
 	}
 	
 
@@ -181,7 +195,7 @@ void drawh5(){
 
 	padInput->Divide(2,2);
 	padInput->cd(1);
-	tr->Draw("1000*(h5->GetMass() - h3->GetMass() - n1->GetMass() - n2->GetMass())");
+	tr->Draw("1000*(h5->GetMass() - h3->GetMass() - n1->GetMass() - n2->GetMass()) - 1.81847");
 	htemp = (TH1F*)gPad->GetPrimitive("htemp");
 	htemp->GetXaxis()->SetTitle("E_{T} (MeV)");
 	htemp->SetTitle("5H spectrum");
@@ -306,16 +320,24 @@ void drawh5(){
 	htemp->SetTitle("binary reaction: cut");
 
 	tr->SetMarkerColor(kGreen);
-	tr->Draw("1000*(he3->GetEnergy() - he3->GetMass())/3.:he3->GetTheta()*TMath::RadToDeg()", cHeLocus,"same");
-	tr->Draw("1000*(h5->GetEnergy() - h5->GetMass())/5.:h5->GetTheta()*TMath::RadToDeg()", cHeLocus, "same");
+	he3tThetcut->SetMarkerColor(kGreen);
+	he3tThetcut->Draw("same");
+	h5tThetcut->SetMarkerColor(kGreen);
+	h5tThetcut->Draw("same");
+	//tr->Draw("1000*(he3->GetEnergy() - he3->GetMass())/3.:he3->GetTheta()*TMath::RadToDeg()", "","same");//
+	//tr->Draw("1000*(h5->GetEnergy() - h5->GetMass())/5.:h5->GetTheta()*TMath::RadToDeg()", "", "same");//
 
 	c1->cd(5);
 	tr->SetMarkerColor(kBlack);
 	tr->Draw("1000*(n1->GetEnergy() - n1->GetMass()):n1->GetTheta()*TMath::RadToDeg()", "", "");
 	tr->Draw("1000*(n2->GetEnergy() - n2->GetMass()):n2->GetTheta()*TMath::RadToDeg()", "", "same");
-	tr->SetMarkerColor(kGreen);
-	tr->Draw("1000*(n1->GetEnergy() - n1->GetMass()):n1->GetTheta()*TMath::RadToDeg()", cHeLocus, "same");
-	tr->Draw("1000*(n2->GetEnergy() - n2->GetMass()):n2->GetTheta()*TMath::RadToDeg()", cHeLocus, "same");
+	//tr->SetMarkerColor(kGreen);
+	n1tThetcut->SetMarkerColor(kGreen);
+	n2tThetcut->SetMarkerColor(kGreen);
+	n1tThetcut->Draw("same");
+	n2tThetcut->Draw("same");
+	//tr->Draw("1000*(n1->GetEnergy() - n1->GetMass()):n1->GetTheta()*TMath::RadToDeg()", "", "same"); //
+	//tr->Draw("1000*(n2->GetEnergy() - n2->GetMass()):n2->GetTheta()*TMath::RadToDeg()", "", "same"); //
 	htemp = (TH1F*)gPad->GetPrimitive("htemp");
 	htemp->GetYaxis()->SetTitle("T_{lab} (MeV/A)");
 	htemp->GetXaxis()->SetTitle("\\Theta_{lab} (deg)");
@@ -324,8 +346,10 @@ void drawh5(){
 	c1->cd(6);
 	tr->SetMarkerColor(kBlack);
 	tr->Draw("1000*(h3->GetEnergy() - h3->GetMass())/3.:h3->GetTheta()*TMath::RadToDeg()", "", "");
-	tr->SetMarkerColor(kGreen);
-	tr->Draw("1000*(h3->GetEnergy() - h3->GetMass())/3.:h3->GetTheta()*TMath::RadToDeg()", cHeLocus, "same");
+	//tr->SetMarkerColor(kGreen);
+	h3tThetcut->SetMarkerColor(kGreen);
+	h3tThetcut->Draw("same");
+	//tr->Draw("1000*(h3->GetEnergy() - h3->GetMass())/3.:h3->GetTheta()*TMath::RadToDeg()", "", "same"); //
 	htemp = (TH1F*)gPad->GetPrimitive("htemp");
 	htemp->GetYaxis()->SetTitle("T_{lab} (MeV/A)");
 	htemp->GetXaxis()->SetTitle("\\Theta_{lab} (deg)");
@@ -341,9 +365,9 @@ void drawh5(){
 	padInputChoice->cd(1);
 //	tr->Draw("kin.GetHeTheta()*TMath::RadToDeg():kin.GetHTheta()*TMath::RadToDeg()", "");
 //	tr->Draw("kin.GetHCMS().Mag() - 4690.36244");
-	tr->Draw("1000*(h5->GetMass() - h3->GetMass() - n1->GetMass() - n2->GetMass())");
+	tr->Draw("1000*(h5->GetMass() - h3->GetMass() - n1->GetMass() - n2->GetMass()) - 1.81847");
 	tr->SetLineColor(kRed);
-	//tr->Draw("1000*(h5->GetMass() - h3->GetMass() - n1->GetMass() - n2->GetMass())", cGS, "same");
+	tr->Draw("1000*(h5->GetMass() - h3->GetMass() - n1->GetMass() - n2->GetMass())", cGS, "same");
 	htemp = (TH1F*)gPad->GetPrimitive("htemp");
 	htemp->GetXaxis()->SetTitle("E_{T} (MeV)");
 	htemp->SetTitle("5H energy spectrum");
@@ -354,6 +378,7 @@ void drawh5(){
 	he3ThetaCMcut->Draw("same");
 	he3ThetaCM->GetXaxis()->SetTitle("\\Theta_{CM} (deg)");
 	he3ThetaCM->SetTitle("input reaction angle: green cut");
+	gPad->SetLogy();
 
 	c2->cd(2);
 
@@ -395,8 +420,8 @@ void drawh5(){
 
 
 /*	tr->SetMarkerColor(kGreen);
-	tr->Draw("3_He.fImpulse.P()/3.:3_He->GetTheta()*TMath::RadToDeg()", cHeLocus, "same");
-	tr->Draw("5_H.fImpulse.P()/5.:5_H->GetTheta()*TMath::RadToDeg()", cHeLocus, "same");
+	tr->Draw("3_He.fImpulse.P()/3.:3_He->GetTheta()*TMath::RadToDeg()", cVol, "same");
+	tr->Draw("5_H.fImpulse.P()/5.:5_H->GetTheta()*TMath::RadToDeg()", cVol, "same");
 	htemp = (TH1F*)gPad->GetPrimitive("htemp");
 	htemp->GetYaxis()->SetTitle("|p|_{lab} (MeV.A^{-1}.c^{-1})");
 	htemp->GetXaxis()->SetTitle("\\Theta_{lab} (deg)");
@@ -431,13 +456,12 @@ void drawh5(){
 	hn1CMcut->SetLineColor(8);
 	hn1CMcut->Draw("same");
 
-
-	cInt->Print("output.pdf");
+	/*cInt->Print("output.pdf");
 	cInt->Print("output.pdf[");
 	cInt->Print("output.pdf");
 	c1->Print("output.pdf");
 	c2->Print("output.pdf");
-	c2->Print("output.pdf]");
+	c2->Print("output.pdf]");*/
 
 
 }

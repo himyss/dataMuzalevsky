@@ -1,82 +1,248 @@
-/********************************************************************************
- *              Copyright (C) Joint Institute for Nuclear Research              *
- *                                                                              *
- *              This software is distributed under the terms of the             *
- *         GNU Lesser General Public Licence version 3 (LGPL) version 3,        *
- *                  copied verbatim in the file "LICENSE"                       *
- ********************************************************************************/
+void exp1803_sim_digi(Int_t nEvents = 2000) {
+  // --------------- Telescope T1 -------------------------------------------
+  Double_t T1Dl = 0.5;         // [cm]      
+  Double_t T1PosZ = 10.;       // [cm] 
+  Double_t T1D1Thick = 0.002;  // [cm]  
+  Double_t T1D2Thick = 0.1;    // [cm] 
+  Double_t T1Side = 6.2;       // [cm]  this parameter should coincide with SD1 side length from /db/QTelescope/QTelescopeParts.xml
+  Double_t T1Aperture = 3.1;   // [cm]  
+  // --------------- Telescope D1 -------------------------------------------
+  Double_t D1PosZ = 20.;       // [cm]
+  Double_t D1Thick = 0.03;     // [cm]
+  // --------------- BeamDet ------------------------------------------------
+  Double_t BeamDetLToF = 1500.;     // [cm] 
+  Double_t BeamDetPosZToF = -50;  // [cm] 
+  Double_t BeamDetLMWPC = 32.;     // [cm]
+  Double_t BeamDetPosZMWPC = -8;  // [cm]  
+  // --------------- Beam start position ------------------------------------
+  Double_t beamStartPosition = -2;  // [cm]
+  // --------------- Target -------------------------------------------------
+  Double_t targetH2Thickness = 0.4;  // [cm] this parameter should coincide with target H2 thickness in /macro/geo/create_target_h2_geo.C
+  //---------------------Files-----------------------------------------------
+  TString outFile= "/store/ivan/EXP1803/temp/sim_digi.root";
+  TString parFile= "/store/ivan/EXP1803/temp/par.root";
+  TString workDirPath = gSystem->Getenv("VMCWORKDIR");
+  TString paramFileQTelescope = workDirPath
+                         + "/db/QTelescope/QTelescopeParts.xml";
+  TString paramFileBeamDet = workDirPath
+                         + "/db/BeamDet/BeamDetParts.xml";
+  TString targetGeoFileName = workDirPath + "/geometry/target.h2.geo.root";
+  TString gadastGeoFileName = workDirPath + "/geometry/partOfGadast.v1.geo.root";
+  TString ndGeoFileName = workDirPath + "/geometry/ND.geo.root";
+  TString magnetGeoFileName = workDirPath + "/geometry/magnet.geo.root";
+  // ------------------------------------------------------------------------
 
-#ifndef ERDecayEXP1803_H
-#define ERDecayEXP1803_H
+  // -----   Timer   --------------------------------------------------------
+  TStopwatch timer; 
+  timer.Start();
+  // ------------------------------------------------------------------------
+ 
+  // -----   Create simulation run   ----------------------------------------
+  ERRunSim* run = new ERRunSim();
+  /** Select transport engine
+  * TGeant3
+  * TGeant4
+  **/
+  run->SetName("TGeant4");              // Transport engine
+  run->SetOutputFile(outFile.Data());          // Output file
+  // ------------------------------------------------------------------------
+  // -----   Runtime database   ---------------------------------------------
+  FairRuntimeDb* rtdb = run->GetRuntimeDb();
+    //-------- Set MC event header --------------------------------------------
+  ERDecayMCEventHeader* decayMCheader = new ERDecayMCEventHeader();
+  run->SetMCEventHeader(decayMCheader);
+  // -----   Create media   -------------------------------------------------
+  run->SetMaterials("media.geo");       // Materials
+  // -----   Create detectors  ----------------------------------------------   
+  FairModule* cave= new ERCave("CAVE");
+  cave->SetGeometryFileName("cave.geo");
+  run->AddModule(cave);
+   
+  Int_t verbose = 0;
+  // -----  BeamDet Setup ---------------------------------------------------
+  ERBeamDetSetup* setupBeamDet = ERBeamDetSetup::Instance();
+  setupBeamDet->SetXmlParametersFile(paramFileBeamDet);
 
-#include "TGraph.h"
-#include "TF1.h"
-#include "TRandom3.h"
-#include "TGenPhaseSpace.h"
+  // -----  BeamDet parameters ----------------------------------------------
+  setupBeamDet->AddToF("ToF1", BeamDetPosZToF - BeamDetLToF);       // 
+  setupBeamDet->AddToF("ToF1", BeamDetPosZToF);                     //  BeamDet parts should be added in ascending order   
+  setupBeamDet->AddMWPC("MWPC1", BeamDetPosZMWPC - BeamDetLMWPC);   //  of Z-coordinate of part.
+  setupBeamDet->AddMWPC("MWPC1", BeamDetPosZMWPC);                  // 
+  //setupBeamDet->SetSensitiveTarget();
 
-#include "FairIon.h"
+  // -----   Create target  -------------------------------------------------
+  FairModule* target = new ERTarget("targetH2", kTRUE, 1);
+  target->SetGeometryFileName(targetGeoFileName);
+  run->AddModule(target);
 
-#include "ERDecay.h"
+  // -----   Create Part of Gadast ------------------------------------------
+  ERGadast* gadast = new ERGadast("PartofGadast", kTRUE, 1);
+  gadast->SetGeometryFileName(gadastGeoFileName);
+  run->AddModule(gadast);
 
-class ERDecayEXP1803 : public ERDecay{
+  // -----   Create Stilbene wall -------------------------------------------
+  ERND* neutronDetector = new ERND("StilbeneWall", kTRUE, 1);
+  neutronDetector->SetGeometryFileName(ndGeoFileName);
+  run->AddModule(neutronDetector);
 
-public:
-  ERDecayEXP1803();
-  ~ERDecayEXP1803();
+  // -----   Create Magnet geometry -----------------------------------------
+  FairModule* magnet = new ERTarget("magnet", 1, kTRUE);
+  magnet->SetGeometryFileName(magnetGeoFileName);
+  run->AddModule(magnet);
 
-  /*Modifiers*/
-  void SetMinStep(Double_t minStep) {fMinStep = minStep;}
-  void SetTargetVolumeName(TString volumeName) {fVolumeName = volumeName;}
-  void SetTargetThickness(Double_t targetThickness) {fTargetThickness = targetThickness;}
-  void SetH5Mass(Double_t mass) {f5HMass = mass; fIs5HUserMassSet = true;}
-  void SetH5Exitation(Double_t excMean, Double_t fwhm, Double_t distibWeight);
+  // -----  QTelescope Setup ------------------------------------------------
+  ERQTelescopeSetup* setupQTelescope = ERQTelescopeSetup::Instance();
+  setupQTelescope->SetXmlParametersFile(paramFileQTelescope);
+  // ----- T1 parameters ----------------------------------------------------
+  TVector3 SD1Rotation(0., 27., 0.);
+  TVector3 SD2Rotation(0., -27., 0.);
+  Double_t xPos, yPos, zPos;
+  TVector3* T1Translation;
+  // ----- T1.1--------------------------------------------------------------
+  setupQTelescope->AddSi("DoubleSi_SD1", TVector3( 9.07981,0., 17.8201), SD1Rotation,"X");
+  setupQTelescope->AddSi("DoubleSi_SD2", TVector3( -9.07981,0., 17.8201), SD2Rotation,"X");
+  // // ----- T1.2--------------------------------------------------------------
+  // setupQTelescope->AddSi("DoubleSi_SD1", TVector3( T1Side/2 - T1Aperture/2, 
+  //                                                 -T1Side/2 - T1Aperture/2,  
+  //                                                  T1PosZ + T1D1Thick/2), T1Rotation, "X");
+  // setupQTelescope->AddSi("DoubleSi_SD2", TVector3( T1Side/2 - T1Aperture/2, 
+  //                                                 -T1Side/2 - T1Aperture/2,  
+  //                                                  T1PosZ   + T1D1Thick +T1Dl + T1D2Thick/2), T1Rotation, "X");
+  // // ----- T1.3 -------------------------------------------------------------
+  // setupQTelescope->AddSi("DoubleSi_SD1", TVector3(-T1Side/2 - T1Aperture/2, 
+  //                                                 -T1Side/2 + T1Aperture/2,  
+  //                                                  T1PosZ   + T1D1Thick/2), T1Rotation, "X");
+  // setupQTelescope->AddSi("DoubleSi_SD2", TVector3(-T1Side/2 - T1Aperture/2, 
+  //                                                 -T1Side/2 + T1Aperture/2,  
+  //                                                  T1PosZ + T1D1Thick +T1Dl + T1D2Thick/2), T1Rotation, "X");
+  // // ----- T1.4--------------------------------------------------------------
+  // setupQTelescope->AddSi("DoubleSi_SD1", TVector3(-T1Side/2 + T1Aperture/2, 
+  //                                                  T1Side/2 + T1Aperture/2,  
+  //                                                  T1PosZ + T1D1Thick/2), T1Rotation, "X");
+  // setupQTelescope->AddSi("DoubleSi_SD2", TVector3(-T1Side/2 + T1Aperture/2, 
+  //                                                  T1Side/2 + T1Aperture/2,  
+  //                                                  T1PosZ + T1D1Thick +T1Dl + T1D2Thick/2), T1Rotation, "X");
 
-  void phasegen2(Double_t Ecm, Double_t h5Mass);
-  void ReadADInput(TString ADfile);
-  static Double_t ADEvaluate(Double_t *x, Double_t *p);
+  // ----- D1 parameters ----------------------------------------------------
+  TVector3* D1Rotation = new TVector3(0., 5., 0);
+  setupQTelescope->AddSi("DoubleSi_D1", TVector3( 0, 
+                                                  0,  
+                                                  D1PosZ + D1Thick/2), *D1Rotation, "X");
 
-public:
-  Bool_t Init();
-  Bool_t Stepping();
+  // ------QTelescope -------------------------------------------------------
+  ERQTelescope* qtelescope= new ERQTelescope("ERQTelescope", kTRUE,verbose);
+  run->AddModule(qtelescope);
 
-  void BeginEvent();
-  void FinishEvent();
+  // ------BeamDet ----------------------------------------------------------
+  ERBeamDet* beamdet= new ERBeamDet("ERBeamDet", kTRUE,verbose);
+  run->AddModule(beamdet);
 
-private:
-  TRandom3       *fRnd;
+  FairPrimaryGenerator* primGen = new FairPrimaryGenerator();
+
+  Double_t  kinE_MevPerNucleon = 40.;
+  // Int_t     Z = 1, A = 3, Q = 1;
+  // TString   ionName = "3H";
+    Int_t Z = 2, A = 6, Q = 2;
+  TString ionName = "6He";
+  ERIonMixGenerator* generator = new ERIonMixGenerator(ionName, Z, A, Q, 1);
+  Double32_t kin_energy = kinE_MevPerNucleon * 1e-3 * A; //GeV
+  generator->SetKinE(kin_energy);
+  generator->SetPSigmaOverP(0);
+  Double32_t sigmaTheta = 0.004*TMath::RadToDeg();
+  // generator->SetKinERange(0,kin_energy);
+  generator->SetThetaSigma(0, 0);
+  generator->SetPhiRange(0, 360);
+  generator->SetBoxXYZ(0, 0, 0, 0, beamStartPosition);
+  generator->SpreadingOnTarget(); 
+
+  primGen->AddGenerator(generator);
+  run->SetGenerator(primGen);
+
+  // ------- Decayer --------------------------------------------------------
+  Double_t massH5 = 4.69036244;  // [GeV]
+
+  ERDecayer* decayer = new ERDecayer();
+  ERDecayEXP1803* targetDecay = new ERDecayEXP1803();
+  targetDecay->ReadADInput("/home/muzalevsky/dataMuzalevsky/Cs_6He_d_3He_5H_35-25AMeV.txt");
+  targetDecay->SetTargetVolumeName("tubeH2");
+  targetDecay->SetTargetThickness(targetH2Thickness);
+  targetDecay->SetH5Mass(massH5);
+  targetDecay->SetH5Exitation(0.0004, 0.00002355, 1);
+  targetDecay->SetH5Exitation(0.0012, 0.0002355, 1);
+
+  decayer->AddDecay(targetDecay);
+  run->SetDecayer(decayer);
+
+  // ------- Magnetic field -------------------------------------------------
+  ERFieldMap* magField = new ERFieldMap("exp1803Field","A"); //exp1803Field, testField
+  magField->SetVolume("magnet");
+  run->SetField(magField);
+    // ------- QTelescope Digitizer -------------------------------------------
+  ERQTelescopeDigitizer* qtelescopeDigitizer = new ERQTelescopeDigitizer(verbose);
+  qtelescopeDigitizer->SetSiElossThreshold(0);
+  qtelescopeDigitizer->SetSiElossSigma(0);
+  qtelescopeDigitizer->SetSiTimeSigma(0);
+
+  qtelescopeDigitizer->SetCsIElossThreshold(0);
+  qtelescopeDigitizer->SetCsIElossSigma(0);
+  qtelescopeDigitizer->SetCsITimeSigma(0);
+  run->AddTask(qtelescopeDigitizer);
+  // ------  Gadast Digitizer -----------------------------------------------
+  ERGadastDigitizer* gadastDigitizer = new ERGadastDigitizer(verbose);
+  run->AddTask(gadastDigitizer);
+  // -----  BeamDet Digitizer ----------------------------------------------
+  ERBeamDetDigitizer* beamDetDigitizer = new ERBeamDetDigitizer(verbose);
+  // beamDetDigitizer->SetMWPCElossThreshold(0.006);
+  // beamDetDigitizer->SetToFElossThreshold(0.006);
+  // beamDetDigitizer->SetToFElossSigmaOverEloss(0);
+  // beamDetDigitizer->SetToFTimeSigma(1e-10);
+  run->AddTask(beamDetDigitizer);
+  // // ------- BeamDet TrackFinder -------------------------------------------
+  // ERBeamDetTrackFinder* trackFinder = new ERBeamDetTrackFinder(verbose);
+  // run->AddTask(trackFinder);
+  // // -----------------------BeamDetTrackPID----------------------------------
+  // ERBeamDetPID* pid = new ERBeamDetPID(verbose);
+  // pid->SetIonMassNumber(A);
+  // pid->SetBoxPID(0., 1000., 0., 1000.);
+  // pid->SetOffsetToF(0.);
+  // pid->SetProbabilityThreshold(0);
+  // run->AddTask(pid);  
+  // // ------- QTelescope TrackFinder -------------------------------------------
+  // ERQTelescopeTrackFinder* qtelescopeTrackFinder = new ERQTelescopeTrackFinder(verbose);
+  // qtelescopeTrackFinder->SetHitStation("DoubleSi_SD2_XY_1");
+  // qtelescopeTrackFinder->SetHitStation("DoubleSi_SD2_XY_3");
+  // qtelescopeTrackFinder->SetStripEdepRange(0., 100.);          // [GeV]
+  // qtelescopeTrackFinder->SetTargetPoint(0., 0., 0.);
+  // // qtelescopeTrackFinder->SetStripEdepRange(0.0097, 100.);   // [GeV]
+  // // qtelescopeTrackFinder->SetEdepDiffXY(5.);                 // [GeV]
+  // qtelescopeTrackFinder->SetEdepMaxDiffXY(0.5); 
+  // run->AddTask(qtelescopeTrackFinder); 
+  //-------Set visualisation flag to true------------------------------------
+  run->SetStoreTraj(kTRUE);
+  //-------Set LOG verbosity  ----------------------------------------------- 
+  FairLogger::GetLogger()->SetLogScreenLevel("INFO");
+  // -----   Initialize simulation run   ------------------------------------
+  run->Init();
+  Int_t nSteps = -15000;
+  // -----   Runtime database   ---------------------------------------------
+  Bool_t kParameterMerged = kTRUE;
+  FairParRootFileIo* parOut = new FairParRootFileIo(kParameterMerged);
+  parOut->open(parFile.Data());
+  rtdb->setOutput(parOut);
+  rtdb->saveOutput();
+  rtdb->print();
+  //gMC->SetMaxNStep(nSteps);
+  // -----   Run simulation  ------------------------------------------------
+  run->Run(nEvents);
   
-  TParticlePDG   *f6He;
-  TParticlePDG   *f2H;
-  TParticlePDG   *f3He;
-  TParticlePDG   *f5H;
-  TParticlePDG   *f3H;
-  TParticlePDG   *fn;
-
-  TLorentzVector *flv3He; //!
-  TLorentzVector *flv5H; //!
-
-  FairIon        *fIon3He;
-  FairIon* fUnstableIon5H;
-
-  TGenPhaseSpace  *fReactionPhaseSpace;
-  TGenPhaseSpace  *fDecayPhaseSpace;
-  TString          fVolumeName;
-  Double_t         fTargetReactZ;
-  Double_t         fMinStep;
-  Double_t         fTargetThickness;
-  Bool_t           fDecayFinish;
-  std::vector<Double_t> f5HExcitationMean;
-  std::vector<Double_t> f5HExcitationSigma; 
-  std::vector<Double_t> f5HExcitationWeight;
-
-  Double_t        f5HMass;
-  Bool_t          fIs5HUserMassSet;
-  Bool_t          fIs5HExcitationSet;
-
-  TF1 *fADFunction;  // function describing AD of binary reaction
-  static TGraph *fADInput; //   distribution (AD) graph containing AD input
-
-  ClassDef(ERDecayEXP1803,1)
-};
-
-#endif
+  // -----   Finish   -------------------------------------------------------
+  timer.Stop();
+  Double_t rtime = timer.RealTime();
+  Double_t ctime = timer.CpuTime();
+  cout << endl << endl;
+  cout << "Macro finished succesfully." << endl;
+  cout << "Output file is sim.root" << endl;
+  cout << "Parameter file is par.root" << endl;
+  cout << "Real time " << rtime << " s, CPU time " << ctime
+          << "s" << endl << endl;
+}
