@@ -82,10 +82,10 @@ void drawh5(){
 	TH2F *n2tThetcut = new TH2F("n2tThetcut","n2 t vs thethaCMcut",1000,0.,100.,1000,0.,100.);
 	TH2F *h3tThetcut = new TH2F("h3tThetcut","h3 t vs thethaCMcut",1000,0.,100.,1000,0.,100.);
 
+	TH1F *h5spec = new TH1F("h5spec","h5 spectrum",100,0,2.);
+	TH1F *h5specut = new TH1F("h5specut","h5 spectrum cut",100,0,2.);
 
-//1000*(h3->GetEnergy() - h3->GetMass())/3.:h3->GetTheta()*TMath::RadToDeg()
 	for(Int_t i=0; i<tr->GetEntries();i++){
-	//for(Int_t i=0; i<10;i++){
 		tr->GetEntry(i);
 
 		fn1 = n1->GetVector();
@@ -134,7 +134,7 @@ void drawh5(){
 		if((fhe3CM.Theta())*TMath::RadToDeg() > 16 && (fhe3CM.Theta())*TMath::RadToDeg() <39) {
 			he3Theta2cut->Fill(fhe3CM.Theta()*TMath::RadToDeg(),he3->GetTheta()*TMath::RadToDeg());
 			h5Theta2cut->Fill(fh5CM.Theta()*TMath::RadToDeg(),h5->GetTheta()*TMath::RadToDeg());
-		}fh5it
+		}
 		if ((fhe3CM.Theta())*TMath::RadToDeg() > 16 && (fhe3CM.Theta())*TMath::RadToDeg() <39) {
 			he3ThetaCMcut->Fill(fhe3CM.Theta()*TMath::RadToDeg());
 		}
@@ -177,6 +177,10 @@ void drawh5(){
 			n2tThetcut->Fill(n2->GetTheta()*TMath::RadToDeg(),1000*(n2->GetEnergy() - n2->GetMass()));
 			h3tThetcut->Fill(h3->GetTheta()*TMath::RadToDeg(),1000*(h3->GetEnergy() - h3->GetMass())/3.);
 		}
+		h5spec->Fill(1000*(h5->GetMass() - h3->GetMass() - n1->GetMass() - n2->GetMass()) - 1.81847);
+		if((1000*fh5it.Mag() - 2809.432 - 2*939.565)<2.6) {
+			h5specut->Fill(1000*(h5->GetMass() - h3->GetMass() - n1->GetMass() - n2->GetMass()) - 1.81847);
+		}
 	}
 	
 
@@ -195,10 +199,11 @@ void drawh5(){
 
 	padInput->Divide(2,2);
 	padInput->cd(1);
-	tr->Draw("1000*(h5->GetMass() - h3->GetMass() - n1->GetMass() - n2->GetMass()) - 1.81847");
-	htemp = (TH1F*)gPad->GetPrimitive("htemp");
-	htemp->GetXaxis()->SetTitle("E_{T} (MeV)");
-	htemp->SetTitle("5H spectrum");
+	//tr->Draw("1000*(h5->GetMass() - h3->GetMass() - n1->GetMass() - n2->GetMass()) - 1.81847");
+	h5spec->Draw();
+	//htemp = (TH1F*)gPad->GetPrimitive("htemp");
+	////htemp->GetXaxis()->SetTitle("E_{T} (MeV)");
+	//htemp->SetTitle("5H spectrum");
 
 	padInput->cd(2);
 	tr->SetLineColor(kBlack);
@@ -365,12 +370,15 @@ void drawh5(){
 	padInputChoice->cd(1);
 //	tr->Draw("kin.GetHeTheta()*TMath::RadToDeg():kin.GetHTheta()*TMath::RadToDeg()", "");
 //	tr->Draw("kin.GetHCMS().Mag() - 4690.36244");
-	tr->Draw("1000*(h5->GetMass() - h3->GetMass() - n1->GetMass() - n2->GetMass()) - 1.81847");
-	tr->SetLineColor(kRed);
-	tr->Draw("1000*(h5->GetMass() - h3->GetMass() - n1->GetMass() - n2->GetMass())", cGS, "same");
-	htemp = (TH1F*)gPad->GetPrimitive("htemp");
-	htemp->GetXaxis()->SetTitle("E_{T} (MeV)");
-	htemp->SetTitle("5H energy spectrum");
+	//tr->Draw("1000*(h5->GetMass() - h3->GetMass() - n1->GetMass() - n2->GetMass()) - 1.81847");
+	h5spec->Draw();
+	h5specut->SetLineColor(kRed);
+	h5specut->Draw("same");
+	//tr->SetLineColor(kRed);
+	//tr->Draw("1000*(h5->GetMass() - h3->GetMass() - n1->GetMass() - n2->GetMass()) - 1.81847", cGS, "same");
+	//htemp = (TH1F*)gPad->GetPrimitive("htemp");
+	//htemp->GetXaxis()->SetTitle("E_{T} (MeV)");
+	//htemp->SetTitle("5H energy spectrum");
 
 	padInputChoice->cd(2);
 	he3ThetaCM->Draw();
@@ -398,7 +406,7 @@ void drawh5(){
 	n1CMPcut->SetLineColor(kRed);
 	n1CMPcut->Draw("same");
 	n1CMP->GetXaxis()->SetTitle("p_{5H CM}(^{1}n) (MeV/c)");
-	n1CMP->SetTitle("CMS of 5H: no cut");
+	n1CMP->SetTitle("CMS of 5H");
 
 	c2->cd(4);
 	n2CMP->SetLineColor(kBlack);
@@ -406,7 +414,7 @@ void drawh5(){
 	n2CMPcut->SetLineColor(kRed);
 	n2CMPcut->Draw("same");
 	n2CMP->GetXaxis()->SetTitle("p_{5H CM}(^{2}n) (MeV/c)");
-	n2CMP->SetTitle("CMS of 5H: no cut");
+	n2CMP->SetTitle("CMS of 5H");
 
 
 
@@ -456,12 +464,12 @@ void drawh5(){
 	hn1CMcut->SetLineColor(8);
 	hn1CMcut->Draw("same");
 
-	/*cInt->Print("output.pdf");
+	cInt->Print("output.pdf");
 	cInt->Print("output.pdf[");
 	cInt->Print("output.pdf");
 	c1->Print("output.pdf");
 	c2->Print("output.pdf");
-	c2->Print("output.pdf]");*/
+	c2->Print("output.pdf]");
 
 
 }

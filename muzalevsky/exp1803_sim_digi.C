@@ -1,4 +1,4 @@
-void exp1803_sim_digi(Int_t nEvents = 100) {
+void exp1803_sim_digi(Int_t nEvents = 5000) {
   // --------------- Telescope T1 -------------------------------------------
   Double_t T1Dl = 0.5;         // [cm]      
   Double_t T1PosZ = 10.;       // [cm] 
@@ -15,12 +15,12 @@ void exp1803_sim_digi(Int_t nEvents = 100) {
   Double_t BeamDetLMWPC = 32.;     // [cm]
   Double_t BeamDetPosZMWPC = -8;  // [cm]  
   // --------------- Beam start position ------------------------------------
-  Double_t beamStartPosition = -4;  // [cm]
+  Double_t beamStartPosition = -2;  // [cm]
   // --------------- Target -------------------------------------------------
   Double_t targetH2Thickness = 0.4;  // [cm] this parameter should coincide with target H2 thickness in /macro/geo/create_target_h2_geo.C
   //---------------------Files-----------------------------------------------
-  TString outFile= "sim_digi.root";
-  TString parFile= "par.root";
+  TString outFile= "/store/ivan/EXP1803/temp/sim_digi.root";
+  TString parFile= "/store/ivan/EXP1803/temp/par.root";
   TString workDirPath = gSystem->Getenv("VMCWORKDIR");
   TString paramFileQTelescope = workDirPath
                          + "/db/QTelescope/QTelescopeParts.xml";
@@ -157,18 +157,18 @@ void exp1803_sim_digi(Int_t nEvents = 100) {
 
   primGen->AddGenerator(generator);
   run->SetGenerator(primGen);
+
   // ------- Decayer --------------------------------------------------------
   Double_t massH5 = 4.69036244;  // [GeV]
 
   ERDecayer* decayer = new ERDecayer();
   ERDecayEXP1803* targetDecay = new ERDecayEXP1803();
+  targetDecay->ReadADInput("/home/muzalevsky/dataMuzalevsky/Cs_6He_d_3He_5H_35-25AMeV.txt");
   targetDecay->SetTargetVolumeName("tubeH2");
   targetDecay->SetTargetThickness(targetH2Thickness);
   targetDecay->SetH5Mass(massH5);
-  // targetDecay->SetH5Exitation(0.0004, 0.00002355, 1);
-  // targetDecay->SetH5Exitation(0.0012, 0.0002355, 1);
-
-  targetDecay->SetH5Exitation(0.03, 0.02, 1);
+  targetDecay->SetH5Exitation(0.0004, 0.00002355, 1);
+  targetDecay->SetH5Exitation(0.0012, 0.0002355, 1);
 
   decayer->AddDecay(targetDecay);
   run->SetDecayer(decayer);
