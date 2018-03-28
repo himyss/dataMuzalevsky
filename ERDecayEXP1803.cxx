@@ -9,6 +9,7 @@
 #include "ERDecayEXP1803.h"
 
 #include <iostream>
+using namespace std;
 
 #include "TVirtualMC.h"
 #include "TLorentzVector.h"
@@ -20,8 +21,6 @@
 
 #include "ERDecayMCEventHeader.h"
 #include "ERMCEventHeader.h"
-
-using namespace std;
 
 ERDecayEXP1803::ERDecayEXP1803():
   ERDecay("EXP1803"),
@@ -44,13 +43,35 @@ ERDecayEXP1803::ERDecayEXP1803():
   fDecayPhaseSpace = new TGenPhaseSpace();
   FairRunSim* run = FairRunSim::Instance();
   fUnstableIon5H = new FairIon("5H",  1, 5, 1);
-  fIon3He                = new FairIon("3He", 2, 3, 2);
+  fIon3He        = new FairIon("3He", 2, 3, 2);
   run->AddNewIon(fUnstableIon5H);
   run->AddNewIon(fIon3He);
+
+  fADInput = NULL;
+  fADFunction = NULL;
+
+  flv5H = new TLorentzVector();
+  flv3He = new TLorentzVector();
+
+  cout << "ERDecayEXP1803 constructed." << endl;
 }
+
 //-------------------------------------------------------------------------------------------------
 ERDecayEXP1803::~ERDecayEXP1803() {
+  if (fADInput) {
+    delete fADInput;
+    fADInput = NULL;
+  }
+  if (fADFunction) {
+    delete fADFunction;
+    fADFunction = NULL;
+  }
+
+  ////if (flv5H) { delete flv5H; flv5H = NULL; }
+  ////if (flv3He) { delete flv3He; flv3He = NULL; }
+
 }
+
 //-------------------------------------------------------------------------------------------------
 void ERDecayEXP1803::SetH5Exitation(Double_t excMean, Double_t fwhm, Double_t distibWeight) {
   f5HExcitationMean.push_back(excMean);
@@ -62,8 +83,12 @@ void ERDecayEXP1803::SetH5Exitation(Double_t excMean, Double_t fwhm, Double_t di
   }
   f5HExcitationWeight.push_back(f5HExcitationWeight.back() + distibWeight);
 }
+
 //-------------------------------------------------------------------------------------------------
-Bool_t ERDecayEXP1803::Init(){
+Bool_t ERDecayEXP1803::Init() {
+
+  cout << "Decayer Init." << endl;
+
   f6He = TDatabasePDG::Instance()->GetParticle("6He");
   if ( ! f6He ) {
     std::cerr  << "-W- ERDecayEXP1803: Ion 6He not found in database!" << endl;
@@ -106,6 +131,7 @@ Bool_t ERDecayEXP1803::Init(){
   }
   return kTRUE;
 }
+
 //-------------------------------------------------------------------------------------------------
 Bool_t ERDecayEXP1803::Stepping() {
   if(!fDecayFinish && gMC->TrackPid() == 1000020060 && TString(gMC->CurrentVolName()).Contains(fVolumeName)){
@@ -134,7 +160,7 @@ Bool_t ERDecayEXP1803::Stepping() {
       Int_t decayHappen = kFALSE;
       // while decay condition is not fullfilled  
       Double_t decay5HMass;
-      while (!decayHappen) {
+      while (decayHappen==kFALSE) { // сделать условие, что если не получается разыграть такой распад, то приступать к следующему событию (энергия пучка слигшком мала.)
         decay5HMass = f5HMass;
         Double_t excitation = 0;  // excitation energy
         if (fIs5HExcitationSet) {
@@ -149,35 +175,41 @@ Bool_t ERDecayEXP1803::Stepping() {
           excitation = gRandom->Gaus(f5HExcitationMean[distribNum], f5HExcitationSigma[distribNum]);
           fUnstableIon5H->SetExcEnergy(excitation);
         }
-        // decay5HMass += excitation;
-        // if((ECM - f6He->Mass() - f2H->Mass() - f3He->Mass() - decay5HMass) > 0) { // выход из цикла while для phasegen2
-        //   decayHappen = kTRUE;
-        // }
+        decay5HMass += excitation;
+        if((ECM - f3He->Mass() - decay5HMass) > 0) { // выход из цикла while для phasegen2
+          decayHappen = kTRUE;
+        }
 
-        Double_t reactMasses[2];
-        reactMasses[0] = f3He->Mass();
-        reactMasses[1] = decay5HMass;
+        // Double_t reactMasses[2];
+         //reactMasses[0] = f3He->Mass();
+        // reactMasses[1] = decay5HMass;
        
-        decayHappen = fReactionPhaseSpace->SetDecay(lvReaction, 2, reactMasses);
+         //decayHappen = fReactionPhaseSpace->SetDecay(lvReaction, 2, reactMasses);
 
-        // if(decayHappen == kFALSE) cout << " forbidden " << ECM - f3He->Mass() - decay5HMass << endl;  
+        //if(decayHappen == kFALSE) cout << " forbidden " << ECM - f3He->Mass() - decay5HMass << endl;  
+  //cout << lv6HeCM(3) << " " << lv2HCM(3) << " " << f3He->Mass() << " " <<  decay5HMass << endl; 
+  cout << "flag"<< lv6He(0) << "-" << lv6He(1) << "-" << lv6He(2)<< " " <<lv6He(3) << endl;  
       }
-      // cout << " allowed " << ECM - f3He->Mass() - decay5HMass << endl; 
+      cout << " allowed " << ECM - f3He->Mass() - decay5HMass << endl; 
       // cout << " MASS 5H " <<  decay5HMass << endl; 
-      // TLorentzVector *flv3He;
-      // TLorentzVector *lv5H;
+      //// TLorentzVector *flv3He;
+      //// TLorentzVector *lv5H;
 
-      // phasegen2(ECM, decay5HMass);
+      phasegen2(ECM, decay5HMass);
+      flv5H->Boost(boost);
+      flv3He->Boost(boost);
 
-      fReactionPhaseSpace->Generate();
-      flv3He = fReactionPhaseSpace->GetDecay(0);
-      flv5H = fReactionPhaseSpace->GetDecay(1);
+      // fReactionPhaseSpace->Generate();
+    //   flv3He = fReactionPhaseSpace->GetDecay(0); // ?
+      // flv5H = fReactionPhaseSpace->GetDecay(1); // ?
 
       //5H → f3H + n +n.
       Double_t decayMasses[3];
       decayMasses[0] = f3H->Mass();
       decayMasses[1] = fn->Mass(); 
       decayMasses[2] = fn->Mass();
+
+      //cout << flv5H.E() << " its fine! " << decay5HMass << endl;
 
       fDecayPhaseSpace->SetDecay(*flv5H, 3, decayMasses);
       fDecayPhaseSpace->Generate();
@@ -192,17 +224,17 @@ Bool_t ERDecayEXP1803::Stepping() {
       He6TrackNb = gMC->GetStack()->GetCurrentTrackNumber();
 
       gMC->GetStack()->PushTrack(1, He6TrackNb, f5H->PdgCode(),
-                                 flv5H->Px(),flv5H->Py(),flv5H->Pz(),
+                                 flv5H->Px(), flv5H->Py(), flv5H->Pz(),
                                  flv5H->E(), curPos.X(), curPos.Y(), curPos.Z(),
                                  gMC->TrackTime(), 0., 0., 0.,
                                  kPDecay, H5TrackNb, decay5HMass, 0);
       gMC->GetStack()->PushTrack(1, He6TrackNb, f3He->PdgCode(),
-                                 flv3He->Px(),flv3He->Py(),flv3He->Pz(),
+                                 flv3He->Px(), flv3He->Py(), flv3He->Pz(),
                                  flv3He->E(), curPos.X(), curPos.Y(), curPos.Z(),
                                  gMC->TrackTime(), 0., 0., 0.,
                                  kPDecay, He3TrackNb, f3He->Mass(), 0);
       gMC->GetStack()->PushTrack(1, He6TrackNb, f3H->PdgCode(),
-                                 lv3H->Px(),lv3H->Py(),lv3H->Pz(),
+                                 lv3H->Px(), lv3H->Py(), lv3H->Pz(),
                                  lv3H->E(), curPos.X(), curPos.Y(), curPos.Z(),
                                  gMC->TrackTime(), 0., 0., 0.,
                                  kPDecay, H3TrackNb, f3H->Mass(), 0);
@@ -236,17 +268,20 @@ Bool_t ERDecayEXP1803::Stepping() {
   }
   return kTRUE;
 }
+
 //-------------------------------------------------------------------------------------------------
 void ERDecayEXP1803::BeginEvent() { 
   fDecayFinish = kFALSE;
   fTargetReactZ = fRnd->Uniform(-fTargetThickness / 2, fTargetThickness / 2);
   FairRunSim* run = FairRunSim::Instance();
 }
+
 //-------------------------------------------------------------------------------------------------
 void ERDecayEXP1803::FinishEvent() {
 }
+
 //-------------------------------------------------------------------------------------------------
-void ERDecayEXP1803::phasegen2(Double_t Ecm, Double_t h5Mass){
+void ERDecayEXP1803::phasegen2(Double_t Ecm, Double_t h5Mass) {
   //generate 2 - body decay in phase space approach.
   //Ecm -Total energy in CM
   //No security checks, cause it should be fast!
@@ -254,77 +289,78 @@ void ERDecayEXP1803::phasegen2(Double_t Ecm, Double_t h5Mass){
   //todo !!Vratislav: set excited masses should be function
   //it is the same algorithm for phasegen2 and phasegen3
 
+
   Double_t m1 = h5Mass;
   Double_t m2 = f3He->Mass();
 
   // Energy of 1-st particle in cm:
-  //todo Vratislav: check this statement
+  //TODO Vratislav: check this statement
   //is it true also for binary reaction?
   Double_t E1 = 0.5 * (Ecm * Ecm + m1 * m1 - m2 * m2) / Ecm;
 
-//   //Impulse in CM
+  //Impulse in CM
   Double_t Pcm = TMath::Sqrt(E1 * E1 - m1 * m1);
 
-//   //Generate angles of particles in CM
+  //Generate angles of particles in CM
 
-  Double_t thetaCM = TMath::ACos(gRandom->Uniform(-1, 1));
-  // Double_t thetaCM = fADFunction->GetRandom();
-  // fThetaCM = GetRandomReactionAngle();
-  Double_t phi = gRandom->Uniform(0, 2 * TMath::Pi());
+   //Double_t thetaCM = TMath::ACos(gRandom->Uniform(-1., 1.));
+   Double_t thetaCM = fADFunction->GetRandom(1.,149.)*TMath::DegToRad();
+  Double_t phi = gRandom->Uniform(0., 2. * TMath::Pi());
 
   TVector3 Pcmv;
   Pcmv.SetMagThetaPhi(Pcm, thetaCM, phi);
 
+  flv5H->SetXYZM(0., 0., 0., 0.);
+  flv3He->SetXYZM(0., 0., 0., 0.);
   flv5H->SetXYZM(Pcmv(0), Pcmv(1), Pcmv(2), m1);
   flv3He->SetXYZM(-Pcmv(0), -Pcmv(1), -Pcmv(2), m2);
 }
-//-------------------------------------------------------------------------------------------------
-void ERDecayEXP1803::ReadADInput(TString ADfile) {
-  //Initiate the binary reaction angular distribution from file. 
 
-  fADInput = new TGraph(ADfile,"%lg %*lg %lg");
-
-  delete fADFunction;
-  fADFunction = NULL;
-
-  //create function from external input
-
-  if (fADInput->IsZombie()) {
-    Error("ERDecayEXP1803::ReadADInput", "AD input cannot be read and AD function won't be initialized");
-    return;
-  }
-  if (fADInput->GetN() <= 0){
-    Info("ERDecayEXP1803::ReadADInput","Too few inputs for creation of AD function!");
-    return;
-  }
-  Double_t *angle = fADInput->GetX();
-  Double_t *angleY = fADInput->GetY();
-  fADFunction = new TF1("fADFunction",ADEvaluate,angle[0],angle[fADInput->GetN()-1]);  
-
-  // fADFunction = new TF1("angDistr", this, &Reaction::ADEvaluate, angle[0],
-  //       angle[fADInput->GetN()-1], 0, "Reaction", "ADEvaluate");
-
-  cout << "++++++++++++++++" << endl;
-  for(Int_t i=0;i<fADInput->GetN();i++){
-    // cout << angle[i] << " " << fADFunction->Eval(angle[i]) << endl;
-    cout << angle[i] << " " << angleY[i] << endl;
-  }
-  cout << "++++++++++++++++" << endl;
-
-  // Double_t *angle = fADInput->GetX();
-  // for (Int_t i = 0; i < fADInput->GetN(); i++) {
-  //   angle[i] = angle[i]*TMath::DegToRad();
-  // }
-
-  return;
-}
 //-------------------------------------------------------------------------------------------------
 Double_t ERDecayEXP1803::ADEvaluate(Double_t *x, Double_t *p) {
+  //this function is necessary for TF1 constructor
   if (fADInput->IsZombie()) {
     Error("ERDecayEXP1803::ADEvaluate", "AD input was not loaded");
     return -1;
   }
-  // return fADInput->Eval(x[0]);
+  return fADInput->Eval(x[0]);
 }
 
+//-------------------------------------------------------------------------------------------------
+void ERDecayEXP1803::ReadADInput(TString ADfile) {
+  fADFile = ADfile;
+
+  if (fADInput) {
+    delete fADInput;
+    fADInput = NULL;
+  }
+  fADInput = new TGraph(fADFile, "%lg %*lg %lg");
+
+  //create function from external input
+
+  if (fADInput->IsZombie()) {
+    Error("ERDecayEXP1803::CreateADFunction", "AD input cannot be read and AD function won't be initialized");
+    return;
+  }
+  if (fADInput->GetN() <= 0) {
+    Info("ERDecayEXP1803::CreateADFunction","Too few inputs for creation of AD function!");
+    return;
+  }
+  Double_t* angle = fADInput->GetX();
+
+  if (fADFunction) {
+    delete fADFunction;
+    fADFunction = NULL;
+  }
+  fADFunction = new TF1("angDistr", this, &ERDecayEXP1803::ADEvaluate, angle[0], angle[fADInput->GetN()-1], 0, "ERDecayEXP1803", "ADEvaluate");
+
+  /*cout << "++++++++++++++++" << endl;
+  for(Int_t i=0; i<fADInput->GetN(); i++) {
+    cout << angle[i] << " " << fADFunction->Eval(angle[i]) << endl;
+  }
+  cout << "++++++++++++++++" << endl;*/
+
+}
+
+//-------------------------------------------------------------------------------------------------
 ClassImp(ERDecayEXP1803)

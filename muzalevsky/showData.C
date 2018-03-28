@@ -1,12 +1,12 @@
 void showData(){
 
 	//TFile* f = new TFile("/store/ivan/EXP1803/Kinematics/sim_digi3.root");
-	TFile* f = new TFile("/store/ivan/EXP1803/Kinematics/sim45.root");
+	TFile* f = new TFile("/store/ivan/EXP1803/temp/sim_digi.root");
 	TTree* t = (TTree*) f->Get("er");
 	TClonesArray* tracks = new TClonesArray("ERMCTrack",20);
 	t->SetBranchAddress("MCTrack", &tracks);
 
-	TFile *f1 = new TFile("/store/ivan/EXP1803/Kinematics/kin45.root","RECREATE");
+	TFile *f1 = new TFile("/store/ivan/EXP1803/temp/kin.root","RECREATE");
 	TTree *tree = new TTree("tree","kin");
 
 	ERMCTrack *n1 = new ERMCTrack();
