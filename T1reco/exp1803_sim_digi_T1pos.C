@@ -104,25 +104,37 @@ void exp1803_sim_digi_T1pos(Int_t nEvents = 100) {
 	TString ionName = "6He";
 
 	ERIonMixGenerator* generator = new ERIonMixGenerator(ionName, Z, A, Q, 1);
+//	ERIonMixGenerator* generator2 = new ERIonMixGenerator("Triton", 1, 3, 1, 1);
+	ERIonMixGenerator* generator2 = new ERIonMixGenerator("HE3", 2, 3, 2, 1);
 
-	generator->AddBackgroundIon("Triton", 1, 3, 1, 0.2 / 0.20);
-	generator->AddBackgroundIon("Alpha", 1, 4, 1, 0.4 / 0.60);
-	generator->AddBackgroundIon("HE3", 2, 3, 2, 0.2 / 0.20);
-	generator->AddBackgroundIon("Deuteron", 1, 2, 1, 0.2 / 0.20);
-	generator->AddBackgroundIon("proton", 1, 1, 1, 0.2 / 0.20);
+//	generator->AddBackgroundIon("Triton", 1, 3, 1, 0.2 / 0.20);
+//	generator->AddBackgroundIon("Alpha", 1, 4, 1, 0.4 / 0.60);
+//	generator->AddBackgroundIon("HE3", 2, 3, 2, 0.2 / 0.20);
+//	generator->AddBackgroundIon("Deuteron", 1, 2, 1, 0.2 / 0.20);
+//	generator->AddBackgroundIon("proton", 1, 1, 1, 0.2 / 0.20);
 
 	Double32_t kin_energy = kinE_MevPerNucleon * 1e-3 * A; //GeV
 	Double32_t kin_energy_max = kinE_MevPerNucleonMax * 1e-3 * A; //GeV
 	generator->SetKinERange(0.001, 0.02);
 	Double32_t sigmaTheta = 0.004*TMath::RadToDeg();
 	generator->SetThetaSigma(0, 0);
-	generator->SetThetaRange(15, 18);
+//	generator->SetThetaRange(15, 18);
+	generator->SetThetaRange(16, 18);
 	generator->SetPhiRange(0, 270);
-	generator->SetBoxXYZ(5, 2, 5, 2, 2.);
+	generator->SetBoxXYZ(2, 2, 2, 2, 2.);
 
+	generator2->SetKinERange(0.001, 0.03);
+	generator2->SetThetaSigma(0, 0);
+	generator2->SetThetaRange(10, 12);
+	generator2->SetPhiRange(90, 360);
+//	generator2->SetBoxXYZ(5, 2, 5, 2, 2.);
+	generator2->SetBoxXYZ(8, 2, 8, 2, 2.);
 
+	primGen->AddGenerator(generator2);
 	primGen->AddGenerator(generator);
+//	primGen->AddGenerator(generator2);
 	run->SetGenerator(primGen);
+//	run->SetGenerator(primGen);
 	// ------- Decayer --------------------------------------------------------
 	Double_t massH5 = (2*939.565 + 2809.431)*0.001;  // [GeV]
 
@@ -158,7 +170,8 @@ void exp1803_sim_digi_T1pos(Int_t nEvents = 100) {
 	ERQTelescopeTrackFinder* qtelescopeTrackFinder = new ERQTelescopeTrackFinder(verbose);
 	qtelescopeTrackFinder->SetHitStation("DoubleSi_SD2_XY_1");
 	qtelescopeTrackFinder->SetStripEdepRange(0., 100.);          // [GeV]
-	qtelescopeTrackFinder->SetTargetPoint(0., 0., 0.);
+//	qtelescopeTrackFinder->SetTargetPoint(0., 0., 0.);
+	qtelescopeTrackFinder->SetTargetPoint(8., 2., 2.);
 //	qtelescopeTrackFinder->SetStripEdepRange(0.016, 100.);   // [GeV]
 	qtelescopeTrackFinder->SetEdepMaxDiffXY(0.5);
 	run->AddTask(qtelescopeTrackFinder);
