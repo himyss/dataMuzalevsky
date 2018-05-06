@@ -1,0 +1,70 @@
+#include <string.h>
+#include <iostream.h>
+#include <fstream.h>
+#include "TSystem.h"
+#include "TFile.h"
+#include "TTree.h"
+//#include "/media/users_NAS/Muzalevsky/exp1803/go4/TNeEvent.h"
+
+using namespace std;
+
+void CsI_cal(){ 
+				
+	string 	input_file_name_cs = "/media/analysis_nas/exp201803/rootfiles/csi_l_0002.root";		
+
+	TTree* 		t;
+	UShort_t    NeEvent_CsI_L[16];
+	TBranch    *b_NeEvent_CsI_L;
+
+	f = new TFile(input_file_name_cs.c_str());
+	f->GetObject("AnalysisxTree",t);
+	t->SetMakeClass(1);
+	t->SetBranchAddress("NeEvent.CsI_L[16]", NeEvent_CsI_L, &b_NeEvent_CsI_L);
+	const Long64_t nentries1 = t->GetEntries();
+  cout << nentries1 << endl;
+	Float_t CsI_L[16],Eloss[16];
+  Int_t count=0;
+
+  Double_t r1[16],r2[16],r3[16],r4[16],r5[16],r6[16];
+
+
+	TFile *fw = new TFile("cal_CsI.root", "RECREATE");
+	TTree *tw = new TTree("tree", "CsI_L data");
+	tw->Branch("CsI_L",&CsI_L,"CsI_L[16]/F");
+	tw->Branch("Eloss",&Eloss,"Eloss[16]/F");
+  
+  Int_t maxE = nentries1;
+  cout<<">>> filling TREE up to "<<maxE<< " event"<<endl;
+	for (Long64_t jentry=0; jentry<maxE;jentry++) {
+		t->GetEntry(jentry);
+		for(Int_t i=0; i<16; i++){
+
+      CsI_L[i]=-1.;// обнуление
+      Eloss[i] = -1.;
+      CsI_L[i] = NeEvent_CsI_L[i];
+      if(CsI_L[i]>165 && CsI_L[i]<190) {
+        Eloss[i] = 4.7843;
+        count++;
+      }
+      if(CsI_L[i]>190 && CsI_L[i]<213) {
+        Eloss[i] = 5.48948;
+        count++;
+      }
+      if(CsI_L[i]>213 && CsI_L[i]<235) {
+        Eloss[i] = 6.0024;
+        count++;
+      }
+      if(CsI_L[i]>270 && CsI_L[i]<302) {
+        Eloss[i] = 7.6869;
+        count++;
+      }
+
+	  } // i<16
+		tw->Fill();			
+	}//entries
+	cout << count << " the number of good events" << endl;
+	//htest->Draw();
+	tw->Write();
+	fw->Close();
+
+}

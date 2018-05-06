@@ -1,0 +1,21 @@
+//226Ra
+//relative units are normalized to 1
+
+4					noPeaks	//number of peaks// число пиков, по которым происходит калибровка
+4.7843			E1	//in MeV including dead layer of alpha source//энергии альфа источника
+5.48948 		E2	//in MeV//
+6.0024			E3	//in MeV//
+7.6869			E4	//in MeV//
+0.			deadLayer
+0					lowersubaddress
+15 					uppersubaddress
+CsI_L				block
+AnalysisxTree		treename
+150	lowerChannel			//in channels//каналы,
+350	upperChannel			//in channels//каналы
+0.8	lowerPeakHight			//in relative units; minimal range of the peak//
+0.5	upperPeakHight			//in relative units; minimal range of the peak//
+0.1	peakPositionTolerance	//in relative units; for check of the peaks positions in channels//
+2	fitFunctionLineWidth	//integer 1 - 10; graphics//
+4	minFitSigma				//minimal sigma of the peaks to be fitted//
+0.6	fitHightThreshold		//in relative units; the minimal height of the treated peak//
