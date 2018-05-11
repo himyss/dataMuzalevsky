@@ -1,1 +1,0 @@
-cal.txt - evaluation of energy resolution of old LaBr scintillator  by 60Co in 20.07.2017
