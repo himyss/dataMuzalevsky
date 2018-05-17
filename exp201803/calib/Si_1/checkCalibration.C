@@ -1,20 +1,20 @@
 void checkCalibration() {
   Int_t par1,par2;
-  par1=0; par2 = 1;  
+  par1=1; par2=0;  
 
   if(par1) {
-      TFile *f = new TFile("/home/muzalevsky/work/exp1803/data/dataCal/SQY_L_full_calibrated_spectra.root");
-  const Int_t nhists = 16;
+      TFile *f = new TFile("/home/muzalevsky/work/exp1803/data/dataCal/SQX_L_full_calibrated_spectra.root");
+  const Int_t nhists = 32;
   TH1F *h[nhists],*hsumm;
-  hsumm = new TH1F("hsumm","summ cal spec",4095,0,10);
+  hsumm = new TH1F("hsumm","summ X spec",4095,0,10);
   TString hname,cName;
   TTree *t = (TTree*)f->Get("AnalysisxTree");
   for(Int_t i=0;i<nhists;i++) {
-    hname.Form("HistSQY_L[%d]Efull",i);
+    hname.Form("HistSQX_L[%d]Efull",i);
     h[i] = (TH1F*)f->Get(hname.Data());
     //cout  << h[i]->GetXaxis()->GetXmax()<< " " << i<< endl;
   }
-  TCanvas *c1 = new TCanvas("c1"," summ cal spec",1000,1000);
+  TCanvas *c1 = new TCanvas("c1"," summ Xspec",1000,1000);
   Float_t content;
   for(Int_t i=0;i<4095;i++) {
     content = 0.;
@@ -51,8 +51,8 @@ void checkCalibration() {
   hsumm->Fit("g2","R+");
   hsumm->Fit("g3","R+");
   hsumm->Fit("g4","R+");
-
-  TCanvas *c[4];
+  hsumm->GetXaxis()->SetRangeUser(0.9,9.);
+  /*TCanvas *c[4];
   for(Int_t i=0;i<4;i++){
     cName.Form("c%d",i+1);
     c[i] = new TCanvas(cName.Data(),"calibrated spectra",1000,1000);
@@ -83,7 +83,7 @@ void checkCalibration() {
     c[count]->Update();
     outcalfile << g1->GetParameter(1) << "\t" << g2->GetParameter(1) << "\t" << g3->GetParameter(1) << "\t" << g4->GetParameter(1) << endl; 
   }
-
+*/
   } // if(par1)
 ///////////////////////////////////
   if(par2) {
@@ -95,7 +95,7 @@ void checkCalibration() {
 	  TBranch    *b_NeEvent_SQX_L;
 	  TBranch    *b_NeEvent_SQY_L;
 
-	  Float_t parSQX1[32], parSQX2[32],parSQY1[16],parSQY2[16];
+	  Float_t parSQX1[32], parSQX2[32],parSQY1[16],parSQY2[16],parSQ201[16],parSQ202[16];
     // Reading cal parameters 
   //------------------------------------------------------------------------------ 
    // for 1 mm Si detector
@@ -113,11 +113,9 @@ void checkCalibration() {
       sscanf(line1.Data(),"%g %g", parSQX1+count,parSQX2+count);
       count++;
     }
-    cout << " pars for SQX_L " << endl;
-    for(Int_t i=0;i<32;i++){
-      cout << parSQX1[i] << " " << parSQX2[i] << endl;   
-    }
-   // for 20 mkm Si detector
+    parSQX1[6]=0.;parSQX2[6]=0.;
+   // for(Int_t i=0;i<32;i++) cout << parSQX1[i] << " " << parSQX2[i] << endl;  
+
     ifstream myfile2;
     TString line2;
     count=-2;
@@ -132,29 +130,50 @@ void checkCalibration() {
       sscanf(line2.Data(),"%g %g", parSQY1+count,parSQY2+count);
       count++;
     }
-    cout << " pars for SQY_L mkm " << endl;
-    for(Int_t i=0;i<16;i++){
-      cout << parSQY1[i] << " " << parSQY2[i] << endl;   
+    parSQY1[0]=0.;parSQY2[0]=0.;
+    //for(Int_t i=0;i<16;i++) cout << parSQY1[i] << " " << parSQY2[i] << endl;   
+
+   // for 20 mkm Si detector
+    ifstream myfile3;
+    TString line3;
+    count=-2;
+    myfile3.open("/home/muzalevsky/work/exp1803/data/dataCal/SQ20.cal");
+    while (! myfile3.eof() ){
+		  line3.ReadLine(myfile3);
+      if(count < 0){
+        count++;
+        continue;
+      }
+		  if(line3.IsNull()) break;
+      sscanf(line3.Data(),"%g %g", parSQ201+count,parSQ202+count);
+      count++;
     }
-return;
-    /*// Creating outfile,outtree
+    parSQ201[14]=0.;parSQ202[14]=0.;
+    parSQ201[15]=0.;parSQ202[15]=0.;
+    //for(Int_t i=0;i<16;i++) cout << parSQ201[i] << " " << parSQ202[i] << endl;   
+
+    // Creating outfile,outtree
   //------------------------------------------------------------------------------ 
 	  TFile *f[100];  
 	  TString input_file;
-	  Float_t SQX_L[32],SQ20[16];
+	  Float_t SQX_L[32],SQY_L[16],SQ20[16],clasterX,clasterY,summX,summY;
     Int_t n =10,maxE;
     Long64_t nentries;
 
-	  TFile *fw = new TFile("data/out.root", "RECREATE");
+	  TFile *fw = new TFile("/home/muzalevsky/work/exp1803/data/exp1804/h5_14/outCal.root", "RECREATE");
 	  TTree *tw = new TTree("tree", "merged data in energies");
 	  tw->Branch("SQX_L",&SQX_L,"SQX_L[32]/F");
+	  tw->Branch("SQY_L",&SQY_L,"SQY_L[16]/F");
 	  tw->Branch("SQ20",&SQ20,"SQ20[16]/F");
+	  tw->Branch("summX",&summX,"summX/F");
+	  tw->Branch("summY",&summY,"summY/F");
 
     // Reading input filesm, filling out tree
   //----------------------------------------------------------------------------------
-    for(Int_t n=10;n<20;n++){
-      input_file.Form("/media/users_NAS/Muzalevsky/exp1804/rootfiles/h5_14_00%d.root",n);		
-	    f[n] = new TFile(input_file.Data());
+    //for(Int_t n=10;n<20;n++){
+      input_file.Form("/media/analysis_nas/exp201804/rootfiles/h5_14_00%d.root",n);		
+	    //f[n] = new TFile(input_file.Data());
+      f[n] = new TFile("/media/analysis_nas/exp201804/calib/si_1000_LR_02_0001.root");
 	    if (f[n]->IsZombie()) {
 		    cerr << "Input file was not opened " << input_file.Data() << endl;
 		    return 1;
@@ -163,6 +182,7 @@ return;
 	    f[n]->GetObject("AnalysisxTree",t);
 	    t->SetMakeClass(1);
 	    t->SetBranchAddress("NeEvent.SQX_L[32]", NeEvent_SQX_L, &b_NeEvent_SQX_L);
+	    t->SetBranchAddress("NeEvent.SQY_L[16]", NeEvent_SQY_L, &b_NeEvent_SQY_L);
       t->SetBranchAddress("NeEvent.SQ20[16]", NeEvent_SQ20, &b_NeEvent_SQ20);
 	    nentries = t->GetEntries();
 
@@ -170,33 +190,43 @@ return;
       cout<<">>> filling TREE up to "<<maxE<< " event"<<endl;
 	    for (Long64_t jentry=0; jentry<maxE;jentry++) {
 		    t->GetEntry(jentry);
+        summX=0.;
+        summY=0.;
 		    for(Int_t i=0; i<32; i++){
-
           SQX_L[i]=-1.;// обнуление
           if(i<16) {
             SQ20[i]=-1.;
+            SQY_L[i] = -1.;
           }
 
-          if(NeEvent_SQX_L[i]>20){ //cut the pedestal, calculating
-            SQX_L[i] = NeEvent_SQX_L[i]*parSQ2[i] + parSQ1[i];
+          SQX_L[i] = NeEvent_SQX_L[i]*parSQX2[i] + parSQX1[i];
+          summX += SQX_L[i];
+          if(i<16){
+            //if(NeEvent_SQ20[i]>150.) { //cut the pedestal, calculating
+            SQ20[i] = NeEvent_SQ20[i]*parSQ202[i] + parSQ201[i];
+            SQY_L[i] = NeEvent_SQY_L[i]*parSQY2[i] + parSQY1[i];
+            summY += SQY_L[i];
+            //}
           }
-     
-          if(i<14){
-            if(NeEvent_SQ20[i]>150.) { //cut the pedestal, calculating
-              SQ20[i] = NeEvent_SQ20[i]*par202[i] + par201[i];
-            }
-          }
-
 	      } // i<32
+
+       /* // fill clasters
+        if(SQX_L[15]>1.1 && SQX_L[14]<1 && SQX_L[16]<1){ //cut the pedestal, calculating
+          clasterX = SQX_L[14] + SQX_L[15] + SQX_L[16];  
+        }
+        if(SQY_L[7]>0.85 && SQY_L[6]<0.85 && SQY_L[8]<0.85){ 
+          clasterY = SQY_L[6] + SQY_L[7] + SQY_L[8];  
+        }*/
+
 		    tw->Fill();			
 	    }//entries
-    }// nfiles
+    //}// nfiles
 
   // writing outfile
   //----------------------------------------------------------------------------------
     fw->cd();
 	  tw->Write();
-	  fw->Close();*/
+	  fw->Close();
   } //if par2
 
   return;
