@@ -96,7 +96,7 @@ void CsI_fill() {
   Int_t maxE;
 
   // Creating outfile,outtree
-  TFile *fw = new TFile("/home/muzalevsky/work/exp1803/data/exp1804/h5_14/out.root", "RECREATE");
+  TFile *fw = new TFile("/home/muzalevsky/work/exp1803/data/exp1804/h5_14/outtest.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
   tw->Branch("CsI_R",&CsI_R,"CsI_R[16]/F");
   tw->Branch("F3",&F3,"F3[4]/F");
