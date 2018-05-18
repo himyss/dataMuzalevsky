@@ -3,14 +3,14 @@ void checkCalibration() {
   par1=1; par2=0;  
 
   if(par1) {
-      TFile *f = new TFile("/home/muzalevsky/work/exp1803/data/dataCal/SQX_L_full_calibrated_spectra.root");
-  const Int_t nhists = 32;
+      TFile *f = new TFile("/home/muzalevsky/work/exp1803/data/dataCal/SQY_R_full_calibrated_spectra.root");
+  const Int_t nhists = 16;
   TH1F *h[nhists],*hsumm;
   hsumm = new TH1F("hsumm","summ X spec",4095,0,10);
   TString hname,cName;
   TTree *t = (TTree*)f->Get("AnalysisxTree");
   for(Int_t i=0;i<nhists;i++) {
-    hname.Form("HistSQX_L[%d]Efull",i);
+    hname.Form("HistSQY_R[%d]Efull",i);
     h[i] = (TH1F*)f->Get(hname.Data());
     //cout  << h[i]->GetXaxis()->GetXmax()<< " " << i<< endl;
   }
@@ -51,7 +51,7 @@ void checkCalibration() {
   hsumm->Fit("g2","R+");
   hsumm->Fit("g3","R+");
   hsumm->Fit("g4","R+");
-  hsumm->GetXaxis()->SetRangeUser(0.9,9.);
+  hsumm->GetXaxis()->SetRangeUser(1.25,9.);
   /*TCanvas *c[4];
   for(Int_t i=0;i<4;i++){
     cName.Form("c%d",i+1);
