@@ -84,11 +84,25 @@ void CsI_fill() {
   cout << endl << " pars for YL strips" << endl;
   for(Int_t i=0;i<16;i++) cout << parYL1[i] << " " << parYL2[i] << endl;   
 
-    
+  // get pars for positions of times
+  ifstream myfile5;
+  TString line5;
+  Float_t post[32];
+  myfile5.open("/home/muzalevsky/work/exp1803/data/exp1804/h5_14/positions.txt");
+  count = 0;
+  while (! myfile5.eof() ){
+    line5.ReadLine(myfile5);
+    if(line5.IsNull()) break;
+
+    sscanf(line5.Data(),"%g", post+count);
+    count++;
+  }
+  cout << endl << " pars for time positions" << endl;
+  for(Int_t i=0;i<32;i++) cout << post[i] << endl;      
   //------------------------------------------------------------------------------ 
 	TFile *f[100]; 
   TString input_file;
-  Float_t CsI_R[16],F3[4],tF3[4],F5[4],tF5[4],SQX_R[32],SQY_R[16],SQX_L[32],SQY_L[16],tSQX_R[32],tSQY_R[16],tSQX_L[32],tSQY_L[16];
+  Float_t CsI_R[16],F3[4],tF3[4],F5[4],tF5[4],SQX_R[32],SQY_R[16],SQX_L[32],SQY_L[16],tSQX_R[32],tSQY_R[16],tSQX_L[32],tSQY_L[16],zeroPos,shitf;
   TTree* 		t;
   UShort_t    NeEvent_CsI_R[16],NeEvent_F3[4],NeEvent_tF3[4],NeEvent_F5[4],NeEvent_tF5[4],NeEvent_SQX_R[32],NeEvent_SQY_R[16],NeEvent_SQX_L[32],NeEvent_SQY_L[16],NeEvent_tSQX_R[32],NeEvent_tSQY_R[16],NeEvent_tSQX_L[32],NeEvent_tSQY_L[16];
   TBranch    *b_NeEvent_CsI_R,*b_NeEvent_F3,*b_NeEvent_F5,*b_NeEvent_tF3,*b_NeEvent_tF5,*b_NeEvent_SQX_R,*b_NeEvent_SQY_R,*b_NeEvent_SQX_L,*b_NeEvent_SQY_L,*b_NeEvent_tSQX_R,*b_NeEvent_tSQY_R,*b_NeEvent_tSQX_L,*b_NeEvent_tSQY_L;
@@ -96,7 +110,7 @@ void CsI_fill() {
   Int_t maxE;
 
   // Creating outfile,outtree
-  TFile *fw = new TFile("/home/muzalevsky/work/exp1803/data/exp1804/h5_14/outtest.root", "RECREATE");
+  TFile *fw = new TFile("/home/muzalevsky/work/exp1803/data/exp1804/h5_14/out5test.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
   tw->Branch("CsI_R",&CsI_R,"CsI_R[16]/F");
   tw->Branch("F3",&F3,"F3[4]/F");
@@ -112,7 +126,7 @@ void CsI_fill() {
   tw->Branch("tSQX_L",&tSQX_L,"tSQX_L[32]/F");
   tw->Branch("tSQY_L",&tSQY_L,"tSQY_L[16]/F");
 
-  for(Int_t n=10;n<30;n++) {
+  for(Int_t n=10;n<15;n++) {
     input_file.Form("/media/analysis_nas/exp201804/rootfiles/h5_14_00%d.root",n);		
     f[n] = new TFile(input_file.Data());
     if (f[n]->IsZombie()) {
@@ -176,7 +190,7 @@ void CsI_fill() {
         SQX_R[i] = NeEvent_SQX_R[i]*parXR2[i] + parXR1[i];
         SQX_L[i] = NeEvent_SQX_L[i]*parXL2[i] + parXL1[i];
         tSQX_R[i] = NeEvent_tSQX_R[i];
-        tSQX_L[i] = NeEvent_tSQX_L[i];
+        tSQX_L[i] = 0.3*(NeEvent_tSQX_L[i] - (post[i]-post[0]));
         if(i<16){
           CsI_R[i] = NeEvent_CsI_R[i];
           SQY_R[i] = NeEvent_SQY_R[i]*parYR2[i] + parYR1[i];

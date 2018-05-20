@@ -1,10 +1,33 @@
-{
+void fitH(TH1F *h, TF1 *g) {
+  Double_t rmax, rmin;
+
+  Int_t i=h->GetMaximumBin();
+  while(h->GetBinContent(i) > 0.5*h->GetMaximum()) {
+    rmax = h->GetBinCenter(i+1);
+    i++;
+  }
+  
+  i=h->GetMaximumBin();
+  while(h->GetBinContent(i) > 0.5*h->GetMaximum()) {
+    rmin = h->GetBinLowEdge(i-1);
+    i--;
+  }
+  //cout << "########" << endl << rmin << " "  << rmax << endl;
+  g->SetParLimits(1,rmin,rmax);
+	g->SetRange(rmin,rmax);
+  h->Fit("g","R");
+  //ofile << g->GetParameter(1) << endl; 
+  return;
+}
+
+void drawData(){
 
 
   Int_t par1,par2,par3,par4;
+  TString canname;
   par4=1;
 
-  TFile *f1 = new TFile("/home/muzalevsky/work/exp1803/data/exp1804/h5_14/out.root");
+  TFile *f1 = new TFile("/home/muzalevsky/work/exp1803/data/exp1804/h5_14/out70.root");
   TTree *t1 = (TTree*)f1->Get("tree");
   
 
@@ -66,74 +89,110 @@
     c1->cd(4);
     t->Draw("NeEvent.SQX_R[0]:NeEvent.CsI_R[0]","NeEvent.SQX_R[0]>200 && NeEvent.CsI_R[0]>100","");
   }
-*/
+
   if(par3) {
 
     TFile *f1 = new TFile("/home/muzalevsky/work/exp1803/data/exp1804/h5_14/out.root");
     TTree *t1 = (TTree*)f1->Get("tree");
     TCanvas *c2 = new TCanvas("c2","Si amp^times",1800,1000);
-    c2->Divide(2,2);
+    c2->Divide(2,1);
     c2->cd(1);
-    t1->Draw("tSQX_L[10]","","",100000,0);
-
+    t1->Draw("SQX_L[12]:tSQX_L[12]","","",4000000,0);
+    
     c2->cd(2);
-    t1->Draw("SQX_L[11]:tSQX_L[11]","","",100000);
-
-    c2->cd(3);
-    t1->Draw("SQX_L[12]:tSQX_L[12]","","",100000,0);
-
-    c2->cd(4);
-    t1->Draw("SQX_L[]:tSQX_L[]","","",100000,0);
+    //c2_2->SetLogz();
+    t1->Draw("SQX_L[]:tSQX_L[]>>(500,500,2500,100,0,90)","","col",5000000,0);
 
   }
-
+*/
 
   if(par4) {
-    Int_t nhists = 4,nPad,count;
+    Int_t nhists = 32,nPad,count;
     TH1F *hX[nhists],*hY[16],*h;
     TString hname,cName,cut,vary,vary1,vary2;
+    TH2F *h2D[32];  
 
-    TF1* g = new TF1("g", "gaus", 1000, 1200);
-    g->SetParLimits(0,1.,150.);
-    g->SetParLimits(1,1000,1200);
+	  ofstream outcalfile;
+	  outcalfile.open("/home/muzalevsky/work/exp1803/data/exp1804/h5_14/positionstest.txt");
+	  if (!outcalfile.is_open()) {
+		  cout <<"Output file was not opened" << endl;
+		  return;
+	  }
+
+    TF1* g = new TF1("g", "gaus", 1000, 1600);
+    g->SetParLimits(0,1.,1e+10);
+    g->SetParLimits(1,1000,1600);
     g->SetParLimits(2,1.,50.);
   
-    h = new TH1F("h","temp hist",100,1000,1200);
+    h = new TH1F("h","temp hist",600,1000,1600);
+    TH2F *h2 = new TH2F("h2","temp 2d hist",600,1000,1750,200,0,90);
 
-    for(Int_t i=0;i<nhists;i++) {
+    /*for(Int_t i=0;i<nhists;i++) {
       hname.Form("h%d",i+1);
-      hX[i] = new TH1F(hname.Data(),"title",100,1000,1200);
-    }  
+      hX[i] = new TH1F(hname.Data(),"title",1200,0,1200);
+    }*/ 
     Int_t ncanvases = nhists/4; 
     TCanvas *c[ncanvases];
     for(Int_t i=0;i<ncanvases;i++){
-      cName.Form("c%d",i+1);
+      cName.Form("c%d",i);
       c[i] = new TCanvas(cName.Data(),"calibrated spectra",1000,1000);
       c[i]->Divide(2,2);
     }
 
+    TCanvas *c2[ncanvases];
+    for(Int_t i=0;i<ncanvases;i++){
+      cName.Form("c2%d",i+1);
+      c2[i] = new TCanvas(cName.Data()," 2-dim calibrated spectra",1000,1000);
+      c2[i]->Divide(2,2);
+    }
+
     for(Int_t i=0;i<nhists;i++) {
-    
-      cut.Form("SQX_L[%d]>14 && tSQX_L[%d]>1000 && tSQX_L[%d]<1200",i,i,i);
+      hname.Form("h%d",i);
+      cut.Form("SQX_L[%d]>14 && tSQX_L[%d]>1000 && tSQX_L[%d]<1600",i,i,i);
+      //cut.Form("tSQX_L[%d]>1000 && tSQX_L[%d]<1600",i,i,i);
       //vary1.Form("tSQX_L[%d]>>(200,1000,1200)",i);
       vary1.Form("tSQX_L[%d]>>h",i);
-      //vary1.Form("tSQX_L[%d]",i);
+
       count = i/4;
       nPad = (i%4)+1;
       c[count]->cd(nPad);
-      t1->Draw(vary1.Data(),cut.Data(),"",100000,0);
+      //t1->Draw(vary1.Data(),cut.Data(),"",1000000,0);
 
-      hX[i] = (TH1F*)gPad->GetPrimitive("h");
-      hX[i]->Fit("g","R");
-      
+      //hX[i] = (TH1F*)gPad->GetPrimitive("h");
+      //hX[i]->SetTitle(hname.Data());
+      //fitH(hX[i],g);
+     
       c[count]->Update();
 
+      c2[count]->cd(nPad);      
+      
+      vary.Form("SQX_L[%d]:tSQX_L[%d]>>h2",i,i);
+      t1->Draw(vary.Data(),"","",100000,0);
+      h2D[i] = (TH2F*)gPad->GetPrimitive("h2");
+      //h2D[i]->Draw();
 
     }
     /*TCanvas *test = new TCanvas("test","title",1000,1000);
     test->cd();
     hX[0]->Draw();*/
       //t1->Draw("SQX_L[10]:tSQX_L[10]","","",1000000);
+
+	/* c[0]->Print("output.pdf");
+	  c[0]->Print("output.pdf[");
+    for(Int_t j=1;j<ncanvases;j++) {
+      c[j]->Print("output.pdf");
+    }
+    for(Int_t j=0;j<ncanvases-1;j++) {
+      c2[j]->Print("output.pdf");
+    }
+	  c2[ncanvases-1]->Print("output.pdf]");
+
+	  c[0]->Print("output1.pdf");
+	  c[0]->Print("output1.pdf[");
+    for(Int_t j=1;j<ncanvases-1;j++) {
+      c[j]->Print("output1.pdf");
+    }
+	  c[ncanvases-1]->Print("output1.pdf]");*/
 
 
   }
