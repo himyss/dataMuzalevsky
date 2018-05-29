@@ -29,7 +29,7 @@ void drawDataEgor()
 
   par3=1;
 
-  TString inFilename("/home/muzalevsky/work/exp1803/data/exp1804/h5_14/out40cal.root");
+  TString inFilename("/home/muzalevsky/work/exp1803/data/exp1804/h5_14/out40_33.root");
   TString inTreeName("tree");
   TString outPdfDir("pdf");
 
@@ -120,8 +120,8 @@ void drawDataEgor()
     c1->cd(4);
     t->Draw("NeEvent.SQX_R[0]:NeEvent.CsI_R[0]","NeEvent.SQX_R[0]>200 && NeEvent.CsI_R[0]>100","");
 
-  } // end of 'par2' part
-*/
+  } // end of 'par2' part*/
+
   if (par3) {
 
     cerr << "Processing 'par3' part." << endl;
@@ -133,14 +133,14 @@ void drawDataEgor()
     TH2F *h2;     
    
 
-    TFile *f1 = new TFile("/home/muzalevsky/work/exp1803/data/exp1804/h5_14/out40cal.root");
+    TFile *f1 = new TFile("/home/muzalevsky/work/exp1803/data/exp1804/h5_14/out40_33.root");
     TTree *t1 = (TTree*)f1->Get("tree");
     TCanvas *c2 = new TCanvas("c2","Si amp^times",1800,1000);
     c2->Divide(2,2);
     c2->cd(1);
     gPad->SetLogz();
     //t1->Draw("SQY_L[4]:tSQY_L[4]>>htemp1(400,1000,1400,100,0,90)","tSQY_L[4]>0 && SQY_L[4]>0","box",5000000,0);
-    t1->Draw("SQX_L[8]:tSQX_L[8]>>htemp1(400,200,600,100,0,90)","tSQX_L[8]>0 && SQX_L[8]>0","box",20000000,0);
+    t1->Draw("SQX_L[8]:tSQX_L[8]>>htemp1(400,200,600,100,0,90)","tSQX_L[8]>0 && SQX_L[8]>0 && trigger==1","box",29000000,0);
     h1 = (TH2F*)gPad->GetPrimitive("htemp1");
     //cout << h1 << endl;
     //c2->cd(3);
@@ -151,7 +151,7 @@ void drawDataEgor()
     gPad->SetLogz();
     //c2_2->SetLogz();
     //t1->Draw("SQY_L[4]:tSQY_L[4]>>htemp2(400,1000,1400,100,0,90)","tSQY_L[4]>0 && SQY_L[4]>0 && multY_L>1","box",5000000,0);
-    t1->Draw("SQX_L[8]:tSQX_L[8]>>htemp2(400,200,600,100,0,90)","tSQX_L[8]>0 && SQX_L[8]>0 && multY_L>1","box",20000000,0);
+    t1->Draw("SQX_L[28]:tSQX_L[28]>>htemp2(400,200,600,100,0,90)","tSQX_L[28]>0 && SQX_L[28]>0 && trigger==1","box",29000000,0);
     h2 = (TH2F*)gPad->GetPrimitive("htemp2");
     h2->Draw();   
 
@@ -159,19 +159,19 @@ void drawDataEgor()
     c2->cd(3);
     gPad->SetLogz();
     //t1->Draw("SQY_L[]:tSQY_L[]>>htemp3(400,1000,1400,100,0,90)","tSQY_L[]>0 && SQY_L[]>0","col",5000000,0);
-    t1->Draw("SQX_L[]:tSQX_L[]>>htemp3(400,200,600,100,0,90)","tSQX_L[]>0 && SQX_L[]>0","col",500000,0);
+    t1->Draw("SQX_L[]:tSQX_L[]>>htemp3(400,200,600,100,0,90)","tSQX_L[]>0 && SQX_L[]>0 && trigger==1","col",29000000,0);
     //t1->Draw("SQY_L[12]:tSQY_L[12]","multY_L==2","",4000000,0);
 
     c2->cd(4);
     gPad->SetLogz();
     //t1->Draw("SQY_L[]:tSQY_L[]>>htemp4(400,1000,1400,100,0,90)","multY_L==1 && tSQY_L[]>0 && SQY_L[]>0","col",5000000,0);
-    t1->Draw("SQX_L[]:tSQX_L[]>>htemp4(400,200,600,100,0,90)","multY_L==1 && tSQX_L[]>0 && SQX_L[]>0","col",500000,0);
+    t1->Draw("SQX_L[]:tSQX_L[]>>htemp4(400,200,600,100,0,90)","multX_L==1 && tSQX_L[]>0 && SQX_L[]>0 && trigger==1","col",29000000,0);
     
   } // end of 'par3' part
 
 
-
-  /*if (par4) {
+/*
+  if (par4) {
 
     cerr << "Processing 'par4' part." << endl;
 
@@ -199,7 +199,7 @@ void drawDataEgor()
     g->SetParLimits(1, 1000., 1200.);
     g->SetParLimits(2, 1., 50.);
   
-    Int_t nhists = 16;
+    Int_t nhists = 32;
     Int_t ncanvases = nhists/4;
     Double_t shift,zeroLevel;
 
@@ -221,16 +221,16 @@ void drawDataEgor()
 
     // Create canvases
     // ========================================================================
-    TCanvas* c[4]; // works only if ncanvases==8
-    for(Int_t i=0; i<4; i++) {
+    TCanvas* c[8]; // works only if ncanvases==8
+    for(Int_t i=0; i<8; i++) {
       TString cName;
       cName.Form("c_%d",i);
       c[i] = new TCanvas(cName.Data(),"calibrated spectra",1000,1000);
       c[i]->Divide(2,2);
     }
 
-    TCanvas* c2[4]; // works only if ncanvases==8
-    for(Int_t i=0; i<4; i++) {
+    TCanvas* c2[8]; // works only if ncanvases==8
+    for(Int_t i=0; i<8; i++) {
       TString cName;
       cName.Form("c2_%d",i);
       c2[i] = new TCanvas(cName.Data(),"2-dim calibrated spectra",1000,1000);
@@ -248,18 +248,18 @@ void drawDataEgor()
       hname.Form("h%d",i);
 
       TString cut;
-      cut.Form("SQY_L[%d]>14",i);
+      cut.Form("SQX_L[%d]>14",i);
       //cut.Form("tSQX_L[%d]>1000 && tSQX_L[%d]<1600",i,i,i);
 
       TString vary1;
       //vary1.Form("tSQX_L[%d]>>(200,1000,1200)",i);
-      vary1.Form("tSQY_L[%d]>>h%d(200,1000,1200)",i,i);
+      vary1.Form("tSQX_L[%d]>>h%d(800,1000,1800)",i,i);
 
       Int_t count = i/4;
       Int_t nPad = (i%4)+1;
 
       c[count]->cd(nPad);
-      t1->Draw(vary1.Data(),cut.Data(),"",10000000,0);
+      t1->Draw(vary1.Data(),cut.Data(),"",100000,0);
 
       hX[i] = (TH1F*)gPad->GetPrimitive(hname.Data());
       hX[i]->SetTitle(hname.Data());
@@ -284,9 +284,9 @@ void drawDataEgor()
       cut1.Form("tSQX_L[%d]>900 && tSQX_L[%d]<1600",i,i);
 
       TString vary;
-      vary.Form("SQY_L[%d]:tSQY_L[%d]>>h2_%d(400,1000.,1400.,100,0.,90)",i,i,i);
-      gPad->SetLogz();
-      t1->Draw(vary.Data(),"","col",100000,0);
+      vary.Form("SQX_L[%d]:tSQX_L[%d]>>h2_%d(800,1000.,1800.,100,0.,90)",i,i,i);
+      //gPad->SetLogz();
+      t1->Draw(vary.Data(),"","",5000000,0);
 
      
       h2D[i] = (TH2F*)gPad->GetPrimitive(h2name.Data());

@@ -107,10 +107,10 @@ void drawData(){
 */
 
   if(par4) {
-    Int_t nhists = 32,nPad,count;
+    Int_t nhists = 16,nPad,count;
     TH1F *hX[nhists],*hY[16],*h;
     TString hname,cName,cut,vary,vary1,vary2;
-    TH2F *h2D[32];  
+    TH2F *h2D[16];  
 
 	  ofstream outcalfile;
 	  outcalfile.open("/home/muzalevsky/work/exp1803/data/exp1804/h5_14/positionstest.txt");
@@ -119,13 +119,13 @@ void drawData(){
 		  return;
 	  }
 
-    TF1* g = new TF1("g", "gaus", 1000, 1600);
-    g->SetParLimits(0,1.,1e+10);
+    TF1* g = new TF1("g", "gaus", 900, 1600);
+    //g->SetParLimits(0,1.,1e+5);
     g->SetParLimits(1,1000,1600);
     g->SetParLimits(2,1.,50.);
   
-    h = new TH1F("h","temp hist",600,1000,1600);
-    TH2F *h2 = new TH2F("h2","temp 2d hist",600,1000,1750,200,0,90);
+    h = new TH1F("h","temp hist",750,900,750);
+    TH2F *h2 = new TH2F("h2","temp 2d hist",200,0,90,750,900,1750);
 
     /*for(Int_t i=0;i<nhists;i++) {
       hname.Form("h%d",i+1);
@@ -148,27 +148,28 @@ void drawData(){
 
     for(Int_t i=0;i<nhists;i++) {
       hname.Form("h%d",i);
-      cut.Form("SQX_L[%d]>14 && tSQX_L[%d]>1000 && tSQX_L[%d]<1600",i,i,i);
+      cut.Form("SQY_L[%d]>14 && tSQY_L[%d]>900 && tSQY_L[%d]<1600",i,i,i);
       //cut.Form("tSQX_L[%d]>1000 && tSQX_L[%d]<1600",i,i,i);
       //vary1.Form("tSQX_L[%d]>>(200,1000,1200)",i);
-      vary1.Form("tSQX_L[%d]>>h",i);
+      vary1.Form("tSQY_L[%d]>>h",i);
 
       count = i/4;
       nPad = (i%4)+1;
       c[count]->cd(nPad);
-      //t1->Draw(vary1.Data(),cut.Data(),"",1000000,0);
+      t1->Draw(vary1.Data(),cut.Data(),"",500000,0);
 
-      //hX[i] = (TH1F*)gPad->GetPrimitive("h");
-      //hX[i]->SetTitle(hname.Data());
-      //fitH(hX[i],g);
+      hX[i] = (TH1F*)gPad->GetPrimitive("h");
+      hX[i]->SetTitle(hname.Data());
+      fitH(hX[i],g);
      
       c[count]->Update();
 
       c2[count]->cd(nPad);      
       
-      vary.Form("SQX_L[%d]:tSQX_L[%d]>>h2",i,i);
-      t1->Draw(vary.Data(),"","",100000,0);
-      h2D[i] = (TH2F*)gPad->GetPrimitive("h2");
+      vary.Form("SQY_L[%d]:tSQY_L[%d]>>h2",i,i);
+      t1->Draw(vary.Data(),"","",500000,0);
+      c2[count]->Update();
+      //h2D[i] = (TH2F*)gPad->GetPrimitive("h2");
       //h2D[i]->Draw();
 
     }

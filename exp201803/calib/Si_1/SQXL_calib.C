@@ -28,39 +28,6 @@ void SQXL_calib(){
     sscanf(line1.Data(),"%g %g", parSQ1+count-3,parSQ2+count-3);
     //cout << parSQ1[count-3] << " " << parSQ2[count-3] << endl;
   }
-  
-	/*parSQ1[0] = -0.3762; 	parSQ2[0] = 0.02216;
-	parSQ1[1] = -0.35;	parSQ2[1] = 0.02198;		
-	parSQ1[2] = -0.2505;	parSQ2[2] = 0.02134;		
-	parSQ1[3] = -0.254;	parSQ2[3] = 0.02215;		
-	parSQ1[4] = -0.2537;	parSQ2[4] = 0.02153;		
-	parSQ1[5] = -0.2664;	parSQ2[5] = 0.02178;		
-	parSQ1[6] = -0.5497;	parSQ2[6] = 0.02013;		
-	parSQ1[7] = -0.2586;	parSQ2[7] = 0.02241;		
-	parSQ1[8] = -0.2682;	parSQ2[8] = 0.02255;		
-	parSQ1[9] = -0.2441;	parSQ2[9] = 0.02177;		
-	parSQ1[10] = -0.2519;	parSQ2[10] = 0.0218;		
-	parSQ1[11] = -0.2714;	parSQ2[11] = 0.02245;		
-	parSQ1[12] = -0.2769;	parSQ2[12] = 0.0223;		
-	parSQ1[13] = -0.2572;	parSQ2[13] = 0.0218;		
-	parSQ1[14] = -0.2795;	parSQ2[14] = 0.02127;		
-	parSQ1[15] = -0.2625;	parSQ2[15] = 0.02182;		
-	parSQ1[16] = -0.3148;	parSQ2[16] = 0.02145;		
-	parSQ1[17] = -0.3162;	parSQ2[17] = 0.02203;		
-	parSQ1[18] = -0.3325;	parSQ2[18] = 0.02177;		
-	parSQ1[19] = -0.3102;	parSQ2[19] = 0.02249;		
-	parSQ1[20] = -0.3252;	parSQ2[20] = 0.02202;		
-	parSQ1[21] = -0.3111;	parSQ2[21] = 0.02191;		
-	parSQ1[22] = -0.3158;	parSQ2[22] = 0.02141;		
-	parSQ1[23] = -0.2989;	parSQ2[23] = 0.02181;		
-	parSQ1[24] = -0.3175;	parSQ2[24] = 0.02124;		
-	parSQ1[25] = -0.32;	parSQ2[25] = 0.02203;		
-	parSQ1[26] = -0.3286;	parSQ2[26] = 0.02192;		
-	parSQ1[27] = -0.3109;	parSQ2[27] = 0.02223;		
-	parSQ1[28] = -0.3135;	parSQ2[28] = 0.02134;		
-	parSQ1[29] = -0.3222;	parSQ2[29] = 0.0222;		
-	parSQ1[30] = -0.3256;	parSQ2[30] = 0.02148;		
-	parSQ1[31] = -0.3173;	parSQ2[31] = 0.02251;		*/
 
 	f = new TFile(input_file_name_cs.c_str());
 	f->GetObject("AnalysisxTree",t);

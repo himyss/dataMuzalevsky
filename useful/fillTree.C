@@ -7,7 +7,7 @@ Double_t fitf(Double_t *x,Double_t *par) {  // creating fit function
 }
 //---------------------------------------------------------
 
-void CsI_fill() { 
+void fillTree() { 
 	
     // Reading cal parameters 
   Float_t parXL1[32], parXL2[32],parYL1[16],parYL2[16],parXR1[32], parXR2[32],parYR1[16],parYR2[16];
@@ -128,12 +128,12 @@ void CsI_fill() {
   Float_t CsI_R[16],F3[4],tF3[4],F5[4],tF5[4],SQX_R[32],SQY_R[16],SQX_L[32],SQY_L[16],tSQX_R[32],tSQY_R[16],tSQX_L[32],tSQY_L[16],zeroPos,shitf;
   TTree* 		t;
   UShort_t    NeEvent_CsI_R[16],NeEvent_F3[4],NeEvent_tF3[4],NeEvent_F5[4],NeEvent_tF5[4],NeEvent_SQX_R[32],NeEvent_SQY_R[16],NeEvent_SQX_L[32],NeEvent_SQY_L[16],NeEvent_tSQX_R[32],NeEvent_tSQY_R[16],NeEvent_tSQX_L[32],NeEvent_tSQY_L[16];
-  TBranch    *b_NeEvent_CsI_R,*b_NeEvent_F3,*b_NeEvent_F5,*b_NeEvent_tF3,*b_NeEvent_tF5,*b_NeEvent_SQX_R,*b_NeEvent_SQY_R,*b_NeEvent_SQX_L,*b_NeEvent_SQY_L,*b_NeEvent_tSQX_R,*b_NeEvent_tSQY_R,*b_NeEvent_tSQX_L,*b_NeEvent_tSQY_L,*b_NeEvent_trigger;
+  TBranch    *b_NeEvent_CsI_R,*b_NeEvent_F3,*b_NeEvent_F5,*b_NeEvent_tF3,*b_NeEvent_tF5,*b_NeEvent_SQX_R,*b_NeEvent_SQY_R,*b_NeEvent_SQX_L,*b_NeEvent_SQY_L,*b_NeEvent_tSQX_R,*b_NeEvent_tSQY_R,*b_NeEvent_tSQX_L,*b_NeEvent_tSQY_L;
   Long64_t nentries1;
-  Int_t maxE,multY_L,multX_L,multY_R,multX_R,trigger,NeEvent_trigger;
+  Int_t maxE,multY_L,multX_L,multY_R,multX_R;
 
   // Creating outfile,outtree
-  TFile *fw = new TFile("/home/muzalevsky/work/exp1803/data/exp1804/h5_14/out40_33.root", "RECREATE");
+  TFile *fw = new TFile("test.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
   tw->Branch("CsI_R",&CsI_R,"CsI_R[16]/F");
   tw->Branch("F3",&F3,"F3[4]/F");
@@ -150,10 +150,9 @@ void CsI_fill() {
   tw->Branch("tSQY_L",&tSQY_L,"tSQY_L[16]/F");
   tw->Branch("multY_L",&multY_L,"multY_L/I");
   tw->Branch("multX_L",&multX_L,"multX_L/I");
-  tw->Branch("trigger",&trigger,"trigger/I");
 
-  for(Int_t n=10;n<50;n++) {
-    input_file.Form("/media/analysis_nas/exp201804/rootfiles/h5_14_00%d.root",n);		
+  for(Int_t n=1;n<8;n++) {
+    input_file.Form("/media/analysis_nas/exp201804/calib/si_after/si_L_cal_35cm_center_normal_000%d.root",n);		
     f[n] = new TFile(input_file.Data());
     if (f[n]->IsZombie()) {
 	    cerr << "Input file was not opened " << input_file.Data() << endl;
@@ -175,7 +174,6 @@ void CsI_fill() {
 	  t->SetBranchAddress("NeEvent.tSQY_R[16]", NeEvent_tSQY_R, &b_NeEvent_tSQY_R);
 	  t->SetBranchAddress("NeEvent.tSQX_L[32]", NeEvent_tSQX_L, &b_NeEvent_tSQX_L);
 	  t->SetBranchAddress("NeEvent.tSQY_L[16]", NeEvent_tSQY_L, &b_NeEvent_tSQY_L);
-    t->SetBranchAddress("NeEvent.trigger", &NeEvent_trigger, &b_NeEvent_trigger);
 		
 	  nentries1 = t->GetEntries();
     cout << nentries1 << endl;
@@ -184,10 +182,9 @@ void CsI_fill() {
     cout<<">>> filling TREE up to "<<maxE<< " event"<<endl;
 	  for (Long64_t jentry=0; jentry<maxE;jentry++) {
 		  t->GetEntry(jentry);
+    
       // обнуление
-      trigger=0;
       for(Int_t i = 0; i<32;i++) {
-        
         multY_L = 0;
         multX_L = 0;
         multY_R = 0;
@@ -210,7 +207,7 @@ void CsI_fill() {
           tF3[i] = 0.;
         }
       }
-      
+
        // selecting nice events
       //if( (NeEvent_F5[0]+NeEvent_F3[0]>400) && (NeEvent_F5[0]+NeEvent_F3[0]<750) && (NeEvent_tF5[0]-NeEvent_tF3[0]>640) && (NeEvent_tF5[0]-NeEvent_tF3[0]<750) && 
       //    (NeEvent_F5[1]+NeEvent_F3[1]>400) && (NeEvent_F5[1]+NeEvent_F3[1]<750) && (NeEvent_tF5[1]-NeEvent_tF3[1]>640) && (NeEvent_tF5[1]-NeEvent_tF3[1]<750) && 
@@ -219,22 +216,20 @@ void CsI_fill() {
       //}
 
       for(Int_t i=0; i<32; i++) {
-        SQX_R[i] = NeEvent_SQX_R[i]*parXR2[i] + parXR1[i];
-        SQX_L[i] = NeEvent_SQX_L[i]*parXL2[i] + parXL1[i];
+        SQX_R[i] = NeEvent_SQX_R[i];
+        SQX_L[i] = NeEvent_SQX_L[i];
         if(SQX_L[i]>1.1) multX_L++; 
         if(SQX_R[i]>1.15) multX_R++; 
         tSQX_R[i] = NeEvent_tSQX_R[i];
-        //tSQX_L[i] = NeEvent_tSQX_L[i]*tPx_l2[i] + tPx_l1[i];
-        tSQX_L[i] = NeEvent_tSQX_L[i]*0.33;
+        tSQX_L[i] = NeEvent_tSQX_L[i];
         if(i<16){
           CsI_R[i] = NeEvent_CsI_R[i];
-          SQY_R[i] = NeEvent_SQY_R[i]*parYR2[i] + parYR1[i];
-          SQY_L[i] = NeEvent_SQY_L[i]*parYL2[i] + parYL1[i];
+          SQY_R[i] = NeEvent_SQY_R[i];
+          SQY_L[i] = NeEvent_SQY_L[i];
           if(SQY_L[i]>0.85) multY_L++; 
           if(SQY_R[i]>1.25) multY_R++; 
           tSQY_R[i] = NeEvent_tSQY_R[i];
-          //tSQY_L[i] = NeEvent_tSQY_L[i]*tPy_l2[i] + tPy_l1[i];
-          tSQY_L[i] = NeEvent_tSQY_L[i]*0.33;
+          tSQY_L[i] = NeEvent_tSQY_L[i];
         }
         if(i<4) {
           F3[i] = NeEvent_F3[i];
@@ -243,7 +238,6 @@ void CsI_fill() {
           tF5[i] = NeEvent_tF5[i];
         }
       }
-      trigger = NeEvent_trigger;
 		  tw->Fill();			
 	  }//entries
   }//nfiles
