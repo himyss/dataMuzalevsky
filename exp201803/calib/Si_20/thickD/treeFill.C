@@ -7,10 +7,10 @@ Double_t fitf(Double_t *x,Double_t *par) {  // creating fit function
 }
 //---------------------------------------------------------
 
-void CsI_fill() { 
+void treeFill() { 
 	
     // Reading cal parameters 
-  Float_t parXL1[32], parXL2[32],parYL1[16],parYL2[16],parXR1[32], parXR2[32],parYR1[16],parYR2[16];
+  Float_t parXL1[32], parXL2[32],parYL1[16],parYL2[16],parXR1[32], parXR2[32],parYR1[16],parYR2[16],par20_1[16],par20_2[16];
   //------------------------------------------------------------------------------ 
   // for 1 mm Si detector
   TString line1;
@@ -27,8 +27,8 @@ void CsI_fill() {
     sscanf(line1.Data(),"%g %g", parXR1+count,parXR2+count);
     count++;
   }
-  cout << endl << " pars for XR strips" << endl;
-  for(Int_t i=0;i<32;i++) cout << parXR1[i] << " " << parXR2[i] << endl;  
+ // cout << endl << " pars for XR strips" << endl;
+ // for(Int_t i=0;i<32;i++) cout << parXR1[i] << " " << parXR2[i] << endl;  
 
   ifstream myfile2;
   TString line2;
@@ -45,13 +45,14 @@ void CsI_fill() {
     count++;
   }
 
-  cout << endl << " pars for YR strips" << endl;
-  for(Int_t i=0;i<16;i++) cout << parYR1[i] << " " << parYR2[i] << endl;   
+  //cout << endl << " pars for YR strips" << endl;
+  //for(Int_t i=0;i<16;i++) cout << parYR1[i] << " " << parYR2[i] << endl;   
 
   ifstream myfile3;
   TString line3;
   count=-2;
-  myfile3.open("/home/muzalevsky/work/exp1803/data/siCal/SQX_L.cal");
+  //myfile3.open("/home/muzalevsky/work/exp1803/data/siCal/SQX_L.cal");
+  myfile3.open("/home/muzalevsky/work/temp/SQX_L.cal");
   while (! myfile3.eof() ){
     line3.ReadLine(myfile3);
     if(count < 0){
@@ -69,7 +70,8 @@ void CsI_fill() {
   ifstream myfile4;
   TString line4;
   count=-2;
-  myfile4.open("/home/muzalevsky/work/exp1803/data/siCal/SQY_L.cal");
+//  myfile4.open("/home/muzalevsky/work/exp1803/data/siCal/SQY_L.cal");
+  myfile4.open("/home/muzalevsky/work/temp/SQY_L.cal");
   while (! myfile4.eof() ){
     line4.ReadLine(myfile4);
     if(count < 0){
@@ -101,8 +103,8 @@ void CsI_fill() {
     sscanf(line5.Data(),"%g %g", tPx_l1+count,tPx_l2+count);
     count++;
   }
-  cout << endl << " pars for X time positions" << endl;
-  for(Int_t i=0;i<32;i++) cout << tPx_l1[i] << " " << tPx_l2[i] << endl;      
+  //cout << endl << " pars for X time positions" << endl;
+ // for(Int_t i=0;i<32;i++) cout << tPx_l1[i] << " " << tPx_l2[i] << endl;      
 
   ifstream myfile6;
   TString line6;
@@ -119,47 +121,68 @@ void CsI_fill() {
     sscanf(line6.Data(),"%g %g", tPy_l1+count,tPy_l2+count);
     count++;
   }
-  cout << endl << " pars for Y time positions" << endl;
-  for(Int_t i=0;i<16;i++) cout << tPy_l1[i] << " " << tPy_l2[i] << endl;      
+  //cout << endl << " pars for Y time positions" << endl;
+  //for(Int_t i=0;i<16;i++) cout << tPy_l1[i] << " " << tPy_l2[i] << endl;  
 
-  //------------------------------------------------------------------------------ 
+  ifstream myfile7;
+  TString line7;
+  count=-2;
+  myfile7.open("/home/muzalevsky/work/temp/SQ20.cal");
+  while (! myfile7.eof() ){
+    line7.ReadLine(myfile7);
+    if(count < 0){
+      count++;
+      continue;
+    }
+    if(line7.IsNull()) break;
+    sscanf(line7.Data(),"%g %g", par20_1+count,par20_2+count);
+    count++;
+  }
+
+  cout << endl << " pars for SQ20 strips" << endl;
+  for(Int_t i=0;i<16;i++) cout << par20_1[i] << " " << par20_2[i] << endl; 
+    
+//------------------------------------------------------------------------------ 
 	TFile *f[100]; 
-  TString input_file;
-  Float_t CsI_R[16],F3[4],tF3[4],F5[4],tF5[4],SQX_R[32],SQY_R[16],SQX_L[32],SQY_L[16],tSQX_R[32],tSQY_R[16],tSQX_L[32],tSQY_L[16],zeroPos,shitf;
+  TString input_file,output_file;
+  Float_t CsI_R[16],F3[4],tF3[4],F5[4],tF5[4],SQX_R[32],SQY_R[16],SQX_L[32],SQY_L[16],tSQX_R[32],tSQY_R[16],tSQX_L[32],tSQY_L[16],zeroPos,shitf,SQ20[16];
   TTree* 		t;
   UShort_t    NeEvent_CsI_R[16],NeEvent_F3[4],NeEvent_tF3[4],NeEvent_F5[4],NeEvent_tF5[4],NeEvent_SQX_R[32],NeEvent_SQY_R[16],NeEvent_SQX_L[32],NeEvent_SQY_L[16],NeEvent_tSQX_R[32],NeEvent_tSQY_R[16],NeEvent_tSQX_L[32],NeEvent_tSQY_L[16];
   TBranch    *b_NeEvent_CsI_R,*b_NeEvent_F3,*b_NeEvent_F5,*b_NeEvent_tF3,*b_NeEvent_tF5,*b_NeEvent_SQX_R,*b_NeEvent_SQY_R,*b_NeEvent_SQX_L,*b_NeEvent_SQY_L,*b_NeEvent_tSQX_R,*b_NeEvent_tSQY_R,*b_NeEvent_tSQX_L,*b_NeEvent_tSQY_L,*b_NeEvent_trigger;
   Long64_t nentries1;
-  Int_t maxE,multY_L,multX_L,multY_R,multX_R,trigger,NeEvent_trigger;
+  Int_t maxE,multY_L,multX_L,multY_R,multX_R,multSQ20,trigger,NeEvent_trigger,flag,flag1;
+
+  TFile *fw;
+  TTree *tw;
 
   // Creating outfile,outtree
-  TFile *fw = new TFile("/home/muzalevsky/work/exp1803/data/exp1804/h5_14/out40_33_test.root", "RECREATE");
-  TTree *tw = new TTree("tree", "data");
-  tw->Branch("CsI_R",&CsI_R,"CsI_R[16]/F");
-  tw->Branch("F3",&F3,"F3[4]/F");
-  tw->Branch("F5",&F5,"F5[4]/F");
-  tw->Branch("tF3",&tF3,"tF3[4]/F");
-  tw->Branch("tF5",&tF5,"tF5[4]/F");
-  tw->Branch("SQX_R",&SQX_R,"SQX_R[32]/F");
-  tw->Branch("SQY_R",&SQY_R,"SQY_R[16]/F");
+  fw = new TFile("out.root", "RECREATE");
+  tw = new TTree("tree", "data");
   tw->Branch("SQX_L",&SQX_L,"SQX_L[32]/F");
   tw->Branch("SQY_L",&SQY_L,"SQY_L[16]/F");
-  tw->Branch("tSQX_R",&tSQX_R,"tSQX_R[32]/F");
-  tw->Branch("tSQY_R",&tSQY_R,"tSQY_R[16]/F");
-  tw->Branch("tSQX_L",&tSQX_L,"tSQX_L[32]/F");
-  tw->Branch("tSQY_L",&tSQY_L,"tSQY_L[16]/F");
+  tw->Branch("SQ20",&SQ20,"SQ20[16]/F");
   tw->Branch("multY_L",&multY_L,"multY_L/I");
   tw->Branch("multX_L",&multX_L,"multX_L/I");
+  tw->Branch("multSQ20",&multSQ20,"multSQ20/I");
   tw->Branch("trigger",&trigger,"trigger/I");
 
-  for(Int_t n=10;n<12;n++) {
-    input_file.Form("/media/analysis_nas/exp201804/rootfiles/h5_14_00%d.root",n);		
+  for(Int_t n=1;n<12;n++) {
+
+    /// reading input file
+    if(n<10) {
+      input_file.Form("/media/analysis_nas/exp201804/calib/si_after/si-1_si-20_35cm_0deg_new1_000%d.root",n);
+    }	
+    if(n>9 && n<100) {
+      input_file.Form("/media/analysis_nas/exp201804/calib/si_after/si-1_si-20_35cm_0deg_new1_00%d.root",n);
+    }
+    
+		
     f[n] = new TFile(input_file.Data());
     if (f[n]->IsZombie()) {
 	    cerr << "Input file was not opened " << input_file.Data() << endl;
 	    return 1;
     }
-    cout <<  input_file.Data() << " filename " << endl;
+    cout <<  input_file.Data() << " opened " << endl;
 	  f[n]->GetObject("AnalysisxTree",t);
 	  t->SetMakeClass(1);
 	  t->SetBranchAddress("NeEvent.CsI_R[16]", NeEvent_CsI_R, &b_NeEvent_CsI_R);
@@ -176,21 +199,22 @@ void CsI_fill() {
 	  t->SetBranchAddress("NeEvent.tSQX_L[32]", NeEvent_tSQX_L, &b_NeEvent_tSQX_L);
 	  t->SetBranchAddress("NeEvent.tSQY_L[16]", NeEvent_tSQY_L, &b_NeEvent_tSQY_L);
     t->SetBranchAddress("NeEvent.trigger", &NeEvent_trigger, &b_NeEvent_trigger);
-		
+
+    /// filling outtree
 	  nentries1 = t->GetEntries();
-    cout << nentries1 << endl;
-    
     maxE = nentries1;
     cout<<">>> filling TREE up to "<<maxE<< " event"<<endl;
 	  for (Long64_t jentry=0; jentry<maxE;jentry++) {
 		  t->GetEntry(jentry);
       // обнуление
+      flag1=0;
+      flag=0;
       trigger=0;
       for(Int_t i = 0; i<32;i++) {
         
         multY_L = 0;
         multX_L = 0;
-        multY_R = 0;
+        multSQ20 = 0;
         multX_R = 0;
         SQX_R[i]=0.;
         SQX_L[i]=0.;
@@ -210,37 +234,17 @@ void CsI_fill() {
           tF3[i] = 0.;
         }
       }
-      
-       // selecting nice events
-      //if( (NeEvent_F5[0]+NeEvent_F3[0]>400) && (NeEvent_F5[0]+NeEvent_F3[0]<750) && (NeEvent_tF5[0]-NeEvent_tF3[0]>640) && (NeEvent_tF5[0]-NeEvent_tF3[0]<750) && 
-      //    (NeEvent_F5[1]+NeEvent_F3[1]>400) && (NeEvent_F5[1]+NeEvent_F3[1]<750) && (NeEvent_tF5[1]-NeEvent_tF3[1]>640) && (NeEvent_tF5[1]-NeEvent_tF3[1]<750) && 
-      //    (NeEvent_F5[2]+NeEvent_F3[2]>400) && (NeEvent_F5[2]+NeEvent_F3[2]<750) && (NeEvent_tF5[2]-NeEvent_tF3[2]>640) && (NeEvent_tF5[2]-NeEvent_tF3[2]<750) && 
-      //    (NeEvent_F5[3]+NeEvent_F3[3]>400) && (NeEvent_F5[3]+NeEvent_F3[3]<750) && (NeEvent_tF5[3]-NeEvent_tF3[3]>640) && (NeEvent_tF5[3]-NeEvent_tF3[3]<750) ) {
-      //}
 
       for(Int_t i=0; i<32; i++) {
-        SQX_R[i] = NeEvent_SQX_R[i]*parXR2[i] + parXR1[i];
+        SQX_R[i] = NeEvent_SQX_R[i];
         SQX_L[i] = NeEvent_SQX_L[i]*parXL2[i] + parXL1[i];
-        if(SQX_L[i]>1.1) multX_L++; 
-        if(SQX_R[i]>1.15) multX_R++; 
-        tSQX_R[i] = NeEvent_tSQX_R[i];
+        if(NeEvent_SQX_L[i]>200) multX_L++; 
         //tSQX_L[i] = NeEvent_tSQX_L[i]*tPx_l2[i] + tPx_l1[i];
-        tSQX_L[i] = NeEvent_tSQX_L[i]*0.33;
         if(i<16){
-          CsI_R[i] = NeEvent_CsI_R[i];
-          SQY_R[i] = NeEvent_SQY_R[i]*parYR2[i] + parYR1[i];
+          SQ20[i] = NeEvent_SQY_R[i]*par20_2[i] + par20_1[i];
           SQY_L[i] = NeEvent_SQY_L[i]*parYL2[i] + parYL1[i];
-          if(SQY_L[i]>0.85) multY_L++; 
-          if(SQY_R[i]>1.25) multY_R++; 
-          tSQY_R[i] = NeEvent_tSQY_R[i];
-          //tSQY_L[i] = NeEvent_tSQY_L[i]*tPy_l2[i] + tPy_l1[i];
-          tSQY_L[i] = NeEvent_tSQY_L[i]*0.33;
-        }
-        if(i<4) {
-          F3[i] = NeEvent_F3[i];
-          F5[i] = NeEvent_F5[i];
-          tF3[i] = NeEvent_tF3[i];
-          tF5[i] = NeEvent_tF5[i];
+          if(NeEvent_SQY_L[i]>130) multY_L++; 
+          if(NeEvent_SQY_R[i]>200) multSQ20++; 
         }
       }
       trigger = NeEvent_trigger;
@@ -248,6 +252,6 @@ void CsI_fill() {
 	  }//entries
   }//nfiles
   fw->cd();
-	tw->Write();
-	fw->Close();
+  tw->Write();
+  fw->Close();
 }
