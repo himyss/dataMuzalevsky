@@ -1,0 +1,2246 @@
+******************************************************************************
+*Tree    :stepMonitoringxTree: Go4FileStore                                           *
+*Entries :    90000 : Total =       663202132 bytes  File  Size =   74628881 *
+*        :          : Tree compression factor =   8.90                       *
+******************************************************************************
+*Branch  :DetEventFull1.                                                     *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br    0 :DetEventFull1.TGo4CompositeEvent.fUniqueID : UInt_t                *
+*Entries :    90000 : Total  Size=     361886 bytes  File Size  =       1903 *
+*Baskets :       10 : Basket Size=     390144 bytes  Compression= 189.83     *
+*............................................................................*
+*Br    1 :DetEventFull1.TGo4CompositeEvent.fBits : UInt_t                    *
+*Entries :    90000 : Total  Size=     722206 bytes  File Size  =     179061 *
+*Baskets :       12 : Basket Size=     700416 bytes  Compression=   4.03     *
+*............................................................................*
+*Br    2 :DetEventFull1.TGo4CompositeEvent.fName : TString                   *
+*Entries :    90000 : Total  Size=    1622650 bytes  File Size  =     207267 *
+*Baskets :       15 : Basket Size=    1474048 bytes  Compression=   7.83     *
+*............................................................................*
+*Br    3 :DetEventFull1.TGo4CompositeEvent.fTitle : TString                  *
+*Entries :    90000 : Total  Size=    1622669 bytes  File Size  =     207014 *
+*Baskets :       15 : Basket Size=    1474048 bytes  Compression=   7.83     *
+*............................................................................*
+*Br    4 :DetEventFull1.TGo4CompositeEvent.fbIsValid : Bool_t                *
+*Entries :    90000 : Total  Size=      91742 bytes  File Size  =       1494 *
+*Baskets :        9 : Basket Size=     158208 bytes  Compression=  60.99     *
+*............................................................................*
+*Br    5 :DetEventFull1.TGo4CompositeEvent.fIdentifier : Short_t             *
+*Entries :    90000 : Total  Size=     181768 bytes  File Size  =       1593 *
+*Baskets :        9 : Basket Size=     235520 bytes  Compression= 113.71     *
+*............................................................................*
+*Br    6 :DetEventFull1.TGo4CompositeEvent.fNElements : Short_t              *
+*Entries :    90000 : Total  Size=     181755 bytes  File Size  =       1602 *
+*Baskets :        9 : Basket Size=     235520 bytes  Compression= 113.06     *
+*............................................................................*
+*Br    7 :DetEventFull1.TGo4CompositeEvent.fMaxIndex : Short_t               *
+*Entries :    90000 : Total  Size=     181742 bytes  File Size  =       1593 *
+*Baskets :        9 : Basket Size=     235520 bytes  Compression= 113.69     *
+*............................................................................*
+*Branch  :DetEventCommon.                                                    *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br    8 :DetEventCommon.TGo4EventElement.fUniqueID : UInt_t                 *
+*Entries :    90000 : Total  Size=     363159 bytes  File Size  =       3274 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 110.67     *
+*............................................................................*
+*Br    9 :DetEventCommon.TGo4EventElement.fBits : UInt_t                     *
+*Entries :    90000 : Total  Size=     726159 bytes  File Size  =     181107 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br   10 :DetEventCommon.TGo4EventElement.fName : TString                    *
+*Entries :    90000 : Total  Size=    1720422 bytes  File Size  =     220920 *
+*Baskets :       68 : Basket Size=     270336 bytes  Compression=   7.78     *
+*............................................................................*
+*Br   11 :DetEventCommon.TGo4EventElement.fTitle : TString                   *
+*Entries :    90000 : Total  Size=    1720494 bytes  File Size  =     220718 *
+*Baskets :       68 : Basket Size=     270848 bytes  Compression=   7.79     *
+*............................................................................*
+*Br   12 :DetEventCommon.TGo4EventElement.fbIsValid : Bool_t                 *
+*Entries :    90000 : Total  Size=      92015 bytes  File Size  =       1793 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  50.95     *
+*............................................................................*
+*Br   13 :DetEventCommon.TGo4EventElement.fIdentifier : Short_t              *
+*Entries :    90000 : Total  Size=     182480 bytes  File Size  =       2352 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  77.27     *
+*............................................................................*
+*Br   14 :DetEventCommon.trigger : UInt_t                                    *
+*Entries :    90000 : Total  Size=     362722 bytes  File Size  =      20912 *
+*Baskets :       19 : Basket Size=     119808 bytes  Compression=  17.31     *
+*............................................................................*
+*Br   15 :DetEventCommon.scaler[16] : UInt_t                                 *
+*Entries :    90000 : Total  Size=    6146564 bytes  File Size  =    1483568 *
+*Baskets :      194 : Basket Size=     755712 bytes  Compression=   4.14     *
+*............................................................................*
+*Br   16 :DetEventCommon.mtime[2] : UShort_t                                 *
+*Entries :    90000 : Total  Size=     725554 bytes  File Size  =     344657 *
+*Baskets :       39 : Basket Size=     160768 bytes  Compression=   2.10     *
+*............................................................................*
+*Branch  :DAQ_status.                                                        *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br   17 :DAQ_status.TGo4CompositeEvent.fUniqueID : UInt_t                   *
+*Entries :    90000 : Total  Size=     363113 bytes  File Size  =       3236 *
+*Baskets :       19 : Basket Size=     119808 bytes  Compression= 111.96     *
+*............................................................................*
+*Br   18 :DAQ_status.TGo4CompositeEvent.fBits : UInt_t                       *
+*Entries :    90000 : Total  Size=     726073 bytes  File Size  =     181047 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br   19 :DAQ_status.TGo4CompositeEvent.fName : TString                      *
+*Entries :    90000 : Total  Size=    1358828 bytes  File Size  =     217013 *
+*Baskets :       58 : Basket Size=     230912 bytes  Compression=   6.25     *
+*............................................................................*
+*Br   20 :DAQ_status.TGo4CompositeEvent.fTitle : TString                     *
+*Entries :    90000 : Total  Size=    1358890 bytes  File Size  =     217046 *
+*Baskets :       58 : Basket Size=     230912 bytes  Compression=   6.25     *
+*............................................................................*
+*Br   21 :DAQ_status.TGo4CompositeEvent.fbIsValid : Bool_t                   *
+*Entries :    90000 : Total  Size=      91985 bytes  File Size  =       1773 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  51.51     *
+*............................................................................*
+*Br   22 :DAQ_status.TGo4CompositeEvent.fIdentifier : Short_t                *
+*Entries :    90000 : Total  Size=     182444 bytes  File Size  =       2338 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  77.73     *
+*............................................................................*
+*Br   23 :DAQ_status.TGo4CompositeEvent.fNElements : Short_t                 *
+*Entries :    90000 : Total  Size=     182426 bytes  File Size  =       2337 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  77.75     *
+*............................................................................*
+*Br   24 :DAQ_status.TGo4CompositeEvent.fMaxIndex : Short_t                  *
+*Entries :    90000 : Total  Size=     182408 bytes  File Size  =       2336 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  77.78     *
+*............................................................................*
+*Branch  :DAQ_status_mtime.                                                  *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br   25 :DAQ_status_mtime.TGo4EventElement.fUniqueID : UInt_t               *
+*Entries :    90000 : Total  Size=     363205 bytes  File Size  =       3292 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 110.08     *
+*............................................................................*
+*Br   26 :DAQ_status_mtime.TGo4EventElement.fBits : UInt_t                   *
+*Entries :    90000 : Total  Size=     726245 bytes  File Size  =     181221 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br   27 :DAQ_status_mtime.TGo4EventElement.fName : TString                  *
+*Entries :    90000 : Total  Size=    1901311 bytes  File Size  =     224820 *
+*Baskets :       73 : Basket Size=     290816 bytes  Compression=   8.45     *
+*............................................................................*
+*Br   28 :DAQ_status_mtime.TGo4EventElement.fTitle : TString                 *
+*Entries :    90000 : Total  Size=    1901388 bytes  File Size  =     225012 *
+*Baskets :       73 : Basket Size=     290816 bytes  Compression=   8.44     *
+*............................................................................*
+*Br   29 :DAQ_status_mtime.TGo4EventElement.fbIsValid : Bool_t               *
+*Entries :    90000 : Total  Size=      92045 bytes  File Size  =       1813 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  50.40     *
+*............................................................................*
+*Br   30 :DAQ_status_mtime.TGo4EventElement.fIdentifier : Short_t            *
+*Entries :    90000 : Total  Size=     182516 bytes  File Size  =       2420 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  75.11     *
+*............................................................................*
+*Br   31 :DAQ_status_mtime.fDetMessages :                                    *
+*         | Int_t DAQ_status_mtime.fDetMessages_                             *
+*Entries :    90000 : Total  Size=     382130 bytes  File Size  =      14382 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=  25.80     *
+*............................................................................*
+*Br   32 :DAQ_status_mtime.fDetMessages.fUniqueID :                          *
+*         | UInt_t fUniqueID[DAQ_status_mtime.fDetMessages_]                 *
+*Entries :    90000 : Total  Size=     364879 bytes  File Size  =       4947 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  73.53     *
+*............................................................................*
+*Br   33 :DAQ_status_mtime.fDetMessages.fBits :                              *
+*         | UInt_t fBits[DAQ_status_mtime.fDetMessages_]                     *
+*Entries :    90000 : Total  Size=     364747 bytes  File Size  =       4831 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  75.27     *
+*............................................................................*
+*Br   34 :DAQ_status_mtime.fDetMessages.fDetector :                          *
+*         | Short_t fDetector[DAQ_status_mtime.fDetMessages_]                *
+*Entries :    90000 : Total  Size=     364879 bytes  File Size  =       4947 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  73.53     *
+*............................................................................*
+*Br   35 :DAQ_status_mtime.fDetMessages.fStation :                           *
+*         | Short_t fStation[DAQ_status_mtime.fDetMessages_]                 *
+*Entries :    90000 : Total  Size=     364846 bytes  File Size  =       4918 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  73.96     *
+*............................................................................*
+*Br   36 :DAQ_status_mtime.fDetMessages.fStChannel :                         *
+*         | Int_t fStChannel[DAQ_status_mtime.fDetMessages_]                 *
+*Entries :    90000 : Total  Size=     364912 bytes  File Size  =       4976 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  73.10     *
+*............................................................................*
+*Br   37 :DAQ_status_mtime.fDetMessages.fValue :                             *
+*         | Int_t fValue[DAQ_status_mtime.fDetMessages_]                     *
+*Entries :    90000 : Total  Size=     364780 bytes  File Size  =       4860 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  74.83     *
+*............................................................................*
+*Branch  :DAQ_status_scalers.                                                *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br   38 :DAQ_status_scalers.TGo4EventElement.fUniqueID : UInt_t             *
+*Entries :    90000 : Total  Size=     363251 bytes  File Size  =       3330 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 108.83     *
+*............................................................................*
+*Br   39 :DAQ_status_scalers.TGo4EventElement.fBits : UInt_t                 *
+*Entries :    90000 : Total  Size=     726331 bytes  File Size  =     181292 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br   40 :DAQ_status_scalers.TGo4EventElement.fName : TString                *
+*Entries :    90000 : Total  Size=    2082220 bytes  File Size  =     228213 *
+*Baskets :       78 : Basket Size=     310784 bytes  Compression=   9.12     *
+*............................................................................*
+*Br   41 :DAQ_status_scalers.TGo4EventElement.fTitle : TString               *
+*Entries :    90000 : Total  Size=    2082302 bytes  File Size  =     228097 *
+*Baskets :       78 : Basket Size=     310784 bytes  Compression=   9.12     *
+*............................................................................*
+*Br   42 :DAQ_status_scalers.TGo4EventElement.fbIsValid : Bool_t             *
+*Entries :    90000 : Total  Size=      92075 bytes  File Size  =       1835 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  49.81     *
+*............................................................................*
+*Br   43 :DAQ_status_scalers.TGo4EventElement.fIdentifier : Short_t          *
+*Entries :    90000 : Total  Size=     182552 bytes  File Size  =       2448 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  74.27     *
+*............................................................................*
+*Br   44 :DAQ_status_scalers.fDetMessages :                                  *
+*         | Int_t DAQ_status_scalers.fDetMessages_                           *
+*Entries :    90000 : Total  Size=     382388 bytes  File Size  =      14580 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=  25.46     *
+*............................................................................*
+*Br   45 :DAQ_status_scalers.fDetMessages.fUniqueID :                        *
+*         | UInt_t fUniqueID[DAQ_status_scalers.fDetMessages_]               *
+*Entries :    90000 : Total  Size=     364949 bytes  File Size  =       5005 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  72.69     *
+*............................................................................*
+*Br   46 :DAQ_status_scalers.fDetMessages.fBits :                            *
+*         | UInt_t fBits[DAQ_status_scalers.fDetMessages_]                   *
+*Entries :    90000 : Total  Size=     364817 bytes  File Size  =       4889 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  74.39     *
+*............................................................................*
+*Br   47 :DAQ_status_scalers.fDetMessages.fDetector :                        *
+*         | Short_t fDetector[DAQ_status_scalers.fDetMessages_]              *
+*Entries :    90000 : Total  Size=     364949 bytes  File Size  =       5005 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  72.69     *
+*............................................................................*
+*Br   48 :DAQ_status_scalers.fDetMessages.fStation :                         *
+*         | Short_t fStation[DAQ_status_scalers.fDetMessages_]               *
+*Entries :    90000 : Total  Size=     364916 bytes  File Size  =       4976 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  73.10     *
+*............................................................................*
+*Br   49 :DAQ_status_scalers.fDetMessages.fStChannel :                       *
+*         | Int_t fStChannel[DAQ_status_scalers.fDetMessages_]               *
+*Entries :    90000 : Total  Size=     364982 bytes  File Size  =       5034 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  72.27     *
+*............................................................................*
+*Br   50 :DAQ_status_scalers.fDetMessages.fValue :                           *
+*         | Int_t fValue[DAQ_status_scalers.fDetMessages_]                   *
+*Entries :    90000 : Total  Size=     364850 bytes  File Size  =       4918 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  73.96     *
+*............................................................................*
+*Branch  :Left_telescope.                                                    *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br   51 :Left_telescope.TGo4CompositeEvent.fUniqueID : UInt_t               *
+*Entries :    90000 : Total  Size=     363205 bytes  File Size  =       3292 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 110.08     *
+*............................................................................*
+*Br   52 :Left_telescope.TGo4CompositeEvent.fBits : UInt_t                   *
+*Entries :    90000 : Total  Size=     726245 bytes  File Size  =     181221 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br   53 :Left_telescope.TGo4CompositeEvent.fName : TString                  *
+*Entries :    90000 : Total  Size=    1720566 bytes  File Size  =     221279 *
+*Baskets :       68 : Basket Size=     270848 bytes  Compression=   7.77     *
+*............................................................................*
+*Br   54 :Left_telescope.TGo4CompositeEvent.fTitle : TString                 *
+*Entries :    90000 : Total  Size=    1720638 bytes  File Size  =     221396 *
+*Baskets :       68 : Basket Size=     270848 bytes  Compression=   7.76     *
+*............................................................................*
+*Br   55 :Left_telescope.TGo4CompositeEvent.fbIsValid : Bool_t               *
+*Entries :    90000 : Total  Size=      92045 bytes  File Size  =       1813 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  50.40     *
+*............................................................................*
+*Br   56 :Left_telescope.TGo4CompositeEvent.fIdentifier : Short_t            *
+*Entries :    90000 : Total  Size=     182516 bytes  File Size  =       2407 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  75.52     *
+*............................................................................*
+*Br   57 :Left_telescope.TGo4CompositeEvent.fNElements : Short_t             *
+*Entries :    90000 : Total  Size=     182498 bytes  File Size  =       2398 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  75.80     *
+*............................................................................*
+*Br   58 :Left_telescope.TGo4CompositeEvent.fMaxIndex : Short_t              *
+*Entries :    90000 : Total  Size=     182480 bytes  File Size  =       2387 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  76.14     *
+*............................................................................*
+*Branch  :Left_telescope_SQX_L.                                              *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br   59 :Left_telescope_SQX_L.TGo4EventElement.fUniqueID : UInt_t           *
+*Entries :    90000 : Total  Size=     363297 bytes  File Size  =       3390 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 106.92     *
+*............................................................................*
+*Br   60 :Left_telescope_SQX_L.TGo4EventElement.fBits : UInt_t               *
+*Entries :    90000 : Total  Size=     726417 bytes  File Size  =     181377 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br   61 :Left_telescope_SQX_L.TGo4EventElement.fName : TString              *
+*Entries :    90000 : Total  Size=    2263302 bytes  File Size  =     229972 *
+*Baskets :       84 : Basket Size=     330752 bytes  Compression=   9.83     *
+*............................................................................*
+*Br   62 :Left_telescope_SQX_L.TGo4EventElement.fTitle : TString             *
+*Entries :    90000 : Total  Size=    2263390 bytes  File Size  =     229981 *
+*Baskets :       84 : Basket Size=     330752 bytes  Compression=   9.83     *
+*............................................................................*
+*Br   63 :Left_telescope_SQX_L.TGo4EventElement.fbIsValid : Bool_t           *
+*Entries :    90000 : Total  Size=      92105 bytes  File Size  =       1859 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  49.18     *
+*............................................................................*
+*Br   64 :Left_telescope_SQX_L.TGo4EventElement.fIdentifier : Short_t        *
+*Entries :    90000 : Total  Size=     182588 bytes  File Size  =       2476 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  73.44     *
+*............................................................................*
+*Br   65 :Left_telescope_SQX_L.fDetMessages :                                *
+*         | Int_t Left_telescope_SQX_L.fDetMessages_                         *
+*Entries :    90000 : Total  Size=     383646 bytes  File Size  =      49729 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=   7.47     *
+*............................................................................*
+*Br   66 :Left_telescope_SQX_L.fDetMessages.fUniqueID :                      *
+*         | UInt_t fUniqueID[Left_telescope_SQX_L.fDetMessages_]             *
+*Entries :    90000 : Total  Size=     702533 bytes  File Size  =     154758 *
+*Baskets :       39 : Basket Size=     158720 bytes  Compression=   4.53     *
+*............................................................................*
+*Br   67 :Left_telescope_SQX_L.fDetMessages.fBits :                          *
+*         | UInt_t fBits[Left_telescope_SQX_L.fDetMessages_]                 *
+*Entries :    90000 : Total  Size=     702361 bytes  File Size  =     154017 *
+*Baskets :       39 : Basket Size=     158720 bytes  Compression=   4.55     *
+*............................................................................*
+*Br   68 :Left_telescope_SQX_L.fDetMessages.fDetector :                      *
+*         | Short_t fDetector[Left_telescope_SQX_L.fDetMessages_]            *
+*Entries :    90000 : Total  Size=     533776 bytes  File Size  =     153519 *
+*Baskets :       34 : Basket Size=     140288 bytes  Compression=   3.47     *
+*............................................................................*
+*Br   69 :Left_telescope_SQX_L.fDetMessages.fStation :                       *
+*         | Short_t fStation[Left_telescope_SQX_L.fDetMessages_]             *
+*Entries :    90000 : Total  Size=     533738 bytes  File Size  =     153754 *
+*Baskets :       34 : Basket Size=     140288 bytes  Compression=   3.46     *
+*............................................................................*
+*Br   70 :Left_telescope_SQX_L.fDetMessages.fStChannel :                     *
+*         | Int_t fStChannel[Left_telescope_SQX_L.fDetMessages_]             *
+*Entries :    90000 : Total  Size=     702576 bytes  File Size  =     218179 *
+*Baskets :       39 : Basket Size=     158720 bytes  Compression=   3.21     *
+*............................................................................*
+*Br   71 :Left_telescope_SQX_L.fDetMessages.fValue :                         *
+*         | Int_t fValue[Left_telescope_SQX_L.fDetMessages_]                 *
+*Entries :    90000 : Total  Size=     702404 bytes  File Size  =     321813 *
+*Baskets :       39 : Basket Size=     158720 bytes  Compression=   2.18     *
+*............................................................................*
+*Branch  :Left_telescope_SQY_L.                                              *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br   72 :Left_telescope_SQY_L.TGo4EventElement.fUniqueID : UInt_t           *
+*Entries :    90000 : Total  Size=     363297 bytes  File Size  =       3390 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 106.92     *
+*............................................................................*
+*Br   73 :Left_telescope_SQY_L.TGo4EventElement.fBits : UInt_t               *
+*Entries :    90000 : Total  Size=     726417 bytes  File Size  =     181377 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br   74 :Left_telescope_SQY_L.TGo4EventElement.fName : TString              *
+*Entries :    90000 : Total  Size=    2263302 bytes  File Size  =     229964 *
+*Baskets :       84 : Basket Size=     330752 bytes  Compression=   9.83     *
+*............................................................................*
+*Br   75 :Left_telescope_SQY_L.TGo4EventElement.fTitle : TString             *
+*Entries :    90000 : Total  Size=    2263390 bytes  File Size  =     229973 *
+*Baskets :       84 : Basket Size=     330752 bytes  Compression=   9.83     *
+*............................................................................*
+*Br   76 :Left_telescope_SQY_L.TGo4EventElement.fbIsValid : Bool_t           *
+*Entries :    90000 : Total  Size=      92105 bytes  File Size  =       1859 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  49.18     *
+*............................................................................*
+*Br   77 :Left_telescope_SQY_L.TGo4EventElement.fIdentifier : Short_t        *
+*Entries :    90000 : Total  Size=     182588 bytes  File Size  =       2476 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  73.44     *
+*............................................................................*
+*Br   78 :Left_telescope_SQY_L.fDetMessages :                                *
+*         | Int_t Left_telescope_SQY_L.fDetMessages_                         *
+*Entries :    90000 : Total  Size=     399406 bytes  File Size  =      15165 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=  24.49     *
+*............................................................................*
+*Br   79 :Left_telescope_SQY_L.fDetMessages.fUniqueID :                      *
+*         | UInt_t fUniqueID[Left_telescope_SQY_L.fDetMessages_]             *
+*Entries :    90000 : Total  Size=    6150659 bytes  File Size  =     222347 *
+*Baskets :      197 : Basket Size=     759296 bytes  Compression=  27.64     *
+*............................................................................*
+*Br   80 :Left_telescope_SQY_L.fDetMessages.fBits :                          *
+*         | UInt_t fBits[Left_telescope_SQY_L.fDetMessages_]                 *
+*Entries :    90000 : Total  Size=    6149855 bytes  File Size  =     221964 *
+*Baskets :      197 : Basket Size=     758784 bytes  Compression=  27.69     *
+*............................................................................*
+*Br   81 :Left_telescope_SQY_L.fDetMessages.fDetector :                      *
+*         | Short_t fDetector[Left_telescope_SQY_L.fDetMessages_]            *
+*Entries :    90000 : Total  Size=    3257686 bytes  File Size  =     183369 *
+*Baskets :      112 : Basket Size=     440320 bytes  Compression=  17.75     *
+*............................................................................*
+*Br   82 :Left_telescope_SQY_L.fDetMessages.fStation :                       *
+*         | Short_t fStation[Left_telescope_SQY_L.fDetMessages_]             *
+*Entries :    90000 : Total  Size=    3257570 bytes  File Size  =     183458 *
+*Baskets :      112 : Basket Size=     440320 bytes  Compression=  17.74     *
+*............................................................................*
+*Br   83 :Left_telescope_SQY_L.fDetMessages.fStChannel :                     *
+*         | Int_t fStChannel[Left_telescope_SQY_L.fDetMessages_]             *
+*Entries :    90000 : Total  Size=    6150860 bytes  File Size  =     237457 *
+*Baskets :      197 : Basket Size=     759296 bytes  Compression=  25.88     *
+*............................................................................*
+*Br   84 :Left_telescope_SQY_L.fDetMessages.fValue :                         *
+*         | Int_t fValue[Left_telescope_SQY_L.fDetMessages_]                 *
+*Entries :    90000 : Total  Size=    6150056 bytes  File Size  =    1625661 *
+*Baskets :      197 : Basket Size=     758784 bytes  Compression=   3.78     *
+*............................................................................*
+*Branch  :Left_telescope_CsI_L.                                              *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br   85 :Left_telescope_CsI_L.TGo4EventElement.fUniqueID : UInt_t           *
+*Entries :    90000 : Total  Size=     363297 bytes  File Size  =       3390 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 106.92     *
+*............................................................................*
+*Br   86 :Left_telescope_CsI_L.TGo4EventElement.fBits : UInt_t               *
+*Entries :    90000 : Total  Size=     726417 bytes  File Size  =     181377 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br   87 :Left_telescope_CsI_L.TGo4EventElement.fName : TString              *
+*Entries :    90000 : Total  Size=    2263302 bytes  File Size  =     229972 *
+*Baskets :       84 : Basket Size=     330752 bytes  Compression=   9.83     *
+*............................................................................*
+*Br   88 :Left_telescope_CsI_L.TGo4EventElement.fTitle : TString             *
+*Entries :    90000 : Total  Size=    2263390 bytes  File Size  =     229981 *
+*Baskets :       84 : Basket Size=     330752 bytes  Compression=   9.83     *
+*............................................................................*
+*Br   89 :Left_telescope_CsI_L.TGo4EventElement.fbIsValid : Bool_t           *
+*Entries :    90000 : Total  Size=      92105 bytes  File Size  =       1859 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  49.18     *
+*............................................................................*
+*Br   90 :Left_telescope_CsI_L.TGo4EventElement.fIdentifier : Short_t        *
+*Entries :    90000 : Total  Size=     182588 bytes  File Size  =       2476 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  73.44     *
+*............................................................................*
+*Br   91 :Left_telescope_CsI_L.fDetMessages :                                *
+*         | Int_t Left_telescope_CsI_L.fDetMessages_                         *
+*Entries :    90000 : Total  Size=     392686 bytes  File Size  =      73480 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=   5.05     *
+*............................................................................*
+*Br   92 :Left_telescope_CsI_L.fDetMessages.fUniqueID :                      *
+*         | UInt_t fUniqueID[Left_telescope_CsI_L.fDetMessages_]             *
+*Entries :    90000 : Total  Size=    3857092 bytes  File Size  =     199876 *
+*Baskets :      130 : Basket Size=     506368 bytes  Compression=  19.28     *
+*............................................................................*
+*Br   93 :Left_telescope_CsI_L.fDetMessages.fBits :                          *
+*         | UInt_t fBits[Left_telescope_CsI_L.fDetMessages_]                 *
+*Entries :    90000 : Total  Size=    3856407 bytes  File Size  =     195360 *
+*Baskets :      129 : Basket Size=     505856 bytes  Compression=  19.72     *
+*............................................................................*
+*Br   94 :Left_telescope_CsI_L.fDetMessages.fDetector :                      *
+*         | Short_t fDetector[Left_telescope_CsI_L.fDetMessages_]            *
+*Entries :    90000 : Total  Size=    2110979 bytes  File Size  =     187354 *
+*Baskets :       79 : Basket Size=     313856 bytes  Compression=  11.26     *
+*............................................................................*
+*Br   95 :Left_telescope_CsI_L.fDetMessages.fStation :                       *
+*         | Short_t fStation[Left_telescope_CsI_L.fDetMessages_]             *
+*Entries :    90000 : Total  Size=    2110896 bytes  File Size  =     187247 *
+*Baskets :       79 : Basket Size=     313856 bytes  Compression=  11.26     *
+*............................................................................*
+*Br   96 :Left_telescope_CsI_L.fDetMessages.fStChannel :                     *
+*         | Int_t fStChannel[Left_telescope_CsI_L.fDetMessages_]             *
+*Entries :    90000 : Total  Size=    3857226 bytes  File Size  =     342501 *
+*Baskets :      130 : Basket Size=     506368 bytes  Compression=  11.25     *
+*............................................................................*
+*Br   97 :Left_telescope_CsI_L.fDetMessages.fValue :                         *
+*         | Int_t fValue[Left_telescope_CsI_L.fDetMessages_]                 *
+*Entries :    90000 : Total  Size=    3856540 bytes  File Size  =    1729018 *
+*Baskets :      129 : Basket Size=     505856 bytes  Compression=   2.23     *
+*............................................................................*
+*Branch  :Left_telescope_SQ20.                                               *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br   98 :Left_telescope_SQ20.TGo4EventElement.fUniqueID : UInt_t            *
+*Entries :    90000 : Total  Size=     363274 bytes  File Size  =       3371 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 107.51     *
+*............................................................................*
+*Br   99 :Left_telescope_SQ20.TGo4EventElement.fBits : UInt_t                *
+*Entries :    90000 : Total  Size=     726374 bytes  File Size  =     181937 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   3.99     *
+*............................................................................*
+*Br  100 :Left_telescope_SQ20.TGo4EventElement.fName : TString               *
+*Entries :    90000 : Total  Size=    2172758 bytes  File Size  =     215522 *
+*Baskets :       81 : Basket Size=     320512 bytes  Compression=  10.07     *
+*............................................................................*
+*Br  101 :Left_telescope_SQ20.TGo4EventElement.fTitle : TString              *
+*Entries :    90000 : Total  Size=    2172843 bytes  File Size  =     214359 *
+*Baskets :       81 : Basket Size=     320512 bytes  Compression=  10.13     *
+*............................................................................*
+*Br  102 :Left_telescope_SQ20.TGo4EventElement.fbIsValid : Bool_t            *
+*Entries :    90000 : Total  Size=      92090 bytes  File Size  =       1848 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  49.46     *
+*............................................................................*
+*Br  103 :Left_telescope_SQ20.TGo4EventElement.fIdentifier : Short_t         *
+*Entries :    90000 : Total  Size=     182570 bytes  File Size  =       2462 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  73.85     *
+*............................................................................*
+*Br  104 :Left_telescope_SQ20.fDetMessages :                                 *
+*         | Int_t Left_telescope_SQ20.fDetMessages_                          *
+*Entries :    90000 : Total  Size=     399277 bytes  File Size  =      15716 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=  23.62     *
+*............................................................................*
+*Br  105 :Left_telescope_SQ20.fDetMessages.fUniqueID :                       *
+*         | UInt_t fUniqueID[Left_telescope_SQ20.fDetMessages_]              *
+*Entries :    90000 : Total  Size=    6149940 bytes  File Size  =     207795 *
+*Baskets :      197 : Basket Size=     759296 bytes  Compression=  29.57     *
+*............................................................................*
+*Br  106 :Left_telescope_SQ20.fDetMessages.fBits :                           *
+*         | UInt_t fBits[Left_telescope_SQ20.fDetMessages_]                  *
+*Entries :    90000 : Total  Size=    6149136 bytes  File Size  =     207009 *
+*Baskets :      197 : Basket Size=     758272 bytes  Compression=  29.68     *
+*............................................................................*
+*Br  107 :Left_telescope_SQ20.fDetMessages.fDetector :                       *
+*         | Short_t fDetector[Left_telescope_SQ20.fDetMessages_]             *
+*Entries :    90000 : Total  Size=    3257310 bytes  File Size  =     183606 *
+*Baskets :      112 : Basket Size=     440320 bytes  Compression=  17.73     *
+*............................................................................*
+*Br  108 :Left_telescope_SQ20.fDetMessages.fStation :                        *
+*         | Short_t fStation[Left_telescope_SQ20.fDetMessages_]              *
+*Entries :    90000 : Total  Size=    3257194 bytes  File Size  =     183589 *
+*Baskets :      112 : Basket Size=     439808 bytes  Compression=  17.73     *
+*............................................................................*
+*Br  109 :Left_telescope_SQ20.fDetMessages.fStChannel :                      *
+*         | Int_t fStChannel[Left_telescope_SQ20.fDetMessages_]              *
+*Entries :    90000 : Total  Size=    6150141 bytes  File Size  =     224016 *
+*Baskets :      197 : Basket Size=     759296 bytes  Compression=  27.43     *
+*............................................................................*
+*Br  110 :Left_telescope_SQ20.fDetMessages.fValue :                          *
+*         | Int_t fValue[Left_telescope_SQ20.fDetMessages_]                  *
+*Entries :    90000 : Total  Size=    6149337 bytes  File Size  =    1892122 *
+*Baskets :      197 : Basket Size=     758784 bytes  Compression=   3.25     *
+*............................................................................*
+*Branch  :Left_telescope_tSQ20.                                              *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  111 :Left_telescope_tSQ20.TGo4EventElement.fUniqueID : UInt_t           *
+*Entries :    90000 : Total  Size=     363297 bytes  File Size  =       3390 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 106.92     *
+*............................................................................*
+*Br  112 :Left_telescope_tSQ20.TGo4EventElement.fBits : UInt_t               *
+*Entries :    90000 : Total  Size=     726417 bytes  File Size  =     181377 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  113 :Left_telescope_tSQ20.TGo4EventElement.fName : TString              *
+*Entries :    90000 : Total  Size=    2263302 bytes  File Size  =     229921 *
+*Baskets :       84 : Basket Size=     330752 bytes  Compression=   9.83     *
+*............................................................................*
+*Br  114 :Left_telescope_tSQ20.TGo4EventElement.fTitle : TString             *
+*Entries :    90000 : Total  Size=    2263390 bytes  File Size  =     229830 *
+*Baskets :       84 : Basket Size=     330752 bytes  Compression=   9.84     *
+*............................................................................*
+*Br  115 :Left_telescope_tSQ20.TGo4EventElement.fbIsValid : Bool_t           *
+*Entries :    90000 : Total  Size=      92105 bytes  File Size  =       1859 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  49.18     *
+*............................................................................*
+*Br  116 :Left_telescope_tSQ20.TGo4EventElement.fIdentifier : Short_t        *
+*Entries :    90000 : Total  Size=     182588 bytes  File Size  =       2476 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  73.44     *
+*............................................................................*
+*Br  117 :Left_telescope_tSQ20.fDetMessages :                                *
+*         | Int_t Left_telescope_tSQ20.fDetMessages_                         *
+*Entries :    90000 : Total  Size=     386846 bytes  File Size  =      47560 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=   7.81     *
+*............................................................................*
+*Br  118 :Left_telescope_tSQ20.fDetMessages.fUniqueID :                      *
+*         | UInt_t fUniqueID[Left_telescope_tSQ20.fDetMessages_]             *
+*Entries :    90000 : Total  Size=    1837501 bytes  File Size  =     218055 *
+*Baskets :       71 : Basket Size=     284160 bytes  Compression=   8.42     *
+*............................................................................*
+*Br  119 :Left_telescope_tSQ20.fDetMessages.fBits :                          *
+*         | UInt_t fBits[Left_telescope_tSQ20.fDetMessages_]                 *
+*Entries :    90000 : Total  Size=    1837201 bytes  File Size  =     217296 *
+*Baskets :       71 : Basket Size=     284160 bytes  Compression=   8.45     *
+*............................................................................*
+*Br  120 :Left_telescope_tSQ20.fDetMessages.fDetector :                      *
+*         | Short_t fDetector[Left_telescope_tSQ20.fDetMessages_]            *
+*Entries :    90000 : Total  Size=    1101260 bytes  File Size  =     218743 *
+*Baskets :       50 : Basket Size=     202752 bytes  Compression=   5.03     *
+*............................................................................*
+*Br  121 :Left_telescope_tSQ20.fDetMessages.fStation :                       *
+*         | Short_t fStation[Left_telescope_tSQ20.fDetMessages_]             *
+*Entries :    90000 : Total  Size=    1101206 bytes  File Size  =     219024 *
+*Baskets :       50 : Basket Size=     202752 bytes  Compression=   5.02     *
+*............................................................................*
+*Br  122 :Left_telescope_tSQ20.fDetMessages.fStChannel :                     *
+*         | Int_t fStChannel[Left_telescope_tSQ20.fDetMessages_]             *
+*Entries :    90000 : Total  Size=    1837576 bytes  File Size  =     337046 *
+*Baskets :       71 : Basket Size=     284672 bytes  Compression=   5.45     *
+*............................................................................*
+*Br  123 :Left_telescope_tSQ20.fDetMessages.fValue :                         *
+*         | Int_t fValue[Left_telescope_tSQ20.fDetMessages_]                 *
+*Entries :    90000 : Total  Size=    1837276 bytes  File Size  =     686281 *
+*Baskets :       71 : Basket Size=     284160 bytes  Compression=   2.67     *
+*............................................................................*
+*Branch  :Left_telescope_tSQX_L.                                             *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  124 :Left_telescope_tSQX_L.TGo4EventElement.fUniqueID : UInt_t          *
+*Entries :    90000 : Total  Size=     363320 bytes  File Size  =       3409 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 106.33     *
+*............................................................................*
+*Br  125 :Left_telescope_tSQX_L.TGo4EventElement.fBits : UInt_t              *
+*Entries :    90000 : Total  Size=     726460 bytes  File Size  =     181369 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  126 :Left_telescope_tSQX_L.TGo4EventElement.fName : TString             *
+*Entries :    90000 : Total  Size=    2353698 bytes  File Size  =     224331 *
+*Baskets :       86 : Basket Size=     340480 bytes  Compression=  10.48     *
+*............................................................................*
+*Br  127 :Left_telescope_tSQX_L.TGo4EventElement.fTitle : TString            *
+*Entries :    90000 : Total  Size=    2353788 bytes  File Size  =     223368 *
+*Baskets :       86 : Basket Size=     340992 bytes  Compression=  10.53     *
+*............................................................................*
+*Br  128 :Left_telescope_tSQX_L.TGo4EventElement.fbIsValid : Bool_t          *
+*Entries :    90000 : Total  Size=      92120 bytes  File Size  =       1870 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  48.89     *
+*............................................................................*
+*Br  129 :Left_telescope_tSQX_L.TGo4EventElement.fIdentifier : Short_t       *
+*Entries :    90000 : Total  Size=     182606 bytes  File Size  =       2490 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  73.03     *
+*............................................................................*
+*Br  130 :Left_telescope_tSQX_L.fDetMessages :                               *
+*         | Int_t Left_telescope_tSQX_L.fDetMessages_                        *
+*Entries :    90000 : Total  Size=     383575 bytes  File Size  =      48573 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=   7.65     *
+*............................................................................*
+*Br  131 :Left_telescope_tSQX_L.fDetMessages.fUniqueID :                     *
+*         | UInt_t fUniqueID[Left_telescope_tSQX_L.fDetMessages_]            *
+*Entries :    90000 : Total  Size=     649602 bytes  File Size  =     136437 *
+*Baskets :       37 : Basket Size=     153088 bytes  Compression=   4.75     *
+*............................................................................*
+*Br  132 :Left_telescope_tSQX_L.fDetMessages.fBits :                         *
+*         | UInt_t fBits[Left_telescope_tSQX_L.fDetMessages_]                *
+*Entries :    90000 : Total  Size=     649438 bytes  File Size  =     136077 *
+*Baskets :       37 : Basket Size=     153088 bytes  Compression=   4.76     *
+*............................................................................*
+*Br  133 :Left_telescope_tSQX_L.fDetMessages.fDetector :                     *
+*         | Short_t fDetector[Left_telescope_tSQX_L.fDetMessages_]           *
+*Entries :    90000 : Total  Size=     507328 bytes  File Size  =     136786 *
+*Baskets :       33 : Basket Size=     137216 bytes  Compression=   3.70     *
+*............................................................................*
+*Br  134 :Left_telescope_tSQX_L.fDetMessages.fStation :                      *
+*         | Short_t fStation[Left_telescope_tSQX_L.fDetMessages_]            *
+*Entries :    90000 : Total  Size=     507291 bytes  File Size  =     136675 *
+*Baskets :       33 : Basket Size=     137216 bytes  Compression=   3.70     *
+*............................................................................*
+*Br  135 :Left_telescope_tSQX_L.fDetMessages.fStChannel :                    *
+*         | Int_t fStChannel[Left_telescope_tSQX_L.fDetMessages_]            *
+*Entries :    90000 : Total  Size=     649643 bytes  File Size  =     191498 *
+*Baskets :       37 : Basket Size=     153088 bytes  Compression=   3.39     *
+*............................................................................*
+*Br  136 :Left_telescope_tSQX_L.fDetMessages.fValue :                        *
+*         | Int_t fValue[Left_telescope_tSQX_L.fDetMessages_]                *
+*Entries :    90000 : Total  Size=     649479 bytes  File Size  =     255697 *
+*Baskets :       37 : Basket Size=     153088 bytes  Compression=   2.53     *
+*............................................................................*
+*Branch  :Left_telescope_tSQY_L.                                             *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  137 :Left_telescope_tSQY_L.TGo4EventElement.fUniqueID : UInt_t          *
+*Entries :    90000 : Total  Size=     363320 bytes  File Size  =       3409 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 106.33     *
+*............................................................................*
+*Br  138 :Left_telescope_tSQY_L.TGo4EventElement.fBits : UInt_t              *
+*Entries :    90000 : Total  Size=     726460 bytes  File Size  =     181369 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  139 :Left_telescope_tSQY_L.TGo4EventElement.fName : TString             *
+*Entries :    90000 : Total  Size=    2353698 bytes  File Size  =     224331 *
+*Baskets :       86 : Basket Size=     340480 bytes  Compression=  10.48     *
+*............................................................................*
+*Br  140 :Left_telescope_tSQY_L.TGo4EventElement.fTitle : TString            *
+*Entries :    90000 : Total  Size=    2353788 bytes  File Size  =     223368 *
+*Baskets :       86 : Basket Size=     340992 bytes  Compression=  10.53     *
+*............................................................................*
+*Br  141 :Left_telescope_tSQY_L.TGo4EventElement.fbIsValid : Bool_t          *
+*Entries :    90000 : Total  Size=      92120 bytes  File Size  =       1870 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  48.89     *
+*............................................................................*
+*Br  142 :Left_telescope_tSQY_L.TGo4EventElement.fIdentifier : Short_t       *
+*Entries :    90000 : Total  Size=     182606 bytes  File Size  =       2490 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  73.03     *
+*............................................................................*
+*Br  143 :Left_telescope_tSQY_L.fDetMessages :                               *
+*         | Int_t Left_telescope_tSQY_L.fDetMessages_                        *
+*Entries :    90000 : Total  Size=     383615 bytes  File Size  =      41563 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=   8.94     *
+*............................................................................*
+*Br  144 :Left_telescope_tSQY_L.fDetMessages.fUniqueID :                     *
+*         | UInt_t fUniqueID[Left_telescope_tSQY_L.fDetMessages_]            *
+*Entries :    90000 : Total  Size=     658044 bytes  File Size  =     151505 *
+*Baskets :       38 : Basket Size=     154112 bytes  Compression=   4.33     *
+*............................................................................*
+*Br  145 :Left_telescope_tSQY_L.fDetMessages.fBits :                         *
+*         | UInt_t fBits[Left_telescope_tSQY_L.fDetMessages_]                *
+*Entries :    90000 : Total  Size=     657726 bytes  File Size  =     151073 *
+*Baskets :       37 : Basket Size=     153600 bytes  Compression=   4.35     *
+*............................................................................*
+*Br  146 :Left_telescope_tSQY_L.fDetMessages.fDetector :                     *
+*         | Short_t fDetector[Left_telescope_tSQY_L.fDetMessages_]           *
+*Entries :    90000 : Total  Size=     511472 bytes  File Size  =     151904 *
+*Baskets :       33 : Basket Size=     137728 bytes  Compression=   3.36     *
+*............................................................................*
+*Br  147 :Left_telescope_tSQY_L.fDetMessages.fStation :                      *
+*         | Short_t fStation[Left_telescope_tSQY_L.fDetMessages_]            *
+*Entries :    90000 : Total  Size=     511435 bytes  File Size  =     151716 *
+*Baskets :       33 : Basket Size=     137728 bytes  Compression=   3.36     *
+*............................................................................*
+*Br  148 :Left_telescope_tSQY_L.fDetMessages.fStChannel :                    *
+*         | Int_t fStChannel[Left_telescope_tSQY_L.fDetMessages_]            *
+*Entries :    90000 : Total  Size=     658086 bytes  File Size  =     219794 *
+*Baskets :       38 : Basket Size=     154112 bytes  Compression=   2.99     *
+*............................................................................*
+*Br  149 :Left_telescope_tSQY_L.fDetMessages.fValue :                        *
+*         | Int_t fValue[Left_telescope_tSQY_L.fDetMessages_]                *
+*Entries :    90000 : Total  Size=     657767 bytes  File Size  =     258742 *
+*Baskets :       37 : Basket Size=     153600 bytes  Compression=   2.54     *
+*............................................................................*
+*Branch  :Left_telescope_tCsI_L.                                             *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  150 :Left_telescope_tCsI_L.TGo4EventElement.fUniqueID : UInt_t          *
+*Entries :    90000 : Total  Size=     363320 bytes  File Size  =       3409 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 106.33     *
+*............................................................................*
+*Br  151 :Left_telescope_tCsI_L.TGo4EventElement.fBits : UInt_t              *
+*Entries :    90000 : Total  Size=     726460 bytes  File Size  =     181369 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  152 :Left_telescope_tCsI_L.TGo4EventElement.fName : TString             *
+*Entries :    90000 : Total  Size=    2353698 bytes  File Size  =     224253 *
+*Baskets :       86 : Basket Size=     340480 bytes  Compression=  10.49     *
+*............................................................................*
+*Br  153 :Left_telescope_tCsI_L.TGo4EventElement.fTitle : TString            *
+*Entries :    90000 : Total  Size=    2353788 bytes  File Size  =     223290 *
+*Baskets :       86 : Basket Size=     340992 bytes  Compression=  10.53     *
+*............................................................................*
+*Br  154 :Left_telescope_tCsI_L.TGo4EventElement.fbIsValid : Bool_t          *
+*Entries :    90000 : Total  Size=      92120 bytes  File Size  =       1870 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  48.89     *
+*............................................................................*
+*Br  155 :Left_telescope_tCsI_L.TGo4EventElement.fIdentifier : Short_t       *
+*Entries :    90000 : Total  Size=     182606 bytes  File Size  =       2490 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  73.03     *
+*............................................................................*
+*Br  156 :Left_telescope_tCsI_L.fDetMessages :                               *
+*         | Int_t Left_telescope_tCsI_L.fDetMessages_                        *
+*Entries :    90000 : Total  Size=     390215 bytes  File Size  =      62872 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=   5.91     *
+*............................................................................*
+*Br  157 :Left_telescope_tCsI_L.fDetMessages.fUniqueID :                     *
+*         | UInt_t fUniqueID[Left_telescope_tCsI_L.fDetMessages_]            *
+*Entries :    90000 : Total  Size=    2966148 bytes  File Size  =     187853 *
+*Baskets :      104 : Basket Size=     407552 bytes  Compression=  15.78     *
+*............................................................................*
+*Br  158 :Left_telescope_tCsI_L.fDetMessages.fBits :                         *
+*         | UInt_t fBits[Left_telescope_tCsI_L.fDetMessages_]                *
+*Entries :    90000 : Total  Size=    2965566 bytes  File Size  =     184092 *
+*Baskets :      103 : Basket Size=     407040 bytes  Compression=  16.09     *
+*............................................................................*
+*Br  159 :Left_telescope_tCsI_L.fDetMessages.fDetector :                     *
+*         | Short_t fDetector[Left_telescope_tCsI_L.fDetMessages_]           *
+*Entries :    90000 : Total  Size=    1665524 bytes  File Size  =     177792 *
+*Baskets :       66 : Basket Size=     264704 bytes  Compression=   9.36     *
+*............................................................................*
+*Br  160 :Left_telescope_tCsI_L.fDetMessages.fStation :                      *
+*         | Short_t fStation[Left_telescope_tCsI_L.fDetMessages_]            *
+*Entries :    90000 : Total  Size=    1665454 bytes  File Size  =     177792 *
+*Baskets :       66 : Basket Size=     264192 bytes  Compression=   9.36     *
+*............................................................................*
+*Br  161 :Left_telescope_tCsI_L.fDetMessages.fStChannel :                    *
+*         | Int_t fStChannel[Left_telescope_tCsI_L.fDetMessages_]            *
+*Entries :    90000 : Total  Size=    2966256 bytes  File Size  =     302555 *
+*Baskets :      104 : Basket Size=     407552 bytes  Compression=   9.80     *
+*............................................................................*
+*Br  162 :Left_telescope_tCsI_L.fDetMessages.fValue :                        *
+*         | Int_t fValue[Left_telescope_tCsI_L.fDetMessages_]                *
+*Entries :    90000 : Total  Size=    2965673 bytes  File Size  =    1389223 *
+*Baskets :      103 : Basket Size=     407040 bytes  Compression=   2.13     *
+*............................................................................*
+*Branch  :Right_telescope.                                                   *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  163 :Right_telescope.TGo4CompositeEvent.fUniqueID : UInt_t              *
+*Entries :    90000 : Total  Size=     363228 bytes  File Size  =       3311 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 109.45     *
+*............................................................................*
+*Br  164 :Right_telescope.TGo4CompositeEvent.fBits : UInt_t                  *
+*Entries :    90000 : Total  Size=     726288 bytes  File Size  =     181204 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  165 :Right_telescope.TGo4CompositeEvent.fName : TString                 *
+*Entries :    90000 : Total  Size=    1811088 bytes  File Size  =     184093 *
+*Baskets :       71 : Basket Size=     280576 bytes  Compression=   9.83     *
+*............................................................................*
+*Br  166 :Right_telescope.TGo4CompositeEvent.fTitle : TString                *
+*Entries :    90000 : Total  Size=    1811163 bytes  File Size  =     184234 *
+*Baskets :       71 : Basket Size=     280576 bytes  Compression=   9.82     *
+*............................................................................*
+*Br  167 :Right_telescope.TGo4CompositeEvent.fbIsValid : Bool_t              *
+*Entries :    90000 : Total  Size=      92060 bytes  File Size  =       1824 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  50.10     *
+*............................................................................*
+*Br  168 :Right_telescope.TGo4CompositeEvent.fIdentifier : Short_t           *
+*Entries :    90000 : Total  Size=     182534 bytes  File Size  =       2421 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  75.09     *
+*............................................................................*
+*Br  169 :Right_telescope.TGo4CompositeEvent.fNElements : Short_t            *
+*Entries :    90000 : Total  Size=     182516 bytes  File Size  =       2412 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  75.36     *
+*............................................................................*
+*Br  170 :Right_telescope.TGo4CompositeEvent.fMaxIndex : Short_t             *
+*Entries :    90000 : Total  Size=     182498 bytes  File Size  =       2406 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  75.55     *
+*............................................................................*
+*Branch  :Right_telescope_SQX_R.                                             *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  171 :Right_telescope_SQX_R.TGo4EventElement.fUniqueID : UInt_t          *
+*Entries :    90000 : Total  Size=     363320 bytes  File Size  =       3409 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 106.33     *
+*............................................................................*
+*Br  172 :Right_telescope_SQX_R.TGo4EventElement.fBits : UInt_t              *
+*Entries :    90000 : Total  Size=     726460 bytes  File Size  =     181369 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  173 :Right_telescope_SQX_R.TGo4EventElement.fName : TString             *
+*Entries :    90000 : Total  Size=    2353698 bytes  File Size  =     224167 *
+*Baskets :       86 : Basket Size=     340480 bytes  Compression=  10.49     *
+*............................................................................*
+*Br  174 :Right_telescope_SQX_R.TGo4EventElement.fTitle : TString            *
+*Entries :    90000 : Total  Size=    2353788 bytes  File Size  =     223371 *
+*Baskets :       86 : Basket Size=     340992 bytes  Compression=  10.53     *
+*............................................................................*
+*Br  175 :Right_telescope_SQX_R.TGo4EventElement.fbIsValid : Bool_t          *
+*Entries :    90000 : Total  Size=      92120 bytes  File Size  =       1870 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  48.89     *
+*............................................................................*
+*Br  176 :Right_telescope_SQX_R.TGo4EventElement.fIdentifier : Short_t       *
+*Entries :    90000 : Total  Size=     182606 bytes  File Size  =       2490 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  73.03     *
+*............................................................................*
+*Br  177 :Right_telescope_SQX_R.fDetMessages :                               *
+*         | Int_t Right_telescope_SQX_R.fDetMessages_                        *
+*Entries :    90000 : Total  Size=     416455 bytes  File Size  =      15264 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=  24.34     *
+*............................................................................*
+*Br  178 :Right_telescope_SQX_R.fDetMessages.fUniqueID :                     *
+*         | UInt_t fUniqueID[Right_telescope_SQX_R.fDetMessages_]            *
+*Entries :    90000 : Total  Size=   11936824 bytes  File Size  =     258185 *
+*Baskets :      366 : Basket Size=    1397760 bytes  Compression=  46.20     *
+*............................................................................*
+*Br  179 :Right_telescope_SQX_R.fDetMessages.fBits :                         *
+*         | UInt_t fBits[Right_telescope_SQX_R.fDetMessages_]                *
+*Entries :    90000 : Total  Size=   11935344 bytes  File Size  =     258181 *
+*Baskets :      366 : Basket Size=    1396224 bytes  Compression=  46.20     *
+*............................................................................*
+*Br  180 :Right_telescope_SQX_R.fDetMessages.fDetector :                     *
+*         | Short_t fDetector[Right_telescope_SQX_R.fDetMessages_]           *
+*Entries :    90000 : Total  Size=    6150862 bytes  File Size  =     222013 *
+*Baskets :      197 : Basket Size=     759296 bytes  Compression=  27.68     *
+*............................................................................*
+*Br  181 :Right_telescope_SQX_R.fDetMessages.fStation :                      *
+*         | Short_t fStation[Right_telescope_SQX_R.fDetMessages_]            *
+*Entries :    90000 : Total  Size=    6150661 bytes  File Size  =     222576 *
+*Baskets :      197 : Basket Size=     759296 bytes  Compression=  27.61     *
+*............................................................................*
+*Br  182 :Right_telescope_SQX_R.fDetMessages.fStChannel :                    *
+*         | Int_t fStChannel[Right_telescope_SQX_R.fDetMessages_]            *
+*Entries :    90000 : Total  Size=   11937194 bytes  File Size  =     305049 *
+*Baskets :      366 : Basket Size=    1397760 bytes  Compression=  39.11     *
+*............................................................................*
+*Br  183 :Right_telescope_SQX_R.fDetMessages.fValue :                        *
+*         | Int_t fValue[Right_telescope_SQX_R.fDetMessages_]                *
+*Entries :    90000 : Total  Size=   11935714 bytes  File Size  =    3193368 *
+*Baskets :      366 : Basket Size=    1396736 bytes  Compression=   3.74     *
+*............................................................................*
+*Branch  :Right_telescope_SQY_R.                                             *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  184 :Right_telescope_SQY_R.TGo4EventElement.fUniqueID : UInt_t          *
+*Entries :    90000 : Total  Size=     363320 bytes  File Size  =       3409 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 106.33     *
+*............................................................................*
+*Br  185 :Right_telescope_SQY_R.TGo4EventElement.fBits : UInt_t              *
+*Entries :    90000 : Total  Size=     726460 bytes  File Size  =     181369 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  186 :Right_telescope_SQY_R.TGo4EventElement.fName : TString             *
+*Entries :    90000 : Total  Size=    2353698 bytes  File Size  =     224167 *
+*Baskets :       86 : Basket Size=     340480 bytes  Compression=  10.49     *
+*............................................................................*
+*Br  187 :Right_telescope_SQY_R.TGo4EventElement.fTitle : TString            *
+*Entries :    90000 : Total  Size=    2353788 bytes  File Size  =     223370 *
+*Baskets :       86 : Basket Size=     340992 bytes  Compression=  10.53     *
+*............................................................................*
+*Br  188 :Right_telescope_SQY_R.TGo4EventElement.fbIsValid : Bool_t          *
+*Entries :    90000 : Total  Size=      92120 bytes  File Size  =       1870 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  48.89     *
+*............................................................................*
+*Br  189 :Right_telescope_SQY_R.TGo4EventElement.fIdentifier : Short_t       *
+*Entries :    90000 : Total  Size=     182606 bytes  File Size  =       2490 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  73.03     *
+*............................................................................*
+*Br  190 :Right_telescope_SQY_R.fDetMessages :                               *
+*         | Int_t Right_telescope_SQY_R.fDetMessages_                        *
+*Entries :    90000 : Total  Size=     399535 bytes  File Size  =      15264 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=  24.34     *
+*............................................................................*
+*Br  191 :Right_telescope_SQY_R.fDetMessages.fUniqueID :                     *
+*         | UInt_t fUniqueID[Right_telescope_SQY_R.fDetMessages_]            *
+*Entries :    90000 : Total  Size=    6150862 bytes  File Size  =     222348 *
+*Baskets :      197 : Basket Size=     759296 bytes  Compression=  27.64     *
+*............................................................................*
+*Br  192 :Right_telescope_SQY_R.fDetMessages.fBits :                         *
+*         | UInt_t fBits[Right_telescope_SQY_R.fDetMessages_]                *
+*Entries :    90000 : Total  Size=    6150058 bytes  File Size  =     222161 *
+*Baskets :      197 : Basket Size=     758784 bytes  Compression=  27.66     *
+*............................................................................*
+*Br  193 :Right_telescope_SQY_R.fDetMessages.fDetector :                     *
+*         | Short_t fDetector[Right_telescope_SQY_R.fDetMessages_]           *
+*Entries :    90000 : Total  Size=    3257804 bytes  File Size  =     183464 *
+*Baskets :      112 : Basket Size=     440320 bytes  Compression=  17.74     *
+*............................................................................*
+*Br  194 :Right_telescope_SQY_R.fDetMessages.fStation :                      *
+*         | Short_t fStation[Right_telescope_SQY_R.fDetMessages_]            *
+*Entries :    90000 : Total  Size=    3257688 bytes  File Size  =     183577 *
+*Baskets :      112 : Basket Size=     440320 bytes  Compression=  17.73     *
+*............................................................................*
+*Br  195 :Right_telescope_SQY_R.fDetMessages.fStChannel :                    *
+*         | Int_t fStChannel[Right_telescope_SQY_R.fDetMessages_]            *
+*Entries :    90000 : Total  Size=    6151063 bytes  File Size  =     237475 *
+*Baskets :      197 : Basket Size=     759808 bytes  Compression=  25.88     *
+*............................................................................*
+*Br  196 :Right_telescope_SQY_R.fDetMessages.fValue :                        *
+*         | Int_t fValue[Right_telescope_SQY_R.fDetMessages_]                *
+*Entries :    90000 : Total  Size=    6150259 bytes  File Size  =    1576899 *
+*Baskets :      197 : Basket Size=     758784 bytes  Compression=   3.90     *
+*............................................................................*
+*Branch  :Right_telescope_CsI_R.                                             *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  197 :Right_telescope_CsI_R.TGo4EventElement.fUniqueID : UInt_t          *
+*Entries :    90000 : Total  Size=     363320 bytes  File Size  =       3409 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 106.33     *
+*............................................................................*
+*Br  198 :Right_telescope_CsI_R.TGo4EventElement.fBits : UInt_t              *
+*Entries :    90000 : Total  Size=     726460 bytes  File Size  =     181369 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  199 :Right_telescope_CsI_R.TGo4EventElement.fName : TString             *
+*Entries :    90000 : Total  Size=    2353698 bytes  File Size  =     224168 *
+*Baskets :       86 : Basket Size=     340480 bytes  Compression=  10.49     *
+*............................................................................*
+*Br  200 :Right_telescope_CsI_R.TGo4EventElement.fTitle : TString            *
+*Entries :    90000 : Total  Size=    2353788 bytes  File Size  =     223370 *
+*Baskets :       86 : Basket Size=     340992 bytes  Compression=  10.53     *
+*............................................................................*
+*Br  201 :Right_telescope_CsI_R.TGo4EventElement.fbIsValid : Bool_t          *
+*Entries :    90000 : Total  Size=      92120 bytes  File Size  =       1870 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  48.89     *
+*............................................................................*
+*Br  202 :Right_telescope_CsI_R.TGo4EventElement.fIdentifier : Short_t       *
+*Entries :    90000 : Total  Size=     182606 bytes  File Size  =       2490 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  73.03     *
+*............................................................................*
+*Br  203 :Right_telescope_CsI_R.fDetMessages :                               *
+*         | Int_t Right_telescope_CsI_R.fDetMessages_                        *
+*Entries :    90000 : Total  Size=     388695 bytes  File Size  =      83195 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=   4.47     *
+*............................................................................*
+*Br  204 :Right_telescope_CsI_R.fDetMessages.fUniqueID :                     *
+*         | UInt_t fUniqueID[Right_telescope_CsI_R.fDetMessages_]            *
+*Entries :    90000 : Total  Size=    2376844 bytes  File Size  =     184000 *
+*Baskets :       88 : Basket Size=     348672 bytes  Compression=  12.90     *
+*............................................................................*
+*Br  205 :Right_telescope_CsI_R.fDetMessages.fBits :                         *
+*         | UInt_t fBits[Right_telescope_CsI_R.fDetMessages_]                *
+*Entries :    90000 : Total  Size=    2376476 bytes  File Size  =     181348 *
+*Baskets :       88 : Basket Size=     348672 bytes  Compression=  13.09     *
+*............................................................................*
+*Br  206 :Right_telescope_CsI_R.fDetMessages.fDetector :                     *
+*         | Short_t fDetector[Right_telescope_CsI_R.fDetMessages_]           *
+*Entries :    90000 : Total  Size=    1371026 bytes  File Size  =     177770 *
+*Baskets :       59 : Basket Size=     235008 bytes  Compression=   7.70     *
+*............................................................................*
+*Br  207 :Right_telescope_CsI_R.fDetMessages.fStation :                      *
+*         | Short_t fStation[Right_telescope_CsI_R.fDetMessages_]            *
+*Entries :    90000 : Total  Size=    1370963 bytes  File Size  =     177967 *
+*Baskets :       59 : Basket Size=     235008 bytes  Compression=   7.69     *
+*............................................................................*
+*Br  208 :Right_telescope_CsI_R.fDetMessages.fStChannel :                    *
+*         | Int_t fStChannel[Right_telescope_CsI_R.fDetMessages_]            *
+*Entries :    90000 : Total  Size=    2376936 bytes  File Size  =     328230 *
+*Baskets :       88 : Basket Size=     348672 bytes  Compression=   7.23     *
+*............................................................................*
+*Br  209 :Right_telescope_CsI_R.fDetMessages.fValue :                        *
+*         | Int_t fValue[Right_telescope_CsI_R.fDetMessages_]                *
+*Entries :    90000 : Total  Size=    2376568 bytes  File Size  =    1122873 *
+*Baskets :       88 : Basket Size=     348672 bytes  Compression=   2.11     *
+*............................................................................*
+*Branch  :Right_telescope_tSQX_R.                                            *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  210 :Right_telescope_tSQX_R.TGo4EventElement.fUniqueID : UInt_t         *
+*Entries :    90000 : Total  Size=     363343 bytes  File Size  =       3428 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 105.74     *
+*............................................................................*
+*Br  211 :Right_telescope_tSQX_R.TGo4EventElement.fBits : UInt_t             *
+*Entries :    90000 : Total  Size=     726503 bytes  File Size  =     181448 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  212 :Right_telescope_tSQX_R.TGo4EventElement.fName : TString            *
+*Entries :    90000 : Total  Size=    2444098 bytes  File Size  =     232592 *
+*Baskets :       88 : Basket Size=     350720 bytes  Compression=  10.50     *
+*............................................................................*
+*Br  213 :Right_telescope_tSQX_R.TGo4EventElement.fTitle : TString           *
+*Entries :    90000 : Total  Size=    2444190 bytes  File Size  =     232312 *
+*Baskets :       88 : Basket Size=     350720 bytes  Compression=  10.51     *
+*............................................................................*
+*Br  214 :Right_telescope_tSQX_R.TGo4EventElement.fbIsValid : Bool_t         *
+*Entries :    90000 : Total  Size=      92135 bytes  File Size  =       1881 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  48.61     *
+*............................................................................*
+*Br  215 :Right_telescope_tSQX_R.TGo4EventElement.fIdentifier : Short_t      *
+*Entries :    90000 : Total  Size=     182624 bytes  File Size  =       2504 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  72.63     *
+*............................................................................*
+*Br  216 :Right_telescope_tSQX_R.fDetMessages :                              *
+*         | Int_t Right_telescope_tSQX_R.fDetMessages_                       *
+*Entries :    90000 : Total  Size=     383024 bytes  File Size  =      32845 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=  11.31     *
+*............................................................................*
+*Br  217 :Right_telescope_tSQX_R.fDetMessages.fUniqueID :                    *
+*         | UInt_t fUniqueID[Right_telescope_tSQX_R.fDetMessages_]           *
+*Entries :    90000 : Total  Size=     411248 bytes  File Size  =      26975 *
+*Baskets :       30 : Basket Size=     126464 bytes  Compression=  15.20     *
+*............................................................................*
+*Br  218 :Right_telescope_tSQX_R.fDetMessages.fBits :                        *
+*         | UInt_t fBits[Right_telescope_tSQX_R.fDetMessages_]               *
+*Entries :    90000 : Total  Size=     411112 bytes  File Size  =      26976 *
+*Baskets :       30 : Basket Size=     126464 bytes  Compression=  15.20     *
+*............................................................................*
+*Br  219 :Right_telescope_tSQX_R.fDetMessages.fDetector :                    *
+*         | Short_t fDetector[Right_telescope_tSQX_R.fDetMessages_]          *
+*Entries :    90000 : Total  Size=     388246 bytes  File Size  =      27669 *
+*Baskets :       30 : Basket Size=     123904 bytes  Compression=  13.99     *
+*............................................................................*
+*Br  220 :Right_telescope_tSQX_R.fDetMessages.fStation :                     *
+*         | Short_t fStation[Right_telescope_tSQX_R.fDetMessages_]           *
+*Entries :    90000 : Total  Size=     388212 bytes  File Size  =      27715 *
+*Baskets :       30 : Basket Size=     123904 bytes  Compression=  13.96     *
+*............................................................................*
+*Br  221 :Right_telescope_tSQX_R.fDetMessages.fStChannel :                   *
+*         | Int_t fStChannel[Right_telescope_tSQX_R.fDetMessages_]           *
+*Entries :    90000 : Total  Size=     411282 bytes  File Size  =      38717 *
+*Baskets :       30 : Basket Size=     126464 bytes  Compression=  10.59     *
+*............................................................................*
+*Br  222 :Right_telescope_tSQX_R.fDetMessages.fValue :                       *
+*         | Int_t fValue[Right_telescope_tSQX_R.fDetMessages_]               *
+*Entries :    90000 : Total  Size=     411146 bytes  File Size  =      51825 *
+*Baskets :       30 : Basket Size=     126464 bytes  Compression=   7.91     *
+*............................................................................*
+*Branch  :Right_telescope_tSQY_R.                                            *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  223 :Right_telescope_tSQY_R.TGo4EventElement.fUniqueID : UInt_t         *
+*Entries :    90000 : Total  Size=     363343 bytes  File Size  =       3428 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 105.74     *
+*............................................................................*
+*Br  224 :Right_telescope_tSQY_R.TGo4EventElement.fBits : UInt_t             *
+*Entries :    90000 : Total  Size=     726503 bytes  File Size  =     181448 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  225 :Right_telescope_tSQY_R.TGo4EventElement.fName : TString            *
+*Entries :    90000 : Total  Size=    2444098 bytes  File Size  =     232608 *
+*Baskets :       88 : Basket Size=     350720 bytes  Compression=  10.50     *
+*............................................................................*
+*Br  226 :Right_telescope_tSQY_R.TGo4EventElement.fTitle : TString           *
+*Entries :    90000 : Total  Size=    2444190 bytes  File Size  =     232304 *
+*Baskets :       88 : Basket Size=     350720 bytes  Compression=  10.51     *
+*............................................................................*
+*Br  227 :Right_telescope_tSQY_R.TGo4EventElement.fbIsValid : Bool_t         *
+*Entries :    90000 : Total  Size=      92135 bytes  File Size  =       1881 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  48.61     *
+*............................................................................*
+*Br  228 :Right_telescope_tSQY_R.TGo4EventElement.fIdentifier : Short_t      *
+*Entries :    90000 : Total  Size=     182624 bytes  File Size  =       2504 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  72.63     *
+*............................................................................*
+*Br  229 :Right_telescope_tSQY_R.fDetMessages :                              *
+*         | Int_t Right_telescope_tSQY_R.fDetMessages_                       *
+*Entries :    90000 : Total  Size=     383224 bytes  File Size  =      42338 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=   8.78     *
+*............................................................................*
+*Br  230 :Right_telescope_tSQY_R.fDetMessages.fUniqueID :                    *
+*         | UInt_t fUniqueID[Right_telescope_tSQY_R.fDetMessages_]           *
+*Entries :    90000 : Total  Size=     472910 bytes  File Size  =      49924 *
+*Baskets :       32 : Basket Size=     133632 bytes  Compression=   9.45     *
+*............................................................................*
+*Br  231 :Right_telescope_tSQY_R.fDetMessages.fBits :                        *
+*         | UInt_t fBits[Right_telescope_tSQY_R.fDetMessages_]               *
+*Entries :    90000 : Total  Size=     472766 bytes  File Size  =      49759 *
+*Baskets :       32 : Basket Size=     133632 bytes  Compression=   9.48     *
+*............................................................................*
+*Br  232 :Right_telescope_tSQY_R.fDetMessages.fDetector :                    *
+*         | Short_t fDetector[Right_telescope_tSQY_R.fDetMessages_]          *
+*Entries :    90000 : Total  Size=     419077 bytes  File Size  =      51108 *
+*Baskets :       31 : Basket Size=     127488 bytes  Compression=   8.18     *
+*............................................................................*
+*Br  233 :Right_telescope_tSQY_R.fDetMessages.fStation :                     *
+*         | Short_t fStation[Right_telescope_tSQY_R.fDetMessages_]           *
+*Entries :    90000 : Total  Size=     419042 bytes  File Size  =      51058 *
+*Baskets :       31 : Basket Size=     127488 bytes  Compression=   8.18     *
+*............................................................................*
+*Br  234 :Right_telescope_tSQY_R.fDetMessages.fStChannel :                   *
+*         | Int_t fStChannel[Right_telescope_tSQY_R.fDetMessages_]           *
+*Entries :    90000 : Total  Size=     472946 bytes  File Size  =      70843 *
+*Baskets :       32 : Basket Size=     133632 bytes  Compression=   6.66     *
+*............................................................................*
+*Br  235 :Right_telescope_tSQY_R.fDetMessages.fValue :                       *
+*         | Int_t fValue[Right_telescope_tSQY_R.fDetMessages_]               *
+*Entries :    90000 : Total  Size=     472802 bytes  File Size  =     116577 *
+*Baskets :       32 : Basket Size=     133632 bytes  Compression=   4.05     *
+*............................................................................*
+*Branch  :Right_telescope_tCsI_R.                                            *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  236 :Right_telescope_tCsI_R.TGo4EventElement.fUniqueID : UInt_t         *
+*Entries :    90000 : Total  Size=     363343 bytes  File Size  =       3428 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 105.74     *
+*............................................................................*
+*Br  237 :Right_telescope_tCsI_R.TGo4EventElement.fBits : UInt_t             *
+*Entries :    90000 : Total  Size=     726503 bytes  File Size  =     181448 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  238 :Right_telescope_tCsI_R.TGo4EventElement.fName : TString            *
+*Entries :    90000 : Total  Size=    2444098 bytes  File Size  =     232512 *
+*Baskets :       88 : Basket Size=     350720 bytes  Compression=  10.50     *
+*............................................................................*
+*Br  239 :Right_telescope_tCsI_R.TGo4EventElement.fTitle : TString           *
+*Entries :    90000 : Total  Size=    2444190 bytes  File Size  =     232296 *
+*Baskets :       88 : Basket Size=     350720 bytes  Compression=  10.51     *
+*............................................................................*
+*Br  240 :Right_telescope_tCsI_R.TGo4EventElement.fbIsValid : Bool_t         *
+*Entries :    90000 : Total  Size=      92135 bytes  File Size  =       1881 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  48.61     *
+*............................................................................*
+*Br  241 :Right_telescope_tCsI_R.TGo4EventElement.fIdentifier : Short_t      *
+*Entries :    90000 : Total  Size=     182624 bytes  File Size  =       2504 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  72.63     *
+*............................................................................*
+*Br  242 :Right_telescope_tCsI_R.fDetMessages :                              *
+*         | Int_t Right_telescope_tCsI_R.fDetMessages_                       *
+*Entries :    90000 : Total  Size=     384924 bytes  File Size  =      52494 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=   7.08     *
+*............................................................................*
+*Br  243 :Right_telescope_tCsI_R.fDetMessages.fUniqueID :                    *
+*         | UInt_t fUniqueID[Right_telescope_tCsI_R.fDetMessages_]           *
+*Entries :    90000 : Total  Size=    1065693 bytes  File Size  =      51294 *
+*Baskets :       49 : Basket Size=     199680 bytes  Compression=  20.75     *
+*............................................................................*
+*Br  244 :Right_telescope_tCsI_R.fDetMessages.fBits :                        *
+*         | UInt_t fBits[Right_telescope_tCsI_R.fDetMessages_]               *
+*Entries :    90000 : Total  Size=    1065481 bytes  File Size  =      50803 *
+*Baskets :       49 : Basket Size=     199680 bytes  Compression=  20.94     *
+*............................................................................*
+*Br  245 :Right_telescope_tCsI_R.fDetMessages.fDetector :                    *
+*         | Short_t fDetector[Right_telescope_tCsI_R.fDetMessages_]          *
+*Entries :    90000 : Total  Size=     715391 bytes  File Size  =      48202 *
+*Baskets :       39 : Basket Size=     160768 bytes  Compression=  14.81     *
+*............................................................................*
+*Br  246 :Right_telescope_tCsI_R.fDetMessages.fStation :                     *
+*         | Short_t fStation[Right_telescope_tCsI_R.fDetMessages_]           *
+*Entries :    90000 : Total  Size=     715348 bytes  File Size  =      48183 *
+*Baskets :       39 : Basket Size=     160768 bytes  Compression=  14.82     *
+*............................................................................*
+*Br  247 :Right_telescope_tCsI_R.fDetMessages.fStChannel :                   *
+*         | Int_t fStChannel[Right_telescope_tCsI_R.fDetMessages_]           *
+*Entries :    90000 : Total  Size=    1065902 bytes  File Size  =      99183 *
+*Baskets :       50 : Basket Size=     200192 bytes  Compression=  10.73     *
+*............................................................................*
+*Br  248 :Right_telescope_tCsI_R.fDetMessages.fValue :                       *
+*         | Int_t fValue[Right_telescope_tCsI_R.fDetMessages_]               *
+*Entries :    90000 : Total  Size=    1065534 bytes  File Size  =     417941 *
+*Baskets :       49 : Basket Size=     199680 bytes  Compression=   2.55     *
+*............................................................................*
+*Branch  :Beam_detector_ToF.                                                 *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  249 :Beam_detector_ToF.TGo4CompositeEvent.fUniqueID : UInt_t            *
+*Entries :    90000 : Total  Size=     363274 bytes  File Size  =       3371 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 107.51     *
+*............................................................................*
+*Br  250 :Beam_detector_ToF.TGo4CompositeEvent.fBits : UInt_t                *
+*Entries :    90000 : Total  Size=     726374 bytes  File Size  =     181937 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   3.99     *
+*............................................................................*
+*Br  251 :Beam_detector_ToF.TGo4CompositeEvent.fName : TString               *
+*Entries :    90000 : Total  Size=    1991998 bytes  File Size  =     219876 *
+*Baskets :       76 : Basket Size=     300544 bytes  Compression=   9.05     *
+*............................................................................*
+*Br  252 :Beam_detector_ToF.TGo4CompositeEvent.fTitle : TString              *
+*Entries :    90000 : Total  Size=    1992078 bytes  File Size  =     219481 *
+*Baskets :       76 : Basket Size=     301056 bytes  Compression=   9.07     *
+*............................................................................*
+*Br  253 :Beam_detector_ToF.TGo4CompositeEvent.fbIsValid : Bool_t            *
+*Entries :    90000 : Total  Size=      92090 bytes  File Size  =       1848 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  49.46     *
+*............................................................................*
+*Br  254 :Beam_detector_ToF.TGo4CompositeEvent.fIdentifier : Short_t         *
+*Entries :    90000 : Total  Size=     182570 bytes  File Size  =       2454 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  74.09     *
+*............................................................................*
+*Br  255 :Beam_detector_ToF.TGo4CompositeEvent.fNElements : Short_t          *
+*Entries :    90000 : Total  Size=     182552 bytes  File Size  =       2440 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  74.51     *
+*............................................................................*
+*Br  256 :Beam_detector_ToF.TGo4CompositeEvent.fMaxIndex : Short_t           *
+*Entries :    90000 : Total  Size=     182534 bytes  File Size  =       2434 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  74.69     *
+*............................................................................*
+*Branch  :Beam_detector_ToF_F3.                                              *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  257 :Beam_detector_ToF_F3.TGo4EventElement.fUniqueID : UInt_t           *
+*Entries :    90000 : Total  Size=     363297 bytes  File Size  =       3390 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 106.92     *
+*............................................................................*
+*Br  258 :Beam_detector_ToF_F3.TGo4EventElement.fBits : UInt_t               *
+*Entries :    90000 : Total  Size=     726417 bytes  File Size  =     181377 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  259 :Beam_detector_ToF_F3.TGo4EventElement.fName : TString              *
+*Entries :    90000 : Total  Size=    2263302 bytes  File Size  =     229972 *
+*Baskets :       84 : Basket Size=     330752 bytes  Compression=   9.83     *
+*............................................................................*
+*Br  260 :Beam_detector_ToF_F3.TGo4EventElement.fTitle : TString             *
+*Entries :    90000 : Total  Size=    2263390 bytes  File Size  =     229988 *
+*Baskets :       84 : Basket Size=     330752 bytes  Compression=   9.83     *
+*............................................................................*
+*Br  261 :Beam_detector_ToF_F3.TGo4EventElement.fbIsValid : Bool_t           *
+*Entries :    90000 : Total  Size=      92105 bytes  File Size  =       1859 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  49.18     *
+*............................................................................*
+*Br  262 :Beam_detector_ToF_F3.TGo4EventElement.fIdentifier : Short_t        *
+*Entries :    90000 : Total  Size=     182588 bytes  File Size  =       2476 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  73.44     *
+*............................................................................*
+*Br  263 :Beam_detector_ToF_F3.fDetMessages :                                *
+*         | Int_t Beam_detector_ToF_F3.fDetMessages_                         *
+*Entries :    90000 : Total  Size=     384566 bytes  File Size  =      41318 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=   8.99     *
+*............................................................................*
+*Br  264 :Beam_detector_ToF_F3.fDetMessages.fUniqueID :                      *
+*         | UInt_t fUniqueID[Beam_detector_ToF_F3.fDetMessages_]             *
+*Entries :    90000 : Total  Size=    1034650 bytes  File Size  =      97773 *
+*Baskets :       48 : Basket Size=     194048 bytes  Compression=  10.57     *
+*............................................................................*
+*Br  265 :Beam_detector_ToF_F3.fDetMessages.fBits :                          *
+*         | UInt_t fBits[Beam_detector_ToF_F3.fDetMessages_]                 *
+*Entries :    90000 : Total  Size=    1034442 bytes  File Size  =      96570 *
+*Baskets :       48 : Basket Size=     194048 bytes  Compression=  10.70     *
+*............................................................................*
+*Br  266 :Beam_detector_ToF_F3.fDetMessages.fDetector :                      *
+*         | Short_t fDetector[Beam_detector_ToF_F3.fDetMessages_]            *
+*Entries :    90000 : Total  Size=     699911 bytes  File Size  =      95934 *
+*Baskets :       39 : Basket Size=     157696 bytes  Compression=   7.28     *
+*............................................................................*
+*Br  267 :Beam_detector_ToF_F3.fDetMessages.fStation :                       *
+*         | Short_t fStation[Beam_detector_ToF_F3.fDetMessages_]             *
+*Entries :    90000 : Total  Size=     699868 bytes  File Size  =      95962 *
+*Baskets :       39 : Basket Size=     157696 bytes  Compression=   7.28     *
+*............................................................................*
+*Br  268 :Beam_detector_ToF_F3.fDetMessages.fStChannel :                     *
+*         | Int_t fStChannel[Beam_detector_ToF_F3.fDetMessages_]             *
+*Entries :    90000 : Total  Size=    1034702 bytes  File Size  =      99463 *
+*Baskets :       48 : Basket Size=     194048 bytes  Compression=  10.39     *
+*............................................................................*
+*Br  269 :Beam_detector_ToF_F3.fDetMessages.fValue :                         *
+*         | Int_t fValue[Beam_detector_ToF_F3.fDetMessages_]                 *
+*Entries :    90000 : Total  Size=    1034494 bytes  File Size  =     429082 *
+*Baskets :       48 : Basket Size=     194048 bytes  Compression=   2.41     *
+*............................................................................*
+*Branch  :Beam_detector_ToF_F5.                                              *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  270 :Beam_detector_ToF_F5.TGo4EventElement.fUniqueID : UInt_t           *
+*Entries :    90000 : Total  Size=     363297 bytes  File Size  =       3390 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 106.92     *
+*............................................................................*
+*Br  271 :Beam_detector_ToF_F5.TGo4EventElement.fBits : UInt_t               *
+*Entries :    90000 : Total  Size=     726417 bytes  File Size  =     181377 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  272 :Beam_detector_ToF_F5.TGo4EventElement.fName : TString              *
+*Entries :    90000 : Total  Size=    2263302 bytes  File Size  =     229929 *
+*Baskets :       84 : Basket Size=     330752 bytes  Compression=   9.83     *
+*............................................................................*
+*Br  273 :Beam_detector_ToF_F5.TGo4EventElement.fTitle : TString             *
+*Entries :    90000 : Total  Size=    2263390 bytes  File Size  =     229747 *
+*Baskets :       84 : Basket Size=     330752 bytes  Compression=   9.84     *
+*............................................................................*
+*Br  274 :Beam_detector_ToF_F5.TGo4EventElement.fbIsValid : Bool_t           *
+*Entries :    90000 : Total  Size=      92105 bytes  File Size  =       1859 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  49.18     *
+*............................................................................*
+*Br  275 :Beam_detector_ToF_F5.TGo4EventElement.fIdentifier : Short_t        *
+*Entries :    90000 : Total  Size=     182588 bytes  File Size  =       2476 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  73.44     *
+*............................................................................*
+*Br  276 :Beam_detector_ToF_F5.fDetMessages :                                *
+*         | Int_t Beam_detector_ToF_F5.fDetMessages_                         *
+*Entries :    90000 : Total  Size=     384566 bytes  File Size  =      41292 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=   8.99     *
+*............................................................................*
+*Br  277 :Beam_detector_ToF_F5.fDetMessages.fUniqueID :                      *
+*         | UInt_t fUniqueID[Beam_detector_ToF_F5.fDetMessages_]             *
+*Entries :    90000 : Total  Size=    1032266 bytes  File Size  =      97269 *
+*Baskets :       48 : Basket Size=     194048 bytes  Compression=  10.60     *
+*............................................................................*
+*Br  278 :Beam_detector_ToF_F5.fDetMessages.fBits :                          *
+*         | UInt_t fBits[Beam_detector_ToF_F5.fDetMessages_]                 *
+*Entries :    90000 : Total  Size=    1032058 bytes  File Size  =      96152 *
+*Baskets :       48 : Basket Size=     194048 bytes  Compression=  10.72     *
+*............................................................................*
+*Br  279 :Beam_detector_ToF_F5.fDetMessages.fDetector :                      *
+*         | Short_t fDetector[Beam_detector_ToF_F5.fDetMessages_]            *
+*Entries :    90000 : Total  Size=     698719 bytes  File Size  =      95368 *
+*Baskets :       39 : Basket Size=     157696 bytes  Compression=   7.31     *
+*............................................................................*
+*Br  280 :Beam_detector_ToF_F5.fDetMessages.fStation :                       *
+*         | Short_t fStation[Beam_detector_ToF_F5.fDetMessages_]             *
+*Entries :    90000 : Total  Size=     698676 bytes  File Size  =      95385 *
+*Baskets :       39 : Basket Size=     157696 bytes  Compression=   7.31     *
+*............................................................................*
+*Br  281 :Beam_detector_ToF_F5.fDetMessages.fStChannel :                     *
+*         | Int_t fStChannel[Beam_detector_ToF_F5.fDetMessages_]             *
+*Entries :    90000 : Total  Size=    1032318 bytes  File Size  =      98633 *
+*Baskets :       48 : Basket Size=     194048 bytes  Compression=  10.45     *
+*............................................................................*
+*Br  282 :Beam_detector_ToF_F5.fDetMessages.fValue :                         *
+*         | Int_t fValue[Beam_detector_ToF_F5.fDetMessages_]                 *
+*Entries :    90000 : Total  Size=    1032110 bytes  File Size  =     437519 *
+*Baskets :       48 : Basket Size=     194048 bytes  Compression=   2.36     *
+*............................................................................*
+*Branch  :Beam_detector_ToF_F6.                                              *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  283 :Beam_detector_ToF_F6.TGo4EventElement.fUniqueID : UInt_t           *
+*Entries :    90000 : Total  Size=     363297 bytes  File Size  =       3390 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 106.92     *
+*............................................................................*
+*Br  284 :Beam_detector_ToF_F6.TGo4EventElement.fBits : UInt_t               *
+*Entries :    90000 : Total  Size=     726417 bytes  File Size  =     181377 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  285 :Beam_detector_ToF_F6.TGo4EventElement.fName : TString              *
+*Entries :    90000 : Total  Size=    2263302 bytes  File Size  =     230024 *
+*Baskets :       84 : Basket Size=     330752 bytes  Compression=   9.83     *
+*............................................................................*
+*Br  286 :Beam_detector_ToF_F6.TGo4EventElement.fTitle : TString             *
+*Entries :    90000 : Total  Size=    2263390 bytes  File Size  =     229771 *
+*Baskets :       84 : Basket Size=     330752 bytes  Compression=   9.84     *
+*............................................................................*
+*Br  287 :Beam_detector_ToF_F6.TGo4EventElement.fbIsValid : Bool_t           *
+*Entries :    90000 : Total  Size=      92105 bytes  File Size  =       1859 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  49.18     *
+*............................................................................*
+*Br  288 :Beam_detector_ToF_F6.TGo4EventElement.fIdentifier : Short_t        *
+*Entries :    90000 : Total  Size=     182588 bytes  File Size  =       2476 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  73.44     *
+*............................................................................*
+*Br  289 :Beam_detector_ToF_F6.fDetMessages :                                *
+*         | Int_t Beam_detector_ToF_F6.fDetMessages_                         *
+*Entries :    90000 : Total  Size=     382646 bytes  File Size  =      14778 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=  25.13     *
+*............................................................................*
+*Br  290 :Beam_detector_ToF_F6.fDetMessages.fUniqueID :                      *
+*         | UInt_t fUniqueID[Beam_detector_ToF_F6.fDetMessages_]             *
+*Entries :    90000 : Total  Size=     365019 bytes  File Size  =       5063 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  71.87     *
+*............................................................................*
+*Br  291 :Beam_detector_ToF_F6.fDetMessages.fBits :                          *
+*         | UInt_t fBits[Beam_detector_ToF_F6.fDetMessages_]                 *
+*Entries :    90000 : Total  Size=     364887 bytes  File Size  =       4947 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  73.53     *
+*............................................................................*
+*Br  292 :Beam_detector_ToF_F6.fDetMessages.fDetector :                      *
+*         | Short_t fDetector[Beam_detector_ToF_F6.fDetMessages_]            *
+*Entries :    90000 : Total  Size=     365019 bytes  File Size  =       5063 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  71.87     *
+*............................................................................*
+*Br  293 :Beam_detector_ToF_F6.fDetMessages.fStation :                       *
+*         | Short_t fStation[Beam_detector_ToF_F6.fDetMessages_]             *
+*Entries :    90000 : Total  Size=     364986 bytes  File Size  =       5034 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  72.27     *
+*............................................................................*
+*Br  294 :Beam_detector_ToF_F6.fDetMessages.fStChannel :                     *
+*         | Int_t fStChannel[Beam_detector_ToF_F6.fDetMessages_]             *
+*Entries :    90000 : Total  Size=     365052 bytes  File Size  =       5092 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  71.46     *
+*............................................................................*
+*Br  295 :Beam_detector_ToF_F6.fDetMessages.fValue :                         *
+*         | Int_t fValue[Beam_detector_ToF_F6.fDetMessages_]                 *
+*Entries :    90000 : Total  Size=     364920 bytes  File Size  =       4976 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  73.10     *
+*............................................................................*
+*Branch  :Beam_detector_ToF_tF3.                                             *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  296 :Beam_detector_ToF_tF3.TGo4EventElement.fUniqueID : UInt_t          *
+*Entries :    90000 : Total  Size=     363320 bytes  File Size  =       3409 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 106.33     *
+*............................................................................*
+*Br  297 :Beam_detector_ToF_tF3.TGo4EventElement.fBits : UInt_t              *
+*Entries :    90000 : Total  Size=     726460 bytes  File Size  =     181369 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  298 :Beam_detector_ToF_tF3.TGo4EventElement.fName : TString             *
+*Entries :    90000 : Total  Size=    2353698 bytes  File Size  =     224090 *
+*Baskets :       86 : Basket Size=     340480 bytes  Compression=  10.49     *
+*............................................................................*
+*Br  299 :Beam_detector_ToF_tF3.TGo4EventElement.fTitle : TString            *
+*Entries :    90000 : Total  Size=    2353788 bytes  File Size  =     223889 *
+*Baskets :       86 : Basket Size=     340992 bytes  Compression=  10.50     *
+*............................................................................*
+*Br  300 :Beam_detector_ToF_tF3.TGo4EventElement.fbIsValid : Bool_t          *
+*Entries :    90000 : Total  Size=      92120 bytes  File Size  =       1870 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  48.89     *
+*............................................................................*
+*Br  301 :Beam_detector_ToF_tF3.TGo4EventElement.fIdentifier : Short_t       *
+*Entries :    90000 : Total  Size=     182606 bytes  File Size  =       2490 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  73.03     *
+*............................................................................*
+*Br  302 :Beam_detector_ToF_tF3.fDetMessages :                               *
+*         | Int_t Beam_detector_ToF_tF3.fDetMessages_                        *
+*Entries :    90000 : Total  Size=     388895 bytes  File Size  =      29167 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=  12.74     *
+*............................................................................*
+*Br  303 :Beam_detector_ToF_tF3.fDetMessages.fUniqueID :                     *
+*         | UInt_t fUniqueID[Beam_detector_ToF_tF3.fDetMessages_]            *
+*Entries :    90000 : Total  Size=    2499248 bytes  File Size  =     237119 *
+*Baskets :       90 : Basket Size=     356352 bytes  Compression=  10.53     *
+*............................................................................*
+*Br  304 :Beam_detector_ToF_tF3.fDetMessages.fBits :                         *
+*         | UInt_t fBits[Beam_detector_ToF_tF3.fDetMessages_]                *
+*Entries :    90000 : Total  Size=    2498872 bytes  File Size  =     235939 *
+*Baskets :       90 : Basket Size=     356352 bytes  Compression=  10.58     *
+*............................................................................*
+*Br  305 :Beam_detector_ToF_tF3.fDetMessages.fDetector :                     *
+*         | Short_t fDetector[Beam_detector_ToF_tF3.fDetMessages_]           *
+*Entries :    90000 : Total  Size=    1432228 bytes  File Size  =     233100 *
+*Baskets :       60 : Basket Size=     239104 bytes  Compression=   6.14     *
+*............................................................................*
+*Br  306 :Beam_detector_ToF_tF3.fDetMessages.fStation :                      *
+*         | Short_t fStation[Beam_detector_ToF_tF3.fDetMessages_]            *
+*Entries :    90000 : Total  Size=    1432164 bytes  File Size  =     232986 *
+*Baskets :       60 : Basket Size=     239104 bytes  Compression=   6.14     *
+*............................................................................*
+*Br  307 :Beam_detector_ToF_tF3.fDetMessages.fStChannel :                    *
+*         | Int_t fStChannel[Beam_detector_ToF_tF3.fDetMessages_]            *
+*Entries :    90000 : Total  Size=    2499342 bytes  File Size  =     342901 *
+*Baskets :       90 : Basket Size=     356352 bytes  Compression=   7.28     *
+*............................................................................*
+*Br  308 :Beam_detector_ToF_tF3.fDetMessages.fValue :                        *
+*         | Int_t fValue[Beam_detector_ToF_tF3.fDetMessages_]                *
+*Entries :    90000 : Total  Size=    2498966 bytes  File Size  =     921278 *
+*Baskets :       90 : Basket Size=     356352 bytes  Compression=   2.71     *
+*............................................................................*
+*Branch  :Beam_detector_ToF_tF5.                                             *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  309 :Beam_detector_ToF_tF5.TGo4EventElement.fUniqueID : UInt_t          *
+*Entries :    90000 : Total  Size=     363320 bytes  File Size  =       3409 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 106.33     *
+*............................................................................*
+*Br  310 :Beam_detector_ToF_tF5.TGo4EventElement.fBits : UInt_t              *
+*Entries :    90000 : Total  Size=     726460 bytes  File Size  =     181369 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  311 :Beam_detector_ToF_tF5.TGo4EventElement.fName : TString             *
+*Entries :    90000 : Total  Size=    2353698 bytes  File Size  =     224098 *
+*Baskets :       86 : Basket Size=     340480 bytes  Compression=  10.49     *
+*............................................................................*
+*Br  312 :Beam_detector_ToF_tF5.TGo4EventElement.fTitle : TString            *
+*Entries :    90000 : Total  Size=    2353788 bytes  File Size  =     223452 *
+*Baskets :       86 : Basket Size=     340992 bytes  Compression=  10.52     *
+*............................................................................*
+*Br  313 :Beam_detector_ToF_tF5.TGo4EventElement.fbIsValid : Bool_t          *
+*Entries :    90000 : Total  Size=      92120 bytes  File Size  =       1870 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  48.89     *
+*............................................................................*
+*Br  314 :Beam_detector_ToF_tF5.TGo4EventElement.fIdentifier : Short_t       *
+*Entries :    90000 : Total  Size=     182606 bytes  File Size  =       2490 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  73.03     *
+*............................................................................*
+*Br  315 :Beam_detector_ToF_tF5.fDetMessages :                               *
+*         | Int_t Beam_detector_ToF_tF5.fDetMessages_                        *
+*Entries :    90000 : Total  Size=     386895 bytes  File Size  =      16775 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=  22.15     *
+*............................................................................*
+*Br  316 :Beam_detector_ToF_tF5.fDetMessages.fUniqueID :                     *
+*         | UInt_t fUniqueID[Beam_detector_ToF_tF5.fDetMessages_]            *
+*Entries :    90000 : Total  Size=    1805860 bytes  File Size  =     183120 *
+*Baskets :       70 : Basket Size=     280064 bytes  Compression=   9.85     *
+*............................................................................*
+*Br  317 :Beam_detector_ToF_tF5.fDetMessages.fBits :                         *
+*         | UInt_t fBits[Beam_detector_ToF_tF5.fDetMessages_]                *
+*Entries :    90000 : Total  Size=    1805564 bytes  File Size  =     182544 *
+*Baskets :       70 : Basket Size=     280064 bytes  Compression=   9.88     *
+*............................................................................*
+*Br  318 :Beam_detector_ToF_tF5.fDetMessages.fDetector :                     *
+*         | Short_t fDetector[Beam_detector_ToF_tF5.fDetMessages_]           *
+*Entries :    90000 : Total  Size=    1085534 bytes  File Size  =     186576 *
+*Baskets :       50 : Basket Size=     200704 bytes  Compression=   5.81     *
+*............................................................................*
+*Br  319 :Beam_detector_ToF_tF5.fDetMessages.fStation :                      *
+*         | Short_t fStation[Beam_detector_ToF_tF5.fDetMessages_]            *
+*Entries :    90000 : Total  Size=    1085480 bytes  File Size  =     186265 *
+*Baskets :       50 : Basket Size=     200704 bytes  Compression=   5.82     *
+*............................................................................*
+*Br  320 :Beam_detector_ToF_tF5.fDetMessages.fStChannel :                    *
+*         | Int_t fStChannel[Beam_detector_ToF_tF5.fDetMessages_]            *
+*Entries :    90000 : Total  Size=    1805934 bytes  File Size  =     273653 *
+*Baskets :       70 : Basket Size=     280064 bytes  Compression=   6.59     *
+*............................................................................*
+*Br  321 :Beam_detector_ToF_tF5.fDetMessages.fValue :                        *
+*         | Int_t fValue[Beam_detector_ToF_tF5.fDetMessages_]                *
+*Entries :    90000 : Total  Size=    1805638 bytes  File Size  =     687838 *
+*Baskets :       70 : Basket Size=     280064 bytes  Compression=   2.62     *
+*............................................................................*
+*Branch  :Beam_detector_ToF_tF6.                                             *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  322 :Beam_detector_ToF_tF6.TGo4EventElement.fUniqueID : UInt_t          *
+*Entries :    90000 : Total  Size=     363320 bytes  File Size  =       3409 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 106.33     *
+*............................................................................*
+*Br  323 :Beam_detector_ToF_tF6.TGo4EventElement.fBits : UInt_t              *
+*Entries :    90000 : Total  Size=     726460 bytes  File Size  =     181369 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  324 :Beam_detector_ToF_tF6.TGo4EventElement.fName : TString             *
+*Entries :    90000 : Total  Size=    2353698 bytes  File Size  =     224331 *
+*Baskets :       86 : Basket Size=     340480 bytes  Compression=  10.48     *
+*............................................................................*
+*Br  325 :Beam_detector_ToF_tF6.TGo4EventElement.fTitle : TString            *
+*Entries :    90000 : Total  Size=    2353788 bytes  File Size  =     223367 *
+*Baskets :       86 : Basket Size=     340992 bytes  Compression=  10.53     *
+*............................................................................*
+*Br  326 :Beam_detector_ToF_tF6.TGo4EventElement.fbIsValid : Bool_t          *
+*Entries :    90000 : Total  Size=      92120 bytes  File Size  =       1870 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  48.89     *
+*............................................................................*
+*Br  327 :Beam_detector_ToF_tF6.TGo4EventElement.fIdentifier : Short_t       *
+*Entries :    90000 : Total  Size=     182606 bytes  File Size  =       2490 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  73.03     *
+*............................................................................*
+*Br  328 :Beam_detector_ToF_tF6.fDetMessages :                               *
+*         | Int_t Beam_detector_ToF_tF6.fDetMessages_                        *
+*Entries :    90000 : Total  Size=     382775 bytes  File Size  =      14877 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=  24.97     *
+*............................................................................*
+*Br  329 :Beam_detector_ToF_tF6.fDetMessages.fUniqueID :                     *
+*         | UInt_t fUniqueID[Beam_detector_ToF_tF6.fDetMessages_]            *
+*Entries :    90000 : Total  Size=     365054 bytes  File Size  =       5092 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  71.46     *
+*............................................................................*
+*Br  330 :Beam_detector_ToF_tF6.fDetMessages.fBits :                         *
+*         | UInt_t fBits[Beam_detector_ToF_tF6.fDetMessages_]                *
+*Entries :    90000 : Total  Size=     364922 bytes  File Size  =       4976 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  73.10     *
+*............................................................................*
+*Br  331 :Beam_detector_ToF_tF6.fDetMessages.fDetector :                     *
+*         | Short_t fDetector[Beam_detector_ToF_tF6.fDetMessages_]           *
+*Entries :    90000 : Total  Size=     365054 bytes  File Size  =       5092 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  71.46     *
+*............................................................................*
+*Br  332 :Beam_detector_ToF_tF6.fDetMessages.fStation :                      *
+*         | Short_t fStation[Beam_detector_ToF_tF6.fDetMessages_]            *
+*Entries :    90000 : Total  Size=     365021 bytes  File Size  =       5063 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  71.87     *
+*............................................................................*
+*Br  333 :Beam_detector_ToF_tF6.fDetMessages.fStChannel :                    *
+*         | Int_t fStChannel[Beam_detector_ToF_tF6.fDetMessages_]            *
+*Entries :    90000 : Total  Size=     365087 bytes  File Size  =       5121 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  71.06     *
+*............................................................................*
+*Br  334 :Beam_detector_ToF_tF6.fDetMessages.fValue :                        *
+*         | Int_t fValue[Beam_detector_ToF_tF6.fDetMessages_]                *
+*Entries :    90000 : Total  Size=     364955 bytes  File Size  =       5005 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  72.69     *
+*............................................................................*
+*Branch  :Ignore.                                                            *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  335 :Ignore.TGo4CompositeEvent.fUniqueID : UInt_t                       *
+*Entries :    90000 : Total  Size=     363021 bytes  File Size  =       3160 *
+*Baskets :       19 : Basket Size=     119808 bytes  Compression= 114.63     *
+*............................................................................*
+*Br  336 :Ignore.TGo4CompositeEvent.fBits : UInt_t                           *
+*Entries :    90000 : Total  Size=     725901 bytes  File Size  =     180883 *
+*Baskets :       39 : Basket Size=     160768 bytes  Compression=   4.01     *
+*............................................................................*
+*Br  337 :Ignore.TGo4CompositeEvent.fName : TString                          *
+*Entries :    90000 : Total  Size=     997029 bytes  File Size  =     211027 *
+*Baskets :       47 : Basket Size=     190976 bytes  Compression=   4.72     *
+*............................................................................*
+*Br  338 :Ignore.TGo4CompositeEvent.fTitle : TString                         *
+*Entries :    90000 : Total  Size=     997080 bytes  File Size  =     210829 *
+*Baskets :       47 : Basket Size=     190976 bytes  Compression=   4.72     *
+*............................................................................*
+*Br  339 :Ignore.TGo4CompositeEvent.fbIsValid : Bool_t                       *
+*Entries :    90000 : Total  Size=      91925 bytes  File Size  =       1729 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  52.80     *
+*............................................................................*
+*Br  340 :Ignore.TGo4CompositeEvent.fIdentifier : Short_t                    *
+*Entries :    90000 : Total  Size=     182372 bytes  File Size  =       2300 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  78.99     *
+*............................................................................*
+*Br  341 :Ignore.TGo4CompositeEvent.fNElements : Short_t                     *
+*Entries :    90000 : Total  Size=     182354 bytes  File Size  =       2273 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  79.92     *
+*............................................................................*
+*Br  342 :Ignore.TGo4CompositeEvent.fMaxIndex : Short_t                      *
+*Entries :    90000 : Total  Size=     182336 bytes  File Size  =       2285 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  79.49     *
+*............................................................................*
+*Branch  :Ignore_Ignore.                                                     *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  343 :Ignore_Ignore.TGo4EventElement.fUniqueID : UInt_t                  *
+*Entries :    90000 : Total  Size=     363136 bytes  File Size  =       3255 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 111.31     *
+*............................................................................*
+*Br  344 :Ignore_Ignore.TGo4EventElement.fBits : UInt_t                      *
+*Entries :    90000 : Total  Size=     726116 bytes  File Size  =     181029 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  345 :Ignore_Ignore.TGo4EventElement.fName : TString                     *
+*Entries :    90000 : Total  Size=    1629912 bytes  File Size  =     213459 *
+*Baskets :       65 : Basket Size=     260608 bytes  Compression=   7.63     *
+*............................................................................*
+*Br  346 :Ignore_Ignore.TGo4EventElement.fTitle : TString                    *
+*Entries :    90000 : Total  Size=    1629981 bytes  File Size  =     213423 *
+*Baskets :       65 : Basket Size=     260608 bytes  Compression=   7.63     *
+*............................................................................*
+*Br  347 :Ignore_Ignore.TGo4EventElement.fbIsValid : Bool_t                  *
+*Entries :    90000 : Total  Size=      92000 bytes  File Size  =       1782 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  51.26     *
+*............................................................................*
+*Br  348 :Ignore_Ignore.TGo4EventElement.fIdentifier : Short_t               *
+*Entries :    90000 : Total  Size=     182462 bytes  File Size  =       2378 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  76.42     *
+*............................................................................*
+*Br  349 :Ignore_Ignore.fDetMessages : Int_t Ignore_Ignore.fDetMessages_     *
+*Entries :    90000 : Total  Size=     381743 bytes  File Size  =      14085 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=  26.32     *
+*............................................................................*
+*Br  350 :Ignore_Ignore.fDetMessages.fUniqueID :                             *
+*         | UInt_t fUniqueID[Ignore_Ignore.fDetMessages_]                    *
+*Entries :    90000 : Total  Size=     364774 bytes  File Size  =       4860 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  74.83     *
+*............................................................................*
+*Br  351 :Ignore_Ignore.fDetMessages.fBits :                                 *
+*         | UInt_t fBits[Ignore_Ignore.fDetMessages_]                        *
+*Entries :    90000 : Total  Size=     364642 bytes  File Size  =       4752 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  76.50     *
+*............................................................................*
+*Br  352 :Ignore_Ignore.fDetMessages.fDetector :                             *
+*         | Short_t fDetector[Ignore_Ignore.fDetMessages_]                   *
+*Entries :    90000 : Total  Size=     364774 bytes  File Size  =       4860 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  74.83     *
+*............................................................................*
+*Br  353 :Ignore_Ignore.fDetMessages.fStation :                              *
+*         | Short_t fStation[Ignore_Ignore.fDetMessages_]                    *
+*Entries :    90000 : Total  Size=     364741 bytes  File Size  =       4831 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  75.27     *
+*............................................................................*
+*Br  354 :Ignore_Ignore.fDetMessages.fStChannel :                            *
+*         | Int_t fStChannel[Ignore_Ignore.fDetMessages_]                    *
+*Entries :    90000 : Total  Size=     364807 bytes  File Size  =       4889 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  74.39     *
+*............................................................................*
+*Br  355 :Ignore_Ignore.fDetMessages.fValue :                                *
+*         | Int_t fValue[Ignore_Ignore.fDetMessages_]                        *
+*Entries :    90000 : Total  Size=     364675 bytes  File Size  =       4773 *
+*Baskets :       29 : Basket Size=     121344 bytes  Compression=  76.17     *
+*............................................................................*
+*Branch  :Beam_detector_MWPC.                                                *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  356 :Beam_detector_MWPC.TGo4CompositeEvent.fUniqueID : UInt_t           *
+*Entries :    90000 : Total  Size=     363297 bytes  File Size  =       3390 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 106.92     *
+*............................................................................*
+*Br  357 :Beam_detector_MWPC.TGo4CompositeEvent.fBits : UInt_t               *
+*Entries :    90000 : Total  Size=     726417 bytes  File Size  =     181377 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  358 :Beam_detector_MWPC.TGo4CompositeEvent.fName : TString              *
+*Entries :    90000 : Total  Size=    2082384 bytes  File Size  =     228267 *
+*Baskets :       78 : Basket Size=     310784 bytes  Compression=   9.11     *
+*............................................................................*
+*Br  359 :Beam_detector_MWPC.TGo4CompositeEvent.fTitle : TString             *
+*Entries :    90000 : Total  Size=    2082466 bytes  File Size  =     228249 *
+*Baskets :       78 : Basket Size=     310784 bytes  Compression=   9.11     *
+*............................................................................*
+*Br  360 :Beam_detector_MWPC.TGo4CompositeEvent.fbIsValid : Bool_t           *
+*Entries :    90000 : Total  Size=      92105 bytes  File Size  =       1859 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  49.18     *
+*............................................................................*
+*Br  361 :Beam_detector_MWPC.TGo4CompositeEvent.fIdentifier : Short_t        *
+*Entries :    90000 : Total  Size=     182588 bytes  File Size  =       2468 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  73.68     *
+*............................................................................*
+*Br  362 :Beam_detector_MWPC.TGo4CompositeEvent.fNElements : Short_t         *
+*Entries :    90000 : Total  Size=     182570 bytes  File Size  =       2454 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  74.09     *
+*............................................................................*
+*Br  363 :Beam_detector_MWPC.TGo4CompositeEvent.fMaxIndex : Short_t          *
+*Entries :    90000 : Total  Size=     182552 bytes  File Size  =       2448 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  74.27     *
+*............................................................................*
+*Branch  :Beam_detector_MWPC_tMWPC.                                          *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  364 :Beam_detector_MWPC_tMWPC.TGo4EventElement.fUniqueID : UInt_t       *
+*Entries :    90000 : Total  Size=     363389 bytes  File Size  =       3466 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 104.60     *
+*............................................................................*
+*Br  365 :Beam_detector_MWPC_tMWPC.TGo4EventElement.fBits : UInt_t           *
+*Entries :    90000 : Total  Size=     726589 bytes  File Size  =     181542 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  366 :Beam_detector_MWPC_tMWPC.TGo4EventElement.fName : TString          *
+*Entries :    90000 : Total  Size=    2625224 bytes  File Size  =     235056 *
+*Baskets :       94 : Basket Size=     370688 bytes  Compression=  11.16     *
+*............................................................................*
+*Br  367 :Beam_detector_MWPC_tMWPC.TGo4EventElement.fTitle : TString         *
+*Entries :    90000 : Total  Size=    2625322 bytes  File Size  =     235143 *
+*Baskets :       94 : Basket Size=     371200 bytes  Compression=  11.15     *
+*............................................................................*
+*Br  368 :Beam_detector_MWPC_tMWPC.TGo4EventElement.fbIsValid : Bool_t       *
+*Entries :    90000 : Total  Size=      92165 bytes  File Size  =       1903 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  48.06     *
+*............................................................................*
+*Br  369 :Beam_detector_MWPC_tMWPC.TGo4EventElement.fIdentifier : Short_t    *
+*Entries :    90000 : Total  Size=     182660 bytes  File Size  =       2532 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  71.84     *
+*............................................................................*
+*Br  370 :Beam_detector_MWPC_tMWPC.fDetMessages :                            *
+*         | Int_t Beam_detector_MWPC_tMWPC.fDetMessages_                     *
+*Entries :    90000 : Total  Size=     387082 bytes  File Size  =      34814 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=  10.68     *
+*............................................................................*
+*Br  371 :Beam_detector_MWPC_tMWPC.fDetMessages.fUniqueID :                  *
+*         | UInt_t fUniqueID[Beam_detector_MWPC_tMWPC.fDetMessages_]         *
+*Entries :    90000 : Total  Size=    1729286 bytes  File Size  =     223820 *
+*Baskets :       68 : Basket Size=     271872 bytes  Compression=   7.72     *
+*............................................................................*
+*Br  372 :Beam_detector_MWPC_tMWPC.fDetMessages.fBits :                      *
+*         | UInt_t fBits[Beam_detector_MWPC_tMWPC.fDetMessages_]             *
+*Entries :    90000 : Total  Size=    1728998 bytes  File Size  =     222493 *
+*Baskets :       68 : Basket Size=     271360 bytes  Compression=   7.76     *
+*............................................................................*
+*Br  373 :Beam_detector_MWPC_tMWPC.fDetMessages.fDetector :                  *
+*         | Short_t fDetector[Beam_detector_MWPC_tMWPC.fDetMessages_]        *
+*Entries :    90000 : Total  Size=    1047301 bytes  File Size  =     222929 *
+*Baskets :       49 : Basket Size=     196608 bytes  Compression=   4.69     *
+*............................................................................*
+*Br  374 :Beam_detector_MWPC_tMWPC.fDetMessages.fStation :                   *
+*         | Short_t fStation[Beam_detector_MWPC_tMWPC.fDetMessages_]         *
+*Entries :    90000 : Total  Size=    1047248 bytes  File Size  =     223130 *
+*Baskets :       49 : Basket Size=     196608 bytes  Compression=   4.69     *
+*............................................................................*
+*Br  375 :Beam_detector_MWPC_tMWPC.fDetMessages.fStChannel :                 *
+*         | Int_t fStChannel[Beam_detector_MWPC_tMWPC.fDetMessages_]         *
+*Entries :    90000 : Total  Size=    1729358 bytes  File Size  =     318433 *
+*Baskets :       68 : Basket Size=     271872 bytes  Compression=   5.42     *
+*............................................................................*
+*Br  376 :Beam_detector_MWPC_tMWPC.fDetMessages.fValue :                     *
+*         | Int_t fValue[Beam_detector_MWPC_tMWPC.fDetMessages_]             *
+*Entries :    90000 : Total  Size=    1729070 bytes  File Size  =     868265 *
+*Baskets :       68 : Basket Size=     271360 bytes  Compression=   1.99     *
+*............................................................................*
+*Branch  :Beam_detector_MWPC_MWPC1.                                          *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  377 :Beam_detector_MWPC_MWPC1.TGo4EventElement.fUniqueID : UInt_t       *
+*Entries :    90000 : Total  Size=     363389 bytes  File Size  =       3466 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 104.60     *
+*............................................................................*
+*Br  378 :Beam_detector_MWPC_MWPC1.TGo4EventElement.fBits : UInt_t           *
+*Entries :    90000 : Total  Size=     726589 bytes  File Size  =     181542 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  379 :Beam_detector_MWPC_MWPC1.TGo4EventElement.fName : TString          *
+*Entries :    90000 : Total  Size=    2625224 bytes  File Size  =     234877 *
+*Baskets :       94 : Basket Size=     370688 bytes  Compression=  11.17     *
+*............................................................................*
+*Br  380 :Beam_detector_MWPC_MWPC1.TGo4EventElement.fTitle : TString         *
+*Entries :    90000 : Total  Size=    2625322 bytes  File Size  =     235298 *
+*Baskets :       94 : Basket Size=     371200 bytes  Compression=  11.15     *
+*............................................................................*
+*Br  381 :Beam_detector_MWPC_MWPC1.TGo4EventElement.fbIsValid : Bool_t       *
+*Entries :    90000 : Total  Size=      92165 bytes  File Size  =       1903 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  48.06     *
+*............................................................................*
+*Br  382 :Beam_detector_MWPC_MWPC1.TGo4EventElement.fIdentifier : Short_t    *
+*Entries :    90000 : Total  Size=     182660 bytes  File Size  =       2532 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  71.84     *
+*............................................................................*
+*Br  383 :Beam_detector_MWPC_MWPC1.fDetMessages :                            *
+*         | Int_t Beam_detector_MWPC_MWPC1.fDetMessages_                     *
+*Entries :    90000 : Total  Size=     384602 bytes  File Size  =      45744 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=   8.13     *
+*............................................................................*
+*Br  384 :Beam_detector_MWPC_MWPC1.fDetMessages.fUniqueID :                  *
+*         | UInt_t fUniqueID[Beam_detector_MWPC_MWPC1.fDetMessages_]         *
+*Entries :    90000 : Total  Size=     864562 bytes  File Size  =     204472 *
+*Baskets :       44 : Basket Size=     177152 bytes  Compression=   4.22     *
+*............................................................................*
+*Br  385 :Beam_detector_MWPC_MWPC1.fDetMessages.fBits :                      *
+*         | UInt_t fBits[Beam_detector_MWPC_MWPC1.fDetMessages_]             *
+*Entries :    90000 : Total  Size=     864217 bytes  File Size  =     204001 *
+*Baskets :       43 : Basket Size=     176640 bytes  Compression=   4.23     *
+*............................................................................*
+*Br  386 :Beam_detector_MWPC_MWPC1.fDetMessages.fDetector :                  *
+*         | Short_t fDetector[Beam_detector_MWPC_MWPC1.fDetMessages_]        *
+*Entries :    90000 : Total  Size=     614782 bytes  File Size  =     200967 *
+*Baskets :       36 : Basket Size=     149504 bytes  Compression=   3.05     *
+*............................................................................*
+*Br  387 :Beam_detector_MWPC_MWPC1.fDetMessages.fStation :                   *
+*         | Short_t fStation[Beam_detector_MWPC_MWPC1.fDetMessages_]         *
+*Entries :    90000 : Total  Size=     614742 bytes  File Size  =     201298 *
+*Baskets :       36 : Basket Size=     148992 bytes  Compression=   3.05     *
+*............................................................................*
+*Br  388 :Beam_detector_MWPC_MWPC1.fDetMessages.fStChannel :                 *
+*         | Int_t fStChannel[Beam_detector_MWPC_MWPC1.fDetMessages_]         *
+*Entries :    90000 : Total  Size=     864610 bytes  File Size  =     338367 *
+*Baskets :       44 : Basket Size=     177152 bytes  Compression=   2.55     *
+*............................................................................*
+*Br  389 :Beam_detector_MWPC_MWPC1.fDetMessages.fValue :                     *
+*         | Int_t fValue[Beam_detector_MWPC_MWPC1.fDetMessages_]             *
+*Entries :    90000 : Total  Size=     864264 bytes  File Size  =     203841 *
+*Baskets :       43 : Basket Size=     176640 bytes  Compression=   4.23     *
+*............................................................................*
+*Branch  :Beam_detector_MWPC_MWPC2.                                          *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  390 :Beam_detector_MWPC_MWPC2.TGo4EventElement.fUniqueID : UInt_t       *
+*Entries :    90000 : Total  Size=     363389 bytes  File Size  =       3466 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 104.60     *
+*............................................................................*
+*Br  391 :Beam_detector_MWPC_MWPC2.TGo4EventElement.fBits : UInt_t           *
+*Entries :    90000 : Total  Size=     726589 bytes  File Size  =     181542 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  392 :Beam_detector_MWPC_MWPC2.TGo4EventElement.fName : TString          *
+*Entries :    90000 : Total  Size=    2625224 bytes  File Size  =     234868 *
+*Baskets :       94 : Basket Size=     370688 bytes  Compression=  11.17     *
+*............................................................................*
+*Br  393 :Beam_detector_MWPC_MWPC2.TGo4EventElement.fTitle : TString         *
+*Entries :    90000 : Total  Size=    2625322 bytes  File Size  =     235290 *
+*Baskets :       94 : Basket Size=     371200 bytes  Compression=  11.15     *
+*............................................................................*
+*Br  394 :Beam_detector_MWPC_MWPC2.TGo4EventElement.fbIsValid : Bool_t       *
+*Entries :    90000 : Total  Size=      92165 bytes  File Size  =       1903 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  48.06     *
+*............................................................................*
+*Br  395 :Beam_detector_MWPC_MWPC2.TGo4EventElement.fIdentifier : Short_t    *
+*Entries :    90000 : Total  Size=     182660 bytes  File Size  =       2532 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  71.84     *
+*............................................................................*
+*Br  396 :Beam_detector_MWPC_MWPC2.fDetMessages :                            *
+*         | Int_t Beam_detector_MWPC_MWPC2.fDetMessages_                     *
+*Entries :    90000 : Total  Size=     384602 bytes  File Size  =      46256 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=   8.04     *
+*............................................................................*
+*Br  397 :Beam_detector_MWPC_MWPC2.fDetMessages.fUniqueID :                  *
+*         | UInt_t fUniqueID[Beam_detector_MWPC_MWPC2.fDetMessages_]         *
+*Entries :    90000 : Total  Size=     866830 bytes  File Size  =     204685 *
+*Baskets :       44 : Basket Size=     177152 bytes  Compression=   4.23     *
+*............................................................................*
+*Br  398 :Beam_detector_MWPC_MWPC2.fDetMessages.fBits :                      *
+*         | UInt_t fBits[Beam_detector_MWPC_MWPC2.fDetMessages_]             *
+*Entries :    90000 : Total  Size=     866485 bytes  File Size  =     204215 *
+*Baskets :       43 : Basket Size=     176640 bytes  Compression=   4.24     *
+*............................................................................*
+*Br  399 :Beam_detector_MWPC_MWPC2.fDetMessages.fDetector :                  *
+*         | Short_t fDetector[Beam_detector_MWPC_MWPC2.fDetMessages_]        *
+*Entries :    90000 : Total  Size=     615916 bytes  File Size  =     201078 *
+*Baskets :       36 : Basket Size=     149504 bytes  Compression=   3.06     *
+*............................................................................*
+*Br  400 :Beam_detector_MWPC_MWPC2.fDetMessages.fStation :                   *
+*         | Short_t fStation[Beam_detector_MWPC_MWPC2.fDetMessages_]         *
+*Entries :    90000 : Total  Size=     615876 bytes  File Size  =     201459 *
+*Baskets :       36 : Basket Size=     148992 bytes  Compression=   3.05     *
+*............................................................................*
+*Br  401 :Beam_detector_MWPC_MWPC2.fDetMessages.fStChannel :                 *
+*         | Int_t fStChannel[Beam_detector_MWPC_MWPC2.fDetMessages_]         *
+*Entries :    90000 : Total  Size=     866878 bytes  File Size  =     319695 *
+*Baskets :       44 : Basket Size=     177152 bytes  Compression=   2.71     *
+*............................................................................*
+*Br  402 :Beam_detector_MWPC_MWPC2.fDetMessages.fValue :                     *
+*         | Int_t fValue[Beam_detector_MWPC_MWPC2.fDetMessages_]             *
+*Entries :    90000 : Total  Size=     866532 bytes  File Size  =     204079 *
+*Baskets :       43 : Basket Size=     176640 bytes  Compression=   4.24     *
+*............................................................................*
+*Branch  :Beam_detector_MWPC_MWPC3.                                          *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  403 :Beam_detector_MWPC_MWPC3.TGo4EventElement.fUniqueID : UInt_t       *
+*Entries :    90000 : Total  Size=     363389 bytes  File Size  =       3466 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 104.60     *
+*............................................................................*
+*Br  404 :Beam_detector_MWPC_MWPC3.TGo4EventElement.fBits : UInt_t           *
+*Entries :    90000 : Total  Size=     726589 bytes  File Size  =     181542 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  405 :Beam_detector_MWPC_MWPC3.TGo4EventElement.fName : TString          *
+*Entries :    90000 : Total  Size=    2625224 bytes  File Size  =     234784 *
+*Baskets :       94 : Basket Size=     370688 bytes  Compression=  11.17     *
+*............................................................................*
+*Br  406 :Beam_detector_MWPC_MWPC3.TGo4EventElement.fTitle : TString         *
+*Entries :    90000 : Total  Size=    2625322 bytes  File Size  =     235313 *
+*Baskets :       94 : Basket Size=     371200 bytes  Compression=  11.15     *
+*............................................................................*
+*Br  407 :Beam_detector_MWPC_MWPC3.TGo4EventElement.fbIsValid : Bool_t       *
+*Entries :    90000 : Total  Size=      92165 bytes  File Size  =       1903 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  48.06     *
+*............................................................................*
+*Br  408 :Beam_detector_MWPC_MWPC3.TGo4EventElement.fIdentifier : Short_t    *
+*Entries :    90000 : Total  Size=     182660 bytes  File Size  =       2532 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  71.84     *
+*............................................................................*
+*Br  409 :Beam_detector_MWPC_MWPC3.fDetMessages :                            *
+*         | Int_t Beam_detector_MWPC_MWPC3.fDetMessages_                     *
+*Entries :    90000 : Total  Size=     384562 bytes  File Size  =      43688 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=   8.51     *
+*............................................................................*
+*Br  410 :Beam_detector_MWPC_MWPC3.fDetMessages.fUniqueID :                  *
+*         | UInt_t fUniqueID[Beam_detector_MWPC_MWPC3.fDetMessages_]         *
+*Entries :    90000 : Total  Size=     849881 bytes  File Size  =     204475 *
+*Baskets :       43 : Basket Size=     174592 bytes  Compression=   4.15     *
+*............................................................................*
+*Br  411 :Beam_detector_MWPC_MWPC3.fDetMessages.fBits :                      *
+*         | UInt_t fBits[Beam_detector_MWPC_MWPC3.fDetMessages_]             *
+*Entries :    90000 : Total  Size=     849693 bytes  File Size  =     204182 *
+*Baskets :       43 : Basket Size=     174592 bytes  Compression=   4.15     *
+*............................................................................*
+*Br  412 :Beam_detector_MWPC_MWPC3.fDetMessages.fDetector :                  *
+*         | Short_t fDetector[Beam_detector_MWPC_MWPC3.fDetMessages_]        *
+*Entries :    90000 : Total  Size=     607520 bytes  File Size  =     201959 *
+*Baskets :       36 : Basket Size=     147968 bytes  Compression=   3.00     *
+*............................................................................*
+*Br  413 :Beam_detector_MWPC_MWPC3.fDetMessages.fStation :                   *
+*         | Short_t fStation[Beam_detector_MWPC_MWPC3.fDetMessages_]         *
+*Entries :    90000 : Total  Size=     607480 bytes  File Size  =     202249 *
+*Baskets :       36 : Basket Size=     147968 bytes  Compression=   3.00     *
+*............................................................................*
+*Br  414 :Beam_detector_MWPC_MWPC3.fDetMessages.fStChannel :                 *
+*         | Int_t fStChannel[Beam_detector_MWPC_MWPC3.fDetMessages_]         *
+*Entries :    90000 : Total  Size=     849928 bytes  File Size  =     331035 *
+*Baskets :       43 : Basket Size=     174592 bytes  Compression=   2.56     *
+*............................................................................*
+*Br  415 :Beam_detector_MWPC_MWPC3.fDetMessages.fValue :                     *
+*         | Int_t fValue[Beam_detector_MWPC_MWPC3.fDetMessages_]             *
+*Entries :    90000 : Total  Size=     849740 bytes  File Size  =     204032 *
+*Baskets :       43 : Basket Size=     174592 bytes  Compression=   4.16     *
+*............................................................................*
+*Branch  :Beam_detector_MWPC_MWPC4.                                          *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  416 :Beam_detector_MWPC_MWPC4.TGo4EventElement.fUniqueID : UInt_t       *
+*Entries :    90000 : Total  Size=     363389 bytes  File Size  =       3466 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 104.60     *
+*............................................................................*
+*Br  417 :Beam_detector_MWPC_MWPC4.TGo4EventElement.fBits : UInt_t           *
+*Entries :    90000 : Total  Size=     726589 bytes  File Size  =     181542 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  418 :Beam_detector_MWPC_MWPC4.TGo4EventElement.fName : TString          *
+*Entries :    90000 : Total  Size=    2625224 bytes  File Size  =     234784 *
+*Baskets :       94 : Basket Size=     370688 bytes  Compression=  11.17     *
+*............................................................................*
+*Br  419 :Beam_detector_MWPC_MWPC4.TGo4EventElement.fTitle : TString         *
+*Entries :    90000 : Total  Size=    2625322 bytes  File Size  =     235220 *
+*Baskets :       94 : Basket Size=     371200 bytes  Compression=  11.15     *
+*............................................................................*
+*Br  420 :Beam_detector_MWPC_MWPC4.TGo4EventElement.fbIsValid : Bool_t       *
+*Entries :    90000 : Total  Size=      92165 bytes  File Size  =       1903 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  48.06     *
+*............................................................................*
+*Br  421 :Beam_detector_MWPC_MWPC4.TGo4EventElement.fIdentifier : Short_t    *
+*Entries :    90000 : Total  Size=     182660 bytes  File Size  =       2532 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  71.84     *
+*............................................................................*
+*Br  422 :Beam_detector_MWPC_MWPC4.fDetMessages :                            *
+*         | Int_t Beam_detector_MWPC_MWPC4.fDetMessages_                     *
+*Entries :    90000 : Total  Size=     384642 bytes  File Size  =      47083 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=   7.90     *
+*............................................................................*
+*Br  423 :Beam_detector_MWPC_MWPC4.fDetMessages.fUniqueID :                  *
+*         | UInt_t fUniqueID[Beam_detector_MWPC_MWPC4.fDetMessages_]         *
+*Entries :    90000 : Total  Size=     878730 bytes  File Size  =     203903 *
+*Baskets :       44 : Basket Size=     178176 bytes  Compression=   4.30     *
+*............................................................................*
+*Br  424 :Beam_detector_MWPC_MWPC4.fDetMessages.fBits :                      *
+*         | UInt_t fBits[Beam_detector_MWPC_MWPC4.fDetMessages_]             *
+*Entries :    90000 : Total  Size=     878538 bytes  File Size  =     203540 *
+*Baskets :       44 : Basket Size=     177664 bytes  Compression=   4.31     *
+*............................................................................*
+*Br  425 :Beam_detector_MWPC_MWPC4.fDetMessages.fDetector :                  *
+*         | Short_t fDetector[Beam_detector_MWPC_MWPC4.fDetMessages_]        *
+*Entries :    90000 : Total  Size=     621866 bytes  File Size  =     199565 *
+*Baskets :       36 : Basket Size=     149504 bytes  Compression=   3.11     *
+*............................................................................*
+*Br  426 :Beam_detector_MWPC_MWPC4.fDetMessages.fStation :                   *
+*         | Short_t fStation[Beam_detector_MWPC_MWPC4.fDetMessages_]         *
+*Entries :    90000 : Total  Size=     621826 bytes  File Size  =     199949 *
+*Baskets :       36 : Basket Size=     149504 bytes  Compression=   3.10     *
+*............................................................................*
+*Br  427 :Beam_detector_MWPC_MWPC4.fDetMessages.fStChannel :                 *
+*         | Int_t fStChannel[Beam_detector_MWPC_MWPC4.fDetMessages_]         *
+*Entries :    90000 : Total  Size=     878778 bytes  File Size  =     335016 *
+*Baskets :       44 : Basket Size=     178176 bytes  Compression=   2.62     *
+*............................................................................*
+*Br  428 :Beam_detector_MWPC_MWPC4.fDetMessages.fValue :                     *
+*         | Int_t fValue[Beam_detector_MWPC_MWPC4.fDetMessages_]             *
+*Entries :    90000 : Total  Size=     878586 bytes  File Size  =     203382 *
+*Baskets :       44 : Basket Size=     178176 bytes  Compression=   4.31     *
+*............................................................................*
+*Branch  :Neutron_detector.                                                  *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  429 :Neutron_detector.TGo4CompositeEvent.fUniqueID : UInt_t             *
+*Entries :    90000 : Total  Size=     363251 bytes  File Size  =       3330 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 108.83     *
+*............................................................................*
+*Br  430 :Neutron_detector.TGo4CompositeEvent.fBits : UInt_t                 *
+*Entries :    90000 : Total  Size=     726331 bytes  File Size  =     181292 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  431 :Neutron_detector.TGo4CompositeEvent.fName : TString                *
+*Entries :    90000 : Total  Size=    1901465 bytes  File Size  =     225052 *
+*Baskets :       73 : Basket Size=     290816 bytes  Compression=   8.44     *
+*............................................................................*
+*Br  432 :Neutron_detector.TGo4CompositeEvent.fTitle : TString               *
+*Entries :    90000 : Total  Size=    1901542 bytes  File Size  =     225246 *
+*Baskets :       73 : Basket Size=     290816 bytes  Compression=   8.43     *
+*............................................................................*
+*Br  433 :Neutron_detector.TGo4CompositeEvent.fbIsValid : Bool_t             *
+*Entries :    90000 : Total  Size=      92075 bytes  File Size  =       1835 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  49.81     *
+*............................................................................*
+*Br  434 :Neutron_detector.TGo4CompositeEvent.fIdentifier : Short_t          *
+*Entries :    90000 : Total  Size=     182552 bytes  File Size  =       2440 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  74.51     *
+*............................................................................*
+*Br  435 :Neutron_detector.TGo4CompositeEvent.fNElements : Short_t           *
+*Entries :    90000 : Total  Size=     182534 bytes  File Size  =       2421 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  75.09     *
+*............................................................................*
+*Br  436 :Neutron_detector.TGo4CompositeEvent.fMaxIndex : Short_t            *
+*Entries :    90000 : Total  Size=     182516 bytes  File Size  =       2420 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  75.11     *
+*............................................................................*
+*Branch  :Neutron_detector_neutTDC.                                          *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  437 :Neutron_detector_neutTDC.TGo4EventElement.fUniqueID : UInt_t       *
+*Entries :    90000 : Total  Size=     363389 bytes  File Size  =       3466 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 104.60     *
+*............................................................................*
+*Br  438 :Neutron_detector_neutTDC.TGo4EventElement.fBits : UInt_t           *
+*Entries :    90000 : Total  Size=     726589 bytes  File Size  =     181542 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  439 :Neutron_detector_neutTDC.TGo4EventElement.fName : TString          *
+*Entries :    90000 : Total  Size=    2625224 bytes  File Size  =     234955 *
+*Baskets :       94 : Basket Size=     370688 bytes  Compression=  11.16     *
+*............................................................................*
+*Br  440 :Neutron_detector_neutTDC.TGo4EventElement.fTitle : TString         *
+*Entries :    90000 : Total  Size=    2625322 bytes  File Size  =     235306 *
+*Baskets :       94 : Basket Size=     371200 bytes  Compression=  11.15     *
+*............................................................................*
+*Br  441 :Neutron_detector_neutTDC.TGo4EventElement.fbIsValid : Bool_t       *
+*Entries :    90000 : Total  Size=      92165 bytes  File Size  =       1903 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  48.06     *
+*............................................................................*
+*Br  442 :Neutron_detector_neutTDC.TGo4EventElement.fIdentifier : Short_t    *
+*Entries :    90000 : Total  Size=     182660 bytes  File Size  =       2532 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  71.84     *
+*............................................................................*
+*Br  443 :Neutron_detector_neutTDC.fDetMessages :                            *
+*         | Int_t Neutron_detector_neutTDC.fDetMessages_                     *
+*Entries :    90000 : Total  Size=     385242 bytes  File Size  =      15475 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=  24.02     *
+*............................................................................*
+*Br  444 :Neutron_detector_neutTDC.fDetMessages.fUniqueID :                  *
+*         | UInt_t fUniqueID[Neutron_detector_neutTDC.fDetMessages_]         *
+*Entries :    90000 : Total  Size=    1088456 bytes  File Size  =     183418 *
+*Baskets :       50 : Basket Size=     201216 bytes  Compression=   5.93     *
+*............................................................................*
+*Br  445 :Neutron_detector_neutTDC.fDetMessages.fBits :                      *
+*         | UInt_t fBits[Neutron_detector_neutTDC.fDetMessages_]             *
+*Entries :    90000 : Total  Size=    1088240 bytes  File Size  =     183157 *
+*Baskets :       50 : Basket Size=     201216 bytes  Compression=   5.93     *
+*............................................................................*
+*Br  446 :Neutron_detector_neutTDC.fDetMessages.fDetector :                  *
+*         | Short_t fDetector[Neutron_detector_neutTDC.fDetMessages_]        *
+*Entries :    90000 : Total  Size=     726729 bytes  File Size  =     181680 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   3.99     *
+*............................................................................*
+*Br  447 :Neutron_detector_neutTDC.fDetMessages.fStation :                   *
+*         | Short_t fStation[Neutron_detector_neutTDC.fDetMessages_]         *
+*Entries :    90000 : Total  Size=     726686 bytes  File Size  =     182223 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   3.98     *
+*............................................................................*
+*Br  448 :Neutron_detector_neutTDC.fDetMessages.fStChannel :                 *
+*         | Int_t fStChannel[Neutron_detector_neutTDC.fDetMessages_]         *
+*Entries :    90000 : Total  Size=    1088510 bytes  File Size  =     183750 *
+*Baskets :       50 : Basket Size=     201216 bytes  Compression=   5.92     *
+*............................................................................*
+*Br  449 :Neutron_detector_neutTDC.fDetMessages.fValue :                     *
+*         | Int_t fValue[Neutron_detector_neutTDC.fDetMessages_]             *
+*Entries :    90000 : Total  Size=    1088294 bytes  File Size  =     184489 *
+*Baskets :       50 : Basket Size=     201216 bytes  Compression=   5.89     *
+*............................................................................*
+*Branch  :Neutron_detector_neutAmp.                                          *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  450 :Neutron_detector_neutAmp.TGo4EventElement.fUniqueID : UInt_t       *
+*Entries :    90000 : Total  Size=     363389 bytes  File Size  =       3466 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 104.60     *
+*............................................................................*
+*Br  451 :Neutron_detector_neutAmp.TGo4EventElement.fBits : UInt_t           *
+*Entries :    90000 : Total  Size=     726589 bytes  File Size  =     181542 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  452 :Neutron_detector_neutAmp.TGo4EventElement.fName : TString          *
+*Entries :    90000 : Total  Size=    2625224 bytes  File Size  =     234945 *
+*Baskets :       94 : Basket Size=     370688 bytes  Compression=  11.16     *
+*............................................................................*
+*Br  453 :Neutron_detector_neutAmp.TGo4EventElement.fTitle : TString         *
+*Entries :    90000 : Total  Size=    2625322 bytes  File Size  =     235316 *
+*Baskets :       94 : Basket Size=     371200 bytes  Compression=  11.15     *
+*............................................................................*
+*Br  454 :Neutron_detector_neutAmp.TGo4EventElement.fbIsValid : Bool_t       *
+*Entries :    90000 : Total  Size=      92165 bytes  File Size  =       1903 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  48.06     *
+*............................................................................*
+*Br  455 :Neutron_detector_neutAmp.TGo4EventElement.fIdentifier : Short_t    *
+*Entries :    90000 : Total  Size=     182660 bytes  File Size  =       2532 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  71.84     *
+*............................................................................*
+*Br  456 :Neutron_detector_neutAmp.fDetMessages :                            *
+*         | Int_t Neutron_detector_neutAmp.fDetMessages_                     *
+*Entries :    90000 : Total  Size=     410522 bytes  File Size  =      15561 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=  23.89     *
+*............................................................................*
+*Br  457 :Neutron_detector_neutAmp.fDetMessages.fUniqueID :                  *
+*         | UInt_t fUniqueID[Neutron_detector_neutAmp.fDetMessages_]         *
+*Entries :    90000 : Total  Size=    9768073 bytes  File Size  =     262670 *
+*Baskets :      303 : Basket Size=    1159168 bytes  Compression=  37.16     *
+*............................................................................*
+*Br  458 :Neutron_detector_neutAmp.fDetMessages.fBits :                      *
+*         | UInt_t fBits[Neutron_detector_neutAmp.fDetMessages_]             *
+*Entries :    90000 : Total  Size=    9766845 bytes  File Size  =     261885 *
+*Baskets :      303 : Basket Size=    1158144 bytes  Compression=  37.27     *
+*............................................................................*
+*Br  459 :Neutron_detector_neutAmp.fDetMessages.fDetector :                  *
+*         | Short_t fDetector[Neutron_detector_neutAmp.fDetMessages_]        *
+*Entries :    90000 : Total  Size=    5066459 bytes  File Size  =     237081 *
+*Baskets :      165 : Basket Size=     640512 bytes  Compression=  21.35     *
+*............................................................................*
+*Br  460 :Neutron_detector_neutAmp.fDetMessages.fStation :                   *
+*         | Short_t fStation[Neutron_detector_neutAmp.fDetMessages_]         *
+*Entries :    90000 : Total  Size=    5066290 bytes  File Size  =     237668 *
+*Baskets :      165 : Basket Size=     640000 bytes  Compression=  21.30     *
+*............................................................................*
+*Br  461 :Neutron_detector_neutAmp.fDetMessages.fStChannel :                 *
+*         | Int_t fStChannel[Neutron_detector_neutAmp.fDetMessages_]         *
+*Entries :    90000 : Total  Size=    9768380 bytes  File Size  =     293090 *
+*Baskets :      303 : Basket Size=    1159680 bytes  Compression=  33.31     *
+*............................................................................*
+*Br  462 :Neutron_detector_neutAmp.fDetMessages.fValue :                     *
+*         | Int_t fValue[Neutron_detector_neutAmp.fDetMessages_]             *
+*Entries :    90000 : Total  Size=    9767152 bytes  File Size  =    1078778 *
+*Baskets :      303 : Basket Size=    1158144 bytes  Compression=   9.05     *
+*............................................................................*
+*Branch  :Neutron_detector_neutTAC.                                          *
+*Entries :    90000 : BranchElement (see below)                              *
+*............................................................................*
+*Br  463 :Neutron_detector_neutTAC.TGo4EventElement.fUniqueID : UInt_t       *
+*Entries :    90000 : Total  Size=     363389 bytes  File Size  =       3466 *
+*Baskets :       19 : Basket Size=     120320 bytes  Compression= 104.60     *
+*............................................................................*
+*Br  464 :Neutron_detector_neutTAC.TGo4EventElement.fBits : UInt_t           *
+*Entries :    90000 : Total  Size=     726589 bytes  File Size  =     181542 *
+*Baskets :       39 : Basket Size=     161280 bytes  Compression=   4.00     *
+*............................................................................*
+*Br  465 :Neutron_detector_neutTAC.TGo4EventElement.fName : TString          *
+*Entries :    90000 : Total  Size=    2625224 bytes  File Size  =     234956 *
+*Baskets :       94 : Basket Size=     370688 bytes  Compression=  11.16     *
+*............................................................................*
+*Br  466 :Neutron_detector_neutTAC.TGo4EventElement.fTitle : TString         *
+*Entries :    90000 : Total  Size=    2625322 bytes  File Size  =     235307 *
+*Baskets :       94 : Basket Size=     371200 bytes  Compression=  11.15     *
+*............................................................................*
+*Br  467 :Neutron_detector_neutTAC.TGo4EventElement.fbIsValid : Bool_t       *
+*Entries :    90000 : Total  Size=      92165 bytes  File Size  =       1903 *
+*Baskets :       11 : Basket Size=      90112 bytes  Compression=  48.06     *
+*............................................................................*
+*Br  468 :Neutron_detector_neutTAC.TGo4EventElement.fIdentifier : Short_t    *
+*Entries :    90000 : Total  Size=     182660 bytes  File Size  =       2532 *
+*Baskets :       14 : Basket Size=     100352 bytes  Compression=  71.84     *
+*............................................................................*
+*Br  469 :Neutron_detector_neutTAC.fDetMessages :                            *
+*         | Int_t Neutron_detector_neutTAC.fDetMessages_                     *
+*Entries :    90000 : Total  Size=     411362 bytes  File Size  =      15561 *
+*Baskets :       99 : Basket Size=       4000 bytes  Compression=  23.89     *
+*............................................................................*
+*Br  470 :Neutron_detector_neutTAC.fDetMessages.fUniqueID :                  *
+*         | UInt_t fUniqueID[Neutron_detector_neutTAC.fDetMessages_]         *
+*Entries :    90000 : Total  Size=   10129325 bytes  File Size  =     280682 *
+*Baskets :      311 : Basket Size=    1198592 bytes  Compression=  36.06     *
+*............................................................................*
+*Br  471 :Neutron_detector_neutTAC.fDetMessages.fBits :                      *
+*         | UInt_t fBits[Neutron_detector_neutTAC.fDetMessages_]             *
+*Entries :    90000 : Total  Size=   10128065 bytes  File Size  =     277606 *
+*Baskets :      311 : Basket Size=    1197568 bytes  Compression=  36.46     *
+*............................................................................*
+*Br  472 :Neutron_detector_neutTAC.fDetMessages.fDetector :                  *
+*         | Short_t fDetector[Neutron_detector_neutTAC.fDetMessages_]        *
+*Entries :    90000 : Total  Size=    5247242 bytes  File Size  =     244662 *
+*Baskets :      170 : Basket Size=     659968 bytes  Compression=  21.43     *
+*............................................................................*
+*Br  473 :Neutron_detector_neutTAC.fDetMessages.fStation :                   *
+*         | Short_t fStation[Neutron_detector_neutTAC.fDetMessages_]         *
+*Entries :    90000 : Total  Size=    5247068 bytes  File Size  =     245560 *
+*Baskets :      170 : Basket Size=     659968 bytes  Compression=  21.35     *
+*............................................................................*
+*Br  474 :Neutron_detector_neutTAC.fDetMessages.fStChannel :                 *
+*         | Int_t fStChannel[Neutron_detector_neutTAC.fDetMessages_]         *
+*Entries :    90000 : Total  Size=   10129640 bytes  File Size  =     315470 *
+*Baskets :      311 : Basket Size=    1199104 bytes  Compression=  32.09     *
+*............................................................................*
+*Br  475 :Neutron_detector_neutTAC.fDetMessages.fValue :                     *
+*         | Int_t fValue[Neutron_detector_neutTAC.fDetMessages_]             *
+*Entries :    90000 : Total  Size=   10128380 bytes  File Size  =    1153053 *
+*Baskets :      311 : Basket Size=    1198080 bytes  Compression=   8.78     *
+*............................................................................*
+
