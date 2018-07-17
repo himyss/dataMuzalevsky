@@ -238,6 +238,7 @@ void tracking_R() {
   tw->Branch("nCs",&nCs,"nCs/I");
   tw->Branch("nCsM",&nCsM,"nCsM/I");
 
+  tw->Branch("trigger",&trigger,"trigger/I");
 
 	t->Add("/media/analysis_nas/exp201804/rootfiles/h5_14_00*");
   nentries1 = t->GetEntries();
@@ -295,7 +296,7 @@ void tracking_R() {
     if(jentry%10000000==0) cout << "######## " << jentry << endl;
 
  
-
+    trigger = NeEvent_trigger;
 
     // MWPC
     // обнуление 
@@ -435,8 +436,8 @@ void tracking_R() {
 
       aCsiM = -10;
       for(Int_t i=0;i<16;i++) {
-        if(aCsiM<NeEvent_CsI_L[i]) {
-          aCsiM = NeEvent_CsI_L[i];
+        if(aCsiM<NeEvent_CsI_R[i]) {
+          aCsiM = NeEvent_CsI_R[i];
           nCsM = i;
         }
       }     

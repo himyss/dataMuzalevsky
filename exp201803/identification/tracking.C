@@ -293,7 +293,7 @@ void tracking() {
   
   cout<<">>> filling TREE up to "<<maxE<< " event"<<endl;
   //for (Long64_t jentry=0; jentry<20000;jentry++) {
-  for (Long64_t jentry=1; jentry<2000000;jentry++) {
+  for (Long64_t jentry=1; jentry<maxE;jentry++) {
 	  t->GetEntry(jentry);
     if(jentry%10000000==0) cout << "######## " << jentry << endl;
 
@@ -331,7 +331,7 @@ void tracking() {
     //cout << " ########EVENT####### " << endl; 
 
 
-    if(NeEvent_nx1==1 && NeEvent_ny1==1 && NeEvent_nx2==1 && NeEvent_ny2==1) { // рассматриваем события с множественностью 1 в MWPC и SQL
+    if(NeEvent_nx1==1 && NeEvent_ny1==1 && NeEvent_nx2==1 && NeEvent_ny2==1 && multX_L==1 && multY_L==1) { // рассматриваем события с множественностью 1 в MWPC и SQL
 		  if (NeEvent_x1[0]<1000 && NeEvent_y1[0]<1000) {
 			  x1p = NeEvent_x1[0]*1.25-20.;
 			  y1p = NeEvent_y1[0]*1.25-20.;
@@ -443,7 +443,7 @@ void tracking() {
           nCsM = i;
         }
       }     
-      tw->Fill();
+      if(nCs!=-10) tw->Fill();
     }
     //}			
   }//entries
