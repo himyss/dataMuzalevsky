@@ -1,6 +1,10 @@
-void tracking_R() { 
+void tracking_L() { 
+
+  TString input_file;
+  Float_t zeroPos,shitf;
 
   TChain *t = new TChain("AnalysisxTree");
+  //TTree* 		t;
 
   Float_t CsI_L[16],tCsI_L[16],CsI_R[16],tCsI_R[16],SQX_L[32],SQY_L[16],tSQX_L[32],tSQY_L[16],SQX_R[32],SQY_R[16],tSQX_R[32],tSQY_R[16],SQ20[16],tSQ20[16],F3[4],tF3[4],F5[4],tF5[4],
           nx1,nx2,ny1,ny2,x1[32],x2[32],y1[32],y2[32];
@@ -27,9 +31,8 @@ void tracking_R() {
   Float_t xCs0,yCs0,zCs0,xCsi_max,xCsi_min,yCsi_max,yCsi_min,aCsiM; //!
 
   // Creating outfile,outtree
-  TFile *fw = new TFile("tracking_r.root", "RECREATE");
+  TFile *fw = new TFile("tracking_l.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
-
 
   tw->Branch("xt",&xt,"xt/F");
   tw->Branch("yt",&yt,"yt/F");
@@ -48,10 +51,11 @@ void tracking_R() {
   tw->Branch("nCs",&nCs,"nCs/I");
   tw->Branch("nCsM",&nCsM,"nCsM/I");
 
-  tw->Branch("multX_R",&multX_R,"multX_R/I");
-  tw->Branch("multY_R",&multY_R,"multY_R/I");
+  tw->Branch("multX_L",&multX_L,"multX_L/I");
+  tw->Branch("multY_L",&multY_L,"multY_L/I");
 
   tw->Branch("trigger",&trigger,"trigger/I");
+
 
 	t->Add("/media/analysis_nas/exp201804/rootfiles/h5_14_00*");
   nentries1 = t->GetEntries();
@@ -61,16 +65,16 @@ void tracking_R() {
 
   t->SetBranchAddress("NeEvent.CsI_L[16]", NeEvent_CsI_L, &b_NeEvent_CsI_L);
   t->SetBranchAddress("NeEvent.tCsI_L[16]", NeEvent_tCsI_L, &b_NeEvent_tCsI_L);
-  t->SetBranchAddress("NeEvent.CsI_R[16]", NeEvent_CsI_R, &b_NeEvent_CsI_R);
-  t->SetBranchAddress("NeEvent.tCsI_R[16]", NeEvent_tCsI_R, &b_NeEvent_tCsI_R);
+   /*t->SetBranchAddress("NeEvent.CsI_R[16]", NeEvent_CsI_R, &b_NeEvent_CsI_R);
+  t->SetBranchAddress("NeEvent.tCsI_R[16]", NeEvent_tCsI_R, &b_NeEvent_tCsI_R);*/
   t->SetBranchAddress("NeEvent.SQX_L[32]", NeEvent_SQX_L, &b_NeEvent_SQX_L);
   t->SetBranchAddress("NeEvent.SQY_L[16]", NeEvent_SQY_L, &b_NeEvent_SQY_L); 
   t->SetBranchAddress("NeEvent.tSQX_L[32]", NeEvent_tSQX_L, &b_NeEvent_tSQX_L);
   t->SetBranchAddress("NeEvent.tSQY_L[16]", NeEvent_tSQY_L, &b_NeEvent_tSQY_L);
-  t->SetBranchAddress("NeEvent.SQX_R[32]", NeEvent_SQX_R, &b_NeEvent_SQX_R);
+  /*t->SetBranchAddress("NeEvent.SQX_R[32]", NeEvent_SQX_R, &b_NeEvent_SQX_R);
   t->SetBranchAddress("NeEvent.SQY_R[16]", NeEvent_SQY_R, &b_NeEvent_SQY_R);
   t->SetBranchAddress("NeEvent.tSQX_R[32]", NeEvent_tSQX_R, &b_NeEvent_tSQX_R);
-  t->SetBranchAddress("NeEvent.tSQY_R[16]", NeEvent_tSQY_R, &b_NeEvent_tSQY_R);
+  t->SetBranchAddress("NeEvent.tSQY_R[16]", NeEvent_tSQY_R, &b_NeEvent_tSQY_R);*/
   t->SetBranchAddress("NeEvent.SQ20[16]", NeEvent_SQ20, &b_NeEvent_SQ20);
   t->SetBranchAddress("NeEvent.tSQ20[16]", NeEvent_tSQ20, &b_NeEvent_tSQ20);
   t->SetBranchAddress("NeEvent.F3[4]", NeEvent_F3, &b_NeEvent_F3);
@@ -93,6 +97,7 @@ void tracking_R() {
     yCsi_max = -1000;
     xCsi_min = 1000;
     yCsi_min = 1000;
+  
   cout<<">>> filling TREE up to "<<maxE<< " event"<<endl;
   //for (Long64_t jentry=0; jentry<20000;jentry++) {
   for (Long64_t jentry=0; jentry<maxE;jentry++) {
@@ -112,25 +117,26 @@ void tracking_R() {
 		xt = -100.;
 		yt = -100.;
     
-    // SQ_R
+    // SQ_L
     //обнуление
-    multX_R=0;
-    multY_R=0;
-    multCsi_R=0;
+    multX_L=0;
+    multY_L=0;
+    multCsi_L=0;
 
 
     for(Int_t i=0;i<32;i++) {
-      if(NeEvent_tSQX_R[i]>0) {
-        multX_R++;
+      if(NeEvent_tSQX_L[i]>0) {
+        multX_L++;
       }
     } 
 
     for(Int_t i=0;i<16;i++) {
-      if(NeEvent_tSQY_R[i]>0) {
-        multY_R++;
+      if(NeEvent_tSQY_L[i]>0) {
+        multY_L++;
       }
     } 
     //cout << " ########EVENT####### " << endl; 
+
 
     if(NeEvent_nx1==1 && NeEvent_ny1==1 && NeEvent_nx2==1 && NeEvent_ny2==1) { // рассматриваем события с множественностью 1 в MWPC и SQL
 		  if (NeEvent_x1[0]<1000 && NeEvent_y1[0]<1000) {
@@ -154,12 +160,12 @@ void tracking_R() {
       
       //SQ_L track
       for(Int_t i=0;i<32;i++) {
-        if(NeEvent_tSQX_R[i]>0) {
+        if(NeEvent_tSQX_L[i]>0) {
           Nst_X = i;
         }
       }
       for(Int_t i=0;i<16;i++) {
-        if(NeEvent_tSQY_R[i]>0) {
+        if(NeEvent_tSQY_L[i]>0) {
           Nst_Y = i;
         }
       } 
@@ -168,7 +174,7 @@ void tracking_R() {
       yd = (Nst_Y - 7.5)*58./16 ;
       zd = xd*sin(TMath::DegToRad()*12.) + 230.*cos(TMath::DegToRad()*12.);*/
       
-      xd = -(Nst_X - 15.5)*58./32;
+      xd = (Nst_X - 15.5)*58./32;
       yd = (Nst_Y - 7.5)*58./16 ;
       zd = 0.;
 
@@ -176,27 +182,27 @@ void tracking_R() {
       yd = xd*sin(TMath::DegToRad()*12.) + yd*cos(TMath::DegToRad()*12.);
       zd = xd*sin(TMath::DegToRad()*12.) + 230.*cos(TMath::DegToRad()*12.);*/
 
-      xd = xd*cos(TMath::DegToRad()*6.95) + zd*sin(TMath::DegToRad()*6.95);
-      zd = -xd*sin(TMath::DegToRad()*6.95) + zd*cos(TMath::DegToRad()*6.95);
+      xd = xd*cos(TMath::DegToRad()*12.) - zd*sin(TMath::DegToRad()*12.);
+      zd = xd*sin(TMath::DegToRad()*12.) + zd*cos(TMath::DegToRad()*12.);
     
-      xd = xd + 290.*sin(TMath::DegToRad()*6.95);
-      zd = zd + 290.*cos(TMath::DegToRad()*6.95);
+      xd = xd - 230.*sin(TMath::DegToRad()*12.);
+      zd = zd + 230.*cos(TMath::DegToRad()*12.);
 
       //CsI track
 
       //-------
 
       //zCs = ( (zd*(xt-xd)/(zt-zd)) - 236*(cos(TMath::DegToRad()*12.) + sin(TMath::DegToRad()*12.)) - xd )/( (xt-xd)/(zt-zd) - sin(TMath::DegToRad()*12.) );
-      zCs = ( (-xd+296.*sin(TMath::DegToRad()*6.95)+zd*(xt-xd)/(zt-zd))*tan(TMath::DegToRad()*6.95) + 296.*cos(TMath::DegToRad()*6.95) )/( 1 + tan(TMath::DegToRad()*6.95)*(xt-xd)/(zt-zd) );
+      zCs = ( (xd+236.*sin(TMath::DegToRad()*12.)-zd*(xt-xd)/(zt-zd))*tan(TMath::DegToRad()*12.) + 236.*cos(TMath::DegToRad()*12.) )/( 1 - tan(TMath::DegToRad()*12.)*(xt-xd)/(zt-zd) );
       xCs = (zCs-zd)*(xt-xd)/(zt-zd) + xd;
       yCs = (zCs-zd)*(yt-yd)/(zt-zd) + yd;  
       //---------------
 
-      xCs0 = xCs - 296.*sin(TMath::DegToRad()*6.95);
-      zCs0 = zCs - 296.*cos(TMath::DegToRad()*6.95);
+      xCs0 = xCs + 236.*sin(TMath::DegToRad()*12.);
+      zCs0 = zCs - 236.*cos(TMath::DegToRad()*12.);
 
-      xCs0 = xCs0*cos(TMath::DegToRad()*6.95) - zCs0*sin(TMath::DegToRad()*6.95); 
-      zCs0 = xCs0*sin(TMath::DegToRad()*6.95) + zCs0*cos(TMath::DegToRad()*6.95);
+      xCs0 = xCs0*cos(TMath::DegToRad()*12.) + zCs0*sin(TMath::DegToRad()*12.); 
+      zCs0 =  -xCs0*sin(TMath::DegToRad()*12.) + zCs0*cos(TMath::DegToRad()*12.);
 
       yCs0 = yCs;
 
@@ -239,8 +245,8 @@ void tracking_R() {
 
       aCsiM = -10;
       for(Int_t i=0;i<16;i++) {
-        if(aCsiM<NeEvent_CsI_R[i]) {
-          aCsiM = NeEvent_CsI_R[i];
+        if(aCsiM<NeEvent_CsI_L[i]) {
+          aCsiM = NeEvent_CsI_L[i];
           nCsM = i;
         }
       }     
