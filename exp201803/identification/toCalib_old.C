@@ -7,7 +7,7 @@ void toCalib_old() {
   TString line1;
   ifstream myfile1;
   Int_t count=-2;
-  myfile1.open("/home/muzalevsky/work/exp1803/data/siCal/presentPars/SQX_R.cal");
+  myfile1.open("/media/user/work/data/analysisexp1804/presentPars/SQX_R.cal");
   while (! myfile1.eof() ){
     line1.ReadLine(myfile1);
     if(count < 0){
@@ -24,7 +24,7 @@ void toCalib_old() {
   ifstream myfile2;
   TString line2;
   count=-2;
-  myfile2.open("/home/muzalevsky/work/exp1803/data/siCal/presentPars/SQY_R.cal");
+  myfile2.open("/media/user/work/data/analysisexp1804/presentPars/SQY_R.cal");
   while (! myfile2.eof() ){
     line2.ReadLine(myfile2);
     if(count < 0){
@@ -43,7 +43,7 @@ void toCalib_old() {
   ifstream myfile7;
   TString line7;
   count=-2;
-  myfile7.open("/home/muzalevsky/work/exp1803/data/siCal/presentPars/csi_r_ec.clb");
+  myfile7.open("/media/user/work/data/analysisexp1804/presentPars/csi_r_ec.clb");
   while (! myfile7.eof() ) {
     line7.ReadLine(myfile7);
     if(count < 0){
@@ -62,9 +62,8 @@ void toCalib_old() {
   //------------------------------------------------------------------------------ 
   TChain *t = new TChain("AnalysisxTree");
 
-  Float_t CsI_L[16],tCsI_L[16],CsI_R[16],tCsI_R[16],SQX_L[32],SQY_L[16],tSQX_L[32],tSQY_L[16],SQX_R[32],SQY_R[16],tSQX_R[32],tSQY_R[16],SQ20[16],tSQ20[16],x1,x2,y1,y2,ToF,deBeam,zt,yt,xt;
-
-  Int_t nx1,nx2,ny1,ny2;
+  Float_t tF5[4],tF3[4],CsI_L[16],tCsI_L[16],CsI_R[16],tCsI_R[16],SQX_L[32],SQY_L[16],tSQX_L[32],tSQY_L[16],SQX_R[32],SQY_R[16],tSQX_R[32],tSQY_R[16],SQ20[16],tSQ20[16],
+          x1,x2,y1,y2,x1n,x2n,y1n,y2n,ToF,deBeam,zt,yt,xt;
 
   UShort_t   NeEvent_CsI_L[16],NeEvent_tCsI_L[16],NeEvent_CsI_R[16],NeEvent_tCsI_R[16],NeEvent_SQX_L[32],NeEvent_SQY_L[16],NeEvent_tSQX_L[32],NeEvent_tSQY_L[16],
              NeEvent_SQX_R[32],NeEvent_SQY_R[16],NeEvent_tSQX_R[32],NeEvent_tSQY_R[16],NeEvent_SQ20[16],NeEvent_tSQ20[16],
@@ -74,7 +73,7 @@ void toCalib_old() {
           *b_NeEvent_tSQX_R,*b_NeEvent_tSQY_R,*b_NeEvent_SQ20,*b_NeEvent_tSQ20,*b_NeEvent_F3,*b_NeEvent_F5,*b_NeEvent_tF3,*b_NeEvent_tF5,
           *b_NeEvent_nx1,*b_NeEvent_nx2,*b_NeEvent_ny1,*b_NeEvent_ny2,*b_NeEvent_x1,*b_NeEvent_x2,*b_NeEvent_y1,*b_NeEvent_y2,*b_NeEvent_trigger;
 
-  Int_t NeEvent_trigger,trigger;
+  Int_t NeEvent_trigger,trigger,nx1,nx2,ny1,ny2;
 
   Long64_t nentries1;
   Int_t maxE,multY_L,multX_L,multY_R,multX_R,mult20,multY_Lt,multX_Lt,multY_Rt,multX_Rt,mult20t,multCsi_R,multCsi_L,timeF5,thresh_X,thresh_Y,thresh_CsI,nCh_L,nCh_R;
@@ -83,13 +82,23 @@ void toCalib_old() {
 
   Float_t maxCsI_R,maxCsI_L;
 
+  const Float_t    MWPC1_X_displacement  = -1.0;
+  const Float_t    MWPC1_Y_displacement  = -2.1375;
+  const Float_t    MWPC2_X_displacement  = 0.2;
+  const Float_t    MWPC2_Y_displacement  = -1.125;
+
+  const Float_t    MWPC1_X_zero_position = -15.5*1.25;
+  const Float_t    MWPC1_Y_zero_position = -15.5*1.25;
+  const Float_t    MWPC2_X_zero_position = -15.5*1.25;
+  const Float_t    MWPC2_Y_zero_position = -15.5*1.25;
+
 
  // Creating outfile,outtree
-  TFile *fw = new TFile("/home/muzalevsky/work/exp1803/data/exp1804/h5_14_id1_test.root", "RECREATE");
+  TFile *fw = new TFile("/media/user/work/data/analysisexp1804/h5_14_tritium_bogumilMWPC.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
-  tw->Branch("CsI_L",&CsI_L,"CsI_L[16]/F");
-  tw->Branch("tCsI_L",&tCsI_L,"tCsI_L[16]/F");
+  //tw->Branch("CsI_L",&CsI_L,"CsI_L[16]/F");
+  //tw->Branch("tCsI_L",&tCsI_L,"tCsI_L[16]/F");
   tw->Branch("CsI_R",&CsI_R,"CsI_R[16]/F");
   tw->Branch("tCsI_R",&tCsI_R,"tCsI_R[16]/F");
   /*tw->Branch("SQX_L",&SQX_L,"SQX_L[32]/F");
@@ -107,6 +116,11 @@ void toCalib_old() {
   tw->Branch("ToF",&ToF,"ToF/F");
   tw->Branch("deBeam",&deBeam,"deBeam/F");
 
+  tw->Branch("nx1",&nx1,"nx1/I");
+  tw->Branch("ny1",&ny1,"ny1/I");
+  tw->Branch("nx2",&nx2,"nx2/I");
+  tw->Branch("ny2",&ny2,"ny2/I");
+
   tw->Branch("x1",&x1,"x1/F");
   tw->Branch("x2",&x2,"x2/F");
   tw->Branch("y1",&y1,"y1/F");
@@ -116,8 +130,8 @@ void toCalib_old() {
 
   tw->Branch("trigger",&trigger,"trigger/I");
 
-  tw->Branch("multY_L",&multY_L,"multY_L/I");
-  tw->Branch("multX_L",&multX_L,"multX_L/I");
+ // tw->Branch("multY_L",&multY_L,"multY_L/I");
+ // tw->Branch("multX_L",&multX_L,"multX_L/I");
   tw->Branch("multY_R",&multY_R,"multY_R/I");
   tw->Branch("multX_R",&multX_R,"multX_R/I");
 
@@ -126,19 +140,10 @@ void toCalib_old() {
   tw->Branch("multY_Rt",&multY_Rt,"multY_Rt/I");
   tw->Branch("multX_Rt",&multX_Rt,"multX_Rt/I");
 
-	t->Add("/media/analysis_nas/exp201804/rootfiles/h5_14_00*.root");
+	t->Add("/media/user/work/data/exp1804/h5_14_00*.root");
   nentries1 = t->GetEntries();
   cout << " Number of InPut entries: "<< nentries1 << endl;
 
-  //for(Int_t n=10;n<12;n++) {
-  //  input_file.Form("/media/analysis_nas/exp201804/rootfiles/h5_14_00%d.root",n);		
-  //  f[n] = new TFile(input_file.Data());
-  //  if (f[n]->IsZombie()) {
-	 //   cerr << "Input file was not opened " << input_file.Data() << endl;
-	 //   return 1;
-   // }
-  //cout <<  input_file.Data() << " filename " << endl;
-  //f[n]->GetObject("AnalysisxTree",t);
   t->SetMakeClass(1);
 
   t->SetBranchAddress("NeEvent.CsI_L[16]", NeEvent_CsI_L, &b_NeEvent_CsI_L);
@@ -168,10 +173,10 @@ void toCalib_old() {
   t->SetBranchAddress("NeEvent.x2[32]", NeEvent_x2, &b_NeEvent_x2);
   t->SetBranchAddress("NeEvent.y2[32]", NeEvent_y2, &b_NeEvent_y2);
   t->SetBranchAddress("NeEvent.trigger", &NeEvent_trigger, &b_NeEvent_trigger);
-	
+
   maxE = nentries1;
   cout<<">>> filling TREE up to "<<maxE<< " event"<<endl;
-  for (Long64_t jentry=0; jentry<5000000;jentry++) {
+  for (Long64_t jentry=0; jentry<1000000;jentry++) {
 	  t->GetEntry(jentry);
     if(jentry%10000000==0) cout << "######## " << jentry << endl;
     // обнуление
@@ -244,6 +249,139 @@ void toCalib_old() {
     //TOFFLAG MUST BE = 0!!
     //----------------------------- end of ToF module
 
+
+    //----------------------------- MWPC
+    // обнуление 
+    MWPCflag = 1;
+
+    x1 = -100.;
+    y1 = -100.;
+    x2 = -100.;
+    y2 = -100.;
+    xt = -100.;
+    yt = -100.;
+   
+    /*if(NeEvent_ny1>1) {
+      cout << endl << "####EVENT####" << endl;
+      //cout << NeEvent_nx1 << " x1 multyplicity !" << endl;
+    }*/
+    nx1 = NeEvent_nx1;
+    ny1 = NeEvent_ny1;
+    nx2 = NeEvent_nx2;
+    ny2 = NeEvent_ny2;
+
+    if(nx1>10 || ny1>10 || nx2>10 || ny2>10) continue;
+
+    if(nx1==0) {MWPCflag = MWPCflag*0;}
+    if(nx1==1) {
+      MWPCflag = MWPCflag*1;
+      x1n = NeEvent_x1[0];
+    }
+    if(nx1>1) {
+      for(Int_t i=0;i<nx1-1;i++) {
+        if((NeEvent_x1[i+1]-NeEvent_x1[i])!=1) {
+          MWPCflag = MWPCflag*0;
+        }
+      }
+     /* for(Int_t i=0;i<NeEvent_nx1;i++) {
+        cout << NeEvent_x1[i] << endl;
+      }*/
+      if(MWPCflag==1) {
+        x1n = (NeEvent_x1[0]+NeEvent_x1[nx1-1])/2.;
+
+        /*cout << endl << "$$$GOODEVENT$$$ " << nx1  << " " << x1n << endl;
+       // cout << NeEvent_nx1 << " x1 multyplicity !" << endl;
+        for(Int_t i=0;i<nx1;i++) {
+          cout << NeEvent_x1[i] << endl;
+        }*/
+
+      }
+    }    
+
+    if(NeEvent_nx2==0) {MWPCflag = MWPCflag*0;}
+    if(NeEvent_nx2==1) {
+      MWPCflag = MWPCflag*1;
+      x2n = NeEvent_x2[0];
+    }
+    if(NeEvent_nx2>1) {
+      for(Int_t i=0;i<nx2-1;i++) {
+        if((NeEvent_x2[i+1]-NeEvent_x2[i])!=1) {
+          MWPCflag = MWPCflag*0;
+        }
+      }
+      if(MWPCflag==1) {
+        x2n = (NeEvent_x2[0]+NeEvent_x2[nx2-1])/2.;
+      }
+    } 
+
+    if(ny1==0) {MWPCflag = MWPCflag*0;}
+    if(ny1==1) {
+      MWPCflag = MWPCflag*1;
+      y1n=NeEvent_y1[0];
+    }
+    if(ny1>1) {
+      for(Int_t i=0;i<ny1-1;i++) {
+        if((NeEvent_y1[i+1]-NeEvent_y1[i])!=1) {
+          MWPCflag = MWPCflag*0;
+        }
+      }
+      if(MWPCflag==1) {
+        y1n = (NeEvent_y1[0]+NeEvent_y1[ny1-1])/2.;
+      }
+    }  
+
+    if(NeEvent_ny2==0) {MWPCflag = MWPCflag*0;}
+    if(NeEvent_ny2==1) {
+      MWPCflag = MWPCflag*1;
+      y2n = NeEvent_y2[0];
+    }
+    if(NeEvent_ny2>1) {
+      for(Int_t i=0;i<ny2-1;i++) {
+        if((NeEvent_y2[i+1]-NeEvent_y2[i])!=1) {
+          MWPCflag = MWPCflag*0;
+        }
+      }
+      if(MWPCflag==1) {
+        y2n = (NeEvent_y2[0]+NeEvent_y2[ny2-1])/2.;
+      }
+    } 
+
+
+    if(MWPCflag==1) { // рассматриваем события с множественностью 1 в MWPC или кластером БОГУМИЛ
+
+      x1 = MWPC1_X_zero_position + MWPC1_X_displacement+x1n*1.25;
+      y1 = MWPC1_Y_zero_position + MWPC1_Y_displacement + y1n*1.25;
+
+      x2 = MWPC2_X_zero_position + MWPC2_X_displacement + x2n*1.25;
+      y2 = MWPC2_Y_zero_position + MWPC2_Y_displacement + y2n*1.25;
+
+      xt = (546*x1 + 816*(x2-x1))/(546 - (x2-x1)*tan(TMath::DegToRad()*tAngle));
+      yt = (y2-y1)*(xt-x1)/(x2-x1) + y1;
+      zt = 546.*(xt-x1)/(x2-x1) - 816;
+
+    }
+
+
+
+
+/*
+    if(MWPCflag==1) { // рассматриваем события с множественностью 1 в MWPC или кластером
+
+      x1 = (x1n+0.5)*1.25-20. + MWPC1_X_displacement;
+      y1 = (y1n+0.5)*1.25-20. + MWPC1_Y_displacement;
+
+      x2 = (x2n+0.5)*1.25-20. + MWPC2_X_displacement;
+      y2 = (y2n+0.5)*1.25-20. + MWPC2_Y_displacement;
+
+      xt = (546*x1 + 816*(x2-x1))/(546 - (x2-x1)*tan(TMath::DegToRad()*tAngle));
+      yt = (y2-y1)*(xt-x1)/(x2-x1) + y1;
+      zt = 546.*(xt-x1)/(x2-x1) - 816;
+
+    }*/
+    //----------------------------- MWPC
+
+
+/*
     //----------------------------- MWPC module
     // обнуление 
     x1 = -100.;
@@ -256,11 +394,11 @@ void toCalib_old() {
 
     if(NeEvent_nx1!=1 || NeEvent_ny1!=1 || NeEvent_nx2!=1 || NeEvent_ny2!=1) MWPCflag--; 
 
-	  x1 = NeEvent_x1[0]*1.25-20.;
-	  y1 = NeEvent_y1[0]*1.25-20.;
+	  x1 = (NeEvent_x1[0]+0.5)*1.25-20.;
+	  y1 = (NeEvent_y1[0]+0.5)*1.25-20.;
 
-	  x2 = NeEvent_x2[0]*1.25-20.;
-	  y2 = NeEvent_y2[0]*1.25-20.;
+	  x2 = (NeEvent_x2[0]+0.5)*1.25-20.;
+	  y2 = (NeEvent_y2[0]+0.5)*1.25-20.;
 
     xt = (546*x1 + 816*(x2-x1))/(546 - (x2-x1)*tan(TMath::DegToRad()*tAngle));
 	  yt = (y2-y1)*(xt-x1)/(x2-x1) + y1;
@@ -268,7 +406,7 @@ void toCalib_old() {
 
     //MWPCflag must be = 0!!
     //----------------------------- end of MWPC module
-
+*/
     
     //----------------------------- SQ_R module
 
@@ -310,62 +448,9 @@ void toCalib_old() {
       }
     }
 
-    // SQRflag must be = 0 !!
-    //----------------------------- end of SQ_R module
-
-
-
-
-
-  /*  for(Int_t i = 0; i<32;i++) {
-      thresh_X = 1;
-      thresh_Y = 1;
-      thresh_CsI = 1;
-      timeF5 = 0;
-      multY_L = 0;
-      multX_L = 0;
-      multY_R = 0;
-      multX_R = 0;
-      multCsi_R=0;
-      SQX_R[i]=0.;
-      SQX_L[i]=0.;
-      tSQX_R[i]=0.;
-      tSQX_L[i]=0.;
-      if(i<16) {
-        CsI_R[i]=0.;
-        SQY_R[i]=0.;
-        SQY_L[i]=0.;
-        tSQY_R[i]=0.;
-        tSQY_L[i]=0.;
-        CsI_R[i] = 0;
-      }
-    }
-
-    for(Int_t i=0; i<32; i++) {
-      SQX_R[i] = NeEvent_SQX_R[i]*parXR2[i] + parXR1[i];
-      SQX_L[i] = NeEvent_SQX_L[i]*parXL2[i] + parXL1[i];
-      if(SQX_R[i]>2.) multX_R++; 
-      tSQX_R[i] = NeEvent_tSQX_R[i]*0.3;
-      //tSQX_L[i] = NeEvent_tSQX_L[i]*tPx_l2[i] + tPx_l1[i];
-     // tSQX_L[i] = NeEvent_tSQX_L[i]*0.3;
-
-      if(i<16){
-       // CsI_R[i] = NeEvent_CsI_R[i]*parCsR2[i]+parCsR1[i];
-        //if(CsI_R[i]>0) multCsi_R++;
-       //if(CsI_R[i]>145) thresh_CsI=0;
-        SQY_R[i] = NeEvent_SQY_R[i]*parYR2[i] + parYR1[i];
-       // SQY_L[i] = NeEvent_SQY_L[i]*parYL2[i] + parYL1[i];
-        if(SQY_R[i]>2.3) multY_R++; 
-        if(SQY_R[i]>20) thresh_Y=0; 
-        tSQY_R[i] = NeEvent_tSQY_R[i]*0.3;
-        //tSQY_L[i] = NeEvent_tSQY_L[i]*tPy_l2[i] + tPy_l1[i];
-       // tSQY_L[i] = NeEvent_tSQY_L[i]*0.3;
-      }
-    }
-*/
     trigger = NeEvent_trigger;
 	  //if(multX_R>0 && multY_R>0 && timeF5>0 && multCsi_R>0 && thresh_Y==1 && thresh_X==1 && thresh_CsI==1) {
-      if(ToFflag==0 && Csi_Rflag==0 && MWPCflag==0) tw->Fill();
+      if(ToFflag==0 && Csi_Rflag==0 && MWPCflag==1) tw->Fill();
    // }			
   }//entries
   fw->cd();
