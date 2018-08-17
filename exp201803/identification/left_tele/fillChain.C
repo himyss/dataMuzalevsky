@@ -185,10 +185,10 @@ void fillChain() {
 
   tw->Branch("trigger",&trigger,"trigger/I");
 
-  tw->Branch("multY_L",&multY_L,"multY_L/I");
-  tw->Branch("multX_L",&multX_L,"multX_L/I");
-  tw->Branch("multY_R",&multY_R,"multY_R/I");
-  tw->Branch("multX_R",&multX_R,"multX_R/I");
+  // tw->Branch("multY_L",&multY_L,"multY_L/I");
+  // tw->Branch("multX_L",&multX_L,"multX_L/I");
+  // tw->Branch("multY_R",&multY_R,"multY_R/I");
+  // tw->Branch("multX_R",&multX_R,"multX_R/I");
 
   // tw->Branch("multY_Lt",&multY_Lt,"multY_Lt/I");
   // tw->Branch("multX_Lt",&multX_Lt,"multX_Lt/I");
@@ -264,10 +264,14 @@ void fillChain() {
     // Csi_R energy threshold
     if(maxCsI_R<200) Csi_Rflag--;
     //multiplicity selection
-    if(multCsi_R!=1) Csi_Rflag--;   
+    if(multCsi_R!=1) Csi_Rflag--;    
   
+// gCut1.Form("NeEvent.CsI_R[%d]*%f+%f>0 && NeEvent.tCsI_R[%d]*0.3 - NeEvent.tF5[0]*0.125>340 && NeEvent.tCsI_R[%d]*0.3 - NeEvent.tF5[0]*0.125<430",i,parCsR2[i],parCsR1[i],i,i);
+
+
+
     //Fill
-    CsI_R[nCh_R] = NeEvent_CsI_R[nCh_R]*parCsR2[nCh_R] +  parCsR1[nCh_R];
+    CsI_R[nCh_R] = NeEvent_CsI_R[nCh_R]*parCsR2[nCh_R] + parCsR1[nCh_R];
     tCsI_R[nCh_R] = NeEvent_tCsI_R[nCh_R]*0.3; 
 
     //Csi_Rflag MUST BE = 0 !!!
