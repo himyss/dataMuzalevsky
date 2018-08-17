@@ -1,6 +1,7 @@
 void tracking_R() { 
 
   TChain *t = new TChain("AnalysisxTree");
+  //TTree*    t;
 
   Float_t CsI_L[16],tCsI_L[16],CsI_R[16],tCsI_R[16],SQX_L[32],SQY_L[16],tSQX_L[32],tSQY_L[16],SQX_R[32],SQY_R[16],tSQX_R[32],tSQY_R[16],SQ20[16],tSQ20[16],F3[4],tF3[4],F5[4],tF5[4],
           nx1,nx2,ny1,ny2,x1[32],x2[32],y1[32],y2[32];
@@ -30,6 +31,36 @@ void tracking_R() {
   TFile *fw = new TFile("tracking_r.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
+  /*tw->Branch("CsI_L",&CsI_L,"CsI_L[16]/F");
+  tw->Branch("tCsI_L",&tCsI_L,"tCsI_L[16]/F");
+  tw->Branch("CsI_R",&CsI_R,"CsI_R[16]/F");
+  tw->Branch("tCsI_R",&tCsI_R,"tCsI_R[16]/F");
+  tw->Branch("SQX_L",&SQX_L,"SQX_L[32]/F");
+  tw->Branch("tSQX_L",&tSQX_L,"tSQX_L[32]/F");
+  tw->Branch("SQY_L",&SQY_L,"SQY_L[16]/F");
+  tw->Branch("tSQY_L",&tSQY_L,"tSQY_L[16]/F");
+  tw->Branch("SQX_R",&SQX_R,"SQX_R[32]/F");
+  tw->Branch("tSQX_R",&tSQX_R,"tSQX_R[32]/F");
+  tw->Branch("SQY_R",&SQY_R,"SQY_R[16]/F");
+  tw->Branch("tSQY_R",&tSQY_R,"tSQY_R[16]/F");
+  tw->Branch("SQ20",&SQ20,"SQ20[16]/F");
+  tw->Branch("tSQ20",&tSQ20,"tSQ20[16]/F");
+  tw->Branch("F3",&F3,"F3[4]/F");
+  tw->Branch("tF3",&tF3,"tF3[4]/F");
+  tw->Branch("F5",&F5,"F5[4]/F");
+  tw->Branch("tF5",&tF5,"tF5[4]/F");
+  tw->Branch("nx1",&nx1,"nx1/F");
+  tw->Branch("ny1",&ny1,"ny1/F");
+  tw->Branch("nx2",&nx2,"nx2/F");
+  tw->Branch("ny2",&ny2,"ny2/F");
+  tw->Branch("x1",&x1,"x1[32]/F");
+  tw->Branch("x2",&x2,"x2[32]/F");
+  tw->Branch("y1",&y1,"y1[32]/F");
+  tw->Branch("y2",&y2,"y2[32]/F");
+  tw->Branch("trigger",&trigger,"trigger/I");
+
+  tw->Branch("multY_L",&multY_L,"multY_L/I");
+  tw->Branch("multX_L",&multX_L,"multX_L/I");*/
 
   tw->Branch("xt",&xt,"xt/F");
   tw->Branch("yt",&yt,"yt/F");
@@ -53,10 +84,19 @@ void tracking_R() {
 
   tw->Branch("trigger",&trigger,"trigger/I");
 
-	t->Add("/media/analysis_nas/exp201804/rootfiles/h5_14_00*");
+  t->Add("/home/user/work/data/exp1804/h5_14_00*");
   nentries1 = t->GetEntries();
   cout << " Number of InPut entries: "<< nentries1 << endl;
 
+  //for(Int_t n=10;n<12;n++) {
+  //  input_file.Form("/media/analysis_nas/exp201804/rootfiles/h5_14_00%d.root",n);   
+  //  f[n] = new TFile(input_file.Data());
+  //  if (f[n]->IsZombie()) {
+   //   cerr << "Input file was not opened " << input_file.Data() << endl;
+   //   return 1;
+   // }
+  //cout <<  input_file.Data() << " filename " << endl;
+  //f[n]->GetObject("AnalysisxTree",t);
   t->SetMakeClass(1);
 
   t->SetBranchAddress("NeEvent.CsI_L[16]", NeEvent_CsI_L, &b_NeEvent_CsI_L);
@@ -86,7 +126,6 @@ void tracking_R() {
   t->SetBranchAddress("NeEvent.x2[32]", NeEvent_x2, &b_NeEvent_x2);
   t->SetBranchAddress("NeEvent.y2[32]", NeEvent_y2, &b_NeEvent_y2);
   t->SetBranchAddress("NeEvent.trigger", &NeEvent_trigger, &b_NeEvent_trigger);
-
   maxE = nentries1;
 
     xCsi_max = -1000;
@@ -95,8 +134,8 @@ void tracking_R() {
     yCsi_min = 1000;
   cout<<">>> filling TREE up to "<<maxE<< " event"<<endl;
   //for (Long64_t jentry=0; jentry<20000;jentry++) {
-  for (Long64_t jentry=0; jentry<maxE;jentry++) {
-	  t->GetEntry(jentry);
+  for (Long64_t jentry=1; jentry<maxE;jentry++) {
+    t->GetEntry(jentry);
     if(jentry%10000000==0) cout << "######## " << jentry << endl;
 
  
@@ -106,11 +145,11 @@ void tracking_R() {
     // обнуление 
 
     x1p = -100.;
-		y1p = -100.;
-		x2p = -100.;
-		y2p = -100.;
-		xt = -100.;
-		yt = -100.;
+    y1p = -100.;
+    x2p = -100.;
+    y2p = -100.;
+    xt = -100.;
+    yt = -100.;
     
     // SQ_R
     //обнуление
@@ -132,24 +171,25 @@ void tracking_R() {
     } 
     //cout << " ########EVENT####### " << endl; 
 
+
     if(NeEvent_nx1==1 && NeEvent_ny1==1 && NeEvent_nx2==1 && NeEvent_ny2==1) { // рассматриваем события с множественностью 1 в MWPC и SQL
-		  if (NeEvent_x1[0]<1000 && NeEvent_y1[0]<1000) {
-			  x1p = NeEvent_x1[0]*1.25-20.;
-			  y1p = NeEvent_y1[0]*1.25-20.;
-		  }
+      if (NeEvent_x1[0]<1000 && NeEvent_y1[0]<1000) {
+        x1p = NeEvent_x1[0]*1.25-20.;
+        y1p = NeEvent_y1[0]*1.25-20.;
+      }
 
-		  if (NeEvent_x2[0]<1000 && NeEvent_y2[0]<1000) {
-			  x2p = NeEvent_x2[0]*1.25-20.;
-			  y2p = NeEvent_y2[0]*1.25-20.;
-		  }
+      if (NeEvent_x2[0]<1000 && NeEvent_y2[0]<1000) {
+        x2p = NeEvent_x2[0]*1.25-20.;
+        y2p = NeEvent_y2[0]*1.25-20.;
+      }
 
-		  if (x1p > -50. && y1p > -50. && x2p > -50. && y2p > -50.) { // what is this
+      if (x1p > -50. && y1p > -50. && x2p > -50. && y2p > -50.) { // what is this
         xt = (546*x1p + 816*(x2p-x1p))/(546 - (x2p-x1p)*tan(TMath::DegToRad()*12.));
-			 // xt = ((x2p-x1p)*816./546.) + x1p; 
-			  yt = (y2p-y1p)*(xt-x1p)/(x2p-x1p) + y1p;
+       // xt = ((x2p-x1p)*816./546.) + x1p; 
+        yt = (y2p-y1p)*(xt-x1p)/(x2p-x1p) + y1p;
         //zt = xt*sin(12.*TMath::DegToRad()); 
         zt = 546.*(xt-x1p)/(x2p-x1p) - 816;
-		  }
+      }
 
       
       //SQ_L track
@@ -203,37 +243,37 @@ void tracking_R() {
       nCs = -10;
       nCsM=-10;
 
-      if(xCs0<=(-29. + 58./4)) {
-        if(yCs0>=29. - 58./4) nCs=15;
-        if((yCs0>=29. - 2*58./4) && (yCs0<=29. - 58./4)) nCs=11;
-        if((yCs0>=29. - 3*58./4) && (yCs0<=29. - 2*58./4)) nCs=7;
-       // if((yCs0>29. - 4*58./4) && (yCs0<29. - 3*58./4)) nCs=3;
-        if(yCs0<=29. - 3*58./4) nCs=3;
+      if(xCs0<=(-33. + 66./4)) {
+        if(yCs0>=33. - 66./4) nCs=15;
+        if((yCs0>=33. - 2*66./4) && (yCs0<=33. - 66./4)) nCs=11;
+        if((yCs0>=33. - 3*66./4) && (yCs0<=33. - 2*66./4)) nCs=7;
+       // if((yCs0>33. - 4*66./4) && (yCs0<33. - 3*66./4)) nCs=3;
+        if(yCs0<=33. - 3*66./4) nCs=3;
       }
 
-      if((xCs0<=(-29. + 2*58./4)) && (xCs0>=(-29. + 58./4))) {
-        if(yCs0>=29. - 58./4) nCs=14;
-        if((yCs0>=29. - 2*58./4) && (yCs0<=29. - 58./4)) nCs=10;
-        if((yCs0>=29. - 3*58./4) && (yCs0<=29. - 2*58./4)) nCs=6;
-       // if((yCs0>29. - 4*58./4) && (yCs0<29. - 3*58./4)) nCs=2;
-        if(yCs0<=29. - 3*58./4) nCs=2;
+      if((xCs0<=(-33. + 2*66./4)) && (xCs0>=(-33. + 66./4))) {
+        if(yCs0>=33. - 66./4) nCs=14;
+        if((yCs0>=33. - 2*66./4) && (yCs0<=33. - 66./4)) nCs=10;
+        if((yCs0>=33. - 3*66./4) && (yCs0<=33. - 2*66./4)) nCs=6;
+       // if((yCs0>33. - 4*66./4) && (yCs0<33. - 3*66./4)) nCs=2;
+        if(yCs0<=33. - 3*66./4) nCs=2;
       }
 
-      if((xCs0<=(-29. + 3*58./4)) && (xCs0>=(-29. + 2*58./4))) {
-        if(yCs0>=29. - 58./4) nCs=13;
-        if((yCs0>=29. - 2*58./4) && (yCs0<=29. - 58./4)) nCs=9;
-        if((yCs0>=29. - 3*58./4) && (yCs0<=29. - 2*58./4)) nCs=5;
-        //if((yCs0>29. - 4*58./4) && (yCs0<29. - 3*58./4)) nCs=1;
-        if(yCs0<=29. - 3*58./4) nCs=1;
+      if((xCs0<=(-33. + 3*66./4)) && (xCs0>=(-33. + 2*66./4))) {
+        if(yCs0>=33. - 66./4) nCs=13;
+        if((yCs0>=33. - 2*66./4) && (yCs0<=33. - 66./4)) nCs=9;
+        if((yCs0>=33. - 3*66./4) && (yCs0<=33. - 2*66./4)) nCs=5;
+        //if((yCs0>33. - 4*66./4) && (yCs0<33. - 3*66./4)) nCs=1;
+        if(yCs0<=33. - 3*66./4) nCs=1;
       }
 
-      //if((xCs0<(-29. + 4*58./4)) && (xCs0>(-29. + 3*58./4))) {
-      if(xCs0>=(-29. + 3*58./4)) {
-        if(yCs0>=29. - 58./4) nCs=12;
-        if((yCs0>=29. - 2*58./4) && (yCs0<=29. - 58./4)) nCs=8;
-        if((yCs0>=29. - 3*58./4) && (yCs0<=29. - 2*58./4)) nCs=4;
-        //if((yCs0>29. - 4*58./4) && (yCs0<29. - 3*58./4)) nCs=0;
-        if(yCs0<=29. - 3*58./4) nCs=0;
+      //if((xCs0<(-33. + 4*66./4)) && (xCs0>(-33. + 3*66./4))) {
+      if(xCs0>=(-33. + 3*66./4)) {
+        if(yCs0>=33. - 66./4) nCs=12;
+        if((yCs0>=33. - 2*66./4) && (yCs0<=33. - 66./4)) nCs=8;
+        if((yCs0>=33. - 3*66./4) && (yCs0<=33. - 2*66./4)) nCs=4;
+        //if((yCs0>33. - 4*66./4) && (yCs0<33. - 3*66./4)) nCs=0;
+        if(yCs0<=33. - 3*66./4) nCs=0;
       }
      // if(nCs==-10) cout << xd << " " << yd << " " << zd << " " << zt << endl;
 
@@ -244,12 +284,12 @@ void tracking_R() {
           nCsM = i;
         }
       }     
-      tw->Fill();
+      if(nCs>-1 && aCsiM>=-1) tw->Fill();
     }
-    //}			
+    //}     
   }//entries
   //cout << xCsi_max << " " << xCsi_min << " " << yCsi_max << " " << yCsi_min << endl;
   fw->cd();
-	tw->Write();
-	fw->Close();
+  tw->Write();
+  fw->Close();
 }

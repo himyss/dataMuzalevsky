@@ -1,7 +1,7 @@
-void toCalib_old() { 
+void fillChain() { 
 	
     // Reading cal parameters 
-  Float_t parXL1[32], parXL2[32],parYL1[16],parYL2[16],parXR1[32], parXR2[32],parYR1[16],parYR2[16];
+  Float_t parXL1[32],parXL2[32],parYL1[16],parYL2[16],parXR1[32], parXR2[32],parYR1[16],parYR2[16],par201[16],par202[16],parCsR1[16],parCsR2[16];
   //------------------------------------------------------------------------------ 
   // for 1 mm Si detector
   TString line1;
@@ -39,7 +39,60 @@ void toCalib_old() {
   cout << endl << " pars for YR strips" << endl;
   for(Int_t i=0;i<16;i++) cout << parYR1[i] << " " << parYR2[i] << endl;   
 
-  Float_t parCsR1[32],parCsR2[32];
+  ifstream myfile3;
+  TString line3;
+  count=-2;
+  myfile3.open("/media/user/work/data/analysisexp1804/presentPars/SQX_L.cal");
+  while (! myfile3.eof() ){
+    line3.ReadLine(myfile3);
+    if(count < 0){
+      count++;
+      continue;
+    }
+    if(line3.IsNull()) break;
+    sscanf(line3.Data(),"%g %g", parXL1+count,parXL2+count);
+    count++;
+  }
+
+  cout << endl << " pars for XL strips" << endl;
+  for(Int_t i=0;i<32;i++) cout << parXL1[i] << " " << parXL2[i] << endl;   
+
+  ifstream myfile4;
+  TString line4;
+  count=-2;
+  myfile4.open("/media/user/work/data/analysisexp1804/presentPars/SQY_L.cal");
+  while (! myfile4.eof() ){
+    line4.ReadLine(myfile4);
+    if(count < 0){
+      count++;
+      continue;
+    }
+    if(line4.IsNull()) break;
+    sscanf(line4.Data(),"%g %g", parYL1+count,parYL2+count);
+    count++;
+  }
+
+  cout << endl << " pars for YL strips" << endl;
+  for(Int_t i=0;i<16;i++) cout << parYL1[i] << " " << parYL2[i] << endl;     
+
+  ifstream myfile5;
+  TString line5;
+  count=-2;
+  myfile5.open("/media/user/work/data/analysisexp1804/presentPars/SQ20.cal");
+  while (! myfile5.eof() ){
+    line5.ReadLine(myfile5);
+    if(count < 0){
+      count++;
+      continue;
+    }
+    if(line5.IsNull()) break;
+    sscanf(line5.Data(),"%g %g", par201+count,par202+count);
+    count++;
+  }
+
+  cout << endl << " pars for 20um strips" << endl;
+  for(Int_t i=0;i<16;i++) cout << par201[i] << " " << par202[i] << endl; 
+
   ifstream myfile7;
   TString line7;
   count=-2;
@@ -78,7 +131,7 @@ void toCalib_old() {
   Long64_t nentries1;
   Int_t maxE,multY_L,multX_L,multY_R,multX_R,mult20,multY_Lt,multX_Lt,multY_Rt,multX_Rt,mult20t,multCsi_R,multCsi_L,timeF5,thresh_X,thresh_Y,thresh_CsI,nCh_L,nCh_R;
 
-  Int_t ToFflag,Csi_Rflag,MWPCflag,SQRflag; //! flags
+  Int_t ToFflag,Csi_Rflag,MWPCflag,SQRflag,SQLflag,SQ20flag,flag; //! flags
 
   Float_t maxCsI_R,maxCsI_L;
 
@@ -96,19 +149,19 @@ void toCalib_old() {
 
 
  // Creating outfile,outtree
-  TFile *fw = new TFile("/media/user/work/data/analysisexp1804/tritium.root", "RECREATE");
+  TFile *fw = new TFile("/media/user/work/data/analysisexp1804/h5_14.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   //tw->Branch("CsI_L",&CsI_L,"CsI_L[16]/F");
   //tw->Branch("tCsI_L",&tCsI_L,"tCsI_L[16]/F");
   tw->Branch("CsI_R",&CsI_R,"CsI_R[16]/F");
   tw->Branch("tCsI_R",&tCsI_R,"tCsI_R[16]/F");
-  /*tw->Branch("SQX_L",&SQX_L,"SQX_L[32]/F");
+  tw->Branch("SQX_L",&SQX_L,"SQX_L[32]/F");
   tw->Branch("tSQX_L",&tSQX_L,"tSQX_L[32]/F");
   tw->Branch("SQY_L",&SQY_L,"SQY_L[16]/F");
   tw->Branch("tSQY_L",&tSQY_L,"tSQY_L[16]/F");
   tw->Branch("SQ20",&SQ20,"SQ20[16]/F");
-  tw->Branch("tSQ20",&tSQ20,"tSQ20[16]/F");*/
+  tw->Branch("tSQ20",&tSQ20,"tSQ20[16]/F");
 
   tw->Branch("SQX_R",&SQX_R,"SQX_R[32]/F");
   tw->Branch("tSQX_R",&tSQX_R,"tSQX_R[32]/F");
@@ -132,8 +185,8 @@ void toCalib_old() {
 
   tw->Branch("trigger",&trigger,"trigger/I");
 
- // tw->Branch("multY_L",&multY_L,"multY_L/I");
- // tw->Branch("multX_L",&multX_L,"multX_L/I");
+  tw->Branch("multY_L",&multY_L,"multY_L/I");
+  tw->Branch("multX_L",&multX_L,"multX_L/I");
   tw->Branch("multY_R",&multY_R,"multY_R/I");
   tw->Branch("multX_R",&multX_R,"multX_R/I");
 
@@ -178,42 +231,34 @@ void toCalib_old() {
 
   maxE = nentries1;
   cout<<">>> filling TREE up to "<<maxE<< " event"<<endl;
-  for (Long64_t jentry=0; jentry<10000;jentry++) {
+  for (Long64_t jentry=0; jentry<maxE;jentry++) {
 	  t->GetEntry(jentry);
     if(jentry%10000000==0) cout << "######## " << jentry << endl;
     // обнуление
     trigger=0;
+    flag=0;
 
 
     //----------------------------- CsI module
     for(Int_t i=0;i<16;i++) { // обнуление
       CsI_R[i] = 0;
-      CsI_L[i] = 0;
       tCsI_R[i] = 0;
-      tCsI_L[i] = 0;
     }
     multCsi_R = 0;
-    multCsi_L = 0;
     Csi_Rflag = 0;    
     //searching for maxAmp of CsI_R and CsI_L, time selection NeEvent_tCsI_R[i]>0
 
     maxCsI_R = 0; nCh_R = -10;
-    maxCsI_L = 0; nCh_L = -10;
     for(Int_t i=0;i<16;i++) {
       if(maxCsI_R<NeEvent_CsI_R[i] && NeEvent_tCsI_R[i]>0) {
         maxCsI_R = NeEvent_CsI_R[i];
         nCh_R = i;  
-      }
-      if(maxCsI_L<NeEvent_CsI_L[i] && NeEvent_tCsI_L[i]>0) {
-        maxCsI_L = NeEvent_CsI_L[i];
-        nCh_L = i;  
       }
     }
  
     // calculation of the multiplicity
     for(Int_t i=0;i<16;i++){
       if(NeEvent_CsI_R[i]==maxCsI_R && maxCsI_R>0) multCsi_R++;
-      if(NeEvent_CsI_L[i]==maxCsI_L && maxCsI_L>0) multCsi_L++;
     }
     
     // Csi_R energy threshold
@@ -223,7 +268,7 @@ void toCalib_old() {
   
     //Fill
     CsI_R[nCh_R] = NeEvent_CsI_R[nCh_R]*parCsR2[nCh_R] +  parCsR1[nCh_R];
-    tCsI_R[nCh_R] = NeEvent_tCsI_R[nCh_R]*0.3;
+    tCsI_R[nCh_R] = NeEvent_tCsI_R[nCh_R]*0.3; 
 
     //Csi_Rflag MUST BE = 0 !!!
     //----------------------------- endl of CsI module
@@ -246,6 +291,7 @@ void toCalib_old() {
     deBeam = (NeEvent_F5[0]+NeEvent_F5[1]+NeEvent_F5[2]+NeEvent_F5[3]+NeEvent_F3[0]+NeEvent_F3[1]+NeEvent_F3[2]+NeEvent_F3[3])*0.25;
     ToF = (NeEvent_tF5[0]+NeEvent_tF5[1]+NeEvent_tF5[2]+NeEvent_tF5[3] - NeEvent_tF3[0]-NeEvent_tF3[1]-NeEvent_tF3[2]-NeEvent_tF3[3])*0.25*0.125 + 89.165;
     if(ToF<100 || ToF>200) ToFflag--; 
+    if(ToFflag!=0) continue;
     //TOFFLAG MUST BE = 0!!
     //----------------------------- end of ToF module
 
@@ -360,6 +406,8 @@ void toCalib_old() {
       zt = 546.*(xt-x1)/(x2-x1) - 816;
     }
 
+
+    if(MWPCflag!=1) continue;
     //----------------------------- MWPC
 
 
@@ -390,7 +438,7 @@ void toCalib_old() {
     //----------------------------- end of MWPC module
 */
     
-    //----------------------------- SQ_R module
+//----------------------------- SQ_R module
 
     // обнуление 
     for(Int_t i = 0; i<32;i++) {
@@ -402,39 +450,95 @@ void toCalib_old() {
       }
     }
     SQRflag = 0;
-    multY_R = 0;
-    multX_R = 0;
 
     //fill
     for(Int_t i=0; i<32; i++) {
       SQX_R[i] = NeEvent_SQX_R[i]*parXR2[i] + parXR1[i];
-      if(SQX_R[i]>1.5 && tSQX_R[i]>0) multX_R++; 
       tSQX_R[i] = NeEvent_tSQX_R[i]*0.3;
       if(i<16){
         SQY_R[i] = NeEvent_SQY_R[i]*parYR2[i] + parYR1[i];
-        if(SQY_R[i]>1.5 && tSQY_R[i]>0) multY_R++; 
         tSQY_R[i] = NeEvent_tSQY_R[i]*0.3;
       }
     }
-    
-    // energy threshold 1.5 MeV
-    if(multY_R<1 || multX_R<1) continue;
 
     for(Int_t i=0;i<32;i++){ 
       if(i<16){ // CFD LED times (walk)
-        if(tSQX_R[i] - NeEvent_tF5[0]*0.125 > -70 && tSQX_R[i] - NeEvent_tF5[0]*0.125<0 && tSQX_R[i]>0) SQRflag++;
-        if(tSQY_R[i] - NeEvent_tF5[0]*0.125 > -70 && tSQY_R[i] - NeEvent_tF5[0]*0.125<0 && tSQY_R[i]>0) SQRflag++;
+        if(tSQX_R[i] - NeEvent_tF5[0]*0.125 > -70 && tSQX_R[i] - NeEvent_tF5[0]*0.125<0 && tSQX_R[i]>0 && SQX_R[i]>1.5) SQRflag++;
+        if(tSQY_R[i] - NeEvent_tF5[0]*0.125 > -70 && tSQY_R[i] - NeEvent_tF5[0]*0.125<0 && tSQY_R[i]>0 && SQY_R[i]>1.5) SQRflag++;
       }
       if(i>15){ // both times by CFD 
-        if(tSQX_R[i] - NeEvent_tF5[0]*0.125 > 40 || tSQX_R[i] - NeEvent_tF5[0]*0.125<90 && tSQX_R[i]>0) SQRflag++;
+        if(tSQX_R[i] - NeEvent_tF5[0]*0.125 > 40 && tSQX_R[i] - NeEvent_tF5[0]*0.125<90 && tSQX_R[i]>0 && SQX_R[i]>1.5) SQRflag++;
+      }
+    }
+    // if(SQRflag!=2) continue;
+    //----------------------------- end of SQ_R module
+
+
+    //----------------------------- SQ_L module
+
+    // обнуление 
+    for(Int_t i = 0; i<32;i++) {
+      SQX_L[i]=0.;
+      tSQX_L[i]=0.;
+      if(i<16) {
+        SQY_L[i]=0.;
+        tSQY_L[i]=0.;
+      }
+    }
+    SQLflag = 0;
+
+    //fill
+    for(Int_t i=0; i<32; i++) {
+      SQX_L[i] = NeEvent_SQX_L[i]*parXL2[i] + parXL1[i];
+      tSQX_L[i] = NeEvent_tSQX_L[i]*0.3;
+      if(i<16){
+        SQY_L[i] = NeEvent_SQY_L[i]*parYL2[i] + parYL1[i];
+        tSQY_L[i] = NeEvent_tSQY_L[i]*0.3;
       }
     }
 
-    //----------------------------- end of SQ_R module
+    for(Int_t i=0;i<32;i++){ 
+      if(i<16){ // CFD LED times (walk)
+        if(tSQX_L[i] - NeEvent_tF5[0]*0.125 > -70 && tSQX_L[i] - NeEvent_tF5[0]*0.125<0 && tSQX_L[i]>0 && SQX_L[i]>1.5) SQLflag++;
+        if(tSQY_L[i] - NeEvent_tF5[0]*0.125 > -70 && tSQY_L[i] - NeEvent_tF5[0]*0.125<0 && tSQY_L[i]>0 && SQY_L[i]>1.5) SQLflag++;
+      }
+      if(i>15){ // both times by CFD 
+        if(tSQX_L[i] - NeEvent_tF5[0]*0.125 > 40 && tSQX_L[i] - NeEvent_tF5[0]*0.125<90 && tSQX_L[i]>0 && SQX_L[i]>1.5) SQLflag++;
+      }
+    }
+
+    // if(SQLflag>0) cout << SQLflag << endl;
+    // continue;
+    //----------------------------- end of SQ_L module
+
+    //----------------------------- SQ20 module
+
+    // обнуление 
+    for(Int_t i = 0; i<16;i++) {
+      SQ20[i]=0.;
+      tSQ20[i]=0.;
+    }
+    SQ20flag = 0;
+    mult20 = 0;
+
+    //fill
+    for(Int_t i=0; i<16; i++) {
+      SQ20[i] = NeEvent_SQ20[i]*par202[i] + par201[i]; 
+      tSQ20[i] = NeEvent_tSQ20[i]*0.3;
+    }
+
+    for(Int_t i=0;i<16;i++){ 
+      if(SQ20[i]>1. && tSQ20[i] - NeEvent_tF5[0]*0.125 > 30 && tSQ20[i] - NeEvent_tF5[0]*0.125<170 && tSQ20[i]>0) SQ20flag++;
+    }
+
+    //----------------------------- en of SQ20 module 
+
 
     trigger = NeEvent_trigger;
-
-    if(ToFflag==0 && Csi_Rflag==0 && MWPCflag==1 && SQRflag==2) tw->Fill();
+    if(Csi_Rflag==0 && SQRflag==2) flag = 1;
+    if(SQ20flag==1 && SQLflag==2) flag = 1;
+    if(flag!=1) continue;
+    tw->Fill();
    // }			
   }//entries
   fw->cd();
