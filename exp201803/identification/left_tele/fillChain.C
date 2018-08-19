@@ -148,7 +148,7 @@ void fillChain() {
   const Float_t    MWPC2_Y_zero_position = -15.5*1.25;
 
  // Creating outfile,outtree
-  TFile *fw = new TFile("/media/user/work/data/analysisexp1804/tmp.root", "RECREATE");
+  TFile *fw = new TFile("/media/user/work/data/analysisexp1804/h5_14_3.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   //tw->Branch("CsI_L",&CsI_L,"CsI_L[16]/F");
@@ -229,7 +229,7 @@ void fillChain() {
 
   maxE = nentries1;
   cout<<">>> filling TREE up to "<<maxE<< " event"<<endl;
-  for (Long64_t jentry=0; jentry<1000;jentry++) {
+  for (Long64_t jentry=0; jentry<maxE;jentry++) {
 	  t->GetEntry(jentry);
     if(jentry%10000000==0) cout << "######## " << jentry << endl;
     // обнуление
@@ -281,7 +281,7 @@ void fillChain() {
     tCsI = tCsI*0.3;
 
     // amp-time cut (340,430)
-    if((tCsI - NeEvent_tF5[0]*0.125)<365 || (tCsI - NeEvent_tF5[0]*0.125)>430) Csi_Rflag--;
+    if((tCsI - NeEvent_tF5[0]*0.125)<365 || (tCsI - NeEvent_tF5[0]*0.125)>460) Csi_Rflag--;
 
 
     //Csi_Rflag MUST BE = 0 !!!
@@ -347,12 +347,12 @@ void fillChain() {
       }
     }    
 
-    if(NeEvent_nx2==0) {MWPCflag = MWPCflag*0;}
-    if(NeEvent_nx2==1) {
+    if(nx2==0) {MWPCflag = MWPCflag*0;}
+    if(nx2==1) {
       MWPCflag = MWPCflag*1;
       x2n = NeEvent_x2[0];
     }
-    if(NeEvent_nx2>1) {
+    if(nx2>1) {
       for(Int_t i=0;i<nx2-1;i++) {
         if((NeEvent_x2[i+1]-NeEvent_x2[i])!=1) {
           MWPCflag = MWPCflag*0;
@@ -368,7 +368,7 @@ void fillChain() {
       MWPCflag = MWPCflag*1;
       y1n=NeEvent_y1[0];
     }
-    if(NeEvent_ny1>1) {
+    if(ny1>1) {
       for(Int_t i=0;i<ny1-1;i++) {
         if((NeEvent_y1[i+1]-NeEvent_y1[i])!=1) {
           MWPCflag = MWPCflag*0;
@@ -379,12 +379,12 @@ void fillChain() {
       }
     }  
 
-    if(NeEvent_ny2==0) {MWPCflag = MWPCflag*0;}
-    if(NeEvent_ny2==1) {
+    if(ny2==0) {MWPCflag = MWPCflag*0;}
+    if(ny2==1) {
       MWPCflag = MWPCflag*1;
       y2n = NeEvent_y2[0];
     }
-    if(NeEvent_ny2>1) {
+    if(ny2>1) {
       for(Int_t i=0;i<ny2-1;i++) {
         if((NeEvent_y2[i+1]-NeEvent_y2[i])!=1) {
           MWPCflag = MWPCflag*0;
@@ -412,7 +412,7 @@ void fillChain() {
     if(MWPCflag!=1) continue;
     //----------------------------- MWPC
 
-/*
+
 //----------------------------- SQ_R module
 
     // обнуление 
@@ -438,14 +438,13 @@ void fillChain() {
 
     for(Int_t i=0;i<32;i++){ 
       if(i<16){ // CFD LED times (walk)
-        if(tSQX_R[i] - NeEvent_tF5[0]*0.125 > -70 && tSQX_R[i] - NeEvent_tF5[0]*0.125<0 && tSQX_R[i]>0 && SQX_R[i]>1.5) SQRflag++;
-        if(tSQY_R[i] - NeEvent_tF5[0]*0.125 > -70 && tSQY_R[i] - NeEvent_tF5[0]*0.125<0 && tSQY_R[i]>0 && SQY_R[i]>1.5) SQRflag++;
+        if(tSQX_R[i] - NeEvent_tF5[0]*0.125 > -70 && tSQX_R[i] - NeEvent_tF5[0]*0.125<0 && tSQX_R[i]>0 && SQX_R[i]>1.) SQRflag++;
+        if(tSQY_R[i] - NeEvent_tF5[0]*0.125 > -70 && tSQY_R[i] - NeEvent_tF5[0]*0.125<0 && tSQY_R[i]>0 && SQY_R[i]>1.) SQRflag++;
       }
       if(i>15){ // both times by CFD 
-        if(tSQX_R[i] - NeEvent_tF5[0]*0.125 > 40 && tSQX_R[i] - NeEvent_tF5[0]*0.125<90 && tSQX_R[i]>0 && SQX_R[i]>1.5) SQRflag++;
+        if(tSQX_R[i] - NeEvent_tF5[0]*0.125 > 40 && tSQX_R[i] - NeEvent_tF5[0]*0.125<90 && tSQX_R[i]>0 && SQX_R[i]>1.) SQRflag++;
       }
     }
-    // if(SQRflag!=2) continue;
     //----------------------------- end of SQ_R module
 
 
@@ -474,16 +473,13 @@ void fillChain() {
 
     for(Int_t i=0;i<32;i++){ 
       if(i<16){ // CFD LED times (walk)
-        if(tSQX_L[i] - NeEvent_tF5[0]*0.125 > -70 && tSQX_L[i] - NeEvent_tF5[0]*0.125<0 && tSQX_L[i]>0 && SQX_L[i]>1.5) SQLflag++;
-        if(tSQY_L[i] - NeEvent_tF5[0]*0.125 > -70 && tSQY_L[i] - NeEvent_tF5[0]*0.125<0 && tSQY_L[i]>0 && SQY_L[i]>1.5) SQLflag++;
+        if(tSQX_L[i] - NeEvent_tF5[0]*0.125 > -70 && tSQX_L[i] - NeEvent_tF5[0]*0.125<0 && tSQX_L[i]>0 && SQX_L[i]>1.) SQLflag++;
+        if(tSQY_L[i] - NeEvent_tF5[0]*0.125 > -70 && tSQY_L[i] - NeEvent_tF5[0]*0.125<0 && tSQY_L[i]>0 && SQY_L[i]>1.) SQLflag++;
       }
       if(i>15){ // both times by CFD 
-        if(tSQX_L[i] - NeEvent_tF5[0]*0.125 > 40 && tSQX_L[i] - NeEvent_tF5[0]*0.125<90 && tSQX_L[i]>0 && SQX_L[i]>1.5) SQLflag++;
+        if(tSQX_L[i] - NeEvent_tF5[0]*0.125 > 40 && tSQX_L[i] - NeEvent_tF5[0]*0.125<90 && tSQX_L[i]>0 && SQX_L[i]>1.) SQLflag++;
       }
     }
-
-    // if(SQLflag>0) cout << SQLflag << endl;
-    // continue;
     //----------------------------- end of SQ_L module
 
     //----------------------------- SQ20 module
@@ -503,16 +499,14 @@ void fillChain() {
     }
 
     for(Int_t i=0;i<16;i++){ 
-      if(SQ20[i]>1. && tSQ20[i] - NeEvent_tF5[0]*0.125 > 30 && tSQ20[i] - NeEvent_tF5[0]*0.125<170 && tSQ20[i]>0) SQ20flag++;
+      if(SQ20[i]>0.9 && tSQ20[i] - NeEvent_tF5[0]*0.125 > 30 && tSQ20[i] - NeEvent_tF5[0]*0.125<170 && tSQ20[i]>0) SQ20flag++;
     }
 
     //----------------------------- en of SQ20 module 
 
-
-
-    if(Csi_Rflag==0 && SQRflag==2) flag = 1;
-    if(SQ20flag==1 && SQLflag==2) flag = 1;
-    if(flag!=1) continue;*/
+    if(Csi_Rflag==0 && SQRflag>1) flagR = 1;
+    if(SQ20flag>0 && SQLflag>1) flagL = 1;
+    if(flagL==0 && flagR==0) continue;
     tw->Fill();
    // }			
   }//entries

@@ -4,49 +4,58 @@ void drawBanana(){
   // TF1 *fa1 = new TF1("fa1","sin(x)/x",0,10);
 
   TChain *ch = new TChain("tree");
-  ch->Add("/media/user/work/data/analysisexp1804/tmp.root");
+  // ch->Add("/media/user/work/data/analysisexp1804/h5_14_1.root");
+  ch->Add("/media/user/work/data/analysisexp1804/h5_14_03_tritium.root");
 
-  TCanvas *c1 = new TCanvas("c1","de-E plots");
-  c1->Divide(2,1);
+  TCanvas *c1 = new TCanvas("c1","de-E plots",1800,1000);
+  c1->Divide(4,4);
   //TH2F *h = new TH2F("h","dE-E",500,0,4000,500,0,50);
-  TString hDraw,hCut,hName;
+  TString hDraw,hCut,hName,hDraw1,hCut1;
 
   TH2F *hSum,*htemp[16];
   hSum = new TH2F("hSum","summ dE-E",500,1,20,500,1,12);
 
-  TFile *fw = new TFile("bananaNew.root", "RECREATE");
-  fw->cd();
+  // TFile *fw = new TFile("bananaNew.root", "RECREATE");
+  // fw->cd();
 
-  c1->cd(1);  
+ 
   for(Int_t i=0;i<16;i++){
-    // c1->cd(i+1);
+    c1->cd(i+1);
 
     // tree->Draw("SQ20[7]:SQY_L>>(200,1,20,200,1,12)","SQ20[7]>1 && SQY_L>1.5 && trigger==3","col")
+    // ch->SetMarkerStyle(8);
+    // hDraw.Form("SQ20[%d]:(SQY_L+SQ20[%d])>>h_%d(100,1.,30,100,1.,6)",i,i,i);
+    hDraw.Form("SQ20[%d]:(SQY_L+SQ20[%d])>>h_%d(100,1.,30,100,1.,6)",i,i,i);
+    hCut.Form("SQ20[%d]>1.5 && SQY_L>1.5 && trigger==3 && flagL==1 && flagT==1",i);
 
-    hDraw.Form("SQ20[%d]:SQX_L>>h(500,1,20,500,1,12)",i);
-    hCut.Form("SQ20[%d]>1 && SQX_L>1.5 && trigger==3",i);
-    ch->Draw(hDraw.Data(),hCut.Data(),"col");
+    hDraw1.Form("SQ20[%d]:(SQY_L+SQ20[%d])>>hC_%d(100,1.,30,100,1.,6)",i,i,i);
+    hCut1.Form("SQ20[%d]>1.5 && SQY_L>1.5 && trigger==3 && flagL==1",i);
 
-    htemp[i] = (TH2F*)gPad->GetPrimitive("h");
+
+    ch->SetMarkerColor(kBlack);
+    ch->Draw(hDraw.Data(),hCut.Data(),"");
+
+    // ch->SetMarkerColor(kRed);
+    // ch->Draw(hDraw1.Data(),hCut1.Data(),"same");
+
+    // htemp[i] = (TH2F*)gPad->GetPrimitive("h");
 
     // cout << htemp->GetEntries() << endl;
-    hSum->Add(htemp[i]);
+    // hSum->Add(htemp[i]);
     //if(i!=0) ch->Draw(hDraw.Data(),hCut.Data(),"same");
     c1->Update();
     cout <<  i << endl;
     //gPad->SetLogz();
 
   }
-  c1->cd(2);
-  hSum->Draw("col");
+  // c1->cd(2);
+  // hSum->Draw("col");
   // f->Draw("same");
   // f->SetLineWidth(2);
   // f->SetLineColor(4);
-  c1->Update();
 
 
-
-  hSum->Write();
-  fw->Close();
+  // hSum->Write();
+  // fw->Close();
 
 }
