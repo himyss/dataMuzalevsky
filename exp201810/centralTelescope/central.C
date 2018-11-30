@@ -1,13 +1,17 @@
 Int_t GetClusterMult(TClonesArray *data);
 ERQTelescopeCsIDigi* processCsI(TClonesArray *data);
+Int_t GetClusterMWPC(TClonesArray *data);
+
 
 void zeroVars();
+void tempfunc(TClonesArray *data);
 
 void fillCsI(ERQTelescopeCsIDigi *data);
 void fillDSDX_C(TClonesArray *data);
 void fillDSDY_C(TClonesArray *data);
 void fillF5(TClonesArray *data);
-
+void fillF3(TClonesArray *data);
+  
 //outtree vars
 Int_t trigger; 
 
@@ -17,7 +21,9 @@ Float_t aCsI,tCsI;
 Float_t DSDX_C[32],DSDY_C[32];
 Float_t tDSDX_C[32],tDSDY_C[32];
 
-Float_t F5,tF5;
+Float_t F5,tF5,F3,tF3;
+
+Int_t multX,multY;
 
 void central() {
 
@@ -33,31 +39,49 @@ void central() {
   TClonesArray *v_CsI = new TClonesArray("ERQTelescopeCsIDigi");
 
   TClonesArray *v_F5 = new TClonesArray("ERBeamDetTOFDigi");
+  TClonesArray *v_F3 = new TClonesArray("ERBeamDetTOFDigi");  
+
+  TClonesArray *v_MWPCx1 = new TClonesArray("ERBeamDetMWPCDigi");
+  TClonesArray *v_MWPCy1 = new TClonesArray("ERBeamDetMWPCDigi");  
+  TClonesArray *v_MWPCx2 = new TClonesArray("ERBeamDetMWPCDigi");
+  TClonesArray *v_MWPCy2 = new TClonesArray("ERBeamDetMWPCDigi"); 
+
 
   ERQTelescopeSiDigi *m_DSDX_C;
   ERQTelescopeSiDigi *m_DSDY_C;
   ERQTelescopeCsIDigi *m_CsI;
   ERBeamDetTOFDigi *m_F5;
+  ERBeamDetTOFDigi *m_F3;  
 
   Int_t multDSDX_C,multDSDY_C;
 
   // setbranchAdress
+  ch->SetBranchAddress("BeamDetToFDigi2",&v_F5);
+  ch->SetBranchAddress("BeamDetToFDigi1",&v_F3);
+
+  ch->SetBranchAddress("BeamDetMWPCDigiX1",&v_MWPCx1);
+  ch->SetBranchAddress("BeamDetMWPCDigiX2",&v_MWPCx2);
+  ch->SetBranchAddress("BeamDetMWPCDigiY1",&v_MWPCy1);
+  ch->SetBranchAddress("BeamDetMWPCDigiY2",&v_MWPCy2);  
+
   ch->SetBranchAddress("ERQTelescopeSiDigi_Central_telescope_DoubleSi_DSD_C_XY_0_X",&v_DSDX_C);
   ch->SetBranchAddress("ERQTelescopeSiDigi_Central_telescope_DoubleSi_DSD_C_XY_0_Y",&v_DSDY_C);
   ch->SetBranchAddress("ERQTelescopeCsIDigi_Central_telescope_CsI_0",&v_CsI);
-  ch->SetBranchAddress("BeamDetToFDigi2",&v_F5);
+ 
   ch->SetBranchAddress("EventHeader.",&header);
 
 
   // Creating outfile,outtree
 
-  TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/central_test.root", "RECREATE");
+  TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/central_multtime.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("trigger",&trigger,"trigger/I");
 
   tw->Branch("F5.",&F5,"F5/F");
   tw->Branch("tF5.",&tF5,"tF5/F");
+  tw->Branch("F3.",&F3,"F3/F");
+  tw->Branch("tF3.",&tF3,"tF3/F");
 
   tw->Branch("aCsI.",&aCsI,"aCsI/F");
   tw->Branch("tCsI.",&tCsI,"tCsI/F");
@@ -68,7 +92,10 @@ void central() {
   tw->Branch("DSDY_C",&DSDY_C,"DSDY_C[32]/F");
   tw->Branch("tDSDY_C",&tDSDY_C,"tDSDY_C[32]/F");
 
-  for(Int_t nentry=1;nentry<100;nentry++) {
+  tw->Branch("multX",&multX,"multX/I");
+  tw->Branch("multY",&multY,"multY/I");  
+
+  for(Int_t nentry=1;nentry<1000;nentry++) {
     if(nentry%100000==0) cout << "#Event " << nentry << "#" << endl;
     ch->GetEntry(nentry);
 
@@ -84,6 +111,10 @@ void central() {
       continue;
     }
 
+    if (GetClusterMWPC(v_MWPCx1)!=1 && GetClusterMWPC(v_MWPCx2)!=1 && GetClusterMWPC(v_MWPCy1)!=1 && GetClusterMWPC(v_MWPCy2)!=1) {
+      continue;
+    }
+
     zeroVars();
 
     // fill the vars
@@ -92,7 +123,7 @@ void central() {
     fillDSDX_C(v_DSDX_C);
     fillDSDY_C(v_DSDY_C);    
     fillF5(v_F5);
-
+    fillF3(v_F3);    
 
     tw->Fill();
   }
@@ -140,6 +171,18 @@ void fillF5(TClonesArray *data){
   return; 
 }
 
+void fillF3(TClonesArray *data){
+  if (!data) return;
+  ERBeamDetTOFDigi *temp_F3 = ((ERBeamDetTOFDigi*)data->At(0));
+  if(!temp_F3) return;
+
+  F3 = temp_F3->GetEdep();
+  tF3 = temp_F3->GetTime();
+
+  return; 
+}
+
+
 ERQTelescopeCsIDigi* processCsI(TClonesArray *data) {
 
   // cout << "processCsI was called " << endl;
@@ -168,12 +211,16 @@ ERQTelescopeCsIDigi* processCsI(TClonesArray *data) {
 }
 
 void zeroVars() {
+  multX=0;
+  multY=0;
   trigger = 0;
   nCsI = 0;
   aCsI = 0;
   tCsI = 0;
   F5 = 0;
   tF5 = 0;
+  F3 = 0;
+  tF3 = 0;
   for(Int_t i=0;i<32;i++) {
     DSDX_C[i] = 0;
     DSDY_C[i] = 0;
@@ -194,7 +241,7 @@ void fillDSDX_C(TClonesArray *data) {
   for(Int_t i=0;i<data->GetEntriesFast();i++) {
     nCh = ((ERQTelescopeSiDigi*)data->At(i))->GetStripNb();
     DSDX_C[nCh] = ((ERQTelescopeSiDigi*)data->At(i))->GetEdep();
-    tDSDX_C[nCh] = ((ERQTelescopeSiDigi*)data->At(i))->GetTime();
+    tDSDX_C[nCh] = ((ERQTelescopeSiDigi*)data->At(i))->GetTime()*25./30.;
   }
 }
 
@@ -203,6 +250,47 @@ void fillDSDY_C(TClonesArray *data) {
   for(Int_t i=0;i<data->GetEntriesFast();i++) {
     nCh = ((ERQTelescopeSiDigi*)data->At(i))->GetStripNb();
     DSDY_C[nCh] = ((ERQTelescopeSiDigi*)data->At(i))->GetEdep();
-    tDSDY_C[nCh] = ((ERQTelescopeSiDigi*)data->At(i))->GetTime();
+    tDSDY_C[nCh] = ((ERQTelescopeSiDigi*)data->At(i))->GetTime()*25./30.;
   }
+}
+
+void tempfunc(TClonesArray *data) {
+
+   // cout << "processCsI was called " << endl;
+  if (!data) return NULL;
+
+  Double_t maxAmp = 0;
+  ERQTelescopeCsIDigi *temp_CsI;
+  ERQTelescopeCsIDigi *temp_CsImax;
+  // find maximum 
+  for(Int_t i = 0; i < data->GetEntriesFast(); i++) {
+    temp_CsI = ((ERQTelescopeCsIDigi*)data->At(i));
+    if(temp_CsI->GetEdep() < 1000 | temp_CsI->GetTime() < 175) multX++;
+  }
+
+  return;
+}
+
+Int_t GetClusterMWPC(TClonesArray *data) {
+
+  if (!data) return 0;
+
+  Int_t entries = data->GetEntriesFast();
+
+  if (entries<2) return entries;
+
+  Int_t wire1, wire2;
+  Int_t noclusters = 1;
+
+  for (Int_t i = 1; i < entries; i++) {
+    //check if entries are in specific order
+    wire1 = ((ERBeamDetMWPCDigi*)data->At(i))->GetWireNb();
+    wire2 = ((ERBeamDetMWPCDigi*)data->At(i-1))->GetWireNb();
+
+    //todo number 32 is related to number of wires
+    // and should be taken from Parameters
+    if ( abs(wire1 - wire2) > 1 && abs(wire1 - wire2) < 32) noclusters++;
+  }
+
+  return noclusters;
 }
