@@ -11,7 +11,8 @@ void fillDSDX_C(TClonesArray *data);
 void fillDSDY_C(TClonesArray *data);
 void fillF5(TClonesArray *data);
 void fillF3(TClonesArray *data);
-  
+
+Bool_t CsIcuts();
 //outtree vars
 Int_t trigger; 
 
@@ -23,7 +24,12 @@ Float_t tDSDX_C[32],tDSDY_C[32];
 
 Float_t F5,tF5,F3,tF3;
 
+Int_t wirex1,wirex2,wirey1,wirey2;
+Float_t tMWPC;
+
 Int_t multX,multY;
+
+TCutG *cutCsI[16];
 
 void central() {
 
@@ -70,10 +76,20 @@ void central() {
  
   ch->SetBranchAddress("EventHeader.",&header);
 
+  TFile *f;
+  TString cutName;
+
+  for(Int_t i=0;i<16;i++) {
+    cutName.Form("/media/user/work/macro/exp201810/centralTelescope/cuts/CsI_%d.root",i);
+    f = new TFile(cutName.Data());
+    cutCsI[i] = (TCutG*)f->Get("CUTG");
+    delete f;
+  }
+
 
   // Creating outfile,outtree
 
-  TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/central_multtime.root", "RECREATE");
+  TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/test.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("trigger",&trigger,"trigger/I");
@@ -82,6 +98,12 @@ void central() {
   tw->Branch("tF5.",&tF5,"tF5/F");
   tw->Branch("F3.",&F3,"F3/F");
   tw->Branch("tF3.",&tF3,"tF3/F");
+
+  // tw->Branch("tMWPC.",&tMWPC,"tMWPC/F");
+  // tw->Branch("wirex1.",&wirex1,"wirex1/I");
+  // tw->Branch("wirex2.",&wirex2,"wirex2/I");
+  // tw->Branch("wirey1.",&wirey1,"wirey1/I");
+  // tw->Branch("wirey2.",&wirey2,"wirey2/I");
 
   tw->Branch("aCsI.",&aCsI,"aCsI/F");
   tw->Branch("tCsI.",&tCsI,"tCsI/F");
@@ -92,10 +114,10 @@ void central() {
   tw->Branch("DSDY_C",&DSDY_C,"DSDY_C[32]/F");
   tw->Branch("tDSDY_C",&tDSDY_C,"tDSDY_C[32]/F");
 
-  tw->Branch("multX",&multX,"multX/I");
-  tw->Branch("multY",&multY,"multY/I");  
+  // tw->Branch("multX",&multX,"multX/I");
+  // tw->Branch("multY",&multY,"multY/I");  
 
-  for(Int_t nentry=1;nentry<1000;nentry++) {
+  for(Int_t nentry=1;nentry<1000000;nentry++) {
     if(nentry%100000==0) cout << "#Event " << nentry << "#" << endl;
     ch->GetEntry(nentry);
 
@@ -111,19 +133,23 @@ void central() {
       continue;
     }
 
-    if (GetClusterMWPC(v_MWPCx1)!=1 && GetClusterMWPC(v_MWPCx2)!=1 && GetClusterMWPC(v_MWPCy1)!=1 && GetClusterMWPC(v_MWPCy2)!=1) {
+    if (GetClusterMWPC(v_MWPCx1)!=1 || GetClusterMWPC(v_MWPCx2)!=1 || GetClusterMWPC(v_MWPCy1)!=1 || GetClusterMWPC(v_MWPCy2)!=1) {
+      continue;
+    }
+
+    if(v_F5->GetEntriesFast()==0 || v_F3->GetEntriesFast()==0) {
       continue;
     }
 
     zeroVars();
 
     // fill the vars
+    fillF5(v_F5);
+    fillF3(v_F3);
     trigger = header->GetTrigger();
     fillCsI(m_CsI);
     fillDSDX_C(v_DSDX_C);
     fillDSDY_C(v_DSDY_C);    
-    fillF5(v_F5);
-    fillF3(v_F3);    
 
     tw->Fill();
   }
@@ -205,7 +231,9 @@ ERQTelescopeCsIDigi* processCsI(TClonesArray *data) {
   for(Int_t i=0; i<data->GetEntriesFast(); i++) {
     if (((ERQTelescopeCsIDigi*)data->At(i))->GetEdep() == maxAmp) nMax++;
   }
-  if (nMax!=1) NULL;
+  if (nMax!=1) return NULL;
+
+  // if(temp_CsImax->GetBlockNb()==9) return NULL;
 
   return temp_CsImax;
 }
@@ -293,4 +321,13 @@ Int_t GetClusterMWPC(TClonesArray *data) {
   }
 
   return noclusters;
+}
+
+Bool_t CsIcuts() {
+  if(cutCsI[nCsI]->IsInside(tCsI-tF5, aCsI)) {
+    return kTRUE;
+  }
+  else {
+    return kFALSE;
+  }
 }

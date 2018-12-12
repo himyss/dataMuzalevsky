@@ -1,7 +1,7 @@
 void zeroVars();
 void checktDSD_C();
-void checkCsI();
-
+void checkToF();
+Bool_t CsIcuts();
 //outtree vars
 Int_t trigger; 
 
@@ -11,9 +11,11 @@ Float_t aCsI,tCsI;
 Float_t DSDX_C[32],DSDY_C[32];
 Float_t tDSDX_C[32],tDSDY_C[32];
 
-Float_t tF5,F5;
+Float_t tF5,F5,tF3,F3;
 
-Bool_t timesDSDX_C,timesDSDY_C,timesCsI;
+Bool_t timesDSDX_C,timesDSDY_C,timesToF,timesCsI;
+
+TCutG *cutCsI[16];
 
 void timeSelections() {
   TChain *ch = new TChain("tree");
@@ -33,14 +35,29 @@ void timeSelections() {
 
   ch->SetBranchAddress("F5.",&F5);
   ch->SetBranchAddress("tF5.",&tF5);
+  ch->SetBranchAddress("F3.",&F3);
+  ch->SetBranchAddress("tF3.",&tF3);
 
-  TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/central_time.root", "RECREATE");
+
+  TFile *f;
+  TString cutName;
+
+  for(Int_t i=0;i<16;i++) {
+    cutName.Form("/media/user/work/macro/exp201810/centralTelescope/cuts/CsI_%d.root",i);
+    f = new TFile(cutName.Data());
+    cutCsI[i] = (TCutG*)f->Get("CUTG");
+    delete f;
+  }
+
+  TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/central_times.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
-  tw->Branch("trigger.",&trigger,"trigger/I");
+  tw->Branch("trigger",&trigger,"trigger/I");
 
   tw->Branch("F5.",&F5,"F5/F");
   tw->Branch("tF5.",&tF5,"tF5/F");
+  tw->Branch("F3.",&F3,"F3/F");
+  tw->Branch("tF3.",&tF3,"tF3/F");
 
   tw->Branch("aCsI.",&aCsI,"aCsI/F");
   tw->Branch("tCsI.",&tCsI,"tCsI/F");
@@ -53,12 +70,20 @@ void timeSelections() {
 
 
   for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
-    if(nentry%1000000==0) cout << "#ENTRY " << nentry << "#" << endl;
+    if(nentry%100000==0) cout << "#ENTRY " << nentry << "#" << endl;
 
     ch->GetEntry(nentry);
+
+    if (nCsI==9) {
+      continue;
+    } 
+
     zeroVars();
+
+    timesCsI = CsIcuts();
     checktDSD_C();
-    checkCsI();
+    checkToF();
+
 
     if (timesDSDX_C==kTRUE && timesDSDY_C==kTRUE && timesCsI==kTRUE) tw->Fill();
   }
@@ -73,6 +98,7 @@ void timeSelections() {
 void zeroVars() {
   timesDSDX_C = kTRUE;
   timesDSDY_C = kTRUE;
+  timesToF = kTRUE;
   timesCsI = kTRUE;
 }
 
@@ -102,7 +128,16 @@ void checktDSD_C() {
   }
 }
 
-void checkCsI() {
-  if(tCsI>175 && aCsI>1000) timesCsI = kFALSE;
+void checkToF() {
+  if(F5<2400 || F5<4400 || tF5-tF3<103 || tF5-tF3>115 || F3<2000 || F3<4000 ) timesToF = kFALSE;
   return;
+}
+
+Bool_t CsIcuts() {
+  if(cutCsI[nCsI]->IsInside(tCsI-tF5, aCsI)) {
+    return kTRUE;
+  }
+  else {
+    return kFALSE;
+  }
 }
