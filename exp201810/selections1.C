@@ -40,14 +40,14 @@ Float_t SSD20_R[16],SSDY_R[16],SSD_R[16],tSSD20_R[16],tSSDY_R[16],tSSD_R[16];
 
 
 Float_t fXt,fYt;
-
+Float_t x1c, y1c, x2c, y2c;
 // flagsё
 Bool_t timesDSDX_C,timesDSDY_C,timesToF,timesCsI,timesMWPC;
 Double_t fThicknessRight[16][16];
 Double_t fThicknessLeft[16][16];
 
 TCutG *cutCsI[16],*cut3h[16],*cutX_L[16];
-  Int_t nh3;
+  Int_t nh3,nTarget;
 
 void selections1() {
   TChain *ch = new TChain("tree");
@@ -122,7 +122,7 @@ void selections1() {
 
   readThickness();
 
-  TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_10_times_new.root", "RECREATE");
+  TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_10_selected.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("trigger",&trigger,"trigger/I");
@@ -169,13 +169,19 @@ void selections1() {
   tw->Branch("t20_R",&t20_R,"t20_R/F");
   tw->Branch("tY_R",&tY_R,"tY_R/F");
 
+  tw->Branch("x1c",&x1c,"x1c/F");
+  tw->Branch("y1c",&y1c,"y1c/F");
+  tw->Branch("x2c",&x2c,"x2c/F");
+  tw->Branch("y2c",&y2c,"y2c/F"); 
 
   tw->Branch("nh3",&nh3,"nh3/I");
+  tw->Branch("nTarget",&nTarget,"nTarget/I");  
 
   for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
     if(nentry%100000==0) cout << "#ENTRY " << nentry << "#" << endl;
 
     nh3 = 0;
+    nTarget = 0;
     ch->GetEntry(nentry);
 
     timesMWPC = kTRUE;
@@ -185,21 +191,21 @@ void selections1() {
     timesCsI = kTRUE;
 
     checkToF();
-    if(!timesToF) continue;
+    if (!timesToF) continue;
 
     cutMWPC();
-    if(!timesMWPC) continue;
+    if (!timesMWPC) continue;
 
     MWPCprojection();
-    // if(fXt<-17 || fXt>13) continue;
+    if ( ((fXt+0.6)*(fXt+0.6) + (fYt+2.5)*(fYt+2.5))>8.5*8.5 ) nTarget = 1;
 
     zeroVars();
     fillSi();
 
-    if(aCsI>0) CsIselect();
+    if (aCsI>0) CsIselect();
 
     DSD_Cselect();
-    SSD20_Lselect();
+    // SSD20_Lselect();
     X_Lselect();
 
     coincidense();
@@ -240,12 +246,12 @@ void zeroVars() {
 } 
 
 void checkToF() {
-  if(F5<2600 || F5>4200 || tF5-tF3<103 || tF5-tF3>115 || F3<2000 || F3>4000 ) timesToF = kFALSE;
+  if(F5<2700 || F5>4200 || tF5-tF3<103 || tF5-tF3>115 || F3<2300 || F3>3700 ) timesToF = kFALSE;
   return;
 }
 
 void cutMWPC() {
-  if ( (tMWPC - tF5)>65 || (tMWPC - tF5)<95 ) timesMWPC = kTRUE;
+  if ( (tMWPC - tF5)>65 && (tMWPC - tF5)<95 ) timesMWPC = kTRUE;
   else timesMWPC = kFALSE;
 }
 
@@ -264,7 +270,7 @@ void MWPCprojection() {
   const Float_t fMWPCz1 = -815.;  //z coordinate of the center of MWPC1
   const Float_t fMWPCz2 = -270.;  //z coordinate of the center of MWPC2
 
-  Float_t x1c, y1c, x2c, y2c, xtc, ytc;
+  Float_t xtc, ytc;
   //cluster multiplicity equal to 1
   x1c = GetPosition(wirex1, fMWPCwireStepX1, fMWPC1_X_offset);
   y1c = GetPosition(wirey1, fMWPCwireStepY1, fMWPC1_Y_offset);

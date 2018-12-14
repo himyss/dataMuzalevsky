@@ -39,8 +39,8 @@ Bool_t flagCsI;
 void convert() {
 
   TChain *ch = new TChain("er");
-  // ch->Add("/media/user/work/data/Analysed1811/digi/BeamDetSelection/he8_10*");
-  ch->Add("/media/user/work/data/Analysed1811/digi/he8_10_0001.Digi.root");
+  ch->Add("/media/user/work/data/Analysed1811/digi/BeamDetSelection/he8_10*");
+  // ch->Add("/media/user/work/data/Analysed1811/digi/he8_10_0001.Digi.root");
 
   cout << "Found " << ch->GetEntries() << " entries" << endl;
 //--------------------------------------------------------------------------------
