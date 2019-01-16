@@ -8,12 +8,14 @@ Float_t GetPosition(Float_t wire, Float_t wireStep,Float_t planeOffset);
 void CsIselect();
 void DSD_Cselect();
 void SSD20_Lselect();
+void SSD20_Rselect();
 void X_Lselect();
 void Y_Lselect();
 
 void fillSi();
 
 void readThickness();
+void readCsImap();
 
 void coincidense();
 //outtree vars
@@ -26,6 +28,10 @@ Float_t tMWPC,wirex1,wirex2,wirey1,wirey2;
 Int_t nCsI;
 Float_t aCsI,tCsI;
 
+Int_t nCsI_s;
+Float_t aCsI_s,tCsI_s;
+
+Float_t arCsI[16],trCsI[16];
 
 Float_t X_C,tX_C,Y_C,tY_C,X_L,Y_L,a20_L,tX_L,tY_L,t20_L,a20_R,Y_R,t20_R,tY_R;
 Int_t nX_C,nY_C,nX_L,nY_L,n20_L,n20_R,nY_R;
@@ -42,17 +48,22 @@ Float_t SSD20_R[16],SSDY_R[16],SSD_R[16],tSSD20_R[16],tSSDY_R[16],tSSD_R[16];
 
 Float_t fXt,fYt;
 Float_t x1c, y1c, x2c, y2c;
-// flagsё
-Bool_t timesDSDX_C,timesDSDY_C,timesToF,timesCsI,timesMWPC,vetoFlag;
+// flags
+Bool_t timesToF,timesMWPC,vetoFlag;
+
 Double_t fThicknessRight[16][16];
 Double_t fThicknessLeft[16][16];
 
+Int_t CsImap[32][32];
+
+
 TCutG *cutCsI[16],*cut3h[16],*cutX_L[16],*cutY_L[16];
-  Int_t nh3,nTarget,nHe8,nMWPC;
+Int_t nh3,nTarget,nHe8,nMWPC;
+Int_t flagLeft,flagCent;
 
 void selection() {
   TChain *ch = new TChain("tree");
-  ch->Add("/media/user/work/data/Analysed1811/siParTests/analysed/he8_10_newnew_20Cal.root");
+  ch->Add("/media/user/work/data/Analysed1811/he8_full.root");
   // ch->Add("/media/user/work/data/Analysed1811/selected/profile.root");
   
   cout << ch->GetEntries() << endl;
@@ -62,6 +73,9 @@ void selection() {
   ch->SetBranchAddress("aCsI.",&aCsI);
   ch->SetBranchAddress("tCsI.",&tCsI);
   ch->SetBranchAddress("nCsI.",&nCsI);
+
+  ch->SetBranchAddress("arCsI",&arCsI);
+  ch->SetBranchAddress("trCsI",&trCsI);
 
   ch->SetBranchAddress("F5.",&F5);
   ch->SetBranchAddress("tF5.",&tF5);
@@ -98,21 +112,21 @@ void selection() {
   TString cutName;
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/media/user/work/macro/exp201810/centralTelescope/cuts/CsI_%d.root",i);
+    cutName.Form("/media/user/work/macro/he8_1811/CsItimeCuts/CsI_%d.root",i);
     f = new TFile(cutName.Data());
     cutCsI[i] = (TCutG*)f->Get("CUTG");
     delete f;
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/media/user/work/macro/exp201810/draw/cuts/CsI_%d.root",i);
+    cutName.Form("/media/user/work/macro/he8_1811/tritonCuts/CsI_%d.root",i);
     f1 = new TFile(cutName.Data());
     cut3h[i] = (TCutG*)f1->Get("CUTG");
     delete f1;
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/media/user/work/data/Analysed1811/siParTests/analysed/cutX_L/X_L_%d.root",i);
+    cutName.Form("/media/user/work/macro/he8_1811/cutX_L/X_L_%d.root",i);
     f2 = new TFile(cutName.Data());
     cutX_L[i] = (TCutG*)f2->Get("CUTG");
     if (!cutX_L[i]) {
@@ -123,7 +137,7 @@ void selection() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/media/user/work/data/Analysed1811/siParTests/analysed/cutY_L/Y_L_%d.root",i);
+    cutName.Form("/media/user/work/macro/he8_1811/cutY_L/Y_L_%d.root",i);
     f2 = new TFile(cutName.Data());
     cutY_L[i] = (TCutG*)f2->Get("CUTG");
     if (!cutY_L[i]) {
@@ -133,9 +147,11 @@ void selection() {
     delete f2;
   }
 
-
   readThickness();
-  TFile *fw = new TFile("/media/user/work/data/Analysed1811/siParTests/analysed/he8_10_new_selected_20Cal.root", "RECREATE");
+  readCsImap();
+
+
+  TFile *fw = new TFile("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("trigger",&trigger,"trigger/I");
@@ -157,6 +173,10 @@ void selection() {
   tw->Branch("aCsI.",&aCsI,"aCsI/F");
   tw->Branch("tCsI.",&tCsI,"tCsI/F");
   tw->Branch("nCsI.",&nCsI,"nCsI/I");
+
+  tw->Branch("aCsI_s.",&aCsI_s,"aCsI_s/F");
+  tw->Branch("tCsI_s.",&tCsI_s,"tCsI_s/F");
+  tw->Branch("nCsI_s.",&nCsI_s,"nCsI_s/I");
 
   tw->Branch("X_C",&X_C,"X_C/F");
   tw->Branch("nX_C",&nX_C,"nX_C/I");
@@ -188,51 +208,66 @@ void selection() {
   tw->Branch("y2c",&y2c,"y2c/F"); 
 
   tw->Branch("nh3",&nh3,"nh3/I");
-  tw->Branch("nHe8",&nHe8,"nHe8/I");  
-  tw->Branch("nMWPC",&nMWPC,"nMWPC/I");  
+  // tw->Branch("nHe8",&nHe8,"nHe8/I");  
+  // tw->Branch("nMWPC",&nMWPC,"nMWPC/I");  
   tw->Branch("nTarget",&nTarget,"nTarget/I");
-  tw->Branch("vetoFlag",&vetoFlag,"vetoFlag/I");
+  // tw->Branch("vetoFlag",&vetoFlag,"vetoFlag/I");
+  // tw->Branch("timesCsI",&timesCsI,"timesCsI/I");
+  // tw->Branch("timesDSDX_C",&timesDSDX_C,"timesDSDX_C/I");
+  // tw->Branch("timesDSDY_C",&timesDSDY_C,"timesDSDY_C/I");
+  // tw->Branch("X_Ltimes",&X_Ltimes,"X_Ltimes/I");
+  // tw->Branch("Y_Ltimes",&Y_Ltimes,"Y_Ltimes/I");
+  // tw->Branch("SQ20_L_flag",&SQ20_L_flag,"SQ20_L_flag/I");
+  tw->Branch("flagLeft",&flagLeft,"flagLeft/I");
+  tw->Branch("flagCent",&flagCent,"flagCent/I");
+
+
 
   for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
-  // for(Int_t nentry=0;nentry<1000;nentry++) {     
+  // for(Int_t nentry=0;nentry<1000000;nentry++) {     
     if(nentry%100000==0) cout << "#ENTRY " << nentry << "#" << endl;
 
     vetoFlag = 0;
     nh3 = 0;
     nMWPC = 0;
-    nHe8 = 0;
-    nTarget = 0;
+    nHe8 = 1;
+    nTarget = 1;
     ch->GetEntry(nentry);
 
     timesMWPC = kTRUE;
-    timesDSDX_C = kTRUE;
-    timesDSDY_C = kTRUE;
     timesToF = kTRUE;
-    timesCsI = kTRUE;
+    flagLeft = 1;
+    flagCent = 1;
 
     checkToF();
     if (timesToF) nHe8 = 1;
+    else continue;
 
     cutMWPC();
     if (timesMWPC) nMWPC = 1;
-
-    MWPCprojection();
-    if ( ((fXt+0.6)*(fXt+0.6) + (fYt+2.5)*(fYt+2.5))>8.5*8.5 ) nTarget = 1;
-
-    zeroVars();
-    fillSi();
+    else continue;
 
     for(Int_t i=0;i<16;i++) {
       if(SSD_L[i]>0 && tSSD_L[i]>0) vetoFlag = 1;
     }
+    if(vetoFlag) continue; 
 
-    // if (aCsI>0) CsIselect();
+    MWPCprojection();
+    if ( ((fXt+0.6)*(fXt+0.6) + (fYt+2.5)*(fYt+2.5))>8.5*8.5 ) nTarget = 0;
+
+    zeroVars();
+    fillSi();
+
+    if (aCsI>0) CsIselect();
 
     DSD_Cselect();
+
     SSD20_Lselect();
+
     X_Lselect();
     Y_Lselect();
-    // coincidense();
+
+    coincidense();
 
     tw->Fill();
   }
@@ -267,6 +302,10 @@ void zeroVars() {
   n20_L = -1;
   n20_R = -1;
   nY_R = -1;
+
+  // nCsI = -1;
+  // aCsI = 0;
+  // tCsI=0;
 } 
 
 void checkToF() {
@@ -319,7 +358,7 @@ Float_t GetPosition(Float_t wire, Float_t wireStep,
 
 void readThickness() {
   cout << "thickness Left detector " << endl;
-  TFile *f = new TFile("/media/user/work/software/fork/useranalysis/calibration/parameters/thicknessLeft.root","READ");
+  TFile *f = new TFile("/media/user/work/macro/he8_1811/parameters/thicknessLeft.root","READ");
   if (f->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -341,6 +380,31 @@ void readThickness() {
     }
   }
   delete f;
+
+cout << "thickness Right detector " << endl;
+  TFile *f1 = new TFile("/media/user/work/macro/he8_1811/parameters/thicknessRight.root","READ");
+  if (f1->IsZombie()) {
+    for(Int_t i = 0; i<16; i++) {
+      for(Int_t j = 0; j<16; j++) {
+        fThicknessRight[i][j] = 20.;
+        cout << fThicknessRight[i][j] << " ";
+      }
+      cout << endl;
+    }
+
+  }
+  else {
+    TH2F *hThick1 = (TH2F*)f1->Get("hTh");
+    for(Int_t i = 0; i<16; i++) {
+      for(Int_t j = 0; j<16; j++) {
+        fThicknessRight[i][j] = hThick1->GetBinContent(i+1,j+1);
+        cout << fThicknessRight[i][j] << " ";
+      }
+      cout << endl;
+    }
+  }
+  delete f1;
+
   return;
 }
 
@@ -355,25 +419,30 @@ void readThickness() {
 void CsIselect() {
   // cout << " check " << endl;
   if(nCsI>-1 && nCsI!=9 && cutCsI[nCsI]->IsInside(tCsI-tF5, aCsI)) {
-    // cout << "fine!" << endl;
     return;
   }
   else {
+    flagCent = 0; 
     aCsI = 0;
-    tCsI = 0;
-    nCsI = -1;    
+    nCsI = -1;
+    tCsI = 0;  
+    return; 
   }
 }  
 
 void DSD_Cselect() {
 
-  if ( (tX_C - tF5 < 80) && (tX_C - tF5 > 140)) {
-    tX_C = 0;
+  if ( (tX_C - tF5 < 80) || (tX_C - tF5 > 140)) {
+    flagCent = 0;
     X_C = 0;
+    nX_C = -1;
+    tX_C = 0;
   }
   if ( (tY_C - tF5 < 80) || (tY_C - tF5 >140)){
-    tY_C = 0;
+    flagCent = 0;
     Y_C = 0;
+    nY_C = -1;
+    tY_C = 0;    
   }
 
 }
@@ -475,18 +544,40 @@ void fillSi() {
 }
 
 void SSD20_Lselect() {
-    // check if thickness if reasonable
-  if(fThicknessLeft[n20_L][nY_L]<10 || fThicknessLeft[n20_L][nY_L] > 30) {
-    a20_L = 0;
+  if (t20_L-tF5<0 || t20_L-tF5>110) { //time cuts
+    flagLeft = 0;
     t20_L = 0;
+    a20_L = 0;
     n20_L = -1;
+    return; 
+  }
+    // check if thickness if reasonable
+  if (fThicknessLeft[n20_L][nY_L]<10 || fThicknessLeft[n20_L][nY_L] > 30) {
+    flagLeft = 0;
+    t20_L = 0;
+    a20_L = 0;
+    n20_L = -1;
+    return;
   }
   // cout << fThicknessLeft[n20_L][nY_L] << endl;
   a20_L = a20_L*20./fThicknessLeft[n20_L][nY_L];
   return;
 }
 
-void coincidense(){
+void SSD20_Rselect() {
+    // check if thickness if reasonable
+  if(fThicknessRight[n20_R][nY_R]<10 || fThicknessRight[n20_R][nY_R] > 30) {
+    a20_R = 0;
+    t20_R = 0;
+    n20_R = -1;
+    return;
+  }
+  // cout << fThicknessLeft[n20_L][nY_L] << endl;
+  a20_R = a20_R*20./fThicknessRight[n20_R][nY_R];
+  return;
+}
+
+void coincidense() {
 
   if(nCsI>-1 && nCsI!=9 && cut3h[nCsI]->IsInside(aCsI, X_C)) {
     nh3 = 1;
@@ -502,13 +593,14 @@ void coincidense(){
 void X_Lselect() {
   // cout << " check " << endl;
   if(nX_L>-1 && nX_L<16 && X_L>0 && cutX_L[nX_L]->IsInside(tX_L-tF5, X_L)) {
-    // cout << "fine!" << endl;
+    
     return;
   }
   else {
+    flagLeft = 0;
     X_L = 0;
     tX_L = 0;
-    nX_L = -1;    
+    nX_L = -1;  
   }
 
 
@@ -521,10 +613,113 @@ void Y_Lselect() {
     return;
   }
   else {
+    flagLeft = 0;
     Y_L = 0;
     tY_L = 0;
     nY_L = -1;    
   }
 
+}
+
+void readCsImap() {
+  for(Int_t i=0;i<8;i++) {
+    for(Int_t j=0;j<8;j++) {
+      CsImap[i][j] = 7;
+    }
+  }
+
+  for(Int_t i=8;i<16;i++) {
+    for(Int_t j=0;j<8;j++) {
+      CsImap[i][j] = 6;
+    }
+  }
+
+  for(Int_t i=16;i<24;i++) {
+    for(Int_t j=0;j<8;j++) {
+      CsImap[i][j] = 5;
+    }
+  } 
+
+  for(Int_t i=24;i<32;i++) {
+    for(Int_t j=0;j<8;j++) {
+      CsImap[i][j] = 4;
+    }
+  }
+
+//----------------------------------
+  for(Int_t i=0;i<8;i++) {
+    for(Int_t j=8;j<16;j++) {
+      CsImap[i][j] = 3;
+    }
+  }
+
+  for(Int_t i=8;i<16;i++) {
+    for(Int_t j=8;j<16;j++) {
+      CsImap[i][j] = 2;
+    }
+  }
+
+  for(Int_t i=16;i<24;i++) {
+    for(Int_t j=8;j<16;j++) {
+      CsImap[i][j] = 1;
+    }
+  } 
+
+  for(Int_t i=24;i<32;i++) {
+    for(Int_t j=8;j<16;j++) {
+      CsImap[i][j] = 0;
+    }
+  }
+//----------------------------------
+
+  for(Int_t i=0;i<8;i++) {
+    for(Int_t j=16;j<24;j++) {
+      CsImap[i][j] = 15;
+    }
+  }
+
+  for(Int_t i=8;i<16;i++) {
+    for(Int_t j=16;j<24;j++) {
+      CsImap[i][j] = 14;
+    }
+  }
+
+  for(Int_t i=16;i<24;i++) {
+    for(Int_t j=16;j<24;j++) {
+      CsImap[i][j] = 13;
+    }
+  } 
+
+  for(Int_t i=24;i<32;i++) {
+    for(Int_t j=16;j<24;j++) {
+      CsImap[i][j] = 12;
+    }
+  }
+//----------------------------------
+
+  for(Int_t i=0;i<8;i++) {
+    for(Int_t j=24;j<32;j++) {
+      CsImap[i][j] = 11;
+    }
+  }
+
+  for(Int_t i=8;i<16;i++) {
+    for(Int_t j=24;j<32;j++) {
+      CsImap[i][j] = 10;
+    }
+  }
+
+  for(Int_t i=16;i<24;i++) {
+    for(Int_t j=24;j<32;j++) {
+      CsImap[i][j] = 9;
+    }
+  } 
+
+  for(Int_t i=24;i<32;i++) {
+    for(Int_t j=24;j<32;j++) {
+      CsImap[i][j] = 8;
+    }
+  }
+//----------------------------------
 
 }

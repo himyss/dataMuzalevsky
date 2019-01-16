@@ -8,10 +8,13 @@ void tempfunc(TClonesArray *data);
 
 void fillCsI(ERQTelescopeCsIDigi *data);
 void fillSi(TClonesArray *data,Float_t* amp,Float_t* time,Float_t *par1,Float_t *par2);
+void fillarrayCsI(TClonesArray *data,Float_t* amp,Float_t* time);
 
 void fillF5(TClonesArray *data);
 void fillF3(TClonesArray *data);
 void fillMWPC(TClonesArray *data,Float_t *wire);
+
+
 
 void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16);
 
@@ -25,6 +28,8 @@ Float_t tMWPC;
 
 Int_t nCsI;
 Float_t aCsI,tCsI;
+
+Float_t arCsI[16],trCsI[16];
 
 Float_t DSDX_C[32],DSDY_C[32];
 Float_t tDSDX_C[32],tDSDY_C[32];
@@ -63,7 +68,7 @@ void convert() {
   //   ch->Add(inputName.Data());    
   // }
   // ch->Add("/media/user/work/data/Analysed1811/siParTests/digi/he8_07*");
-  ch->Add("/media/user/work/data/Analysed1811/siParTests/digi/he8_05*");
+  ch->Add("/media/user/work/data/Analysed1811/siParTests/digi/he8_*");
 
   cout << "Found " << ch->GetEntries() << " entries" << endl;
 
@@ -80,7 +85,6 @@ void convert() {
 
   readPar("DSDX_C",pDSDX_C1,pDSDX_C2,32);
   readPar("DSDY_C",pDSDY_C1,pDSDY_C2,32);
-  return;
 //--------------------------------------------------------------------------------
   ERBeamTimeEventHeader* header = new ERBeamTimeEventHeader();
 
@@ -143,7 +147,7 @@ void convert() {
 
   // Creating outfile,outtree
 
-  TFile *fw = new TFile("/media/user/work/data/Analysed1811/siParTests/analysed/he8_10_newnew_20Cal.root", "RECREATE");
+  TFile *fw = new TFile("/media/user/work/data/Analysed1811/he8_full_CsIarray.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("trigger",&trigger,"trigger/I");
@@ -162,6 +166,9 @@ void convert() {
   tw->Branch("aCsI.",&aCsI,"aCsI/F");
   tw->Branch("tCsI.",&tCsI,"tCsI/F");
   tw->Branch("nCsI.",&nCsI,"nCsI/I");
+
+  tw->Branch("arCsI",&arCsI,"arCsI[16]/F");
+  tw->Branch("trCsI",&trCsI,"trCsI[16]/F");
 
   tw->Branch("DSDX_C",&DSDX_C,"DSDX_C[32]/F");
   tw->Branch("tDSDX_C",&tDSDX_C,"tDSDX_C[32]/F");
@@ -184,7 +191,7 @@ void convert() {
   tw->Branch("tSSD_R",&tSSD_R,"tSSD_R[16]/F");
 
   for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) {
-  // for(Int_t nentry=0;nentry<100000;nentry++) {    
+  // for(Int_t nentry=0;nentry<1000;nentry++) {    
     if(nentry%100000==0) cout << "#Event " << nentry << "#" << endl;
     ch->GetEntry(nentry);
     flagCsI = kTRUE;
@@ -216,14 +223,16 @@ void convert() {
 
     
     m_CsI = processCsI(v_CsI); // kinda CsIClusters
-    // if(!flagCsI) {
-    //   continue;
-    // }
+    if(!flagCsI) {
+      continue;
+    }
+
 
     zeroVars();
 
     // // fill the vars
     trigger = header->GetTrigger();
+
 
 
     fillF5(v_F5);
@@ -236,17 +245,19 @@ void convert() {
     fillMWPC(v_MWPCy2,&wirey2);
 
     fillCsI(m_CsI);
-    fillSi(v_DSDY_C,DSDY_C,tDSDY_C,nullPtr,nullPtr); 
-    fillSi(v_DSDX_C,DSDX_C,tDSDX_C,nullPtr,nullPtr);   
+    fillarrayCsI(v_CsI,arCsI,trCsI);
+
+    fillSi(v_DSDY_C,DSDY_C,tDSDY_C,pDSDY_C1,pDSDY_C2); 
+    fillSi(v_DSDX_C,DSDX_C,tDSDX_C,pDSDX_C1,pDSDX_C2);   
 
     fillSi(v_DSDX_L,DSDX_L,tDSDX_L,pDSDX_L1,pDSDX_L2);
     fillSi(v_DSDY_L,DSDY_L,tDSDY_L,pDSDY_L1,pDSDY_L2);
     fillSi(v_SSD20_L,SSD20_L,tSSD20_L,pSQ20_L1,pSQ20_L2);
-    fillSi(v_SSD_L,SSD_L,tSSD_L,nullPtr,nullPtr);
+    fillSi(v_SSD_L,SSD_L,tSSD_L,pSSD_L1,pSSD_L2);
 
-    fillSi(v_SSD20_R,SSD20_R,tSSD20_R,nullPtr,nullPtr);
+    fillSi(v_SSD20_R,SSD20_R,tSSD20_R,pSQ20_R1,pSQ20_R2);
     fillSi(v_SSDY_R,SSDY_R,tSSDY_R,pSSDY_R1,pSSDY_R2);
-    fillSi(v_SSD_R,SSD_R,tSSD_R,nullPtr,nullPtr);
+    fillSi(v_SSD_R,SSD_R,tSSD_R,pSSD_R1,pSSD_R2);
 
     tw->Fill();
   }
@@ -275,6 +286,11 @@ void zeroVars() {
   nCsI = 0;
   aCsI = 0;
   tCsI = 0;
+
+  for(Int_t i=0;i<16;i++) {
+    arCsI[i] = 0;
+    trCsI[i] = 0;
+  }
 
   for(Int_t i=0;i<16;i++) {
     DSDX_L[i] = 0;
@@ -434,6 +450,20 @@ void fillSi(TClonesArray *data,Float_t* amp,Float_t* time,Float_t *par1,Float_t 
     if (!isCal) *(amp+nCh) = ((ERQTelescopeSiDigi*)data->At(i))->GetEdep();
     *(time+nCh) = ((ERQTelescopeSiDigi*)data->At(i))->GetTime();
   } 
+}
+
+void fillarrayCsI(TClonesArray *data,Float_t* amp,Float_t* time) {
+  if(!data) return;
+  if(data->GetEntriesFast()==0) return;
+
+  Int_t nCh;
+  for(Int_t i=0;i<data->GetEntriesFast();i++) {
+    nCh = ((ERQTelescopeCsIDigi*)data->At(i))->GetBlockNb();
+    *(amp+nCh) = ((ERQTelescopeCsIDigi*)data->At(i))->GetEdep();
+    *(time+nCh) = ((ERQTelescopeCsIDigi*)data->At(i))->GetTime();
+    // cout << nCh << " " << *(amp+nCh) << " " << *(time+nCh) << endl;
+  }
+  return;
 }
 
 void fillF5(TClonesArray *data){
