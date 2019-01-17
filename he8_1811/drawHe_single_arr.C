@@ -1,4 +1,4 @@
-void drawHe_single() {
+void drawHe_single_arr() {
   TChain *ch = new TChain("tree");
   // ch->Add("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut.root");
   ch->Add("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut_CsIarray.root");
@@ -6,28 +6,9 @@ void drawHe_single() {
     // ch->Add("/media/user/work/data/Analysed1811/selected/he8_10_selected.root");
   cout << ch->GetEntries() << endl;
   //--------------------------------------------------------------------------------
-  TLine *l1 = new TLine(20.69,1,20.69,2.5);
-  l1->SetLineColor(kRed);
-  l1->SetLineWidth(3);
-  TLine *l2 = new TLine(15,1.8,25,1.8);
-  l2->SetLineColor(kRed);
-  l2->SetLineWidth(3);
 
-  TLine *l3 = new TLine(7.22,2.5,7.22,3.5);
-  l3->SetLineColor(kRed);
-  l3->SetLineWidth(3);
-  TLine *l4 = new TLine(5,3.11,10,3.11);
-  l4->SetLineColor(kRed);
-  l4->SetLineWidth(3);
 
-  TLine *l5 = new TLine(29.01,1,29.01,2);
-  l5->SetLineColor(kRed);
-  l5->SetLineWidth(3);
-  TLine *l6 = new TLine(25,1.43,35,1.43);
-  l6->SetLineColor(kRed);
-  l6->SetLineWidth(3);
-
-  // --------------------------------------------------------------------------------
+  Bool_t usingtarget = kFALSE; 
   
   // gStyle->SetOptStat(0);
   // TCanvas *c2 = new TCanvas("c2","",1800,1000);  
@@ -116,7 +97,7 @@ void drawHe_single() {
 
 
 
-
+/*
   TCanvas *c1 = new TCanvas("c1","",1800,1000);  
   c1->Divide(4,4);
   // ch->SetMarkerStyle(20);
@@ -181,158 +162,184 @@ void drawHe_single() {
 
     c3->Update();
   }
-ch->SetMarkerColor(kRed);
-ch->SetMarkerStyle(7);
-ch->SetMarkerSize(2);
 
+*/
   TCanvas *c4 = new TCanvas("c4","",1800,1000);  
   c4->Divide(2,2);
   c4->cd(1);
   cut.Form("n20_L==1 && a20_L>0 && X_L>0 && flagLeft==1");
+  if (usingtarget) cut = cut + TString(" && nTarget==1");
+
   hDraw.Form("a20_L:X_L>>h%d_new(200,0,70,200,0,5)",6);
   ch->Draw(hDraw.Data(),cut.Data(),"col");
   c4->Update();
 
-    m1->Draw("same");
-    m2->Draw("same");
-    m3->Draw("same");
-    m4->Draw("same");
+  m1->Draw("same");
+  m2->Draw("same");
+  m3->Draw("same");
+  m4->Draw("same");
 
-    m10_1->Draw("same");
-    m10_2->Draw("same");
-    m10_3->Draw("same");
-    m10_4->Draw("same");
+  m10_1->Draw("same");
+  m10_2->Draw("same");
+  m10_3->Draw("same");
+  m10_4->Draw("same");
 
-    m20_1->Draw("same");
-    m20_2->Draw("same");
-    m20_3->Draw("same");
-    m20_4->Draw("same"); 
+  m20_1->Draw("same");
+  m20_2->Draw("same");
+  m20_3->Draw("same");
+  m20_4->Draw("same"); 
 
-c4->Update();
+  c4->Update();
   c4->cd(2);
   cut.Form("n20_L==2 && a20_L>0 && X_L>0 && flagLeft==1");
+  if (usingtarget) cut = cut + TString(" && nTarget==1");
+
   hDraw.Form("a20_L:X_L>>h%d_new(200,0,70,200,0,5)",7);
   ch->Draw(hDraw.Data(),cut.Data(),"col");
   c4->Update();
 
+  m1->Draw("same");
+  m2->Draw("same");
+  m3->Draw("same");
+  m4->Draw("same");
 
-    m1->Draw("same");
-    m2->Draw("same");
-    m3->Draw("same");
-    m4->Draw("same");
+  m10_1->Draw("same");
+  m10_2->Draw("same");
+  m10_3->Draw("same");
+  m10_4->Draw("same");
 
-    m10_1->Draw("same");
-    m10_2->Draw("same");
-    m10_3->Draw("same");
-    m10_4->Draw("same");
+  m20_1->Draw("same");
+  m20_2->Draw("same");
+  m20_3->Draw("same");
+  m20_4->Draw("same"); 
 
-    m20_1->Draw("same");
-    m20_2->Draw("same");
-    m20_3->Draw("same");
-    m20_4->Draw("same"); 
-
-c4->Update();
+  c4->Update();
   c4->cd(3);
   cut.Form("n20_L==9 && a20_L>0 && X_L>0 && flagLeft==1");
+  if (usingtarget) cut = cut + TString(" && nTarget==1");
+
   hDraw.Form("a20_L:X_L>>h%d_new(200,0,70,200,0,5)",10);
   ch->Draw(hDraw.Data(),cut.Data(),"col");
   c4->Update();
 
-    m1->Draw("same");
-    m2->Draw("same");
-    m3->Draw("same");
-    m4->Draw("same");
+  m1->Draw("same");
+  m2->Draw("same");
+  m3->Draw("same");
+  m4->Draw("same");
 
-    m10_1->Draw("same");
-    m10_2->Draw("same");
-    m10_3->Draw("same");
-    m10_4->Draw("same");
+  m10_1->Draw("same");
+  m10_2->Draw("same");
+  m10_3->Draw("same");
+  m10_4->Draw("same");
 
-    m20_1->Draw("same");
-    m20_2->Draw("same");
-    m20_3->Draw("same");
-    m20_4->Draw("same"); 
+  m20_1->Draw("same");
+  m20_2->Draw("same");
+  m20_3->Draw("same");
+  m20_4->Draw("same"); 
 
-c4->Update();
+  c4->Update();
   c4->cd(4);
   cut.Form("n20_L==10 && a20_L>0 && X_L>0 && flagLeft==1");
+  if (usingtarget) cut = cut + TString(" && nTarget==1");
+
   hDraw.Form("a20_L:X_L>>h%d_new(200,0,70,200,0,5)",11);
   ch->Draw(hDraw.Data(),cut.Data(),"col");
   c4->Update();
 
 
-    m1->Draw("same");
-    m2->Draw("same");
-    m3->Draw("same");
-    m4->Draw("same");
+  m1->Draw("same");
+  m2->Draw("same");
+  m3->Draw("same");
+  m4->Draw("same");
 
-    m10_1->Draw("same");
-    m10_2->Draw("same");
-    m10_3->Draw("same");
-    m10_4->Draw("same");
+  m10_1->Draw("same");
+  m10_2->Draw("same");
+  m10_3->Draw("same");
+  m10_4->Draw("same");
 
-    m20_1->Draw("same");
-    m20_2->Draw("same");
-    m20_3->Draw("same");
-    m20_4->Draw("same"); 
+  m20_1->Draw("same");
+  m20_2->Draw("same");
+  m20_3->Draw("same");
+  m20_4->Draw("same"); 
 
   c4->Update();
 
   ch->SetMarkerSize(0.7);
   ch->SetMarkerStyle(20);
 
- TCanvas *c5 = new TCanvas("c5","",1800,1000);  
+
+  ch->SetMarkerColor(kRed);
+  ch->SetMarkerStyle(20);
+  ch->SetMarkerSize(0.7);
+
+  TCanvas *c5 = new TCanvas("c5","",1800,1000);  
   c5->Divide(2,2);
   c5->cd(1);
   cut.Form("n20_L==1 && a20_L>0 && X_L>0 && flagLeft==1");
+  if (usingtarget) cut = cut + TString(" && nTarget==1");
+
   hDraw.Form("a20_L:X_L>>h1%d_new(200,0,70,200,0,5)",6);
   ch->Draw(hDraw.Data(),cut.Data(),"col");
   c5->Update();
 
   hDraw.Form("a20_L:X_L>>h_h3%d_new(200,0,70,200,0,5)",6);
-  cut.Form("nh3==1 && n20_L==1 && a20_L>0 && X_L>0 && flagLeft==1 && flagCent==1");
+  cut.Form("nh3==1 && n20_L==1 && a20_L>0 && X_L>0 && flagLeft==1 && flagCent_arr==1");
+  if (usingtarget) cut = cut + TString(" && nTarget==1");
+
   ch->Draw(hDraw.Data(),cut.Data(),"same");
   c5->Update();
 
 
-c5->Update();
+  c5->Update();
   c5->cd(2);
   cut.Form("n20_L==1 && a20_L>0 && X_L>0 && flagLeft==1");
+  if (usingtarget) cut = cut + TString(" && nTarget==1");
+
   hDraw.Form("a20_L:X_L>>h1%d_new(200,0,70,200,0,5)",7);
   ch->Draw(hDraw.Data(),cut.Data(),"col");
   c5->Update();
 
-hDraw.Form("a20_L:X_L>>h_h3%d_new(200,0,70,200,0,5)",7);
-cut.Form("nh3==1 && n20_L==2 && a20_L>0 && X_L>0 && flagLeft==1 && flagCent==1");
-ch->Draw(hDraw.Data(),cut.Data(),"same");
+  hDraw.Form("a20_L:X_L>>h_h3%d_new(200,0,70,200,0,5)",7);
+  cut.Form("nh3==1 && n20_L==2 && a20_L>0 && X_L>0 && flagLeft==1 && flagCent_arr==1");
+  if (usingtarget) cut = cut + TString(" && nTarget==1");
+
+  ch->Draw(hDraw.Data(),cut.Data(),"same");
   c5->Update();
 
 
 
-c5->Update();
+  c5->Update();
   c5->cd(3);
   cut.Form("n20_L==9 && a20_L>0 && X_L>0");
+  if (usingtarget) cut = cut + TString(" && nTarget==1");
+
   hDraw.Form("a20_L:X_L>>h1%d_new(200,0,70,200,0,5)",10);
   ch->Draw(hDraw.Data(),cut.Data(),"col");
   c5->Update();
 
-hDraw.Form("a20_L:X_L>>h_h3%d_new(200,0,70,200,0,5)",10);
-cut.Form("nh3==1 && n20_L==9 && a20_L>0 && X_L>0 && flagLeft==1 && flagCent==1");
-ch->Draw(hDraw.Data(),cut.Data(),"same");
+  hDraw.Form("a20_L:X_L>>h_h3%d_new(200,0,70,200,0,5)",10);
+  cut.Form("nh3==1 && n20_L==9 && a20_L>0 && X_L>0 && flagLeft==1 && flagCent_arr==1");
+  if (usingtarget) cut = cut + TString(" && nTarget==1");
+
+  ch->Draw(hDraw.Data(),cut.Data(),"same");
   c5->Update();
 
 
 
-c5->Update();
+  c5->Update();
   c5->cd(4);
   cut.Form("n20_L==10 && a20_L>0 && X_L>0");
+  if (usingtarget) cut = cut + TString(" && nTarget==1");
+
   hDraw.Form("a20_L:X_L>>h1%d_new(200,0,70,200,0,5)",11);
   ch->Draw(hDraw.Data(),cut.Data(),"col");
   c5->Update();
 
-hDraw.Form("a20_L:X_L>>h_h3%d_new(200,0,70,200,0,5)",11);
-cut.Form("nh3==1 && n20_L==10 && a20_L>0 && X_L>0 && flagLeft==1 && flagCent==1");
-ch->Draw(hDraw.Data(),cut.Data(),"same");
+  hDraw.Form("a20_L:X_L>>h_h3%d_new(200,0,70,200,0,5)",11);
+  cut.Form("nh3==1 && n20_L==10 && a20_L>0 && X_L>0 && flagLeft==1 && flagCent_arr==1");
+  if (usingtarget) cut = cut + TString(" && nTarget==1");
+
+  ch->Draw(hDraw.Data(),cut.Data(),"same");
   c5->Update();
 
 

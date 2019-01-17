@@ -1,31 +1,38 @@
-void drawCut(){
+void drawCut_arr(){
   
-  Bool_t tritium = kTRUE;
-  Bool_t tCsI = kFALSE;
+  Bool_t tritium = kFALSE;
   Bool_t tCsI_s = kFALSE;
+  Bool_t tCsI_s_s = kFALSE;
   Bool_t target = kFALSE;
-  Bool_t centtimes = kFALSE;
+  Bool_t centtimes = kTRUE;
   Bool_t sq20times = kFALSE;
   Bool_t X_Lcuts = kFALSE;
   Bool_t Y_Lcuts = kFALSE;
 
   TChain *ch = new TChain("tree");
   // ch->Add("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut.root");
-
   ch->Add("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut_CsIarray.root");
   
 
-  TCutG *cutCsI[16],*cut3h[16],*cutX_L[16],*cutY_L[16];
+  TCutG *cutCsI_s[16],*cut3h[16],*cutX_L[16],*cutY_L[16];
   TString cutName;
   TFile *f1;
 
   for(Int_t i=0;i<16;i++) {
-    // cutName.Form("/media/user/work/macro/exp201810/draw/cuts/CsI_%d.root",i);
+    // cutName.Form("/media/user/work/macro/exp201810/draw/cuts/CsI_s_%d.root",i);
     cutName.Form("/media/user/work/macro/he8_1811/tritonCuts/CsI_%d.root",i);
     f1 = new TFile(cutName.Data());
     cut3h[i] = (TCutG*)f1->Get("CUTG");
     delete f1;
   }
+
+  for(Int_t i=0;i<16;i++) {
+    cutName.Form("/media/user/work/macro/he8_1811/CsItimeCuts/CsI_%d.root",i);
+    f1 = new TFile(cutName.Data());
+    cutCsI_s[i] = (TCutG*)f1->Get("CUTG");
+    delete f1;
+  }
+
 
   for(Int_t i=0;i<16;i++) {
     cutName.Form("/media/user/work/macro/he8_1811/cutX_L/X_L_%d.root",i);
@@ -58,9 +65,9 @@ void drawCut(){
     c1->Divide(4,4);
     for(Int_t i=0;i<16;i++) {
       c1->cd(i+1);
-      cut.Form("nCsI==%d && flagCent==1",i);
-      // tree->Draw("DSDX_C:aCsI","nCsI==0","", 1004737, 0);
-      hdraw.Form("X_C.:aCsI>>h%d(300,0,5000,300,0,20)",i);
+      cut.Form("nCsI_s==%d && flagCent_arr==1",i);
+      // tree->Draw("DSDX_C:aCsI_s","nCsI_s==0","", 1004737, 0);
+      hdraw.Form("X_C.:aCsI_s>>h%d(300,0,5000,300,0,20)",i);
       ch->Draw(hdraw.Data(),cut.Data(),"col", 1004737, 0);
       cut3h[i]->SetLineColor(kRed);
       cut3h[i]->Draw("same");
@@ -69,22 +76,25 @@ void drawCut(){
 
     TCanvas *c2 = new TCanvas("c2","",1800,1000);  
     c2->cd();
-    ch->Draw("X_C.:aCsI>>h(300,0,5000,300,0,100)","nCsI==2","col", 1004737, 0);
+    ch->Draw("X_C.:aCsI_s>>h(300,0,5000,300,0,100)","nCsI_s==2","col", 1004737, 0);
     cut3h[2]->Draw("same");
     c2->Update();
   }
 
-  if (tCsI) {
+  if (tCsI_s) {
     TCanvas *c3 = new TCanvas("c3","",1800,1000);  
     c3->Divide(4,4);
     for(Int_t i=0;i<16;i++) {
       c3->cd(i+1);
-      cut.Form("nCsI==%d",i);
-      // tree->Draw("DSDX_C:aCsI","nCsI==0","", 1004737, 0);
-      hdraw.Form("aCsI:tCsI-tF5");
+      cut.Form("nCsI_s==%d",i);
+      // tree->Draw("DSDX_C:aCsI_s","nCsI_s==0","", 1004737, 0);
+      hdraw.Form("aCsI_s:tCsI_s-tF5");
       ch->Draw(hdraw.Data(),cut.Data(),"", 1004737, 0);
       ch->SetMarkerColor(kRed);
-      cut.Form("nCsI==%d && flagCent==1",i);
+      // cutCsI_s[i]->Draw("same");
+      // cutCsI_s[i]->SetLineColor(kRed);
+
+      cut.Form("nCsI_s==%d && flagCent_arr==1",i);
       ch->Draw(hdraw.Data(),cut.Data(),"same", 1004737, 0);
       ch->SetMarkerColor(kBlack);
       c3->Update();
@@ -109,14 +119,14 @@ void drawCut(){
     ch->SetMarkerColor(kBlack);  
     ch->Draw("X_C:tX_C - tF5","","", 1004737, 0);
     ch->SetMarkerColor(kRed);
-    ch->Draw("X_C:tX_C - tF5","timesDSDX_C==1","same", 1004737, 0);
+    // ch->Draw("X_C:tX_C - tF5","flagCent_arr==1","same", 1004737, 0);
     ch->SetMarkerColor(kBlack);
 
     c5->cd(2);
     ch->SetMarkerColor(kBlack);  
     ch->Draw("Y_C:tY_C - tF5","","", 1004737, 0);
     ch->SetMarkerColor(kRed);
-    ch->Draw("Y_C:tY_C - tF5","timesDSDY_C==1","same", 1004737, 0);
+    // ch->Draw("Y_C:tY_C - tF5","flagCent_arr==1","same", 1004737, 0);
     ch->SetMarkerColor(kBlack);
   }
 
@@ -126,7 +136,7 @@ void drawCut(){
     for(Int_t i=0;i<16;i++) {
       c6->cd(i+1);
       cut.Form("n20_L==%d",i);
-      // tree->Draw("DSDX_C:aCsI","nCsI==0","", 1004737, 0);
+      // tree->Draw("DSDX_C:aCsI_s","nCsI_s==0","", 1004737, 0);
       hdraw.Form("a20_L:t20_L-tF5");
       ch->Draw(hdraw.Data(),cut.Data(),"", 1004737, 0);
       ch->SetMarkerColor(kRed);
@@ -144,7 +154,7 @@ void drawCut(){
     for(Int_t i=0;i<16;i++) {
       c7->cd(i+1);
       // tX_L-tF5, X_L
-      // tree->Draw("DSDX_C:aCsI","nCsI==0","", 1004737, 0);
+      // tree->Draw("DSDX_C:aCsI_s","nCsI_s==0","", 1004737, 0);
       cut.Form("nX_L==%d",i);
       hdraw.Form("X_L:tX_L-tF5",i);
       ch->SetMarkerColor(kBlack);
@@ -160,7 +170,7 @@ void drawCut(){
     c8->Divide(4,4);
     for(Int_t i=0;i<16;i++) {
       c8->cd(i+1);
-      // tree->Draw("DSDX_C:aCsI","nCsI==0","", 1004737, 0);
+      // tree->Draw("DSDX_C:aCsI_s","nCsI_s==0","", 1004737, 0);
       cut.Form("nY_L==%d",i);
       hdraw.Form("Y_L:tY_L-tF5",i);
       ch->SetMarkerColor(kBlack);

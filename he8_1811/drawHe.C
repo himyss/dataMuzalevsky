@@ -1,6 +1,6 @@
 void drawHe() {
   TChain *ch = new TChain("tree");
-  ch->Add("/media/user/work/data/Analysed1811/siParTests/analysed/he8_10_new_selected_20Cal.root");
+  ch->Add("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut.root");
     // ch->Add("/media/user/work/data/Analysed1811/selected/he8_10_selected.root");
   cout << ch->GetEntries() << endl;
   //--------------------------------------------------------------------------------

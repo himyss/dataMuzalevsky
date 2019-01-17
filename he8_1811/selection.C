@@ -6,6 +6,7 @@ void MWPCprojection();
 Float_t GetPosition(Float_t wire, Float_t wireStep,Float_t planeOffset);
 
 void CsIselect();
+void CsIselect_arr();
 void DSD_Cselect();
 void SSD20_Lselect();
 void SSD20_Rselect();
@@ -13,11 +14,13 @@ void X_Lselect();
 void Y_Lselect();
 
 void fillSi();
+void fillCsI();
 
 void readThickness();
 void readCsImap();
 
 void coincidense();
+void coincidense_arr();
 //outtree vars
 Int_t trigger; 
 
@@ -58,12 +61,12 @@ Int_t CsImap[32][32];
 
 
 TCutG *cutCsI[16],*cut3h[16],*cutX_L[16],*cutY_L[16];
-Int_t nh3,nTarget,nHe8,nMWPC;
-Int_t flagLeft,flagCent;
+Int_t nh3,nh3_s,nTarget,nHe8,nMWPC;
+Int_t flagLeft,flagCent,flagCent_arr;
 
 void selection() {
   TChain *ch = new TChain("tree");
-  ch->Add("/media/user/work/data/Analysed1811/he8_full.root");
+  ch->Add("/media/user/work/data/Analysed1811/he8_full_CsIarray.root");
   // ch->Add("/media/user/work/data/Analysed1811/selected/profile.root");
   
   cout << ch->GetEntries() << endl;
@@ -151,7 +154,7 @@ void selection() {
   readCsImap();
 
 
-  TFile *fw = new TFile("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut.root", "RECREATE");
+  TFile *fw = new TFile("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut_CsIarray.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("trigger",&trigger,"trigger/I");
@@ -208,6 +211,7 @@ void selection() {
   tw->Branch("y2c",&y2c,"y2c/F"); 
 
   tw->Branch("nh3",&nh3,"nh3/I");
+  tw->Branch("nh3_s",&nh3_s,"nh3_s/I");
   // tw->Branch("nHe8",&nHe8,"nHe8/I");  
   // tw->Branch("nMWPC",&nMWPC,"nMWPC/I");  
   tw->Branch("nTarget",&nTarget,"nTarget/I");
@@ -220,15 +224,17 @@ void selection() {
   // tw->Branch("SQ20_L_flag",&SQ20_L_flag,"SQ20_L_flag/I");
   tw->Branch("flagLeft",&flagLeft,"flagLeft/I");
   tw->Branch("flagCent",&flagCent,"flagCent/I");
+  tw->Branch("flagCent_arr",&flagCent_arr,"flagCent_arr/I");
 
 
 
   for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
-  // for(Int_t nentry=0;nentry<1000000;nentry++) {     
+  // for(Int_t nentry=0;nentry<1000;nentry++) {     
     if(nentry%100000==0) cout << "#ENTRY " << nentry << "#" << endl;
 
     vetoFlag = 0;
     nh3 = 0;
+    nh3_s = 0;
     nMWPC = 0;
     nHe8 = 1;
     nTarget = 1;
@@ -238,6 +244,7 @@ void selection() {
     timesToF = kTRUE;
     flagLeft = 1;
     flagCent = 1;
+    flagCent_arr = 1;
 
     checkToF();
     if (timesToF) nHe8 = 1;
@@ -258,7 +265,11 @@ void selection() {
     zeroVars();
     fillSi();
 
-    if (aCsI>0) CsIselect();
+    fillCsI();
+    // if (nCsI || nCsI_s) cout << nCsI << " " << nCsI_s << endl;
+
+    CsIselect();
+    CsIselect_arr();
 
     DSD_Cselect();
 
@@ -268,6 +279,7 @@ void selection() {
     Y_Lselect();
 
     coincidense();
+    coincidense_arr();
 
     tw->Fill();
   }
@@ -303,9 +315,9 @@ void zeroVars() {
   n20_R = -1;
   nY_R = -1;
 
-  // nCsI = -1;
-  // aCsI = 0;
-  // tCsI=0;
+  nCsI_s = 0;
+  aCsI_s = 0;
+  tCsI_s = 0;
 } 
 
 void checkToF() {
@@ -417,29 +429,65 @@ cout << "thickness Right detector " << endl;
 
 
 void CsIselect() {
+  if (nCsI==9) {
+    flagCent = 0;
+    return; 
+  }
+
   // cout << " check " << endl;
   if(nCsI>-1 && nCsI!=9 && cutCsI[nCsI]->IsInside(tCsI-tF5, aCsI)) {
     return;
   }
   else {
     flagCent = 0; 
-    aCsI = 0;
-    nCsI = -1;
-    tCsI = 0;  
+    // aCsI = 0;
+    // nCsI = -1;
+    // tCsI = 0;  
     return; 
   }
 }  
+
+void CsIselect_arr() {
+
+  if (nCsI_s==9) {
+    flagCent_arr = 0;
+    return; 
+  }
+
+  // cout << " check " << endl;
+  if(nCsI_s>-1 && nCsI_s!=9 && cutCsI[nCsI_s]->IsInside(tCsI_s-tF5, aCsI_s)) {
+    return;
+  }
+  else {
+    flagCent_arr = 0;
+    // aCsI_s = 0;
+    // nCsI_s = -1;
+    // tCsI_s = 0;  
+    return; 
+  }
+}
+
+void fillCsI() {
+  Int_t crystN = CsImap[nX_C][nY_C];
+  if (crystN<0 || crystN>15) return; 
+  nCsI_s = crystN;
+  aCsI_s = arCsI[crystN];
+  tCsI_s = trCsI[crystN];
+  return;
+}
 
 void DSD_Cselect() {
 
   if ( (tX_C - tF5 < 80) || (tX_C - tF5 > 140)) {
     flagCent = 0;
+    flagCent_arr = 0;
     X_C = 0;
     nX_C = -1;
     tX_C = 0;
   }
   if ( (tY_C - tF5 < 80) || (tY_C - tF5 >140)){
     flagCent = 0;
+    flagCent_arr = 0;
     Y_C = 0;
     nY_C = -1;
     tY_C = 0;    
@@ -587,8 +635,20 @@ void coincidense() {
     nh3 = 0;
     return;
   }
-
 }
+
+void coincidense_arr() {
+
+  if(nCsI_s>-1 && nCsI_s!=9 && cut3h[nCsI_s]->IsInside(aCsI_s, X_C)) {
+    nh3_s = 1;
+    return;
+  }
+  else {
+    nh3_s = 0;
+    return;
+  }
+}
+
 
 void X_Lselect() {
   // cout << " check " << endl;
