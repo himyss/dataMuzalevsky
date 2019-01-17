@@ -4,17 +4,17 @@ void drawCut_arr(){
   Bool_t tCsI_s = kFALSE;
   Bool_t tCsI_s_s = kFALSE;
   Bool_t target = kFALSE;
-  Bool_t centtimes = kTRUE;
+  Bool_t centtimes = kFALSE;
   Bool_t sq20times = kFALSE;
   Bool_t X_Lcuts = kFALSE;
-  Bool_t Y_Lcuts = kFALSE;
+  Bool_t Y_Lcuts = kTRUE;
 
   TChain *ch = new TChain("tree");
   // ch->Add("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut.root");
   ch->Add("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut_CsIarray.root");
-  
+  cout << ch->GetEntries() << endl;
 
-  TCutG *cutCsI_s[16],*cut3h[16],*cutX_L[16],*cutY_L[16];
+  TCutG *cutCsI_s[16],*cut3h[16],*cutX_L[16],*cutY_L[16],*cutSQ20_L[16];
   TString cutName;
   TFile *f1;
 
@@ -56,6 +56,17 @@ void drawCut_arr(){
     delete f1;
   }
 
+  for(Int_t i=0;i<16;i++) {
+    cutName.Form("/media/user/work/macro/he8_1811/SQ20_Lcuts/sq20_L_%d.root",i);
+    f1 = new TFile(cutName.Data());
+    cutSQ20_L[i] = (TCutG*)f1->Get("CUTG");
+    if (!cutSQ20_L[i]) {
+      cout << i  << " no cut"<< endl;
+      return;
+    }
+    delete f1;
+  }
+
 
 
   TString cut,hdraw;
@@ -68,15 +79,15 @@ void drawCut_arr(){
       cut.Form("nCsI_s==%d && flagCent_arr==1",i);
       // tree->Draw("DSDX_C:aCsI_s","nCsI_s==0","", 1004737, 0);
       hdraw.Form("X_C.:aCsI_s>>h%d(300,0,5000,300,0,20)",i);
-      ch->Draw(hdraw.Data(),cut.Data(),"col", 1004737, 0);
+      ch->Draw(hdraw.Data(),cut.Data(),"col");
       cut3h[i]->SetLineColor(kRed);
       cut3h[i]->Draw("same");
       c1->Update();
     }
-
+    c1->Print("/home/user/Desktop/redmine/triton.png");
     TCanvas *c2 = new TCanvas("c2","",1800,1000);  
     c2->cd();
-    ch->Draw("X_C.:aCsI_s>>h(300,0,5000,300,0,100)","nCsI_s==2","col", 1004737, 0);
+    ch->Draw("X_C.:aCsI_s>>h(300,0,5000,300,0,100)","nCsI_s==2","col");
     cut3h[2]->Draw("same");
     c2->Update();
   }
@@ -99,6 +110,7 @@ void drawCut_arr(){
       ch->SetMarkerColor(kBlack);
       c3->Update();
     }
+    c3->Print("/home/user/Desktop/redmine/CsI_cuts.png");
   }
 
 
@@ -113,38 +125,104 @@ void drawCut_arr(){
 
   if (centtimes) {
     TCanvas *c5 = new TCanvas("c5","",1800,1000);
-    c5->Divide(1,2);
+    c5->Divide(4,4);
 
-    c5->cd(1);
-    ch->SetMarkerColor(kBlack);  
-    ch->Draw("X_C:tX_C - tF5","","", 1004737, 0);
-    ch->SetMarkerColor(kRed);
-    // ch->Draw("X_C:tX_C - tF5","flagCent_arr==1","same", 1004737, 0);
-    ch->SetMarkerColor(kBlack);
+    for(Int_t i=0;i<16;i++) {
+      c5->cd(i+1);
+// hdraw cutName
+      cutName.Form("nX_C==%d && tX_C - tF5>110 && tX_C - tF5<140",i);
+      ch->SetMarkerColor(kBlack);  
+      ch->Draw("X_C:tX_C - tF5",cutName.Data(),"");
+      ch->SetMarkerColor(kRed);
+      cutName = cutName + TString(" && flagCent_arr==1");
+      ch->Draw("X_C:tX_C - tF5",cutName.Data(),"same");
 
-    c5->cd(2);
-    ch->SetMarkerColor(kBlack);  
-    ch->Draw("Y_C:tY_C - tF5","","", 1004737, 0);
-    ch->SetMarkerColor(kRed);
-    // ch->Draw("Y_C:tY_C - tF5","flagCent_arr==1","same", 1004737, 0);
-    ch->SetMarkerColor(kBlack);
+      c5->Update();
+    }
+c5->Print("/home/user/Desktop/redmine/DSSD_C_cuts.png");
+    // c5->cd(1);
+    // ch->SetMarkerColor(kBlack);  
+    // ch->Draw("X_C:tX_C - tF5","","");
+    // ch->SetMarkerColor(kRed);
+    // ch->Draw("X_C:tX_C - tF5","flagCent_arr==1","same");
+    // ch->SetMarkerColor(kBlack);
+
+    // c5->cd(2);
+    // ch->SetMarkerColor(kBlack);  
+    // ch->Draw("Y_C:tY_C - tF5","","", 1004737, 0);
+    // ch->SetMarkerColor(kRed);
+    // ch->Draw("Y_C:tY_C - tF5","flagCent_arr==1","same");
+    // ch->SetMarkerColor(kBlack);
   }
 
   if (sq20times) {
+    // TCanvas *c6 = new TCanvas("c6","sq20_L times",1800,1000);
+    // c6->Divide(4,4);
+    // for(Int_t i=0;i<16;i++) {
+    //   c6->cd(i+1);
+    //   cut.Form("n20_L==%d && t20_L-tF5>0 && t20_L-tF5<150",i);
+    //   // tree->Draw("DSDX_C:aCsI_s","nCsI_s==0","", 1004737, 0);
+    //   hdraw.Form("a20_L:t20_L-tF5");
+    //   ch->Draw(hdraw.Data(),cut.Data(),"");
+    //   // ch->SetMarkerColor(kRed);
+    //   // cut.Form("n20_L==%d && flagLeft==1 && t20_L-tF5>40 && t20_L-tF5<100",i);
+    //   // ch->Draw(hdraw.Data(),cut.Data(),"same");
+    //   // ch->SetMarkerColor(kBlack);
+    //   c6->Update();
+    // }
+
+    // TCanvas *c7 = new TCanvas("c7","sq20_L times",1800,1000);
+    // // for(Int_t i=0;i<16;i++) 
+    // {
+    //   Int_t i = 3;
+    //   // c6->cd(i+1);
+    //   cut.Form("n20_L==%d",i);
+    //   // tree->Draw("DSDX_C:aCsI_s","nCsI_s==0","", 1004737, 0);
+    //   hdraw.Form("a20_L:t20_L-tF5");
+    //   ch->Draw(hdraw.Data(),cut.Data(),"");
+    //   // ch->SetMarkerColor(kRed);
+    //   // cut.Form("n20_L==%d && flagLeft==1 && t20_L-tF5>40 && t20_L-tF5<100",i);
+    //   // ch->Draw(hdraw.Data(),cut.Data(),"same");
+    //   // ch->SetMarkerColor(kBlack);
+    //   c7->Update();
+    // }
+
+
     TCanvas *c6 = new TCanvas("c6","sq20_L times",1800,1000);
     c6->Divide(4,4);
     for(Int_t i=0;i<16;i++) {
       c6->cd(i+1);
-      cut.Form("n20_L==%d",i);
+      cut.Form("n20_L==%d && t20_L-tF5>0 && t20_L-tF5<120",i);
       // tree->Draw("DSDX_C:aCsI_s","nCsI_s==0","", 1004737, 0);
-      hdraw.Form("a20_L:t20_L-tF5");
-      ch->Draw(hdraw.Data(),cut.Data(),"", 1004737, 0);
-      ch->SetMarkerColor(kRed);
-      cut.Form("n20_L==%d && SQ20_L_flag==1",i);
-      ch->Draw(hdraw.Data(),cut.Data(),"same", 1004737, 0);
-      ch->SetMarkerColor(kBlack);
+      hdraw.Form("a20_L:t20_L-tF5 >> hcol_%d(300,0,120,300,0,20)",i);
+      ch->Draw(hdraw.Data(),cut.Data(),"col");
+      cutSQ20_L[i]->SetLineColor(kRed);
+      cutSQ20_L[i]->Draw("same");
+      // ch->SetMarkerColor(kRed);
+      // cut.Form("n20_L==%d && flagLeft==1 && t20_L-tF5>40 && t20_L-tF5<100",i);
+      // ch->Draw(hdraw.Data(),cut.Data(),"same");
+      // ch->SetMarkerColor(kBlack);
       c6->Update();
     }
+c6->Print("/home/user/Desktop/redmine/SQ20_L_cuts.png");
+    // TCanvas *c9 = new TCanvas("c7","sq20_L times",1800,1000);
+    // // for(Int_t i=0;i<16;i++) 
+    // {
+    //   Int_t i = 3;
+    //   // c6->cd(i+1);
+    //   cut.Form("n20_L==%d",i);
+    //   // tree->Draw("DSDX_C:aCsI_s","nCsI_s==0","", 1004737, 0);
+    //   hdraw.Form("a20_L:t20_L-tF5 >> hcolSingle_%d(300,0,120,300,0,20)");
+    //   ch->Draw(hdraw.Data(),cut.Data(),"col");
+    //   // ch->SetMarkerColor(kRed);
+    //   // cut.Form("n20_L==%d && flagLeft==1 && t20_L-tF5>40 && t20_L-tF5<100",i);
+    //   // ch->Draw(hdraw.Data(),cut.Data(),"same");
+    //   // ch->SetMarkerColor(kBlack);
+    //   c9->Update();
+    // }
+
+
+
 
   }
 
@@ -155,14 +233,19 @@ void drawCut_arr(){
       c7->cd(i+1);
       // tX_L-tF5, X_L
       // tree->Draw("DSDX_C:aCsI_s","nCsI_s==0","", 1004737, 0);
-      cut.Form("nX_L==%d",i);
+      cut.Form("nX_L==%d && tX_L-tF5<200",i);
       hdraw.Form("X_L:tX_L-tF5",i);
       ch->SetMarkerColor(kBlack);
-      ch->Draw(hdraw.Data(),cut.Data(),"", 1004737, 0);
-
+      ch->Draw(hdraw.Data(),cut.Data(),"");
+      // ch->SetMarkerColor(kRed);
+      // cut.Form("nX_L==%d && flagLeft==1",i);
+      // ch->Draw(hdraw.Data(),cut.Data(),"same");
+      cutX_L[i]->SetLineColor(kRed);
+      cutX_L[i]->SetLineWidth(2);
       cutX_L[i]->Draw("same");
       c7->Update();
     }
+    c7->Print("/home/user/Desktop/redmine/X_L_cuts.png");
   }
 
   if (Y_Lcuts) {
@@ -171,13 +254,15 @@ void drawCut_arr(){
     for(Int_t i=0;i<16;i++) {
       c8->cd(i+1);
       // tree->Draw("DSDX_C:aCsI_s","nCsI_s==0","", 1004737, 0);
-      cut.Form("nY_L==%d",i);
+      cut.Form("nY_L==%d && tY_L-tF5<200",i);
       hdraw.Form("Y_L:tY_L-tF5",i);
       ch->SetMarkerColor(kBlack);
-      ch->Draw(hdraw.Data(),cut.Data(),"", 1004737, 0);
-      cutX_L[i]->Draw("same");
+      ch->Draw(hdraw.Data(),cut.Data(),"");
+      cutY_L[i]->SetLineColor(kRed);
+      cutY_L[i]->Draw("same");
       c8->Update();
     }
+    c8->Print("/home/user/Desktop/redmine/Y_L_cuts.png");
   }
 
 

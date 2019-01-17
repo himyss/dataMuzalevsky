@@ -6,40 +6,6 @@ void drawHe_single_arr() {
     // ch->Add("/media/user/work/data/Analysed1811/selected/he8_10_selected.root");
   cout << ch->GetEntries() << endl;
   //--------------------------------------------------------------------------------
-
-
-  Bool_t usingtarget = kFALSE; 
-  
-  // gStyle->SetOptStat(0);
-  // TCanvas *c2 = new TCanvas("c2","",1800,1000);  
-  // c2->Divide(4,4);
-  TString cut,hDraw;
-  // ch->SetMarkerStyle(20);
-  // ch->SetMarkerSize(0.6);
-  // // c1->cd(2);
-  // for(Int_t i=0;i<16;i++) {
-  // // {Int_t i=15;
-  //   c2->cd(i+1);
-  //   // cut.Form("nY_L==%d && n20_L==12 && nHe8==1 && nMWPC==1 && vetoFlag==0 && nTarget==0 && a20_L>0 && X_L>0 && t20_L-tF5<100",i);
-  //   cut.Form("nY_L==%d && n20_L==14 && nHe8==1 && nMWPC==1 && vetoFlag==0 && a20_L>0 && X_L>0 && t20_L-tF5<100",i);
-  //   hDraw.Form("a20_L:X_L>>h%d(300,0,70,300,0,5)",i);
-
-  //   // ch->SetMarkerColor(i+1);
-  //   ch->Draw(hDraw.Data(),cut.Data(),"");
-  //   // l1->Draw("same");
-  //   // l2->Draw("same");
-
-  //   // l3->Draw("same");
-  //   // l4->Draw("same");
-
-  //   // l5->Draw("same");
-  //   // l6->Draw("same");
-
-  //   // else ch->Draw(hDraw.Data(),cut.Data(),"same");
-  //   c2->Update();
-  // }
-
-  //--------------------------------------------------------------------------------
   gStyle->SetOptStat(0);
 
   // TString cut,hDraw;
@@ -96,8 +62,45 @@ void drawHe_single_arr() {
   m4->SetMarkerColor(kRed);
 
 
+  TString cut,hDraw;
+  Bool_t usingtarget = kFALSE; 
+  /*
+  gStyle->SetOptStat(0);
+  TCanvas *c2 = new TCanvas("c2","",1800,1000);  
+  c2->Divide(4,4);
+  
+  ch->SetMarkerStyle(20);
+  ch->SetMarkerSize(0.6);
+  // c1->cd(2);
+  for(Int_t i=0;i<16;i++) {
+  // {Int_t i=15;
+    c2->cd(i+1);
+    // cut.Form("nY_L==%d && n20_L==12 && nHe8==1 && nMWPC==1 && vetoFlag==0 && nTarget==0 && a20_L>0 && X_L>0 && t20_L-tF5<100",i);
+    cut.Form("nY_L==%d && n20_L==14 && flagLeft==1",i);
+    hDraw.Form("a20_L:X_L>>h%d(300,0,70,300,0,5)",i);
 
-/*
+    // ch->SetMarkerColor(i+1);
+    ch->Draw(hDraw.Data(),cut.Data(),"");
+    m1->Draw("same");
+    m2->Draw("same");
+    m3->Draw("same");
+    m4->Draw("same");
+
+    m10_1->Draw("same");
+    m10_2->Draw("same");
+    m10_3->Draw("same");
+    m10_4->Draw("same");
+
+    m20_1->Draw("same");
+    m20_2->Draw("same");
+    m20_3->Draw("same");
+    m20_4->Draw("same"); 
+
+    // else ch->Draw(hDraw.Data(),cut.Data(),"same");
+    c2->Update();
+  }*/
+
+  //--------------------------------------------------------------------------------
   TCanvas *c1 = new TCanvas("c1","",1800,1000);  
   c1->Divide(4,4);
   // ch->SetMarkerStyle(20);
@@ -108,11 +111,11 @@ void drawHe_single_arr() {
 
     c1->cd(i+1);
     // cut.Form("nY_L==%d && n20_L==12 && nHe8==1 && nMWPC==1 && vetoFlag==0 && nTarget==1 && a20_L>0 && X_L>0 && t20_L-tF5<100",i);
-    cut.Form("X_Ltimes==1 && Y_Ltimes==1&& n20_L==%d && nHe8==1 && nMWPC==1 && vetoFlag==0 && a20_L>0 && X_L>0 && t20_L-tF5<100",i);
+    cut.Form("flagLeft==1 && n20_L==%d",i);
     hDraw.Form("a20_L:X_L>>h%d(200,0,70,200,0,5)",i);
 
     // ch->SetMarkerColor(i+1);
-    // ch->Draw(hDraw.Data(),cut.Data(),"col");
+    ch->Draw(hDraw.Data(),cut.Data(),"col");
 
     m1->Draw("same");
     m2->Draw("same");
@@ -147,23 +150,23 @@ void drawHe_single_arr() {
 
     c3->cd(i+1);
     // cut.Form("nY_L==%d && n20_L==12 && nHe8==1 && nMWPC==1 && vetoFlag==0 && nTarget==1 && a20_L>0 && X_L>0 && t20_L-tF5<100",i);
-    cut.Form("timesCsI==1 && X_Ltimes==1 && Y_Ltimes==1&& n20_L==%d && nHe8==1 && nMWPC==1 && vetoFlag==0 && a20_L>0 && X_L>0 && t20_L-tF5<100",i);
+    cut.Form("flagLeft==1 && n20_L==%d",i);
     hDraw.Form("a20_L:X_L>>h1_%d(200,0,70,200,0,5)",i);
 
     // ch->SetMarkerColor(i+1);
-    // ch->Draw(hDraw.Data(),cut.Data(),"col");
+    ch->Draw(hDraw.Data(),cut.Data(),"col");
     c3->Update();
-    cut.Form("timesCsI==1 && nh3==1 && X_Ltimes==1 && Y_Ltimes==1 && n20_L==%d && nHe8==1 && nMWPC==1 && vetoFlag==0 && a20_L>0 && X_L>0 && t20_L-tF5<100",i);
+    cut.Form("nh3==1 && flagCent_arr==1 && flagLeft==1 && n20_L==%d",i);
     hDraw.Form("a20_L:X_L>>h_coin_%d(200,0,70,200,0,5)",i);
     ch->SetMarkerColor(kRed);
     ch->SetMarkerStyle(7);
-    // ch->Draw(hDraw.Data(),cut.Data(),"same");
+    ch->Draw(hDraw.Data(),cut.Data(),"same");
     ch->SetMarkerColor(kBlack);
 
     c3->Update();
   }
 
-*/
+/*
   TCanvas *c4 = new TCanvas("c4","",1800,1000);  
   c4->Divide(2,2);
   c4->cd(1);
@@ -346,5 +349,5 @@ void drawHe_single_arr() {
 
   c5->Update();
 
-  
+  */
 }

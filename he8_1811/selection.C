@@ -60,9 +60,11 @@ Double_t fThicknessLeft[16][16];
 Int_t CsImap[32][32];
 
 
-TCutG *cutCsI[16],*cut3h[16],*cutX_L[16],*cutY_L[16];
+TCutG *cutCsI[16],*cut3h[16],*cutX_L[16],*cutY_L[16],*cutSQ20_L[16];
 Int_t nh3,nh3_s,nTarget,nHe8,nMWPC;
 Int_t flagLeft,flagCent,flagCent_arr;
+
+Int_t number = 0;
 
 void selection() {
   TChain *ch = new TChain("tree");
@@ -144,6 +146,17 @@ void selection() {
     f2 = new TFile(cutName.Data());
     cutY_L[i] = (TCutG*)f2->Get("CUTG");
     if (!cutY_L[i]) {
+      cout << i  << " no cut"<< endl;
+      return;
+    }
+    delete f2;
+  }
+
+  for(Int_t i=0;i<16;i++) {
+    cutName.Form("/media/user/work/macro/he8_1811/SQ20_Lcuts/sq20_L_%d.root",i);
+    f2 = new TFile(cutName.Data());
+    cutSQ20_L[i] = (TCutG*)f2->Get("CUTG");
+    if (!cutSQ20_L[i]) {
       cout << i  << " no cut"<< endl;
       return;
     }
@@ -283,7 +296,7 @@ void selection() {
 
     tw->Fill();
   }
-
+  cout << number << endl;
   fw->cd();
   tw->Write();
   fw->Close();
@@ -370,7 +383,7 @@ Float_t GetPosition(Float_t wire, Float_t wireStep,
 
 void readThickness() {
   cout << "thickness Left detector " << endl;
-  TFile *f = new TFile("/media/user/work/macro/he8_1811/parameters/thicknessLeft.root","READ");
+  TFile *f = new TFile("/media/user/work/macro/he8_1811/parameters/thicknessLeft_new.root","READ");
   if (f->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -478,19 +491,19 @@ void fillCsI() {
 
 void DSD_Cselect() {
 
-  if ( (tX_C - tF5 < 80) || (tX_C - tF5 > 140)) {
+  if ( (tX_C - tF5 < 80) || (tX_C - tF5 > 135)) {
     flagCent = 0;
     flagCent_arr = 0;
-    X_C = 0;
-    nX_C = -1;
-    tX_C = 0;
+    // X_C = 0;
+    // nX_C = -1;
+    // tX_C = 0;
   }
-  if ( (tY_C - tF5 < 80) || (tY_C - tF5 >140)){
+  if ( (tY_C - tF5 < 123) || (tY_C - tF5 >135)){
     flagCent = 0;
     flagCent_arr = 0;
-    Y_C = 0;
-    nY_C = -1;
-    tY_C = 0;    
+    // Y_C = 0;
+    // nY_C = -1;
+    // tY_C = 0;    
   }
 
 }
@@ -550,11 +563,13 @@ void fillSi() {
     nY_L = nCh;    
   }
 
+
   count = 0;
   for(Int_t i=0;i<16;i++) {
     if (SSD20_L[i]>0 && tSSD20_L[i]>0){
       nCh = i;
       count++;
+      number++;
     } 
   }
   if(count==1) {
@@ -592,19 +607,28 @@ void fillSi() {
 }
 
 void SSD20_Lselect() {
-  if (t20_L-tF5<0 || t20_L-tF5>110) { //time cuts
+
+  if (n20_L>-1 && n20_L<16 && a20_L>0 && cutSQ20_L[n20_L]->IsInside(t20_L-tF5, a20_L)) {
+    
+    // a20_L = a20_L*20./fThicknessLeft[n20_L][nY_L];
+  }
+  else {
     flagLeft = 0;
-    t20_L = 0;
-    a20_L = 0;
-    n20_L = -1;
+  }
+
+  if (t20_L-tF5<40 || t20_L-tF5>110) { //time cuts
+    flagLeft = 0;
+    // t20_L = 0;
+    // a20_L = 0;
+    // n20_L = -1;
     return; 
   }
     // check if thickness if reasonable
   if (fThicknessLeft[n20_L][nY_L]<10 || fThicknessLeft[n20_L][nY_L] > 30) {
     flagLeft = 0;
-    t20_L = 0;
-    a20_L = 0;
-    n20_L = -1;
+    // t20_L = 0;
+    // a20_L = 0;
+    // n20_L = -1;
     return;
   }
   // cout << fThicknessLeft[n20_L][nY_L] << endl;
@@ -658,9 +682,9 @@ void X_Lselect() {
   }
   else {
     flagLeft = 0;
-    X_L = 0;
-    tX_L = 0;
-    nX_L = -1;  
+    // X_L = 0;
+    // tX_L = 0;
+    // nX_L = -1;  
   }
 
 
@@ -674,9 +698,9 @@ void Y_Lselect() {
   }
   else {
     flagLeft = 0;
-    Y_L = 0;
-    tY_L = 0;
-    nY_L = -1;    
+    // Y_L = 0;
+    // tY_L = 0;
+    // nY_L = -1;    
   }
 
 }
