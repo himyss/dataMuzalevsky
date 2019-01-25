@@ -21,6 +21,7 @@ void readCsImap();
 
 void coincidense();
 void coincidense_arr();
+void checkHe3();
 //outtree vars
 Int_t trigger; 
 
@@ -60,8 +61,8 @@ Double_t fThicknessLeft[16][16];
 Int_t CsImap[32][32];
 
 
-TCutG *cutCsI[16],*cut3h[16],*cutX_L[16],*cutY_L[16],*cutSQ20_L[16];
-Int_t nh3,nh3_s,nTarget,nHe8,nMWPC;
+TCutG *cutCsI[16],*cut3h[16],*cutX_L[16],*cutY_L[16],*cutSQ20_L[16],*cuthe3[16];
+Int_t nh3,nh3_s,nTarget,nHe8,nMWPC,nhe3;
 Int_t flagLeft,flagCent,flagCent_arr;
 
 Int_t number = 0;
@@ -70,6 +71,8 @@ void selection() {
   TChain *ch = new TChain("tree");
   ch->Add("/media/user/work/data/Analysed1811/he8_full_CsIarray.root");
   // ch->Add("/media/user/work/data/Analysed1811/selected/profile.root");
+  
+  // ch->Add("/media/user/work/data/Analysed1811/he8_alltriggers.root");
   
   cout << ch->GetEntries() << endl;
   //--------------------------------------------------------------------------------
@@ -163,11 +166,25 @@ void selection() {
     delete f2;
   }
 
+  for(Int_t i=0;i<16;i++) {
+    cutName.Form("/media/user/work/macro/he8_1811/he3_cut/he3_%d.root",i);
+    f2 = new TFile(cutName.Data());
+    cuthe3[i] = (TCutG*)f2->Get("CUTG");
+    if (!cuthe3[i]) {
+      cout << i  << " no cut"<< endl;
+      return;
+    }
+    delete f2;
+  }
+
+
   readThickness();
   readCsImap();
 
 
-  TFile *fw = new TFile("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut_CsIarray.root", "RECREATE");
+  // TFile *fw = new TFile("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut_Alltrigger.root", "RECREATE");
+  // TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_full_cut_CsIarray.root", "RECREATE");
+  TFile *fw = new TFile("test.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("trigger",&trigger,"trigger/I");
@@ -182,9 +199,7 @@ void selection() {
   tw->Branch("wirex2.",&wirex2,"wirex2/F");
   tw->Branch("wirey1.",&wirey1,"wirey1/F");
   tw->Branch("wirey2.",&wirey2,"wirey2/F");
-
-  tw->Branch("fXt.",&fXt,"fXt/F");
-  tw->Branch("fYt.",&fYt,"fYt/F");  
+ 
 
   tw->Branch("aCsI.",&aCsI,"aCsI/F");
   tw->Branch("tCsI.",&tCsI,"tCsI/F");
@@ -222,9 +237,13 @@ void selection() {
   tw->Branch("y1c",&y1c,"y1c/F");
   tw->Branch("x2c",&x2c,"x2c/F");
   tw->Branch("y2c",&y2c,"y2c/F"); 
+  tw->Branch("fXt.",&fXt,"fXt/F");
+  tw->Branch("fYt.",&fYt,"fYt/F"); 
 
   tw->Branch("nh3",&nh3,"nh3/I");
   tw->Branch("nh3_s",&nh3_s,"nh3_s/I");
+  tw->Branch("nhe3",&nhe3,"nhe3/I");
+  
   // tw->Branch("nHe8",&nHe8,"nHe8/I");  
   // tw->Branch("nMWPC",&nMWPC,"nMWPC/I");  
   tw->Branch("nTarget",&nTarget,"nTarget/I");
@@ -241,17 +260,22 @@ void selection() {
 
 
 
-  for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
-  // for(Int_t nentry=0;nentry<1000;nentry++) {     
+  // for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
+  for(Int_t nentry=0;nentry<1000;nentry++) {     
     if(nentry%100000==0) cout << "#ENTRY " << nentry << "#" << endl;
+
+
 
     vetoFlag = 0;
     nh3 = 0;
     nh3_s = 0;
+    nhe3 = 0;
     nMWPC = 0;
     nHe8 = 1;
     nTarget = 1;
     ch->GetEntry(nentry);
+
+
 
     timesMWPC = kTRUE;
     timesToF = kTRUE;
@@ -275,6 +299,7 @@ void selection() {
     MWPCprojection();
     if ( ((fXt+0.6)*(fXt+0.6) + (fYt+2.5)*(fYt+2.5))>8.5*8.5 ) nTarget = 0;
 
+
     zeroVars();
     fillSi();
 
@@ -293,6 +318,11 @@ void selection() {
 
     coincidense();
     coincidense_arr();
+    checkHe3();
+
+    // cout << x1c << " " << y1c << endl;
+    // cout << x2c << " " << y2c << endl;
+    // cout << fXt << " " << fYt << endl;
 
     tw->Fill();
   }
@@ -491,7 +521,7 @@ void fillCsI() {
 
 void DSD_Cselect() {
 
-  if ( (tX_C - tF5 < 80) || (tX_C - tF5 > 135)) {
+  if ( (tX_C - tF5 < 118) || (tX_C - tF5 > 135)) {
     flagCent = 0;
     flagCent_arr = 0;
     // X_C = 0;
@@ -608,6 +638,8 @@ void fillSi() {
 
 void SSD20_Lselect() {
 
+  a20_L = a20_L*20./fThicknessLeft[n20_L][nY_L];
+
   if (n20_L>-1 && n20_L<16 && a20_L>0 && cutSQ20_L[n20_L]->IsInside(t20_L-tF5, a20_L)) {
     
     // a20_L = a20_L*20./fThicknessLeft[n20_L][nY_L];
@@ -616,7 +648,7 @@ void SSD20_Lselect() {
     flagLeft = 0;
   }
 
-  if (t20_L-tF5<40 || t20_L-tF5>110) { //time cuts
+  if (t20_L-tF5<40 || t20_L-tF5>120) { //time cuts
     flagLeft = 0;
     // t20_L = 0;
     // a20_L = 0;
@@ -632,7 +664,6 @@ void SSD20_Lselect() {
     return;
   }
   // cout << fThicknessLeft[n20_L][nY_L] << endl;
-  a20_L = a20_L*20./fThicknessLeft[n20_L][nY_L];
   return;
 }
 
@@ -673,6 +704,16 @@ void coincidense_arr() {
   }
 }
 
+void checkHe3() {
+  if(nX_L>-1 && n20_L>-1 && cuthe3[n20_L]->IsInside(X_L, a20_L)) {
+    nhe3 = 1;
+    return;
+  }
+  else {
+    nhe3 = 0;
+    return;
+  }
+}
 
 void X_Lselect() {
   // cout << " check " << endl;

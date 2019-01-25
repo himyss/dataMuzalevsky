@@ -59,6 +59,10 @@ Float_t pSSD_L1[16],pSSD_L2[16];
 
 Float_t *nullPtr = NULL;
 
+//
+Int_t multX_L,mult20_L,multY_L;
+
+
 void convert() {
 
   TChain *ch = new TChain("er");
@@ -68,7 +72,10 @@ void convert() {
   //   ch->Add(inputName.Data());    
   // }
   // ch->Add("/media/user/work/data/Analysed1811/siParTests/digi/he8_07*");
-  ch->Add("/media/user/work/data/Analysed1811/siParTests/digi/he8_*");
+  ch->Add("/media/user/work/data/Analysed1811/digi/allTriggers/he8_*");
+  // ch->Add("/media/user/work/data/Analysed1811/digi/emptyTarget/he8_*");
+
+
 
   cout << "Found " << ch->GetEntries() << " entries" << endl;
 
@@ -147,7 +154,7 @@ void convert() {
 
   // Creating outfile,outtree
 
-  TFile *fw = new TFile("/media/user/work/data/Analysed1811/he8_full_CsIarray.root", "RECREATE");
+  TFile *fw = new TFile("/media/user/work/data/Analysed1811/test", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("trigger",&trigger,"trigger/I");
@@ -190,12 +197,20 @@ void convert() {
   tw->Branch("tSSDY_R",&tSSDY_R,"tSSDY_R[16]/F");
   tw->Branch("tSSD_R",&tSSD_R,"tSSD_R[16]/F");
 
-  for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) {
-  // for(Int_t nentry=0;nentry<1000;nentry++) {    
+  tw->Branch("multX_L.",&multX_L,"multX_L/I");
+  tw->Branch("mult20_L.",&mult20_L,"mult20_L/I");
+  tw->Branch("multY_L.",&multY_L,"multY_L/I");
+
+  // for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) {
+  for(Int_t nentry=0;nentry<1000000;nentry++) {    
     if(nentry%100000==0) cout << "#Event " << nentry << "#" << endl;
     ch->GetEntry(nentry);
     flagCsI = kTRUE;
-    if (header->GetTrigger()!=2 && header->GetTrigger()!=3) continue; 
+    if (header->GetTrigger()!=2) continue; 
+
+    multX_L = v_DSDX_L->GetEntries();
+    mult20_L = v_SSD20_L->GetEntries();
+    multY_L = v_DSDY_L->GetEntries();
 
     // if(v_MWPCx1->GetEntriesFast()==0) continue;
     // if(v_MWPCx2->GetEntriesFast()==0) continue;
