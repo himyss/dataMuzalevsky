@@ -12,7 +12,7 @@ void drawCut_arr(){
 
   TChain *ch = new TChain("tree");
   // ch->Add("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut.root");
-  ch->Add("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut_CsIarray.root");
+  ch->Add("/media/user/work/data/Analysed1811/selected/he8_full_cut_CsIarray.root");
   // ch->Add("/media/user/work/data/Analysed1811/selected/he8_full_cut_emptyTarget.root");
   // cout << ch->GetEntries() << endl;
 
@@ -295,13 +295,13 @@ void drawCut_arr(){
       // c6_single->cd(i+1);
       cut.Form("trigger==2 && n20_L==%d",i);
       // tree->Draw("DSDX_C:aCsI_s","nCsI_s==0","", 1004737, 0);
-      hdraw.Form("a20_L:t20_L-tF5 >> h_tsq20_signgle_%d(300,0,120,300,0,20)",i);
+      hdraw.Form("a20_L_uncorr:t20_L-tF5 >> h_tsq20_signgle_%d(300,0,120,300,0,20)",i);
       ch->Draw(hdraw.Data(),cut.Data(),"");
       cutSQ20_L[i]->SetLineColor(kRed);
       cutSQ20_L[i]->Draw("same");
 
       cut.Form("trigger==2 && n20_L==%d",i);
-      hdraw.Form("a20_L:t20_L-tF5 >> h_tsq20_signgle1_%d(300,0,120,300,0,20)",i);
+      hdraw.Form("a20_L_uncorr:t20_L-tF5 >> h_tsq20_signgle1_%d(300,0,120,300,0,20)",i);
       c6_single->cd(2);
       ch->Draw(hdraw.Data(),cut.Data(),"col");
       cutSQ20_L[i]->SetLineColor(kRed);

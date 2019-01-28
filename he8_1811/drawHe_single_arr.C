@@ -2,7 +2,7 @@ void drawHe_single_arr() {
   TChain *ch = new TChain("tree");
   // ch->Add("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut.root");
   // ch->Add("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut_CsIarray.root");
-  ch->Add("/media/user/work/data/Analysed1811/selected/he8_full_cut_CsIarray.root");
+  ch->Add("/media/user/work/data/Analysed1811/selected/he8_full_cut.root");
   
     // ch->Add("/media/user/work/data/Analysed1811/selected/he8_10_selected.root");
   cout << ch->GetEntries() << endl;
@@ -167,22 +167,22 @@ Int_t coinh7 = 0;
 Int_t tmpC;
 
   TCanvas *c3 = new TCanvas("c3","",1800,1000);  
-  // c3->Divide(4,4);
+  c3->Divide(4,4);
 
-  // for(Int_t i=0;i<16;i++) {
-  {Int_t i=13;
+  for(Int_t i=0;i<16;i++) {
+  // {Int_t i=13;
 
 
 
-    // c3->cd(i+1);
+    c3->cd(i+1);
     // cut.Form("nY_L==%d && n20_L==12 && nHe8==1 && nMWPC==1 && vetoFlag==0 && nTarget==1 && a20_L>0 && X_L>0 && t20_L-tF5<100",i);
-    cut.Form("nTarget==1 && flagLeft==1 && n20_L==%d",i);
+    cut.Form("flagLeft==1 && n20_L==%d",i);
     hDraw.Form("a20_L:X_L>>h1_%d(200,0,70,200,0,5)",i);
 
     // ch->SetMarkerColor(i+1);
-    ch->Draw(hDraw.Data(),cut.Data(),"");
+    ch->Draw(hDraw.Data(),cut.Data(),"col");
     c3->Update();
-    cut.Form("nhe3==1 && nTarget==1 && nh3==1 && flagCent_arr==1 && flagLeft==1 && n20_L==%d",i);
+    cut.Form("nhe3==1 && nh3==1 && flagCent==1 && flagLeft==1 && n20_L==%d",i);
     hDraw.Form("a20_L:X_L>>h_coin_%d(200,0,70,200,0,5)",i);
     ch->SetMarkerColor(kRed);
     ch->SetMarkerStyle(20);
@@ -211,7 +211,7 @@ Int_t tmpC;
 
     c3->Update();
   }
-  c3->Print("/home/user/Desktop/pictures/de-E_all_coincidence.png");
+  // c3->Print("/home/user/Desktop/pictures/de-E_all_coincidence.png");
   cout << coinh7 << " in total" << endl;
 
 /*

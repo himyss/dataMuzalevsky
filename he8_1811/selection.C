@@ -22,6 +22,15 @@ void readCsImap();
 void coincidense();
 void coincidense_arr();
 void checkHe3();
+
+// reconstruction
+
+void GetXYLeft();
+void GetXYCent();
+
+const Double_t angleLeft =  17.;
+const Double_t leftDistance = 180.;
+
 //outtree vars
 Int_t trigger; 
 
@@ -37,7 +46,7 @@ Float_t aCsI_s,tCsI_s;
 
 Float_t arCsI[16],trCsI[16];
 
-Float_t X_C,tX_C,Y_C,tY_C,X_L,Y_L,a20_L,tX_L,tY_L,t20_L,a20_R,Y_R,t20_R,tY_R;
+Float_t X_C,tX_C,Y_C,tY_C,X_L,Y_L,a20_L,tX_L,tY_L,t20_L,a20_R,Y_R,t20_R,tY_R,a20_L_uncorr;
 Int_t nX_C,nY_C,nX_L,nY_L,n20_L,n20_R,nY_R;
 //
 Float_t DSDX_C[32],DSDY_C[32];
@@ -49,9 +58,10 @@ Float_t SSD20_R[16],SSDY_R[16],SSD_R[16],tSSD20_R[16],tSSDY_R[16],tSSD_R[16];
 
 // reconstructed
 
-
 Float_t fXt,fYt;
 Float_t x1c, y1c, x2c, y2c;
+Float_t xLeft,yLeft,zLeft;
+Float_t xCent,yCent,zCent;
 // flags
 Bool_t timesToF,timesMWPC,vetoFlag;
 
@@ -69,8 +79,9 @@ Int_t number = 0;
 
 void selection() {
   TChain *ch = new TChain("tree");
-  ch->Add("/media/user/work/data/Analysed1811/he8_full_CsIarray.root");
-  // ch->Add("/media/user/work/data/Analysed1811/selected/profile.root");
+  // ch->Add("/media/user/work/data/Analysed1811/he8_full_CsIarray.root");
+
+  ch->Add("/media/user/work/data/Analysed1811/he8_alltriggers.root");
   
   // ch->Add("/media/user/work/data/Analysed1811/he8_alltriggers.root");
   
@@ -177,17 +188,15 @@ void selection() {
     delete f2;
   }
 
-
   readThickness();
   readCsImap();
 
-
   // TFile *fw = new TFile("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut_Alltrigger.root", "RECREATE");
-  // TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_full_cut_CsIarray.root", "RECREATE");
-  TFile *fw = new TFile("test.root", "RECREATE");
+  TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_full_cut.root", "RECREATE");
+  // TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_integral.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
-  tw->Branch("trigger",&trigger,"trigger/I");
+  tw->Branch("trigger.",&trigger,"trigger/I");
 
   tw->Branch("F5.",&F5,"F5/F");
   tw->Branch("tF5.",&tF5,"tF5/F");
@@ -200,7 +209,6 @@ void selection() {
   tw->Branch("wirey1.",&wirey1,"wirey1/F");
   tw->Branch("wirey2.",&wirey2,"wirey2/F");
  
-
   tw->Branch("aCsI.",&aCsI,"aCsI/F");
   tw->Branch("tCsI.",&tCsI,"tCsI/F");
   tw->Branch("nCsI.",&nCsI,"nCsI/I");
@@ -209,44 +217,53 @@ void selection() {
   tw->Branch("tCsI_s.",&tCsI_s,"tCsI_s/F");
   tw->Branch("nCsI_s.",&nCsI_s,"nCsI_s/I");
 
-  tw->Branch("X_C",&X_C,"X_C/F");
-  tw->Branch("nX_C",&nX_C,"nX_C/I");
-  tw->Branch("tX_C",&tX_C,"tX_C/F");
-  tw->Branch("Y_C",&Y_C,"Y_C/F");
-  tw->Branch("tY_C",&tY_C,"tY_C/F");
-  tw->Branch("nY_C",&nY_C,"nY_C/I");
+  tw->Branch("X_C.",&X_C,"X_C/F");
+  tw->Branch("nX_C.",&nX_C,"nX_C/I");
+  tw->Branch("tX_C.",&tX_C,"tX_C/F");
+  tw->Branch("Y_C.",&Y_C,"Y_C/F");
+  tw->Branch("tY_C.",&tY_C,"tY_C/F");
+  tw->Branch("nY_C.",&nY_C,"nY_C/I");
 
-  tw->Branch("X_L",&X_L,"X_L/F");
-  tw->Branch("Y_L",&Y_L,"Y_L/F");
-  tw->Branch("nY_L",&nY_L,"nY_L/I");
-  tw->Branch("nX_L",&nX_L,"nX_L/I");
-  tw->Branch("a20_L",&a20_L,"a20_L/F");
-  tw->Branch("n20_L",&n20_L,"n20_L/I");
-  tw->Branch("tX_L",&tX_L,"tX_L/F");
-  tw->Branch("tY_L",&tY_L,"tY_L/F");
-  tw->Branch("t20_L",&t20_L,"t20_L/F");
+  tw->Branch("X_L.",&X_L,"X_L/F");
+  tw->Branch("Y_L.",&Y_L,"Y_L/F");
+  tw->Branch("nY_L.",&nY_L,"nY_L/I");
+  tw->Branch("nX_L.",&nX_L,"nX_L/I");
+  tw->Branch("a20_L.",&a20_L,"a20_L/F");
+  tw->Branch("n20_L.",&n20_L,"n20_L/I");
+  tw->Branch("a20_L_uncorr.",&a20_L_uncorr,"a20_L_uncorr/F"); 
+  tw->Branch("tX_L.",&tX_L,"tX_L/F");
+  tw->Branch("tY_L.",&tY_L,"tY_L/F");
+  tw->Branch("t20_L.",&t20_L,"t20_L/F");
 
-  tw->Branch("a20_R",&a20_R,"a20_R/F");
-  tw->Branch("n20_R",&n20_R,"n20_R/I");
-  tw->Branch("Y_R",&Y_R,"Y_R/F");
-  tw->Branch("nY_R",&nY_R,"nY_R/I");
-  tw->Branch("t20_R",&t20_R,"t20_R/F");
-  tw->Branch("tY_R",&tY_R,"tY_R/F");
+  tw->Branch("a20_R.",&a20_R,"a20_R/F"); 
+  tw->Branch("n20_R.",&n20_R,"n20_R/I");
+  tw->Branch("Y_R.",&Y_R,"Y_R/F");
+  tw->Branch("nY_R.",&nY_R,"nY_R/I");
+  tw->Branch("t20_R.",&t20_R,"t20_R/F");
+  tw->Branch("tY_R.",&tY_R,"tY_R/F");
 
-  tw->Branch("x1c",&x1c,"x1c/F");
-  tw->Branch("y1c",&y1c,"y1c/F");
-  tw->Branch("x2c",&x2c,"x2c/F");
-  tw->Branch("y2c",&y2c,"y2c/F"); 
+  tw->Branch("x1c.",&x1c,"x1c/F");
+  tw->Branch("y1c.",&y1c,"y1c/F");
+  tw->Branch("x2c.",&x2c,"x2c/F");
+  tw->Branch("y2c.",&y2c,"y2c/F"); 
   tw->Branch("fXt.",&fXt,"fXt/F");
   tw->Branch("fYt.",&fYt,"fYt/F"); 
 
-  tw->Branch("nh3",&nh3,"nh3/I");
-  tw->Branch("nh3_s",&nh3_s,"nh3_s/I");
-  tw->Branch("nhe3",&nhe3,"nhe3/I");
+  tw->Branch("xLeft.",&xLeft,"xLeft/F");
+  tw->Branch("yLeft.",&yLeft,"yLeft/F");
+  tw->Branch("zLeft.",&zLeft,"zLeft/F");
+
+  tw->Branch("xCent.",&xCent,"xCent/F");
+  tw->Branch("yCent.",&yCent,"yCent/F");
+  tw->Branch("zCent.",&zCent,"zCent/F");
+
+  tw->Branch("nh3.",&nh3,"nh3/I");
+  tw->Branch("nh3_s.",&nh3_s,"nh3_s/I");
+  tw->Branch("nhe3.",&nhe3,"nhe3/I");
   
   // tw->Branch("nHe8",&nHe8,"nHe8/I");  
   // tw->Branch("nMWPC",&nMWPC,"nMWPC/I");  
-  tw->Branch("nTarget",&nTarget,"nTarget/I");
+  // tw->Branch("nTarget.",&nTarget,"nTarget/I");
   // tw->Branch("vetoFlag",&vetoFlag,"vetoFlag/I");
   // tw->Branch("timesCsI",&timesCsI,"timesCsI/I");
   // tw->Branch("timesDSDX_C",&timesDSDX_C,"timesDSDX_C/I");
@@ -254,17 +271,14 @@ void selection() {
   // tw->Branch("X_Ltimes",&X_Ltimes,"X_Ltimes/I");
   // tw->Branch("Y_Ltimes",&Y_Ltimes,"Y_Ltimes/I");
   // tw->Branch("SQ20_L_flag",&SQ20_L_flag,"SQ20_L_flag/I");
-  tw->Branch("flagLeft",&flagLeft,"flagLeft/I");
-  tw->Branch("flagCent",&flagCent,"flagCent/I");
-  tw->Branch("flagCent_arr",&flagCent_arr,"flagCent_arr/I");
+  tw->Branch("flagLeft.",&flagLeft,"flagLeft/I");
+  tw->Branch("flagCent.",&flagCent,"flagCent/I");
+  tw->Branch("flagCent_arr.",&flagCent_arr,"flagCent_arr/I");
 
 
-
-  // for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
-  for(Int_t nentry=0;nentry<1000;nentry++) {     
+  for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
+  // for(Int_t nentry=0;nentry<1000;nentry++) {     
     if(nentry%100000==0) cout << "#ENTRY " << nentry << "#" << endl;
-
-
 
     vetoFlag = 0;
     nh3 = 0;
@@ -274,7 +288,7 @@ void selection() {
     nHe8 = 1;
     nTarget = 1;
     ch->GetEntry(nentry);
-
+    if (trigger!=2) continue;
 
 
     timesMWPC = kTRUE;
@@ -297,8 +311,7 @@ void selection() {
     if(vetoFlag) continue; 
 
     MWPCprojection();
-    if ( ((fXt+0.6)*(fXt+0.6) + (fYt+2.5)*(fYt+2.5))>8.5*8.5 ) nTarget = 0;
-
+    if ( ((fXt+0.6)*(fXt+0.6) + (fYt+2.5)*(fYt+2.5))>8.5*8.5 ) continue;
 
     zeroVars();
     fillSi();
@@ -320,13 +333,17 @@ void selection() {
     coincidense_arr();
     checkHe3();
 
+    if (flagLeft) {
+      GetXYLeft();
+    }
+    if (flagCent) GetXYCent();
     // cout << x1c << " " << y1c << endl;
     // cout << x2c << " " << y2c << endl;
     // cout << fXt << " " << fYt << endl;
 
     tw->Fill();
   }
-  cout << number << endl;
+  // cout << number  << " number " << endl;
   fw->cd();
   tw->Write();
   fw->Close();
@@ -361,6 +378,17 @@ void zeroVars() {
   nCsI_s = 0;
   aCsI_s = 0;
   tCsI_s = 0;
+
+  xLeft = 0;
+  yLeft = 0;
+  zLeft = 0;
+
+  xCent = 0;
+  yCent = 0;
+  zCent = 0;
+
+  a20_L_uncorr = 0;
+
 } 
 
 void checkToF() {
@@ -409,6 +437,7 @@ Float_t GetPosition(Float_t wire, Float_t wireStep,
   //TODO: omit gRandom
   return (wire + gRandom->Uniform(-0.5, 0.5) + 0.5 - 16.)*wireStep + planeOffset;
 }
+
 
 
 void readThickness() {
@@ -599,7 +628,6 @@ void fillSi() {
     if (SSD20_L[i]>0 && tSSD20_L[i]>0){
       nCh = i;
       count++;
-      number++;
     } 
   }
   if(count==1) {
@@ -637,7 +665,7 @@ void fillSi() {
 }
 
 void SSD20_Lselect() {
-
+  a20_L_uncorr = a20_L;
   a20_L = a20_L*20./fThicknessLeft[n20_L][nY_L];
 
   if (n20_L>-1 && n20_L<16 && a20_L>0 && cutSQ20_L[n20_L]->IsInside(t20_L-tF5, a20_L)) {
@@ -648,13 +676,13 @@ void SSD20_Lselect() {
     flagLeft = 0;
   }
 
-  if (t20_L-tF5<40 || t20_L-tF5>120) { //time cuts
-    flagLeft = 0;
-    // t20_L = 0;
-    // a20_L = 0;
-    // n20_L = -1;
-    return; 
-  }
+  // if (t20_L-tF5<40 || t20_L-tF5>120) { //time cuts
+  //   flagLeft = 0;
+  //   // t20_L = 0;
+  //   // a20_L = 0;
+  //   // n20_L = -1;
+  //   return; 
+  // }
     // check if thickness if reasonable
   if (fThicknessLeft[n20_L][nY_L]<10 || fThicknessLeft[n20_L][nY_L] > 30) {
     flagLeft = 0;
@@ -727,7 +755,6 @@ void X_Lselect() {
     // tX_L = 0;
     // nX_L = -1;  
   }
-
 
 }
 
@@ -845,6 +872,33 @@ void readCsImap() {
       CsImap[i][j] = 8;
     }
   }
+}
 //----------------------------------
 
+void GetXYLeft() {
+
+  // coordinates in the system of detector
+  xLeft = 30. - nX_L*60./16;
+  yLeft = 30. - nY_L*60./16;
+  zLeft = 0;
+
+  // rotate the detector
+  xLeft = xLeft*cos(angleLeft*TMath::DegToRad());
+  zLeft = xLeft*sin(angleLeft*TMath::DegToRad());
+
+  // transfer the detector
+  xLeft = xLeft + leftDistance*sin(angleLeft*TMath::DegToRad());
+  zLeft = zLeft + leftDistance*cos(angleLeft*TMath::DegToRad());
+
+  return;
+}
+
+void GetXYCent() {
+
+  // coordinates in the system of detector
+  xCent = 32. - nX_C*64./32;
+  yCent = 32. - nY_C*64./32;
+  zCent = 280.;
+
+  return;
 }

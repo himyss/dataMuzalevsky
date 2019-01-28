@@ -1,7 +1,17 @@
 void readThickness();
+void setTables();
 
-TELoss f3HeSi;
-TELoss f3HSi;
+TELoss *f3HeSi;
+TELoss *f3HeMylar;
+TELoss *f3HeSteel;
+TELoss *f3HeTarget;
+
+TELoss *f3HSi;
+TELoss *f3HMylar;
+TELoss *f3HSteel;
+TELoss *f3HTarget;
+
+Float_t tF5,F5,tF3,F3;
 
 Float_t fXt,fYt;
 Float_t x1c, y1c, x2c, y2c;
@@ -24,30 +34,22 @@ Double_t thickness;
 Float_t leftE4,leftE24,leftEcal;
 Float_t centE;
 
-
+TVector3 dirLeft,dirCent;
+Double_t angleLeft,angleCent;
 //--------------------------------------------------------------------------------
 
 void calcEnergies() {
-  f3HeSi.SetEL(1, 2.321); // density in g/cm3
-  f3HeSi.AddEL(14., 28.086, 1);  //Z, mass
-  f3HeSi.SetZP(2., 3.);   //alphas, Z, A
-  f3HeSi.SetEtab(100000, 200.); // ?, MeV calculate ranges
-  f3HeSi.SetDeltaEtab(300);
 
-  f3HSi.SetEL(1, 2.321); // density in g/cm3
-  f3HSi.AddEL(14., 28.086, 1);  //Z, mass
-  f3HSi.SetZP(1., 3.);   //alphas, Z, A
-  f3HSi.SetEtab(100000, 200.); // ?, MeV calculate ranges
-  f3HSi.SetDeltaEtab(300);
-  //--------------------------------------------------------------------------------
-
-
- //--------------------------------------------------------------------------------
-
+  
   TChain *ch = new TChain("tree");
-  ch->Add("/media/user/work/data/Analysed1811/selected/he8_trigger2_cut.root");
+  ch->Add("/media/user/work/data/Analysed1811/selected/he8_full_cut.root");
   cout << ch->GetEntries() << " total number of Entries" << endl;
   //--------------------------------------------------------------------------------
+
+  ch->SetBranchAddress("F5.",&F5);
+  ch->SetBranchAddress("tF5.",&tF5);
+  ch->SetBranchAddress("F3.",&F3);
+  ch->SetBranchAddress("tF3.",&tF3);
 
   ch->SetBranchAddress("nh3.",&nh3);
   ch->SetBranchAddress("nh3_s.",&nh3_s);
@@ -60,6 +62,14 @@ void calcEnergies() {
   ch->SetBranchAddress("fXt.",&fXt);
   ch->SetBranchAddress("fYt.",&fYt); 
   
+  ch->SetBranchAddress("xLeft.",&xLeft);
+  ch->SetBranchAddress("yLeft.",&yLeft);
+  ch->SetBranchAddress("zLeft.",&zLeft);
+
+  ch->SetBranchAddress("xCent.",&xCent);
+  ch->SetBranchAddress("yCent.",&yCent);
+  ch->SetBranchAddress("zCent.",&zCent);
+
   ch->SetBranchAddress("X_L.",&X_L);
   ch->SetBranchAddress("Y_L.",&Y_L);
   ch->SetBranchAddress("nY_L.",&nY_L);
@@ -77,8 +87,13 @@ void calcEnergies() {
   ch->SetBranchAddress("flagCent.",&flagCent);
   ch->SetBranchAddress("flagCent_arr.",&flagCent_arr);
 
-  TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_reco.root", "RECREATE");
+  TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_reco_new.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
+
+  tw->Branch("F5.",&F5,"F5/F");
+  tw->Branch("tF5.",&tF5,"tF5/F");
+  tw->Branch("F3.",&F3,"F3/F");
+  tw->Branch("tF3.",&tF3,"tF3/F");
 
   tw->Branch("nh3.",&nh3,"nh3/I");
   tw->Branch("nh3_s.",&nh3_s,"nh3_s/I");
@@ -88,20 +103,48 @@ void calcEnergies() {
   tw->Branch("flagCent.",&flagCent,"flagCent/I");
   tw->Branch("flagCent_arr.",&flagCent_arr,"flagCent_arr/I");
 
+  tw->Branch("x1c.",&x1c,"x1c/F");
+  tw->Branch("y1c.",&y1c,"y1c/F");
+  tw->Branch("x2c.",&x2c,"x2c/F");
+  tw->Branch("y2c.",&y2c,"y2c/F"); 
+  tw->Branch("fXt.",&fXt,"fXt/F");
+  tw->Branch("fYt.",&fYt,"fYt/F"); 
+
+  tw->Branch("xLeft.",&xLeft,"xLeft/F");
+  tw->Branch("yLeft.",&yLeft,"yLeft/F");
+  tw->Branch("zLeft.",&zLeft,"zLeft/F");
+
+  tw->Branch("xCent.",&xCent,"xCent/F");
+  tw->Branch("yCent.",&yCent,"yCent/F");
+  tw->Branch("zCent.",&zCent,"zCent/F");
+
   tw->Branch("leftE4.",&leftE4,"leftE4/F");
   tw->Branch("leftE24.",&leftE24,"leftE24/F");
   tw->Branch("leftEcal.",&leftEcal,"leftEcal/F");
 
   tw->Branch("centE.",&centE,"centE/F");
 
-  // cout << f3HeSi.GetE0(5.,20.) << endl;
   readThickness();
+  setTables();
 
-// cout << f3HeSi.GetE0dE(10., 1500.) << endl;
-// return;
-  // for(Int_t nentry = 0; nentry<ch->GetEntries();nentry++) {
-  for(Int_t nentry = 0; nentry<1000;nentry++) {
+  // for(Int_t nentry = 0; nentry<1000;nentry++) {
+  for(Int_t nentry = 0; nentry<ch->GetEntries();nentry++) {
+    if(nentry%1000==0) cout << "#ENTRY " << nentry << "#" << endl;
+    // cout << nentry << endl;
     ch->GetEntry(nentry);
+
+    if (flagLeft==0 && flagCent==0) continue;
+    if (nhe3==0 && nh3==0) continue;
+
+    if(flagLeft) {
+      dirLeft.SetXYZ(xLeft-fXt, yLeft-fYt, zLeft);
+      angleLeft = dirLeft.Theta();
+    }
+
+    if(flagCent) {
+      dirCent.SetXYZ(xCent-fXt, yCent-fYt, zCent);
+      angleCent = dirCent.Theta();
+    }
 
     leftE4 = 0;
     leftE24 = 0;
@@ -110,36 +153,61 @@ void calcEnergies() {
 
     if(flagLeft && nhe3) {
       // Si
-      f3HeSi.SetEL(1, 2.321); // density in g/cm3
-      f3HeSi.AddEL(14., 28.086, 1);  //Z, mass
 
-      leftE24 = X_L + f3HeSi.GetE0(a20_L,24.);
+      leftE24 = f3HeSi->GetE0(X_L,23.); // 3 micron - DL in thick
 
-      thickness = fThicknessLeft[n20_L][nY_L] + 4.;
-      leftE4 = X_L + f3HeSi.GetE0(a20_L,thickness);
+      thickness = fThicknessLeft[n20_L][nY_L] + 3.; // 3 micron - DL in thick
+      leftE4 = f3HeSi->GetE0(X_L,thickness);
 
-      leftEcal = X_L + a20_L_uncorr;
+      leftEcal = f3HeSi->GetE0(X_L,4.) + a20_L_uncorr; // 4 micron - DL between thin and thick sensitive areas (DL thin about 1 mik)
+      // cout << leftE24 << endl;
 
       // mylar
-      f3HeSi.SetEL(1, 1.39); // density in g/cm3
-      f3HeSi.AddEL(6., 12.0096, 0.45);  //Z, mass
-      f3HeSi.AddEL(1., 1.00784, 0.36);
-      f3HeSi.AddEL(8., 15.99903, 0.19);
+      thickness = 3.5/cos(angleLeft);
+
+      leftE24 = f3HeMylar->GetE0(leftE24,thickness);
+      leftE4 = f3HeMylar->GetE0(leftE4,thickness);
+      leftEcal = f3HeMylar->GetE0(leftEcal,thickness);
+
+      // cout << leftE24 << endl;
 
       // steel
-      f3HeSi.SetEL(1, 8.0); // density in g/cm3
-      f3HeSi.AddEL(24., 51.9962, 0.07);  //Z, mass
-      f3HeSi.AddEL(26., 55.845, 0.74);  
-      f3HeSi.AddEL(28., 58.6934, 0.19);  
-      
+      thickness = 6./cos(angleLeft);
 
+      leftE24 = f3HeSteel->GetE0(leftE24,thickness);
+      leftE4 = f3HeSteel->GetE0(leftE4,thickness);
+      leftEcal = f3HeSteel->GetE0(leftEcal,thickness);
+      // cout << leftE24 << endl;
+
+      // deuterium target
+      thickness = 3000./cos(angleLeft);
+
+      leftE24 = f3HeTarget->GetE0(leftE24,thickness);
+      leftE4 = f3HeTarget->GetE0(leftE4,thickness);
+      leftEcal = f3HeTarget->GetE0(leftEcal,thickness);
+      // cout << leftE24 << endl;
     }
 
-    if(flagLeft && nh3) {
-      centE = X_C + f3HSi.GetE0dE(X_C, 1500.);
+    if(flagCent && nh3) {
+      // Si
+      thickness = 1500./cos(angleCent);
+      centE = f3HSi->GetE0dE(X_C, thickness);
+
+      // mylar
+      thickness = 3.5/cos(angleCent);
+      centE = f3HMylar->GetE0(centE,thickness);
+
+      // steel
+      thickness = 6./cos(angleCent);
+      centE = f3HSteel->GetE0(centE,thickness);
+
+      // deuterium target
+      thickness = 3000./cos(angleCent);
+      centE = f3HTarget->GetE0(centE,thickness);
+      // cout << centE << endl;
     }
 
-
+    tw->Fill();
   }
 
   fw->cd();
@@ -175,5 +243,84 @@ void readThickness() {
   }
   delete f;
 
+  return;
+}
+
+void setTables() {
+
+// Si
+  f3HeSi = new TELoss();
+  f3HeSi->SetEL(1, 2.321); // density in g/cm3
+  f3HeSi->AddEL(14., 28.086, 1);  //Z, mass
+  f3HeSi->SetZP(2., 3.);   //alphas, Z, A
+  f3HeSi->SetEtab(100000, 200.); // ?, MeV calculate ranges
+  f3HeSi->SetDeltaEtab(300);
+
+  // mylar
+  f3HeMylar = new TELoss();
+  f3HeMylar->SetEL(1, 1.39); // density in g/cm3
+  f3HeMylar->AddEL(6., 12.0096, 0.45);  //Z, mass
+  f3HeMylar->AddEL(1., 1.00784, 0.36);
+  f3HeMylar->AddEL(8., 15.99903, 0.19);
+  f3HeMylar->SetZP(2., 3.);   //alphas, Z, A
+  f3HeMylar->SetEtab(100000, 200.); // ?, MeV calculate ranges
+  f3HeMylar->SetDeltaEtab(300);
+
+  // steel
+  f3HeSteel = new TELoss();
+  f3HeSteel->SetEL(1, 8.0); // density in g/cm3
+  f3HeSteel->AddEL(24., 51.9962, 0.07);  //Z, mass
+  f3HeSteel->AddEL(26., 55.845, 0.74);  
+  f3HeSteel->AddEL(28., 58.6934, 0.19);
+  f3HeSteel->SetZP(2., 3.);   //alphas, Z, A
+  f3HeSteel->SetEtab(100000, 200.); // ?, MeV calculate ranges
+  f3HeSteel->SetDeltaEtab(300);
+
+  // deuterium target
+  f3HeTarget = new TELoss();
+  f3HeTarget->SetEL(1, 0.00090841); // density in g/cm3
+  f3HeTarget->AddEL(1., 2.0141017778, 1);  //Z, mass
+  f3HeTarget->SetZP(2., 3.);   //alphas, Z, A
+  f3HeTarget->SetEtab(100000, 200.); // ?, MeV calculate ranges
+  f3HeTarget->SetDeltaEtab(300);
+  //--------------------------------------------------------------------------------
+
+  // tritium
+// Si
+  f3HSi = new TELoss();
+  f3HSi->SetEL(1, 2.321); // density in g/cm3
+  f3HSi->AddEL(14., 28.086, 1);  //Z, mass
+  f3HSi->SetZP(1., 3.);   //alphas, Z, A
+  f3HSi->SetEtab(100000, 200.); // ?, MeV calculate ranges
+  f3HSi->SetDeltaEtab(300);
+
+  // mylar
+  f3HMylar = new TELoss();
+  f3HMylar->SetEL(1, 1.39); // density in g/cm3
+  f3HMylar->AddEL(6., 12.0096, 0.45);  //Z, mass
+  f3HMylar->AddEL(1., 1.00784, 0.36);
+  f3HMylar->AddEL(8., 15.99903, 0.19);
+  f3HMylar->SetZP(1., 3.);   //alphas, Z, A
+  f3HMylar->SetEtab(100000, 200.); // ?, MeV calculate ranges
+  f3HMylar->SetDeltaEtab(300);
+
+  // steel
+  f3HSteel = new TELoss();
+  f3HSteel->SetEL(1, 8.0); // density in g/cm3
+  f3HSteel->AddEL(24., 51.9962, 0.07);  //Z, mass
+  f3HSteel->AddEL(26., 55.845, 0.74);  
+  f3HSteel->AddEL(28., 58.6934, 0.19);
+  f3HSteel->SetZP(1., 3.);   //alphas, Z, A
+  f3HSteel->SetEtab(100000, 200.); // ?, MeV calculate ranges
+  f3HSteel->SetDeltaEtab(300);
+
+  // deuterium target
+  f3HTarget = new TELoss();
+  f3HTarget->SetEL(1, 0.00090841); // density in g/cm3
+  f3HTarget->AddEL(1., 2.0141017778, 1);  //Z, mass
+  f3HTarget->SetZP(1., 3.);   //alphas, Z, A
+  f3HTarget->SetEtab(100000, 200.); // ?, MeV calculate ranges
+  f3HTarget->SetDeltaEtab(300);
+  //--------------------------------------------------------------------------------
   return;
 }

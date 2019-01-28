@@ -1,18 +1,18 @@
 void drawCut(){
   
-  Bool_t tritium = kTRUE;
+  Bool_t tritium = kFALSE;
   Bool_t tCsI = kFALSE;
   Bool_t tCsI_s = kFALSE;
   Bool_t target = kFALSE;
   Bool_t centtimes = kFALSE;
-  Bool_t sq20times = kFALSE;
+  Bool_t sq20times = kTRUE;
   Bool_t X_Lcuts = kFALSE;
   Bool_t Y_Lcuts = kFALSE;
 
   TChain *ch = new TChain("tree");
   // ch->Add("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut.root");
 
-  ch->Add("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut_CsIarray.root");
+  ch->Add("/media/user/work/data/Analysed1811/selected/he8_full_cut_CsIarray.root");
   
 
   TCutG *cutCsI[16],*cut3h[16],*cutX_L[16],*cutY_L[16];
@@ -127,7 +127,7 @@ void drawCut(){
       c6->cd(i+1);
       cut.Form("n20_L==%d",i);
       // tree->Draw("DSDX_C:aCsI","nCsI==0","", 1004737, 0);
-      hdraw.Form("a20_L:t20_L-tF5");
+      hdraw.Form("a20_L_uncorr:t20_L-tF5");
       ch->Draw(hdraw.Data(),cut.Data(),"", 1004737, 0);
       ch->SetMarkerColor(kRed);
       cut.Form("n20_L==%d && SQ20_L_flag==1",i);

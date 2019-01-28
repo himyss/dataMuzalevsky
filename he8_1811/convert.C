@@ -154,7 +154,7 @@ void convert() {
 
   // Creating outfile,outtree
 
-  TFile *fw = new TFile("/media/user/work/data/Analysed1811/test", "RECREATE");
+  TFile *fw = new TFile("/media/user/work/data/Analysed1811/he8_alltriggers.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("trigger",&trigger,"trigger/I");
@@ -201,12 +201,12 @@ void convert() {
   tw->Branch("mult20_L.",&mult20_L,"mult20_L/I");
   tw->Branch("multY_L.",&multY_L,"multY_L/I");
 
-  // for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) {
-  for(Int_t nentry=0;nentry<1000000;nentry++) {    
+  for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) {
+  // for(Int_t nentry=0;nentry<1000000;nentry++) {    
     if(nentry%100000==0) cout << "#Event " << nentry << "#" << endl;
     ch->GetEntry(nentry);
     flagCsI = kTRUE;
-    if (header->GetTrigger()!=2) continue; 
+    // if (header->GetTrigger()!=2) continue; 
 
     multX_L = v_DSDX_L->GetEntries();
     mult20_L = v_SSD20_L->GetEntries();
@@ -224,17 +224,17 @@ void convert() {
     if (GetClusterMWPC(v_MWPCy1)!=1) continue;
     if (GetClusterMWPC(v_MWPCy2)!=1) continue;
     
-    if (GetClusterSi(v_DSDX_C)>1) continue;
-    if (GetClusterSi(v_DSDY_C)>1) continue;
+    // if (GetClusterSi(v_DSDX_C)>1) continue;
+    // if (GetClusterSi(v_DSDY_C)>1) continue;
 
-    if (GetClusterSi(v_SSD20_R)>1) continue;
-    if (GetClusterSi(v_SSDY_R)>1) continue;
-    if (GetClusterSi(v_SSD_R)>1) continue;
+    // if (GetClusterSi(v_SSD20_R)>1) continue;
+    // if (GetClusterSi(v_SSDY_R)>1) continue;
+    // if (GetClusterSi(v_SSD_R)>1) continue;
 
-    if (GetClusterSi(v_DSDX_L)>1) continue;
-    if (GetClusterSi(v_DSDY_L)>1) continue;
-    if (GetClusterSi(v_SSD20_L)>1) continue;
-    if (GetClusterSi(v_SSD_L)>1) continue;
+    // if (GetClusterSi(v_DSDX_L)>1) continue;
+    // if (GetClusterSi(v_DSDY_L)>1) continue;
+    // if (GetClusterSi(v_SSD20_L)>1) continue;
+    // if (GetClusterSi(v_SSD_L)>1) continue;
 
     
     m_CsI = processCsI(v_CsI); // kinda CsIClusters
@@ -247,8 +247,6 @@ void convert() {
 
     // // fill the vars
     trigger = header->GetTrigger();
-
-
 
     fillF5(v_F5);
     fillF3(v_F3);
