@@ -9,7 +9,6 @@ void CsIselect();
 void CsIselect_arr();
 void DSD_Cselect();
 void SSD20_Lselect();
-void SSD20_Rselect();
 void X_Lselect();
 void Y_Lselect();
 
@@ -19,12 +18,11 @@ void fillCsI();
 void readThickness();
 void readCsImap();
 
-void coincidense();
-void coincidense_arr();
+void triton();
+void triton_arr();
 void checkHe3();
 
 // reconstruction
-
 void GetXYLeft();
 void GetXYCent();
 
@@ -46,15 +44,14 @@ Float_t aCsI_s,tCsI_s;
 
 Float_t arCsI[16],trCsI[16];
 
-Float_t X_C,tX_C,Y_C,tY_C,X_L,Y_L,a20_L,tX_L,tY_L,t20_L,a20_R,Y_R,t20_R,tY_R,a20_L_uncorr;
-Int_t nX_C,nY_C,nX_L,nY_L,n20_L,n20_R,nY_R;
+Float_t X_C,tX_C,Y_C,tY_C,X_L,Y_L,a20_L,tX_L,tY_L,t20_L,a20_L_uncorr;
+Int_t nX_C,nY_C,nX_L,nY_L,n20_L;
 //
 Float_t DSDX_C[32],DSDY_C[32];
 Float_t tDSDX_C[32],tDSDY_C[32];
 
 Float_t DSDX_L[16],DSDY_L[16],SSD20_L[16],SSD_L[16],tDSDX_L[16],tDSDY_L[16],tSSD20_L[16],tSSD_L[16];
 
-Float_t SSD20_R[16],SSDY_R[16],SSD_R[16],tSSD20_R[16],tSSDY_R[16],tSSD_R[16];
 
 // reconstructed
 
@@ -120,13 +117,6 @@ void selection() {
   ch->SetBranchAddress("tDSDY_L",&tDSDY_L);
   ch->SetBranchAddress("tSSD20_L",&tSSD20_L);
   ch->SetBranchAddress("tSSD_L",&tSSD_L);
-  ch->SetBranchAddress("SSD20_R",&SSD20_R);
-  ch->SetBranchAddress("SSDY_R",&SSDY_R);
-  ch->SetBranchAddress("SSD_R",&SSD_R);
-  ch->SetBranchAddress("tSSD20_R",&tSSD20_R);
-  ch->SetBranchAddress("tSSDY_R",&tSSDY_R);
-  ch->SetBranchAddress("tSSD_R",&tSSD_R);
-
   TFile *f,*f1,*f2;
   TString cutName;
 
@@ -192,7 +182,8 @@ void selection() {
   readCsImap();
 
   // TFile *fw = new TFile("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut_Alltrigger.root", "RECREATE");
-  TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_full_cut.root", "RECREATE");
+  // TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_full_cut.root", "RECREATE");
+  TFile *fw = new TFile("test.root", "RECREATE");
   // TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_integral.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
@@ -235,13 +226,6 @@ void selection() {
   tw->Branch("tY_L.",&tY_L,"tY_L/F");
   tw->Branch("t20_L.",&t20_L,"t20_L/F");
 
-  tw->Branch("a20_R.",&a20_R,"a20_R/F"); 
-  tw->Branch("n20_R.",&n20_R,"n20_R/I");
-  tw->Branch("Y_R.",&Y_R,"Y_R/F");
-  tw->Branch("nY_R.",&nY_R,"nY_R/I");
-  tw->Branch("t20_R.",&t20_R,"t20_R/F");
-  tw->Branch("tY_R.",&tY_R,"tY_R/F");
-
   tw->Branch("x1c.",&x1c,"x1c/F");
   tw->Branch("y1c.",&y1c,"y1c/F");
   tw->Branch("x2c.",&x2c,"x2c/F");
@@ -261,89 +245,69 @@ void selection() {
   tw->Branch("nh3_s.",&nh3_s,"nh3_s/I");
   tw->Branch("nhe3.",&nhe3,"nhe3/I");
   
-  // tw->Branch("nHe8",&nHe8,"nHe8/I");  
-  // tw->Branch("nMWPC",&nMWPC,"nMWPC/I");  
-  // tw->Branch("nTarget.",&nTarget,"nTarget/I");
-  // tw->Branch("vetoFlag",&vetoFlag,"vetoFlag/I");
-  // tw->Branch("timesCsI",&timesCsI,"timesCsI/I");
-  // tw->Branch("timesDSDX_C",&timesDSDX_C,"timesDSDX_C/I");
-  // tw->Branch("timesDSDY_C",&timesDSDY_C,"timesDSDY_C/I");
-  // tw->Branch("X_Ltimes",&X_Ltimes,"X_Ltimes/I");
-  // tw->Branch("Y_Ltimes",&Y_Ltimes,"Y_Ltimes/I");
-  // tw->Branch("SQ20_L_flag",&SQ20_L_flag,"SQ20_L_flag/I");
   tw->Branch("flagLeft.",&flagLeft,"flagLeft/I");
   tw->Branch("flagCent.",&flagCent,"flagCent/I");
   tw->Branch("flagCent_arr.",&flagCent_arr,"flagCent_arr/I");
 
-
   for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
-  // for(Int_t nentry=0;nentry<1000;nentry++) {     
+  // for(Int_t nentry=0;nentry<5000000;nentry++) {     
     if(nentry%100000==0) cout << "#ENTRY " << nentry << "#" << endl;
 
-    vetoFlag = 0;
+
+    ch->GetEntry(nentry);
+    // if (trigger!=2) continue;
+
+    
     nh3 = 0;
     nh3_s = 0;
     nhe3 = 0;
-    nMWPC = 0;
-    nHe8 = 1;
-    nTarget = 1;
-    ch->GetEntry(nentry);
-    if (trigger!=2) continue;
-
-
     timesMWPC = kTRUE;
     timesToF = kTRUE;
+    vetoFlag = 0;
     flagLeft = 1;
     flagCent = 1;
     flagCent_arr = 1;
 
     checkToF();
-    if (timesToF) nHe8 = 1;
-    else continue;
+    // if (!timesToF) continue;
 
     cutMWPC();
-    if (timesMWPC) nMWPC = 1;
-    else continue;
+    if (!timesMWPC) continue;
 
     for(Int_t i=0;i<16;i++) {
       if(SSD_L[i]>0 && tSSD_L[i]>0) vetoFlag = 1;
     }
     if(vetoFlag) continue; 
 
-    MWPCprojection();
-    if ( ((fXt+0.6)*(fXt+0.6) + (fYt+2.5)*(fYt+2.5))>8.5*8.5 ) continue;
-
     zeroVars();
-    fillSi();
 
+    MWPCprojection();
+    // if ( ((fXt+0.6)*(fXt+0.6) + (fYt+2.5)*(fYt+2.5))>8.5*8.5 ) continue;
+
+    fillSi();
     fillCsI();
-    // if (nCsI || nCsI_s) cout << nCsI << " " << nCsI_s << endl;
 
     CsIselect();
     CsIselect_arr();
 
     DSD_Cselect();
-
     SSD20_Lselect();
-
     X_Lselect();
     Y_Lselect();
 
-    coincidense();
-    coincidense_arr();
-    checkHe3();
+    if(flagCent) {
+      triton();
+      triton_arr();
+      GetXYCent();
+    }
 
     if (flagLeft) {
+      checkHe3();
       GetXYLeft();
     }
-    if (flagCent) GetXYCent();
-    // cout << x1c << " " << y1c << endl;
-    // cout << x2c << " " << y2c << endl;
-    // cout << fXt << " " << fYt << endl;
 
     tw->Fill();
   }
-  // cout << number  << " number " << endl;
   fw->cd();
   tw->Write();
   fw->Close();
@@ -359,36 +323,36 @@ void zeroVars() {
   X_L = 0;
   Y_L = 0;
   a20_L = 0;
+  a20_L_uncorr = 0;
   tX_L = 0;
   tY_L = 0;
   t20_L = 0;
-  a20_R = 0;
-  Y_R = 0;
-  t20_R = 0;
-  tY_R = 0;
 
   nX_C = -1;
   nY_C = -1;
   nX_L = -1;
   nY_L = -1;
   n20_L = -1;
-  n20_R = -1;
-  nY_R = -1;
 
   nCsI_s = 0;
   aCsI_s = 0;
   tCsI_s = 0;
 
-  xLeft = 0;
-  yLeft = 0;
-  zLeft = 0;
+  xLeft = -50;
+  yLeft = -50;
+  zLeft = -50;
 
-  xCent = 0;
-  yCent = 0;
-  zCent = 0;
+  xCent = -50;
+  yCent = -50;
+  zCent = -50;
 
-  a20_L_uncorr = 0;
+  x1c = -50;
+  y1c = -50;
+  x2c = -50;
+  y2c = -50;
 
+  fXt = -100;
+  fYt = -100;
 } 
 
 void checkToF() {
@@ -409,8 +373,11 @@ void MWPCprojection() {
 
   const Float_t fMWPC1_X_offset = 0.;
   const Float_t fMWPC1_Y_offset = 0.;
-  const Float_t fMWPC2_X_offset = 1.1375;
-  const Float_t fMWPC2_Y_offset = 0.7125;
+  const Float_t fMWPC2_X_offset = 0;
+  const Float_t fMWPC2_Y_offset = 0;
+
+  // const Float_t fMWPC2_X_offset = 1.1375;
+  // const Float_t fMWPC2_Y_offset = -0.7125;
 
   const Float_t fMWPCz1 = -815.;  //z coordinate of the center of MWPC1
   const Float_t fMWPCz2 = -270.;  //z coordinate of the center of MWPC2
@@ -423,22 +390,22 @@ void MWPCprojection() {
   x2c = GetPosition(wirex2, fMWPCwireStepX2, fMWPC2_X_offset);
   y2c = GetPosition(wirey1, fMWPCwireStepY2, fMWPC2_Y_offset);
 
-  xtc = x1c - (x2c -x1c)*fMWPCz1/(fMWPCz2-fMWPCz1);
-  ytc = y1c - (y2c -y1c)*fMWPCz1/(fMWPCz2-fMWPCz1);
+  // xtc = x1c - (x2c -x1c)*fMWPCz1/(fMWPCz2-fMWPCz1);
+  // ytc = y1c - (y2c -y1c)*fMWPCz1/(fMWPCz2-fMWPCz1);
+
+  xtc = fMWPCz1*(x1c - x2c)/(fMWPCz2-fMWPCz1);
+  ytc = y1c + (y1c - y2c)*( (fMWPCz1/(fMWPCz2 - fMWPCz1)) + (x1c/(x2c-x1c)) );
 
   fXt = xtc;
   fYt = ytc;
-
 }
 
 Float_t GetPosition(Float_t wire, Float_t wireStep,
     Float_t planeOffset) {
   //TODO: number of wires (16) as parameter
   //TODO: omit gRandom
-  return (wire + gRandom->Uniform(-0.5, 0.5) + 0.5 - 16.)*wireStep + planeOffset;
+  return (wire + 0.5 - 16.)*wireStep + planeOffset;
 }
-
-
 
 void readThickness() {
   cout << "thickness Left detector " << endl;
@@ -635,33 +602,6 @@ void fillSi() {
     t20_L = tSSD20_L[nCh];
     n20_L = nCh;
   }
-
-  count = 0;
-  for(Int_t i=0;i<16;i++) {
-    if (SSD20_R[i]>0 && tSSD20_R[i]>0){
-      nCh = i;
-      count++;
-    } 
-  }
-  if(count==1) {
-    a20_R = SSD20_R[nCh];
-    t20_R = tSSD20_R[nCh];
-    n20_R = nCh;
-  }
-
-  count = 0;
-  for(Int_t i=0;i<16;i++) {
-    if (SSDY_R[i]>0 && tSSDY_R[i]>0){
-      nCh = i;
-      count++;
-    } 
-  }
-  if(count==1) {
-    Y_R = SSDY_R[nCh];
-    tY_R = tSSDY_R[nCh];
-    nY_R = nCh;
-  }
-
 }
 
 void SSD20_Lselect() {
@@ -695,20 +635,7 @@ void SSD20_Lselect() {
   return;
 }
 
-void SSD20_Rselect() {
-    // check if thickness if reasonable
-  if(fThicknessRight[n20_R][nY_R]<10 || fThicknessRight[n20_R][nY_R] > 30) {
-    a20_R = 0;
-    t20_R = 0;
-    n20_R = -1;
-    return;
-  }
-  // cout << fThicknessLeft[n20_L][nY_L] << endl;
-  a20_R = a20_R*20./fThicknessRight[n20_R][nY_R];
-  return;
-}
-
-void coincidense() {
+void triton() {
 
   if(nCsI>-1 && nCsI!=9 && cut3h[nCsI]->IsInside(aCsI, X_C)) {
     nh3 = 1;
@@ -720,7 +647,7 @@ void coincidense() {
   }
 }
 
-void coincidense_arr() {
+void triton_arr() {
 
   if(nCsI_s>-1 && nCsI_s!=9 && cut3h[nCsI_s]->IsInside(aCsI_s, X_C)) {
     nh3_s = 1;
@@ -876,7 +803,6 @@ void readCsImap() {
 //----------------------------------
 
 void GetXYLeft() {
-
   // coordinates in the system of detector
   xLeft = 30. - nX_L*60./16;
   yLeft = 30. - nY_L*60./16;
@@ -894,7 +820,6 @@ void GetXYLeft() {
 }
 
 void GetXYCent() {
-
   // coordinates in the system of detector
   xCent = 32. - nX_C*64./32;
   yCent = 32. - nY_C*64./32;

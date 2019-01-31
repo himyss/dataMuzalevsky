@@ -1,6 +1,8 @@
 void calculateBeam();
 void zerovars();
 
+TELoss f8HeSi;
+
 Float_t fXt,fYt;
 Float_t x1c, y1c, x2c, y2c;
 Float_t xLeft,yLeft,zLeft;
@@ -22,7 +24,9 @@ Int_t nh3,nh3_s,nhe3;
 Float_t leftE4,leftE24,leftEcal;
 Float_t centE;
 
-TLorentzVector h3,he8,d2,he3,h7,h3CM,he3CM,h7CM;
+TLorentzVector h3,he8,d2,he3,h7,h3CM;
+TLorentzVector he3CM,h7CM; // reaction CMS
+TLorentzVector he3CM_H7,h3CM_H7,h7CM_H7; // reaction CMS
 
 Double_t phi,theta;
 Double_t momentum,energy,mass;
@@ -31,12 +35,17 @@ Float_t thetah7,phih7,phih3,thetah3,phihe3,thetahe3;
 Float_t thetah7CM,phih7CM,phih3CM,thetah3CM,phihe3CM,thetahe3CM;
 Float_t mh7,eh7,eh3,ehe3,ehe8;
 
-Float_t angle_h3_h7,angle_h3_h7CM;
+Float_t angle_h3_h7,angle_h3_h7CM,angle_h3_h7CMreaction;
 Float_t qReaction;
 
-TVector3 bVect;
+TVector3 bVect,bVect_H7;
 
 void reco() {
+  f8HeSi.SetEL(1, 2.321); // density in g/cm3
+  f8HeSi.AddEL(14., 28.086, 1);  //Z, mass
+  f8HeSi.SetZP(2., 8.);   //alphas, Z, A
+  f8HeSi.SetEtab(100000, 200.); // ?, MeV calculate ranges
+  f8HeSi.SetDeltaEtab(300);
 
   TChain *ch = new TChain("tree");
   ch->Add("/media/user/work/data/Analysed1811/selected/he8_reco_new.root");
@@ -77,8 +86,7 @@ void reco() {
 
   ch->SetBranchAddress("centE.",&centE);
 
-
-  TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_missing_mass3.root", "RECREATE");
+  TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_missing_mass1.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("nh3.",&nh3,"nh3/I");
@@ -115,6 +123,7 @@ void reco() {
 
   tw->Branch("angle_h3_h7.",&angle_h3_h7,"angle_h3_h7/F");
   tw->Branch("angle_h3_h7CM.",&angle_h3_h7CM,"angle_h3_h7CM/F");
+  tw->Branch("angle_h3_h7CMreaction.",&angle_h3_h7CMreaction,"angle_h3_h7CMreaction/F");
 
   tw->Branch("h7.", "TLorentzVector", &h7);
   tw->Branch("h3.", "TLorentzVector", &h3);
@@ -136,7 +145,7 @@ void reco() {
     // cout << summVect.Px() << " " << bVect.Py() << " " << bVect.Pz() << endl;
 
     if (nhe3) {
-      energy = leftEcal/1000.;
+      energy = leftE4/1000.;
       mass = 2.808391;  //MeV
 
       TVector3 dir;
@@ -154,6 +163,7 @@ void reco() {
       ehe3 = he3.T() - mass;
 
       h7 = he8 + d2 + (-he3);
+      bVect_H7 = h7.BoostVector();
 
       thetah7 = h7.Theta()*TMath::RadToDeg();
       phih7 = h7.Phi()*TMath::RadToDeg();
@@ -170,6 +180,9 @@ void reco() {
       h7CM.Boost(-bVect); 
       thetah7CM = h7CM.Theta()*TMath::RadToDeg();
       phih7CM = h7CM.Phi()*TMath::RadToDeg();
+
+      h7CM_H7 = h7;
+      h7CM_H7.Boost(-bVect_H7);
     }
 
     if (nh3) {
@@ -189,17 +202,25 @@ void reco() {
       thetah3 = h3.Theta()*TMath::RadToDeg();
       phih3 = h3.Phi()*TMath::RadToDeg();
       eh3 = h3.T() - mass;
-
+      if (h3.T() == h3.Mag()) { 
+        cout << xCent << " " << yCent << " " << zCent << endl;
+        // cout << h3.T() << " " << h3.Mag() << " " << mass << endl;
+      }
       // CM
       h3CM = h3;
       h3CM.Boost(-bVect); 
       thetah3CM = h3CM.Theta()*TMath::RadToDeg();
       phih3CM = h3CM.Phi()*TMath::RadToDeg();
+
+      h3CM_H7 = h3;
+      h3CM_H7.Boost(-bVect_H7);
     } 
     
     if (nh3==1 && nhe3==1) {
+      angle_h3_h7CM = h7CM_H7.Angle(h3CM_H7.Vect())*TMath::RadToDeg();
       angle_h3_h7 = h7.Angle(h3.Vect())*TMath::RadToDeg(); 
-      angle_h3_h7CM = h7CM.Angle(h3CM.Vect())*TMath::RadToDeg(); 
+      angle_h3_h7CMreaction = h7CM.Angle(h3CM.Vect())*TMath::RadToDeg(); 
+
     }
 
     tw->Fill();
@@ -210,7 +231,10 @@ void reco() {
 return;
 }
 
+
+
 void calculateBeam() {
+
   TVector3 dir;
   dir.SetXYZ(fXt-x1c,fYt-y1c,815.);
   // dir.SetXYZ(x2c-x1c,y2c-y1c,545.);  
@@ -221,12 +245,16 @@ void calculateBeam() {
 
   mass = 7.482538;
 
-  Double_t velocity = 12320./(tF5-tF3 + 68.553);
+  Double_t velocity = 12320./(tF5-tF3 + 68.475);
   Double_t beta = sqrt(1 - (velocity*velocity/(299.792458*299.792458) ) );
   Double_t kinEnergy = mass*((1/beta) - 1);
 
-  kinEnergy = kinEnergy*0.95;
+  kinEnergy =  f8HeSi.GetE(1000*kinEnergy, 644.)/1000.;
+  // kinEnergy = kinEnergy*0.95;
   ehe8 = kinEnergy;
+
+  // kinEnergy = 0.1979;
+  // ehe8 = kinEnergy;
 
   momentum = sqrt(kinEnergy*kinEnergy + 2*kinEnergy*mass);
 
@@ -251,6 +279,7 @@ void zerovars() {
   thetah3CM = -1000.;
   phih3CM = -10000.;
   angle_h3_h7CM = -100000;
+  angle_h3_h7CMreaction = -100000;
   qReaction = -100.;
 
   mh7 = -1.;
@@ -265,4 +294,9 @@ void zerovars() {
   h3CM.SetXYZT(0,0,0,0);
   he3CM.SetXYZT(0,0,0,0);  
   bVect.SetXYZ(0,0,0);
+
+  bVect_H7.SetXYZ(0,0,0);
+  h3CM_H7.SetXYZT(0,0,0,0);
+  he3CM_H7.SetXYZT(0,0,0,0);
+  h7CM_H7.SetXYZT(0,0,0,0);
 }

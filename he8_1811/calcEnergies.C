@@ -45,11 +45,27 @@ void calcEnergies() {
   ch->Add("/media/user/work/data/Analysed1811/selected/he8_full_cut.root");
   cout << ch->GetEntries() << " total number of Entries" << endl;
   //--------------------------------------------------------------------------------
-
   ch->SetBranchAddress("F5.",&F5);
   ch->SetBranchAddress("tF5.",&tF5);
   ch->SetBranchAddress("F3.",&F3);
   ch->SetBranchAddress("tF3.",&tF3);
+ 
+  ch->SetBranchAddress("aCsI.",&aCsI);
+  // ch->SetBranchAddress("tCsI.",&tCsI);
+  ch->SetBranchAddress("nCsI.",&nCsI);
+
+  ch->SetBranchAddress("X_C.",&X_C);
+  ch->SetBranchAddress("nX_C.",&nX_C);
+  ch->SetBranchAddress("Y_C.",&Y_C);
+  ch->SetBranchAddress("nY_C.",&nY_C);
+
+  ch->SetBranchAddress("X_L.",&X_L);
+  ch->SetBranchAddress("Y_L.",&Y_L);
+  ch->SetBranchAddress("nY_L.",&nY_L);
+  ch->SetBranchAddress("nX_L.",&nX_L);
+  ch->SetBranchAddress("a20_L.",&a20_L);
+  ch->SetBranchAddress("n20_L.",&n20_L);
+  ch->SetBranchAddress("a20_L_uncorr.",&a20_L_uncorr); 
 
   ch->SetBranchAddress("nh3.",&nh3);
   ch->SetBranchAddress("nh3_s.",&nh3_s);
@@ -70,38 +86,38 @@ void calcEnergies() {
   ch->SetBranchAddress("yCent.",&yCent);
   ch->SetBranchAddress("zCent.",&zCent);
 
-  ch->SetBranchAddress("X_L.",&X_L);
-  ch->SetBranchAddress("Y_L.",&Y_L);
-  ch->SetBranchAddress("nY_L.",&nY_L);
-  ch->SetBranchAddress("nX_L.",&nX_L);
-  ch->SetBranchAddress("a20_L.",&a20_L);
-  ch->SetBranchAddress("n20_L.",&n20_L);
-  ch->SetBranchAddress("a20_L_uncorr.",&a20_L_uncorr); 
-
-  ch->SetBranchAddress("X_C.",&X_C);
-  ch->SetBranchAddress("nX_C.",&nX_C);
-  ch->SetBranchAddress("Y_C.",&Y_C);
-  ch->SetBranchAddress("nY_C.",&nY_C);
-
   ch->SetBranchAddress("flagLeft.",&flagLeft);
   ch->SetBranchAddress("flagCent.",&flagCent);
-  ch->SetBranchAddress("flagCent_arr.",&flagCent_arr);
-
-  TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_reco_new.root", "RECREATE");
+return;
+  // TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_reco_new.root", "RECREATE");
+  TFile *fw = new TFile("test.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("F5.",&F5,"F5/F");
   tw->Branch("tF5.",&tF5,"tF5/F");
   tw->Branch("F3.",&F3,"F3/F");
   tw->Branch("tF3.",&tF3,"tF3/F");
+ 
+  tw->Branch("aCsI.",&aCsI,"aCsI/I");
+  // ch->SetBranchAddress("tCsI.",&tCsI);
+  tw->Branch("nCsI.",&nCsI,"nCsI/I");
+
+  tw->Branch("X_C.",&X_C,"X_C/F");
+  tw->Branch("nX_C.",&nX_C,"nX_C/I");
+  tw->Branch("Y_C.",&Y_C,"Y_C/F");
+  tw->Branch("nY_C.",&nY_C),"nY_C/I";
+
+  tw->Branch("X_L.",&X_L,"X_L/F");
+  tw->Branch("Y_L.",&Y_L,"Y_L/F");
+  tw->Branch("nY_L.",&nY_L,"nY_L/I");
+  tw->Branch("nX_L.",&nX_L,"nY_L/I");
+  tw->Branch("a20_L.",&a20_L,"a20_L/F");
+  tw->Branch("n20_L.",&n20_L,"n20_L/I");
+  tw->Branch("a20_L_uncorr.",&a20_L_uncorr,"a20_L_uncorr/F"); 
 
   tw->Branch("nh3.",&nh3,"nh3/I");
   tw->Branch("nh3_s.",&nh3_s,"nh3_s/I");
   tw->Branch("nhe3.",&nhe3,"nhe3/I");
-
-  tw->Branch("flagLeft.",&flagLeft,"flagLeft/I");
-  tw->Branch("flagCent.",&flagCent,"flagCent/I");
-  tw->Branch("flagCent_arr.",&flagCent_arr,"flagCent_arr/I");
 
   tw->Branch("x1c.",&x1c,"x1c/F");
   tw->Branch("y1c.",&y1c,"y1c/F");
@@ -109,7 +125,7 @@ void calcEnergies() {
   tw->Branch("y2c.",&y2c,"y2c/F"); 
   tw->Branch("fXt.",&fXt,"fXt/F");
   tw->Branch("fYt.",&fYt,"fYt/F"); 
-
+  
   tw->Branch("xLeft.",&xLeft,"xLeft/F");
   tw->Branch("yLeft.",&yLeft,"yLeft/F");
   tw->Branch("zLeft.",&zLeft,"zLeft/F");
@@ -117,6 +133,9 @@ void calcEnergies() {
   tw->Branch("xCent.",&xCent,"xCent/F");
   tw->Branch("yCent.",&yCent,"yCent/F");
   tw->Branch("zCent.",&zCent,"zCent/F");
+
+  tw->Branch("flagLeft.",&flagLeft,"flagLeft/I");
+  tw->Branch("flagCent.",&flagCent,"flagCent/I");
 
   tw->Branch("leftE4.",&leftE4,"leftE4/F");
   tw->Branch("leftE24.",&leftE24,"leftE24/F");
@@ -278,7 +297,7 @@ void setTables() {
 
   // deuterium target
   f3HeTarget = new TELoss();
-  f3HeTarget->SetEL(1, 0.00090841); // density in g/cm3
+  f3HeTarget->SetEL(1, 0.0018431); // density in g/cm3
   f3HeTarget->AddEL(1., 2.0141017778, 1);  //Z, mass
   f3HeTarget->SetZP(2., 3.);   //alphas, Z, A
   f3HeTarget->SetEtab(100000, 200.); // ?, MeV calculate ranges
@@ -316,7 +335,7 @@ void setTables() {
 
   // deuterium target
   f3HTarget = new TELoss();
-  f3HTarget->SetEL(1, 0.00090841); // density in g/cm3
+  f3HTarget->SetEL(1, 0.0018431); // density in g/cm3
   f3HTarget->AddEL(1., 2.0141017778, 1);  //Z, mass
   f3HTarget->SetZP(1., 3.);   //alphas, Z, A
   f3HTarget->SetEtab(100000, 200.); // ?, MeV calculate ranges

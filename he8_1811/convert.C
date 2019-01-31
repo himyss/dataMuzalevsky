@@ -14,8 +14,6 @@ void fillF5(TClonesArray *data);
 void fillF3(TClonesArray *data);
 void fillMWPC(TClonesArray *data,Float_t *wire);
 
-
-
 void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16);
 
 //outtree vars
@@ -154,7 +152,8 @@ void convert() {
 
   // Creating outfile,outtree
 
-  TFile *fw = new TFile("/media/user/work/data/Analysed1811/he8_alltriggers.root", "RECREATE");
+  // TFile *fw = new TFile("/media/user/work/data/Analysed1811/he8_alltriggers.root", "RECREATE");
+  TFile *fw = new TFile("test.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("trigger",&trigger,"trigger/I");
@@ -197,20 +196,12 @@ void convert() {
   tw->Branch("tSSDY_R",&tSSDY_R,"tSSDY_R[16]/F");
   tw->Branch("tSSD_R",&tSSD_R,"tSSD_R[16]/F");
 
-  tw->Branch("multX_L.",&multX_L,"multX_L/I");
-  tw->Branch("mult20_L.",&mult20_L,"mult20_L/I");
-  tw->Branch("multY_L.",&multY_L,"multY_L/I");
-
   for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) {
-  // for(Int_t nentry=0;nentry<1000000;nentry++) {    
+  // for(Int_t nentry=0;nentry<1000;nentry++) {    
     if(nentry%100000==0) cout << "#Event " << nentry << "#" << endl;
     ch->GetEntry(nentry);
     flagCsI = kTRUE;
     // if (header->GetTrigger()!=2) continue; 
-
-    multX_L = v_DSDX_L->GetEntries();
-    mult20_L = v_SSD20_L->GetEntries();
-    multY_L = v_DSDY_L->GetEntries();
 
     // if(v_MWPCx1->GetEntriesFast()==0) continue;
     // if(v_MWPCx2->GetEntriesFast()==0) continue;
@@ -241,7 +232,6 @@ void convert() {
     if(!flagCsI) {
       continue;
     }
-
 
     zeroVars();
 
@@ -290,10 +280,10 @@ void zeroVars() {
   F3 = 0;
   tF3 = 0;
 
-  wirex1 = -10;
-  wirex2 = -10;
-  wirey1 = -10;
-  wirey2 = -10;
+  wirex1 = -100;
+  wirex2 = -100;
+  wirey1 = -100;
+  wirey2 = -100;
   tMWPC = 0;
 
   nCsI = 0;
@@ -404,7 +394,9 @@ Int_t GetClusterMWPC(TClonesArray *data) {
 
     //todo number 32 is related to number of wires
     // and should be taken from Parameters
-    if ( abs(wire1 - wire2) > 1 && abs(wire1 - wire2) < 32) noclusters++;
+    if ( abs(wire1 - wire2) > 1 && abs(wire1 - wire2) < 32) {
+      noclusters++;
+    }
   }
 
   return noclusters;
