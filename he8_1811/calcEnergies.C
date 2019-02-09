@@ -40,7 +40,6 @@ Double_t angleLeft,angleCent;
 
 void calcEnergies() {
 
-  
   TChain *ch = new TChain("tree");
   ch->Add("/media/user/work/data/Analysed1811/selected/he8_full_cut.root");
   cout << ch->GetEntries() << " total number of Entries" << endl;
@@ -88,9 +87,9 @@ void calcEnergies() {
 
   ch->SetBranchAddress("flagLeft.",&flagLeft);
   ch->SetBranchAddress("flagCent.",&flagCent);
-return;
-  // TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_reco_new.root", "RECREATE");
-  TFile *fw = new TFile("test.root", "RECREATE");
+
+  TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_reco.root", "RECREATE");
+  // TFile *fw = new TFile("test.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("F5.",&F5,"F5/F");

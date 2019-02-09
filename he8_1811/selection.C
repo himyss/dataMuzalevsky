@@ -182,8 +182,8 @@ void selection() {
   readCsImap();
 
   // TFile *fw = new TFile("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut_Alltrigger.root", "RECREATE");
-  // TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_full_cut.root", "RECREATE");
-  TFile *fw = new TFile("test.root", "RECREATE");
+  TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_full_cut.root", "RECREATE");
+  // TFile *fw = new TFile("test1.root", "RECREATE");
   // TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_integral.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
@@ -249,15 +249,19 @@ void selection() {
   tw->Branch("flagCent.",&flagCent,"flagCent/I");
   tw->Branch("flagCent_arr.",&flagCent_arr,"flagCent_arr/I");
 
+  // tw->Branch("nTarget.",&nTarget,"nTarget/I");
+
+  Float_t xCent,yCent;
+  xCent = -1.;
+  yCent = 2.2;
+
   for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
-  // for(Int_t nentry=0;nentry<5000000;nentry++) {     
+  // for(Int_t nentry=0;nentry<1000000;nentry++) {     
     if(nentry%100000==0) cout << "#ENTRY " << nentry << "#" << endl;
-
-
+    // cout << "###ENTRY " << nentry << "###" << endl;
     ch->GetEntry(nentry);
-    // if (trigger!=2) continue;
+    if (trigger!=2) continue;
 
-    
     nh3 = 0;
     nh3_s = 0;
     nhe3 = 0;
@@ -269,7 +273,7 @@ void selection() {
     flagCent_arr = 1;
 
     checkToF();
-    // if (!timesToF) continue;
+    if (!timesToF) continue;
 
     cutMWPC();
     if (!timesMWPC) continue;
@@ -282,7 +286,7 @@ void selection() {
     zeroVars();
 
     MWPCprojection();
-    // if ( ((fXt+0.6)*(fXt+0.6) + (fYt+2.5)*(fYt+2.5))>8.5*8.5 ) continue;
+    if ( ((fXt-xCent)*(fXt-xCent) + (fYt-yCent)*(fYt-yCent))>9*9 ) continue;
 
     fillSi();
     fillCsI();
@@ -373,11 +377,11 @@ void MWPCprojection() {
 
   const Float_t fMWPC1_X_offset = 0.;
   const Float_t fMWPC1_Y_offset = 0.;
-  const Float_t fMWPC2_X_offset = 0;
-  const Float_t fMWPC2_Y_offset = 0;
+  // const Float_t fMWPC2_X_offset = 0;
+  // const Float_t fMWPC2_Y_offset = 0;
 
-  // const Float_t fMWPC2_X_offset = 1.1375;
-  // const Float_t fMWPC2_Y_offset = -0.7125;
+  const Float_t fMWPC2_X_offset = 0.112500;
+  const Float_t fMWPC2_Y_offset = 0.537500;
 
   const Float_t fMWPCz1 = -815.;  //z coordinate of the center of MWPC1
   const Float_t fMWPCz2 = -270.;  //z coordinate of the center of MWPC2
@@ -388,13 +392,10 @@ void MWPCprojection() {
   y1c = GetPosition(wirey1, fMWPCwireStepY1, fMWPC1_Y_offset);
 
   x2c = GetPosition(wirex2, fMWPCwireStepX2, fMWPC2_X_offset);
-  y2c = GetPosition(wirey1, fMWPCwireStepY2, fMWPC2_Y_offset);
+  y2c = GetPosition(wirey2, fMWPCwireStepY2, fMWPC2_Y_offset);
 
-  // xtc = x1c - (x2c -x1c)*fMWPCz1/(fMWPCz2-fMWPCz1);
-  // ytc = y1c - (y2c -y1c)*fMWPCz1/(fMWPCz2-fMWPCz1);
-
-  xtc = fMWPCz1*(x1c - x2c)/(fMWPCz2-fMWPCz1);
-  ytc = y1c + (y1c - y2c)*( (fMWPCz1/(fMWPCz2 - fMWPCz1)) + (x1c/(x2c-x1c)) );
+  xtc = x1c - (x2c -x1c)*fMWPCz1/(fMWPCz2-fMWPCz1);
+  ytc = y1c + (xtc - x1c)*(y2c-y1c)/(x2c-x1c);
 
   fXt = xtc;
   fYt = ytc;
@@ -404,7 +405,7 @@ Float_t GetPosition(Float_t wire, Float_t wireStep,
     Float_t planeOffset) {
   //TODO: number of wires (16) as parameter
   //TODO: omit gRandom
-  return (wire + 0.5 - 16.)*wireStep + planeOffset;
+  return (wire - 16.5)*wireStep + planeOffset;
 }
 
 void readThickness() {

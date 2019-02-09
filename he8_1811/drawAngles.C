@@ -1,23 +1,27 @@
-{
+void drawAngles(){
 
   Bool_t MM,angles;
   MM = 1;
-  angles = 2;
+  angles = 0;
 
   // gStyle->SetOptStat(0);
 
   TChain *ch1 = new TChain("tree"); //e4
-  ch1->Add("/media/user/work/data/Analysed1811/selected/he8_missing_mass1.root");
-  cout << ch1->GetEntries() << " total number of Entries" << endl;
+  ch1->Add("/media/user/work/data/Analysed1811/selected/he8_missing_mass.root");
+  // cout << ch1->GetEntries() << " total number of Entries" << endl;
 
 
   TChain *ch2 = new TChain("tree");//e24
   ch2->Add("/media/user/work/data/Analysed1811/selected/he8_missing_mass2.root");
-  cout << ch2->GetEntries() << " total number of Entries" << endl;
+  // cout << ch2->GetEntries() << " total number of Entries" << endl;
 
   TChain *ch3 = new TChain("tree");//ecal
   ch3->Add("/media/user/work/data/Analysed1811/selected/he8_missing_mass3.root");
-  cout << ch3->GetEntries() << " total number of Entries" << endl;
+  // cout << ch3->GetEntries() << " total number of Entries" << endl;
+
+  ch1->AddFriend(ch2);
+  ch1->AddFriend(ch3);
+
 
   //--------------------------------------------------------------------------------
   if (MM) {
@@ -27,49 +31,50 @@
     // c1->cd(1);
     // ch->Draw("angle_h3_h7.>>h1(30,0,15)","flagLeft && flagCent && nh3 && nhe3","", 5390, 0);
 
-    TF1 *f1 = new TF1();
+    // TF1 *f1 = new TF1();
+
+    ch1->SetMarkerStyle(20);
+    ch2->SetMarkerStyle(20);
+    ch3->SetMarkerStyle(20);
 
     // c1->cd(2);
     // ch->Draw("1000*(eh7.-4*0.939565-2.80892)","nhe3 && flagLeft","", 5390, 0);
     ch1->SetLineColor(kBlack);
     ch1->SetLineWidth(3.);
+
+    ch2->SetLineColor(kBlack);
+    ch2->SetLineWidth(3.);
+
+    ch3->SetLineColor(kBlack);
+    ch3->SetLineWidth(3.);
+
     // c1->cd(1);
-    ch1->Draw("1000*(mh7.-4*0.939565-2.808920)>>h1(20,-5,25)","nhe3 && flagLeft && nh3 && eh3>0","");
-return;
-    // ch1->SetLineColor(kRed);
-    // ch1->Draw("1000*(mh7.-4*0.939565-2.808920)>>h1_1(20,-5,25)","nhe3 && flagLeft && nh3 && eh3>0 && 1000*(7.482538 + 1.874319 - mh7- 2.808391)>-35 && 1000*(7.482538 + 1.874319 - mh7- 2.808391)<-30","same");  
 
-    // ch1->SetLineColor(kBlue);
-    // ch1->Draw("1000*(mh7.-4*0.939565-2.808920)>>h1_2(20,-5,25)","nhe3 && flagLeft && nh3 && eh3>0 && 1000*(7.482538 + 1.874319 - mh7- 2.808391)>-30 && 1000*(7.482538 + 1.874319 - mh7- 2.808391)<-25","same");  
-    // ch1->SetLineColor(kBlack);
-
-    // ch2->SetLineColor(kBlack);
-    // ch2->SetLineWidth(3.);
+    // c1->cd(1);
+    // ch1->Draw("angle_h3_h7*angle_h3_h7.:1000*(mh7-4*0.939565-2.808920) >> h2D_1(20,-10,20,20,-10,140)","nhe3 && flagLeft && flagCent && nh3 && eh3>0.06 && ehe3<0.03 && thetahe3<20","");
     // c1->cd(2);
-    // ch2->Draw("1000*(mh7.-4*0.939565-2.808920)>>h2(20,-5,25)","nhe3 && flagLeft && nh3 && eh3>0","");  
-
-    // ch2->SetLineColor(kRed);
-    // ch2->Draw("1000*(mh7.-4*0.939565-2.808920)>>h2_1(20,-5,25)","nhe3 && flagLeft && nh3 && eh3>0 && 1000*(7.482538 + 1.874319 - mh7- 2.808391)>-35 && 1000*(7.482538 + 1.874319 - mh7- 2.808391)<-30","same");  
-
-    // ch2->SetLineColor(kBlue);
-    // ch2->Draw("1000*(mh7.-4*0.939565-2.808920)>>h2_2(20,-5,25)","nhe3 && flagLeft && nh3 && eh3>0 && 1000*(7.482538 + 1.874319 - mh7- 2.808391)>-30 && 1000*(7.482538 + 1.874319 - mh7- 2.808391)<-25","same");  
-    // ch2->SetLineColor(kBlack);
-
-    // ch3->SetLineColor(kBlack);
-    // ch3->SetLineWidth(3.);
+    // ch2->Draw("angle_h3_h7*angle_h3_h7.:1000*(mh7-4*0.939565-2.808920)>> h2D_2(20,-10,20,20,-10,140)","nhe3 && flagLeft && flagCent && nh3 && eh3>0.06 && ehe3<0.03 && thetahe3<20","");
     // c1->cd(3);
-    // ch3->Draw("1000*(mh7.-4*0.939565-2.808920)>>h3(20,-5,25)","nhe3 && flagLeft && nh3 && eh3>0","");
-
-    // ch3->SetLineColor(kRed);
-    // ch3->Draw("1000*(mh7.-4*0.939565-2.808920)>>h3_1(20,-5,25)","nhe3 && flagLeft && nh3 && eh3>0 && 1000*(7.482538 + 1.874319 - mh7- 2.808391)>-35 && 1000*(7.482538 + 1.874319 - mh7- 2.808391)<-30","same");  
-
-    // ch3->SetLineColor(kBlue);
-    // ch3->Draw("1000*(mh7.-4*0.939565-2.808920)>>h3_2(20,-5,25)","nhe3 && flagLeft && nh3 && eh3>0 && 1000*(7.482538 + 1.874319 - mh7- 2.808391)>-30 && 1000*(7.482538 + 1.874319 - mh7- 2.808391)<-25","same");  
-    // ch3->SetLineColor(kBlack);
+    // ch3->Draw("angle_h3_h7*angle_h3_h7.:1000*(mh7-4*0.939565-2.808920)>> h2D_3(20,-10,20,20,-10,140)","nhe3 && flagLeft && flagCent && nh3 && eh3>0.06 && ehe3<0.03 && thetahe3<20","");
 
 
-    c1->cd(2);
-    ch1->Draw("1000*(7.482538 + 1.874319 - mh7- 2.808391)>>h4(25,-50,0)","nhe3 && flagLeft && nh3 && eh3>0","");
+    // c1->cd(2);
+    // ch1->Draw("angle_h3_h7*angle_h3_h7.:1000*(mh7-4*0.939565-2.808920) >> h2D_1(20,-10,20,20,-10,140)","nhe3 && flagLeft && flagCent && nh3 && eh3>0.06 && ehe3<0.03 && thetahe3>20","");
+    // c1->cd(5);
+    // ch2->Draw("angle_h3_h7*angle_h3_h7.:1000*(mh7-4*0.939565-2.808920)>> h2D_2(20,-10,20,20,-10,140)","nhe3 && flagLeft && flagCent && nh3 && eh3>0.06 && ehe3<0.03 && thetahe3>20","");
+    // c1->cd(6);
+    // ch3->Draw("angle_h3_h7*angle_h3_h7.:1000*(mh7-4*0.939565-2.808920)>> h2D_3(20,-10,20,20,-10,140)","nhe3 && flagLeft && flagCent && nh3 && eh3>0.06 && ehe3<0.03 && thetahe3>20","");
+
+
+    c1->cd(1);
+    ch1->Draw("1000*(mh7-4*0.939565-2.808920) >>mm(15,0,20)","nhe3 && flagLeft && flagCent && nh3 && thetahe3<20 && eh3>0.045 && ehe3<0.03","");
+
+    // ch1->SetLineCo*(mh7-4*0.939565-2.808920) >>mm2(15,0,20)","1000*(7.482538 + 1.874319 - mh7- 2.808391)>-30 && nhe3 && flagLeft && flagCent && nh3 && thetahe3<20 && eh3>0.045 && ehe3<0.03","same");
+
+
+    // ch1->SetLineColor(kBlack);
+    // c1->cd(2);
+    // ch1->Draw("1000*(7.482538 + 1.874319 - mh7- 2.808391)>>h4(25,-50,0)","nhe3 && flagLeft && flagCent && nh3 && thetahe3<20 && eh3>0.045 && ehe3<0.03","");
 
     // c1->cd(5);
     // ch2->Draw("1000*(7.482538 + 1.874319 - mh7- 2.808391)>>h5(25,-50,0)","nhe3 && flagLeft && nh3 && eh3>0","");  

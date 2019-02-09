@@ -70,10 +70,11 @@ void convert() {
   //   ch->Add(inputName.Data());    
   // }
   // ch->Add("/media/user/work/data/Analysed1811/siParTests/digi/he8_07*");
-  ch->Add("/media/user/work/data/Analysed1811/digi/allTriggers/he8_*");
+  // ch->Add("/media/user/work/data/Analysed1811/digi/allTriggers/he8_*");
   // ch->Add("/media/user/work/data/Analysed1811/digi/emptyTarget/he8_*");
 
-
+  ch->Add("/media/user/work/software/expertroot/macro/myFolder/beamtime/parallel/test.root");
+  
 
   cout << "Found " << ch->GetEntries() << " entries" << endl;
 
@@ -152,7 +153,7 @@ void convert() {
 
   // Creating outfile,outtree
 
-  // TFile *fw = new TFile("/media/user/work/data/Analysed1811/he8_alltriggers.root", "RECREATE");
+  TFile *fw = new TFile("/media/user/work/data/Analysed1811/he8_alltriggers.root", "RECREATE");
   TFile *fw = new TFile("test.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
@@ -196,9 +197,10 @@ void convert() {
   tw->Branch("tSSDY_R",&tSSDY_R,"tSSDY_R[16]/F");
   tw->Branch("tSSD_R",&tSSD_R,"tSSD_R[16]/F");
 
-  for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) {
-  // for(Int_t nentry=0;nentry<1000;nentry++) {    
+  // for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) {
+  for(Int_t nentry=0;nentry<15;nentry++) {    
     if(nentry%100000==0) cout << "#Event " << nentry << "#" << endl;
+    cout << "###EVENT" << nentry << " ###" << endl;
     ch->GetEntry(nentry);
     flagCsI = kTRUE;
     // if (header->GetTrigger()!=2) continue; 
@@ -242,9 +244,13 @@ void convert() {
     fillF3(v_F3);
 
     tMWPC = ((ERBeamDetMWPCDigi*)v_MWPCx1->At(0))->GetTime();
+    // cout << "first plane" << endl;
     fillMWPC(v_MWPCx1,&wirex1);
-    fillMWPC(v_MWPCx2,&wirex2);
+    // cout << "second plane" << endl;
     fillMWPC(v_MWPCy1,&wirey1);
+    // cout << "third plane" << endl;
+    fillMWPC(v_MWPCx2,&wirex2);
+    // cout << "fourth plane" << endl;
     fillMWPC(v_MWPCy2,&wirey2);
 
     fillCsI(m_CsI);
@@ -428,8 +434,15 @@ Int_t GetClusterSi(TClonesArray *data) {
 void fillMWPC(TClonesArray *data,Float_t *wire) {
   if (!data) return;
 
+  // cout << " Number of fired wires = " << data->GetEntries() << endl; 
+  // for(Int_t i=0;i<data->GetEntries();i++) {
+  //   cout << ((ERBeamDetMWPCDigi*)data->At(i))->GetWireNb() << endl;
+  // }
+
   *(wire) = ((ERBeamDetMWPCDigi*)data->At(0))->GetWireNb() + ((ERBeamDetMWPCDigi*)data->At(data->GetEntriesFast()-1))->GetWireNb();
   *(wire) = *(wire)/2; 
+
+  // cout << *(wire) << endl; 
 
   return;
 }

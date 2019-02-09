@@ -48,7 +48,7 @@ void reco() {
   f8HeSi.SetDeltaEtab(300);
 
   TChain *ch = new TChain("tree");
-  ch->Add("/media/user/work/data/Analysed1811/selected/he8_reco_new.root");
+  ch->Add("/media/user/work/data/Analysed1811/selected/he8_reco.root");
   cout << ch->GetEntries() << " total number of Entries" << endl;
   //--------------------------------------------------------------------------------
 
@@ -86,7 +86,7 @@ void reco() {
 
   ch->SetBranchAddress("centE.",&centE);
 
-  TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_missing_mass1.root", "RECREATE");
+  TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_missing_mass.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("nh3.",&nh3,"nh3/I");
@@ -202,10 +202,10 @@ void reco() {
       thetah3 = h3.Theta()*TMath::RadToDeg();
       phih3 = h3.Phi()*TMath::RadToDeg();
       eh3 = h3.T() - mass;
-      if (h3.T() == h3.Mag()) { 
-        cout << xCent << " " << yCent << " " << zCent << endl;
-        // cout << h3.T() << " " << h3.Mag() << " " << mass << endl;
-      }
+      // if (h3.T() == h3.Mag()) { 
+      //   cout << xCent << " " << yCent << " " << zCent << endl;
+      //   // cout << h3.T() << " " << h3.Mag() << " " << mass << endl;
+      // }
       // CM
       h3CM = h3;
       h3CM.Boost(-bVect); 
