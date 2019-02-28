@@ -1,4 +1,5 @@
 void drawAngles(){
+  gStyle->SetOptStat(0);
 
   Bool_t MM,angles;
   MM = 1;
@@ -7,26 +8,15 @@ void drawAngles(){
   // gStyle->SetOptStat(0);
 
   TChain *ch1 = new TChain("tree"); //e4
-  ch1->Add("/media/user/work/data/Analysed1811/selected/he8_missing_mass.root");
+  ch1->Add("/home/oem/work/data/exp1811/analysed/he8_missing_mass.root");
+  TChain *ch2 = new TChain("tree"); //e4
+  ch2->Add("/home/oem/work/data/exp1811/analysed/noTarget/he8_emtpytarget_mm.root");
   // cout << ch1->GetEntries() << " total number of Entries" << endl;
-
-
-  TChain *ch2 = new TChain("tree");//e24
-  ch2->Add("/media/user/work/data/Analysed1811/selected/he8_missing_mass2.root");
-  // cout << ch2->GetEntries() << " total number of Entries" << endl;
-
-  TChain *ch3 = new TChain("tree");//ecal
-  ch3->Add("/media/user/work/data/Analysed1811/selected/he8_missing_mass3.root");
-  // cout << ch3->GetEntries() << " total number of Entries" << endl;
-
-  ch1->AddFriend(ch2);
-  ch1->AddFriend(ch3);
-
 
   //--------------------------------------------------------------------------------
   if (MM) {
     TCanvas *c1 = new TCanvas("c1","",1800,1000);  
-    // c1->Divide(2,1);
+    c1->Divide(2,1);
 
     // c1->cd(1);
     // ch->Draw("angle_h3_h7.>>h1(30,0,15)","flagLeft && flagCent && nh3 && nhe3","", 5390, 0);
@@ -34,24 +24,22 @@ void drawAngles(){
     // TF1 *f1 = new TF1();
 
     ch1->SetMarkerStyle(20);
-    ch2->SetMarkerStyle(20);
-    ch3->SetMarkerStyle(20);
+
 
     // c1->cd(2);
     // ch->Draw("1000*(eh7.-4*0.939565-2.80892)","nhe3 && flagLeft","", 5390, 0);
     ch1->SetLineColor(kBlack);
     ch1->SetLineWidth(3.);
 
-    ch2->SetLineColor(kBlack);
-    ch2->SetLineWidth(3.);
-
-    ch3->SetLineColor(kBlack);
-    ch3->SetLineWidth(3.);
 
     // c1->cd(1);
 
-    // c1->cd(1);
-    // ch1->Draw("angle_h3_h7*angle_h3_h7.:1000*(mh7-4*0.939565-2.808920) >> h2D_1(20,-10,20,20,-10,140)","nhe3 && flagLeft && flagCent && nh3 && eh3>0.06 && ehe3<0.03 && thetahe3<20","");
+    c1->cd(1);
+    ch1->Draw("angle_h3_h7*angle_h3_h7.:1000*(mh7-4*0.939565-2.808920) >> h2D_1(20,-10,25,20,-10,140)","nhe3 && flagLeft && flagCent && nh3","");
+    
+    ch2->SetMarkerStyle(20);
+    ch2->SetMarkerColor(kRed);
+    ch2->Draw("angle_h3_h7*angle_h3_h7.:1000*(mh7-4*0.939565-2.808920) >> h2D_1(20,-10,25,20,-10,140)","nhe3 && flagLeft && flagCent && nh3","same");
     // c1->cd(2);
     // ch2->Draw("angle_h3_h7*angle_h3_h7.:1000*(mh7-4*0.939565-2.808920)>> h2D_2(20,-10,20,20,-10,140)","nhe3 && flagLeft && flagCent && nh3 && eh3>0.06 && ehe3<0.03 && thetahe3<20","");
     // c1->cd(3);
@@ -64,11 +52,11 @@ void drawAngles(){
     // ch2->Draw("angle_h3_h7*angle_h3_h7.:1000*(mh7-4*0.939565-2.808920)>> h2D_2(20,-10,20,20,-10,140)","nhe3 && flagLeft && flagCent && nh3 && eh3>0.06 && ehe3<0.03 && thetahe3>20","");
     // c1->cd(6);
     // ch3->Draw("angle_h3_h7*angle_h3_h7.:1000*(mh7-4*0.939565-2.808920)>> h2D_3(20,-10,20,20,-10,140)","nhe3 && flagLeft && flagCent && nh3 && eh3>0.06 && ehe3<0.03 && thetahe3>20","");
-
-
-    c1->cd(1);
-    ch1->Draw("1000*(mh7-4*0.939565-2.808920) >>mm(15,0,20)","nhe3 && flagLeft && flagCent && nh3 && thetahe3<20 && eh3>0.045 && ehe3<0.03","");
-
+    c1->cd(2);
+    ch1->Draw("1000*(mh7-4*0.939565-2.808920) >>mm(20,-10,25)","nhe3 && flagLeft && flagCent && nh3","");
+    ch2->SetLineColor(kRed);
+    ch2->SetLineWidth(3.);
+    ch2->Draw("1000*(mh7-4*0.939565-2.808920) >>mm1(20,-10,25)","nhe3 && flagLeft && flagCent && nh3","same");
     // ch1->SetLineCo*(mh7-4*0.939565-2.808920) >>mm2(15,0,20)","1000*(7.482538 + 1.874319 - mh7- 2.808391)>-30 && nhe3 && flagLeft && flagCent && nh3 && thetahe3<20 && eh3>0.045 && ehe3<0.03","same");
 
 
@@ -98,13 +86,13 @@ void drawAngles(){
     // ch1->Draw("angle_h3_h7CM.>>h2_3(40,0,5)","flagLeft && flagCent && nh3 && nhe3 && eh3>0.06 ","", 5390, 0);
 
     c2->cd(1);
-    ch1->Draw("ehe3.>>h3_1_123(35,0.,045)","flagLeft && nhe3 ","", 5390, 0);
+    ch1->Draw("ehe3.>>h3_1_123(35,0.,045)","flagLeft && nhe3 ","");
 
-    c2->cd(2);
-    ch2->Draw("ehe3.>>h3_4(35,0.,0.045)","flagLeft && nhe3","", 5390, 0);
+    // c2->cd(2);
+    // ch2->Draw("ehe3.>>h3_4(35,0.,0.045)","flagLeft && nhe3","", 5390, 0);
 
-    c2->cd(3);
-    ch3->Draw("ehe3.>>h3_4_2(35,0.,0.045)","flagLeft && nhe3","", 5390, 0);
+    // c2->cd(3);
+    // ch3->Draw("ehe3.>>h3_4_2(35,0.,0.045)","flagLeft && nhe3","", 5390, 0);
     
 
   }

@@ -48,7 +48,8 @@ void reco() {
   f8HeSi.SetDeltaEtab(300);
 
   TChain *ch = new TChain("tree");
-  ch->Add("/media/user/work/data/Analysed1811/selected/he8_reco.root");
+  // ch->Add("/home/oem/work/data/exp1811/analysed/he8_reco.root");
+  ch->Add("/home/oem/work/data/exp1811/analysed/noTarget/he8_emtpytarget_reco.root");
   cout << ch->GetEntries() << " total number of Entries" << endl;
   //--------------------------------------------------------------------------------
 
@@ -86,7 +87,8 @@ void reco() {
 
   ch->SetBranchAddress("centE.",&centE);
 
-  TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_missing_mass.root", "RECREATE");
+  // TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/he8_missing_mass.root", "RECREATE");
+  TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/noTarget/he8_emtpytarget_mm.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("nh3.",&nh3,"nh3/I");

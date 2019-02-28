@@ -37,7 +37,7 @@ Float_t tF5,F5,tF3,F3;
 Float_t tMWPC,wirex1,wirex2,wirey1,wirey2;
 
 Int_t nCsI;
-Float_t aCsI,tCsI;
+Float_t aCsI,tCsI,aCsI_cal;
 
 Int_t nCsI_s;
 Float_t aCsI_s,tCsI_s;
@@ -76,17 +76,15 @@ Int_t number = 0;
 
 void selection() {
   TChain *ch = new TChain("tree");
-  // ch->Add("/media/user/work/data/Analysed1811/he8_full_CsIarray.root");
-
-  ch->Add("/media/user/work/data/Analysed1811/he8_alltriggers.root");
-  
-  // ch->Add("/media/user/work/data/Analysed1811/he8_alltriggers.root");
+  // ch->Add("/home/oem/work/data/exp1811/analysed/he8_trigger2.root");
+  ch->Add("/home/oem/work/data/exp1811/analysed/noTarget/he8_emtpytarget.root");
   
   cout << ch->GetEntries() << endl;
   //--------------------------------------------------------------------------------
   ch->SetBranchAddress("trigger",&trigger);
 
   ch->SetBranchAddress("aCsI.",&aCsI);
+  ch->SetBranchAddress("aCsI_cal.",&aCsI_cal);
   ch->SetBranchAddress("tCsI.",&tCsI);
   ch->SetBranchAddress("nCsI.",&nCsI);
 
@@ -121,21 +119,21 @@ void selection() {
   TString cutName;
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/media/user/work/macro/he8_1811/CsItimeCuts/CsI_%d.root",i);
+    cutName.Form("/home/oem/work/macro/he8_1811/CsItimeCuts/CsI_%d.root",i);
     f = new TFile(cutName.Data());
     cutCsI[i] = (TCutG*)f->Get("CUTG");
     delete f;
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/media/user/work/macro/he8_1811/tritonCuts/CsI_%d.root",i);
+    cutName.Form("/home/oem/work/macro/he8_1811/tritonCuts/h3_%d.root",i);
     f1 = new TFile(cutName.Data());
     cut3h[i] = (TCutG*)f1->Get("CUTG");
     delete f1;
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/media/user/work/macro/he8_1811/cutX_L/X_L_%d.root",i);
+    cutName.Form("/home/oem/work/macro/he8_1811/cutX_L/X_L_%d.root",i);
     f2 = new TFile(cutName.Data());
     cutX_L[i] = (TCutG*)f2->Get("CUTG");
     if (!cutX_L[i]) {
@@ -146,7 +144,7 @@ void selection() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/media/user/work/macro/he8_1811/cutY_L/Y_L_%d.root",i);
+    cutName.Form("/home/oem/work/macro/he8_1811/cutY_L/Y_L_%d.root",i);
     f2 = new TFile(cutName.Data());
     cutY_L[i] = (TCutG*)f2->Get("CUTG");
     if (!cutY_L[i]) {
@@ -157,7 +155,7 @@ void selection() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/media/user/work/macro/he8_1811/SQ20_Lcuts/sq20_L_%d.root",i);
+    cutName.Form("/home/oem/work/macro/he8_1811/SQ20_Lcuts/sq20_L_%d.root",i);
     f2 = new TFile(cutName.Data());
     cutSQ20_L[i] = (TCutG*)f2->Get("CUTG");
     if (!cutSQ20_L[i]) {
@@ -168,7 +166,7 @@ void selection() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/media/user/work/macro/he8_1811/he3_cut/he3_%d.root",i);
+    cutName.Form("/home/oem/work/macro/he8_1811/he3_cut/he3_%d.root",i);
     f2 = new TFile(cutName.Data());
     cuthe3[i] = (TCutG*)f2->Get("CUTG");
     if (!cuthe3[i]) {
@@ -181,10 +179,8 @@ void selection() {
   readThickness();
   readCsImap();
 
-  // TFile *fw = new TFile("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut_Alltrigger.root", "RECREATE");
-  TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_full_cut.root", "RECREATE");
-  // TFile *fw = new TFile("test1.root", "RECREATE");
-  // TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_integral.root", "RECREATE");
+  // TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/he8_trigger2_cut.root", "RECREATE");
+  TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/noTarget/he8_emtpytarget_cut.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("trigger.",&trigger,"trigger/I");
@@ -201,6 +197,7 @@ void selection() {
   tw->Branch("wirey2.",&wirey2,"wirey2/F");
  
   tw->Branch("aCsI.",&aCsI,"aCsI/F");
+  tw->Branch("aCsI_cal.",&aCsI_cal,"aCsI_cal/F");
   tw->Branch("tCsI.",&tCsI,"tCsI/F");
   tw->Branch("nCsI.",&nCsI,"nCsI/I");
 
@@ -242,12 +239,12 @@ void selection() {
   tw->Branch("zCent.",&zCent,"zCent/F");
 
   tw->Branch("nh3.",&nh3,"nh3/I");
-  tw->Branch("nh3_s.",&nh3_s,"nh3_s/I");
+  // tw->Branch("nh3_s.",&nh3_s,"nh3_s/I");
   tw->Branch("nhe3.",&nhe3,"nhe3/I");
   
   tw->Branch("flagLeft.",&flagLeft,"flagLeft/I");
   tw->Branch("flagCent.",&flagCent,"flagCent/I");
-  tw->Branch("flagCent_arr.",&flagCent_arr,"flagCent_arr/I");
+  // tw->Branch("flagCent_arr.",&flagCent_arr,"flagCent_arr/I");
 
   // tw->Branch("nTarget.",&nTarget,"nTarget/I");
 
@@ -256,11 +253,11 @@ void selection() {
   yCent = 2.2;
 
   for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
-  // for(Int_t nentry=0;nentry<1000000;nentry++) {     
+  // for(Int_t nentry=0;nentry<10000;nentry++) {     
     if(nentry%100000==0) cout << "#ENTRY " << nentry << "#" << endl;
     // cout << "###ENTRY " << nentry << "###" << endl;
     ch->GetEntry(nentry);
-    if (trigger!=2) continue;
+    // if (trigger!=2) continue;
 
     nh3 = 0;
     nh3_s = 0;
@@ -296,6 +293,7 @@ void selection() {
 
     DSD_Cselect();
     SSD20_Lselect();
+
     X_Lselect();
     Y_Lselect();
 
@@ -410,7 +408,7 @@ Float_t GetPosition(Float_t wire, Float_t wireStep,
 
 void readThickness() {
   cout << "thickness Left detector " << endl;
-  TFile *f = new TFile("/media/user/work/macro/he8_1811/parameters/thicknessLeft_new.root","READ");
+  TFile *f = new TFile("/home/oem/work/software/expertroot/input/parameters/map_left.root","READ");
   if (f->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -422,10 +420,11 @@ void readThickness() {
 
   }
   else {
-    TH2F *hThick = (TH2F*)f->Get("hTh");
+    TH2F *hThick = (TH2F*)f->Get("pseudo_Y_high_dead");
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
         fThicknessLeft[i][j] = hThick->GetBinContent(i+1,j+1);
+        if (j==15) fThicknessLeft[i][j] = 100.;
         cout << fThicknessLeft[i][j] << " ";
       }
       cout << endl;

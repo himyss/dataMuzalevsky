@@ -41,7 +41,8 @@ Double_t angleLeft,angleCent;
 void calcEnergies() {
 
   TChain *ch = new TChain("tree");
-  ch->Add("/media/user/work/data/Analysed1811/selected/he8_full_cut.root");
+  // ch->Add("/home/oem/work/data/exp1811/analysed/he8_trigger2_cut.root");
+  ch->Add("/home/oem/work/data/exp1811/analysed/noTarget/he8_emtpytarget_cut.root");
   cout << ch->GetEntries() << " total number of Entries" << endl;
   //--------------------------------------------------------------------------------
   ch->SetBranchAddress("F5.",&F5);
@@ -87,9 +88,9 @@ void calcEnergies() {
 
   ch->SetBranchAddress("flagLeft.",&flagLeft);
   ch->SetBranchAddress("flagCent.",&flagCent);
-
-  TFile *fw = new TFile("/media/user/work/data/Analysed1811/selected/he8_reco.root", "RECREATE");
-  // TFile *fw = new TFile("test.root", "RECREATE");
+  
+  // TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/he8_reco.root", "RECREATE");
+  TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/noTarget/he8_emtpytarget_reco.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("F5.",&F5,"F5/F");
@@ -238,7 +239,7 @@ void calcEnergies() {
 
 void readThickness() {
   cout << "thickness Left detector " << endl;
-  TFile *f = new TFile("/media/user/work/macro/he8_1811/parameters/thicknessLeft_new.root","READ");
+  TFile *f = new TFile("/home/oem/work/software/expertroot/input/parameters/map_left.root","READ");
   if (f->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -250,10 +251,11 @@ void readThickness() {
 
   }
   else {
-    TH2F *hThick = (TH2F*)f->Get("hTh");
+    TH2F *hThick = (TH2F*)f->Get("pseudo_Y_high_dead");
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
         fThicknessLeft[i][j] = hThick->GetBinContent(i+1,j+1);
+        if (j==15) fThicknessLeft[i][j] = 100.;
         cout << fThicknessLeft[i][j] << " ";
       }
       cout << endl;
