@@ -2,7 +2,7 @@ void drawHe_single_arr() {
   TChain *ch = new TChain("tree");
   // ch->Add("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut.root");
   // ch->Add("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut_CsIarray.root");
-  ch->Add("/media/user/work/data/Analysed1811/selected/he8_full_cut.root");
+  ch->Add("/home/oem/work/data/exp1811/analysed/he8_trigger2_cut.root");
   
     // ch->Add("/media/user/work/data/Analysed1811/selected/he8_10_selected.root");
   cout << ch->GetEntries() << endl;
@@ -14,7 +14,7 @@ void drawHe_single_arr() {
   TFile *f1;
   TString cutName;
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/media/user/work/macro/he8_1811/he3_cut/he3_%d.root",i);
+    cutName.Form("/home/oem/work/macro/he8_1811/helium3/he3_%d.root",i);
     f1 = new TFile(cutName.Data());
     cuthe3[i] = (TCutG*)f1->Get("CUTG");
     if (!cuthe3[i]) {
@@ -86,83 +86,6 @@ void drawHe_single_arr() {
   Bool_t usingtarget = kFALSE; 
   
   gStyle->SetOptStat(0);
-//   TCanvas *c2 = new TCanvas("c2","",1800,1000);  
-//   c2->Divide(2,2);
-  
-//   ch->SetMarkerStyle(20);
-//   ch->SetMarkerSize(0.8);
-//   // c2->cd(2);
-//   for(Int_t i=0;i<4;i++) {
-//   // {Int_t i=15;
-//     c2->cd(i+1);
-//     // cut.Form("nY_L==%d && n20_L==12 && nHe8==1 && nMWPC==1 && vetoFlag==0 && nTarget==0 && a20_L>0 && X_L>0 && t20_L-tF5<100",i);
-//     cut.Form("nTarget==1 && nY_L==%d && n20_L==14 && flagLeft==1",i);
-//     hDraw.Form("a20_L:X_L>>h%d(300,0,70,300,0,5)",i);
-
-//     // ch->SetMarkerColor(i+1);
-//     ch->Draw(hDraw.Data(),cut.Data(),"");
-//     m1->Draw("same");
-//     m2->Draw("same");
-//     m3->Draw("same");
-//     m4->Draw("same");
-
-//     m10_1->Draw("same");
-//     m10_2->Draw("same");
-//     m10_3->Draw("same");
-//     m10_4->Draw("same");
-
-//     m20_1->Draw("same");
-//     m20_2->Draw("same");
-//     m20_3->Draw("same");
-//     m20_4->Draw("same"); 
-
-//     // else ch->Draw(hDraw.Data(),cut.Data(),"same");
-//     c2->Update();
-    
-//   }
-//   c2->Print("/home/user/Desktop/pictures/pixels_0-3.png");
-// return;
-  // --------------------------------------------------------------------------------
-//   TCanvas *c1 = new TCanvas("c1","",1800,1000);  
-//   // c1->Divide(2,2);
-//   // ch->SetMarkerStyle(20);
-//   // ch->SetMarkerSize(0.6);
-//   // c1->cd(2);
-//   // for(Int_t i=10;i<16;i++) {
-//   {Int_t i=13;
-
-//     // c1->cd(i+1-8);
-//     // cut.Form("nY_L==%d && n20_L==12 && nHe8==1 && nMWPC==1 && vetoFlag==0 && nTarget==1 && a20_L>0 && X_L>0 && t20_L-tF5<100",i);
-//     cut.Form("nTarget==1 && flagLeft==1 && n20_L==%d",i);
-//     hDraw.Form("a20_L:X_L>>h%d(300,0,70,300,0,5)",i);
-
-//     // ch->SetMarkerColor(i+1);
-//     ch->Draw(hDraw.Data(),cut.Data(),"col");
-
-//     m1->Draw("same");
-//     m2->Draw("same");
-//     m3->Draw("same");
-//     m4->Draw("same");
-
-//     m10_1->Draw("same");
-//     m10_2->Draw("same");
-//     m10_3->Draw("same");
-//     m10_4->Draw("same");
-
-//     m20_1->Draw("same");
-//     m20_2->Draw("same");
-//     m20_3->Draw("same");
-//     m20_4->Draw("same");    
-
-
-//   cuthe3[i]->SetLineColor(kRed);
-//   cuthe3[i]->Draw("same");
-
-//     // else ch->Draw(hDraw.Data(),cut.Data(),"same");
-//     c1->Update();
-//   }
-//   c1->Print("/home/user/Desktop/pictures/de-E_all_zoom.png");
-// return;
 Int_t coinh7 = 0;
 Int_t tmpC;
 
@@ -175,14 +98,13 @@ Int_t tmpC;
 
 
     c3->cd(i+1);
-    // cut.Form("nY_L==%d && n20_L==12 && nHe8==1 && nMWPC==1 && vetoFlag==0 && nTarget==1 && a20_L>0 && X_L>0 && t20_L-tF5<100",i);
     cut.Form("flagLeft==1 && n20_L==%d",i);
     hDraw.Form("a20_L:X_L>>h1_%d(200,0,70,200,0,5)",i);
 
     // ch->SetMarkerColor(i+1);
     ch->Draw(hDraw.Data(),cut.Data(),"col");
     c3->Update();
-    cut.Form("nhe3==1 && nh3==1 && flagCent==1 && flagLeft==1 && n20_L==%d",i);
+    cut.Form("nhe3==1 && nh3==1 && flagCent==1 && flagLeft==1 && n20_L==%d && X_L+a20_L<20",i);
     hDraw.Form("a20_L:X_L>>h_coin_%d(200,0,70,200,0,5)",i);
     ch->SetMarkerColor(kRed);
     ch->SetMarkerStyle(20);

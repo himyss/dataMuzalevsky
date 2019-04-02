@@ -51,8 +51,9 @@ Float_t DSDX_C[32],DSDY_C[32];
 Float_t tDSDX_C[32],tDSDY_C[32];
 
 Float_t DSDX_L[16],DSDY_L[16],SSD20_L[16],SSD_L[16],tDSDX_L[16],tDSDY_L[16],tSSD20_L[16],tSSD_L[16];
+Float_t DSDX_L_ch[16],DSDY_L_ch[16],SSD20_L_ch[16];
 
-
+Float_t X_L_ch,Y_L_ch,a20_L_ch,a20_L_uncorr_ch;
 // reconstructed
 
 Float_t fXt,fYt;
@@ -76,9 +77,12 @@ Int_t number = 0;
 
 void selection() {
   TChain *ch = new TChain("tree");
-  // ch->Add("/home/oem/work/data/exp1811/analysed/he8_trigger2.root");
-  ch->Add("/home/oem/work/data/exp1811/analysed/noTarget/he8_emtpytarget.root");
+  ch->Add("/home/oem/work/data/exp1811/analysed/he8_trigger2.root");
+
+  // ch->Add("/home/oem/work/data/exp1811/analysed/notarget.root");
   
+  // ch->Add("/home/oem/work/data/exp1811/analysed/he8_trigger2_noCal.root");
+
   cout << ch->GetEntries() << endl;
   //--------------------------------------------------------------------------------
   ch->SetBranchAddress("trigger",&trigger);
@@ -115,6 +119,11 @@ void selection() {
   ch->SetBranchAddress("tDSDY_L",&tDSDY_L);
   ch->SetBranchAddress("tSSD20_L",&tSSD20_L);
   ch->SetBranchAddress("tSSD_L",&tSSD_L);
+
+  ch->SetBranchAddress("DSDX_L_ch",&DSDX_L_ch);
+  ch->SetBranchAddress("DSDY_L_ch",&DSDY_L_ch);
+  ch->SetBranchAddress("SSD20_L_ch",&SSD20_L_ch);
+
   TFile *f,*f1,*f2;
   TString cutName;
 
@@ -166,7 +175,7 @@ void selection() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/oem/work/macro/he8_1811/he3_cut/he3_%d.root",i);
+    cutName.Form("/home/oem/work/macro/he8_1811/helium3/he3_%d.root",i);
     f2 = new TFile(cutName.Data());
     cuthe3[i] = (TCutG*)f2->Get("CUTG");
     if (!cuthe3[i]) {
@@ -179,8 +188,10 @@ void selection() {
   readThickness();
   readCsImap();
 
-  // TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/he8_trigger2_cut.root", "RECREATE");
-  TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/noTarget/he8_emtpytarget_cut.root", "RECREATE");
+  TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/he8_trigger2_cut.root", "RECREATE");
+  // TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/he8_trigger2_nocal_cut.root", "RECREATE");  
+  // TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/notarget_cut.root", "RECREATE");
+  // TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/clb/dsd_20_l_03_selected.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("trigger.",&trigger,"trigger/I");
@@ -222,6 +233,12 @@ void selection() {
   tw->Branch("tX_L.",&tX_L,"tX_L/F");
   tw->Branch("tY_L.",&tY_L,"tY_L/F");
   tw->Branch("t20_L.",&t20_L,"t20_L/F");
+
+  tw->Branch("X_L_ch.",&X_L_ch,"X_L_ch/F");
+  tw->Branch("Y_L_ch.",&Y_L_ch,"Y_L_ch/F");
+  tw->Branch("a20_L_ch.",&a20_L_ch,"a20_L_ch/F");
+  tw->Branch("a20_L_uncorr_ch.",&a20_L_uncorr_ch,"a20_L_uncorr_ch/F"); 
+
 
   tw->Branch("x1c.",&x1c,"x1c/F");
   tw->Branch("y1c.",&y1c,"y1c/F");
@@ -355,6 +372,11 @@ void zeroVars() {
 
   fXt = -100;
   fYt = -100;
+
+  X_L_ch = 0;
+  Y_L_ch = 0;
+  a20_L_ch = 0;
+  a20_L_uncorr_ch = 0;
 } 
 
 void checkToF() {
@@ -408,7 +430,7 @@ Float_t GetPosition(Float_t wire, Float_t wireStep,
 
 void readThickness() {
   cout << "thickness Left detector " << endl;
-  TFile *f = new TFile("/home/oem/work/software/expertroot/input/parameters/map_left.root","READ");
+  TFile *f = new TFile("/home/oem/work/software/expertroot/input/parameters/thicknessLeft_new.root","READ");
   if (f->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -420,7 +442,7 @@ void readThickness() {
 
   }
   else {
-    TH2F *hThick = (TH2F*)f->Get("pseudo_Y_high_dead");
+    TH2F *hThick = (TH2F*)f->Get("hTh");
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
         fThicknessLeft[i][j] = hThick->GetBinContent(i+1,j+1);
@@ -574,6 +596,8 @@ void fillSi() {
     X_L = DSDX_L[nCh];
     tX_L = tDSDX_L[nCh];
     nX_L = nCh;
+
+    X_L_ch = DSDX_L_ch[nCh];
   }
 
   count = 0;
@@ -585,6 +609,7 @@ void fillSi() {
   }
   if(count==1) {
     Y_L = DSDY_L[nCh];
+    Y_L_ch = DSDY_L_ch[nCh];
     tY_L = tDSDY_L[nCh];
     nY_L = nCh;    
   }
@@ -599,6 +624,7 @@ void fillSi() {
   }
   if(count==1) {
     a20_L = SSD20_L[nCh];
+    a20_L_ch = SSD20_L_ch[nCh];
     t20_L = tSSD20_L[nCh];
     n20_L = nCh;
   }
@@ -606,15 +632,18 @@ void fillSi() {
 
 void SSD20_Lselect() {
   a20_L_uncorr = a20_L;
-  a20_L = a20_L*20./fThicknessLeft[n20_L][nY_L];
+  a20_L_uncorr_ch = a20_L_ch;
 
-  if (n20_L>-1 && n20_L<16 && a20_L>0 && cutSQ20_L[n20_L]->IsInside(t20_L-tF5, a20_L)) {
+  a20_L = a20_L*20./fThicknessLeft[n20_L][nY_L];
+  a20_L_ch = a20_L_ch*20./fThicknessLeft[n20_L][nY_L];
+
+  // if (n20_L>-1 && n20_L<16 && a20_L>0 && cutSQ20_L[n20_L]->IsInside(t20_L-tF5, a20_L)) {
     
-    // a20_L = a20_L*20./fThicknessLeft[n20_L][nY_L];
-  }
-  else {
-    flagLeft = 0;
-  }
+  //   // a20_L = a20_L*20./fThicknessLeft[n20_L][nY_L];
+  // }
+  // else {
+  //   flagLeft = 0;
+  // }
 
   // if (t20_L-tF5<40 || t20_L-tF5>120) { //time cuts
   //   flagLeft = 0;

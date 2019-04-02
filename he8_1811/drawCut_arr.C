@@ -1,14 +1,15 @@
 void drawCut_arr(){
   gStyle->SetOptStat(0);
-  Bool_t tritium = kFALSE;
-  Bool_t he3 = kFALSE;
-  Bool_t tCsI_s = kFALSE;
+  Bool_t tritium = 0;
+  Bool_t tritiumCal = 1;
+  Bool_t he3 = 0;
+  Bool_t tCsI_s = 0;
   Bool_t tCsI_s_s = kFALSE;
   Bool_t target = kFALSE;
-  Bool_t centtimes = kFALSE;
-  Bool_t sq20times = kTRUE;
-  Bool_t X_Lcuts = kFALSE;
-  Bool_t Y_Lcuts = kFALSE;
+  Bool_t centtimes = 0;
+  Bool_t sq20times = 0;
+  Bool_t X_Lcuts = 0;
+  Bool_t Y_Lcuts = 0;
 
 
   TChain *ch1 = new TChain("tree");
@@ -75,7 +76,7 @@ void drawCut_arr(){
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/oem/work/macro/he8_1811/he3_cut/he3_%d.root",i);
+    cutName.Form("/home/oem/work/macro/he8_1811/helium3/he3_%d.root",i);
     f1 = new TFile(cutName.Data());
     cuthe3[i] = (TCutG*)f1->Get("CUTG");
     if (!cuthe3[i]) {
@@ -123,6 +124,8 @@ void drawCut_arr(){
       cut3h[i]->Draw("same");
       c1->Update();
     }
+
+
       // cut.Form("nh3==1 && trigger==2 && nCsI==%d && flagCent==1",i);
       // // tree->Draw("DSDX_C:aCsI_s","nCsI_s==0","", 1004737, 0);
 
@@ -144,6 +147,39 @@ void drawCut_arr(){
     // ch->Draw("X_C.:aCsI_s>>h(300,0,5000,300,0,100)","nCsI_s==2","col");
     // cut3h[2]->Draw("same");
     // c2->Update();
+  }
+
+if (tritiumCal) {
+    TCanvas *c1_c = new TCanvas("c1_c","",1800,1000);  
+    c1_c->Divide(4,4);
+    for(Int_t i=0;i<16;i++) {
+      c1_c->cd(i+1);
+      cut.Form("nCsI==%d && aCsI>0 && X_C>0 && flagCent",i);
+      // tree->Draw("DSDX_C:aCsI_s","nCsI_s==0","", 1004737, 0);
+      hdraw.Form("X_C.:aCsI_cal>>h%d(300,0,100,300,0,20)",i);
+      ch->Draw(hdraw.Data(),cut.Data(),"col");
+
+      ch->SetMarkerColor(kRed);
+      ch->SetMarkerStyle(20);
+      cut.Form("nCsI==%d && nhe3 && aCsI>0 && X_C>0 && flagCent && flagLeft",i);
+      hdraw.Form("X_C.:aCsI_cal>>h_he3_%d(300,0,100,300,0,20)",i);
+      ch->Draw(hdraw.Data(),cut.Data(),"same");
+
+      ch->SetMarkerColor(kMagenta);
+      ch->SetMarkerStyle(20);
+      cut.Form("nCsI==%d && nhe3 && aCsI>0 && X_C>0 && nh3 && flagCent && flagLeft",i);
+      hdraw.Form("X_C.:aCsI_cal>>h_he3_coin_%d(300,0,100,300,0,20)",i);
+      ch->Draw(hdraw.Data(),cut.Data(),"same");
+
+      ch1->SetMarkerColor(kBlack);
+      ch1->SetMarkerStyle(20);
+      cut.Form("nCsI==%d && nhe3 && aCsI>0 && X_C>0 && nh3 && flagCent && flagLeft",i);
+      hdraw.Form("X_C.:aCsI_cal>>h_he3_coin_fon_%d(300,0,100,300,0,20)",i);
+      ch1->Draw(hdraw.Data(),cut.Data(),"same");
+
+
+      c1_c->Update();
+    }
   }
 
   if (he3) {
@@ -224,7 +260,7 @@ void drawCut_arr(){
       ch->SetMarkerColor(kBlack);  
       ch->Draw("Y_C:tY_C - tF5",cutName.Data(),"");
       ch->SetMarkerColor(kRed);
-      cutName = cutName + TString(" && flagCent_arr==1");
+      cutName = cutName + TString(" && flagCent==1");
       ch->Draw("Y_C:tY_C - tF5",cutName.Data(),"same");
 
       c5->Update();
@@ -240,7 +276,7 @@ void drawCut_arr(){
       ch->SetMarkerColor(kBlack);  
       ch->Draw("X_C:tX_C - tF5",cutName.Data(),"");
       ch->SetMarkerColor(kRed);
-      cutName = cutName + TString(" && flagCent_arr==1");
+      cutName = cutName + TString(" && flagCent==1");
       ch->Draw("X_C:tX_C - tF5",cutName.Data(),"same");
 
       c5_1->Update();
@@ -272,10 +308,10 @@ void drawCut_arr(){
       hdraw.Form("a20_L_uncorr:t20_L-tF5 >> h_tsq20_%d(300,0,120,300,0,20)",i);
       ch->Draw(hdraw.Data(),cut.Data(),"col");
 
-      // ch->SetMarkerColor(kRed);
-      // cut.Form("n20_L==%d && flagLeft && t20_L-tF5>40 && t20_L-tF5<100",i);
-      // hdraw.Form("a20_L_uncorr:t20_L-tF5 >> h_tsq20_red_%d(300,0,120,300,0,20)",i);
-      // ch->Draw(hdraw.Data(),cut.Data(),"same");
+      ch->SetMarkerColor(kRed);
+      cut.Form("n20_L==%d && flagLeft && t20_L-tF5>0 && t20_L-tF5<120",i);
+      hdraw.Form("a20_L_uncorr:t20_L-tF5 >> h_tsq20_red_%d(300,0,120,300,0,20)",i);
+      ch->Draw(hdraw.Data(),cut.Data(),"same");
 
       cutSQ20_L[i]->SetLineColor(kBlack);
       cutSQ20_L[i]->Draw("same");

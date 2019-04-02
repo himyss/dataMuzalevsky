@@ -19,7 +19,7 @@ Float_t xLeft,yLeft,zLeft;
 Float_t xCent,yCent,zCent;
 
 Int_t nCsI;
-Float_t aCsI,tCsI;
+Float_t aCsI,tCsI,aCsI_cal;
 
 Float_t X_C,tX_C,Y_C,tY_C,X_L,Y_L,a20_L,tX_L,tY_L,t20_L,a20_R,Y_R,t20_R,tY_R,a20_L_uncorr;
 Int_t nX_C,nY_C,nX_L,nY_L,n20_L,n20_R,nY_R;
@@ -41,8 +41,8 @@ Double_t angleLeft,angleCent;
 void calcEnergies() {
 
   TChain *ch = new TChain("tree");
-  // ch->Add("/home/oem/work/data/exp1811/analysed/he8_trigger2_cut.root");
-  ch->Add("/home/oem/work/data/exp1811/analysed/noTarget/he8_emtpytarget_cut.root");
+  ch->Add("/home/oem/work/data/exp1811/analysed/he8_trigger2_cut.root");
+  // ch->Add("/home/oem/work/data/exp1811/analysed/notarget_cut.root");
   cout << ch->GetEntries() << " total number of Entries" << endl;
   //--------------------------------------------------------------------------------
   ch->SetBranchAddress("F5.",&F5);
@@ -53,6 +53,8 @@ void calcEnergies() {
   ch->SetBranchAddress("aCsI.",&aCsI);
   // ch->SetBranchAddress("tCsI.",&tCsI);
   ch->SetBranchAddress("nCsI.",&nCsI);
+  ch->SetBranchAddress("aCsI_cal.",&aCsI_cal);
+
 
   ch->SetBranchAddress("X_C.",&X_C);
   ch->SetBranchAddress("nX_C.",&nX_C);
@@ -89,8 +91,8 @@ void calcEnergies() {
   ch->SetBranchAddress("flagLeft.",&flagLeft);
   ch->SetBranchAddress("flagCent.",&flagCent);
   
-  // TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/he8_reco.root", "RECREATE");
-  TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/noTarget/he8_emtpytarget_reco.root", "RECREATE");
+  TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/he8_reco.root", "RECREATE");
+  // TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/he8_emtpytarget_reco.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("F5.",&F5,"F5/F");
@@ -98,7 +100,8 @@ void calcEnergies() {
   tw->Branch("F3.",&F3,"F3/F");
   tw->Branch("tF3.",&tF3,"tF3/F");
  
-  tw->Branch("aCsI.",&aCsI,"aCsI/I");
+  tw->Branch("aCsI.",&aCsI,"aCsI/F");
+  tw->Branch("aCsI_cal.",&aCsI_cal,"aCsI_cal/F");
   // ch->SetBranchAddress("tCsI.",&tCsI);
   tw->Branch("nCsI.",&nCsI,"nCsI/I");
 
@@ -152,8 +155,8 @@ void calcEnergies() {
     // cout << nentry << endl;
     ch->GetEntry(nentry);
 
-    if (flagLeft==0 && flagCent==0) continue;
-    if (nhe3==0 && nh3==0) continue;
+    // if (flagLeft==0 && flagCent==0) continue;
+    // if (nhe3==0 && nh3==0) continue;
 
     if(flagLeft) {
       dirLeft.SetXYZ(xLeft-fXt, yLeft-fYt, zLeft);
@@ -173,9 +176,9 @@ void calcEnergies() {
     if(flagLeft && nhe3) {
       // Si
 
-      leftE24 = f3HeSi->GetE0(X_L,23.); // 3 micron - DL in thick
+      leftE24 = f3HeSi->GetE0(X_L,20.5); // 3 micron - DL in thick
 
-      thickness = fThicknessLeft[n20_L][nY_L] + 3.; // 3 micron - DL in thick
+      thickness = fThicknessLeft[n20_L][nY_L] + 0.5; // 3 micron - DL in thick
       leftE4 = f3HeSi->GetE0(X_L,thickness);
 
       leftEcal = f3HeSi->GetE0(X_L,4.) + a20_L_uncorr; // 4 micron - DL between thin and thick sensitive areas (DL thin about 1 mik)
@@ -239,7 +242,7 @@ void calcEnergies() {
 
 void readThickness() {
   cout << "thickness Left detector " << endl;
-  TFile *f = new TFile("/home/oem/work/software/expertroot/input/parameters/map_left.root","READ");
+  TFile *f = new TFile("/home/oem/work/software/expertroot/input/parameters/thicknessLeft_new.root","READ");
   if (f->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -251,7 +254,7 @@ void readThickness() {
 
   }
   else {
-    TH2F *hThick = (TH2F*)f->Get("pseudo_Y_high_dead");
+    TH2F *hThick = (TH2F*)f->Get("hTh");
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
         fThicknessLeft[i][j] = hThick->GetBinContent(i+1,j+1);

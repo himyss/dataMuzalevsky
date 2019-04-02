@@ -13,7 +13,6 @@ void fillarrayCsI(TClonesArray *data,Float_t* amp,Float_t* time);
 void fillF5(TClonesArray *data);
 void fillF3(TClonesArray *data);
 void fillMWPC(TClonesArray *data,Float_t *wire);
-
 void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16);
 
 //outtree vars
@@ -25,7 +24,7 @@ Float_t wirex1,wirex2,wirey1,wirey2;
 Float_t tMWPC;
 
 Int_t nCsI;
-Float_t aCsI,tCsI;
+Float_t aCsI,tCsI,aCsI_cal;
 
 Float_t arCsI[16],trCsI[16];
 
@@ -33,6 +32,7 @@ Float_t DSDX_C[32],DSDY_C[32];
 Float_t tDSDX_C[32],tDSDY_C[32];
 
 Float_t DSDX_L[16],DSDY_L[16],SSD20_L[16],SSD_L[16];
+Float_t DSDX_L_ch[16],DSDY_L_ch[16],SSD20_L_ch[16];
 Float_t tDSDX_L[16],tDSDY_L[16],tSSD20_L[16],tSSD_L[16];
 
 Float_t SSD20_R[16],SSDY_R[16],SSD_R[16];
@@ -55,6 +55,8 @@ Float_t pDSDY_C1[32],pDSDY_C2[32];
 Float_t pSSD_R1[16],pSSD_R2[16];
 Float_t pSSD_L1[16],pSSD_L2[16];
 
+Float_t pCsI_1[16],pCsI_2[16];
+
 Float_t *nullPtr = NULL;
 
 //
@@ -64,33 +66,29 @@ Int_t multX_L,mult20_L,multY_L;
 void convert() {
 
   TChain *ch = new TChain("er");
-  // TString inputName;
-  // for(Int_t i=1;i<10;i++){
-  //   inputName.Form("/media/user/work/data/Analysed1811/siParTests/digi/he8_07_000%d.Digi.root",i);
-  //   ch->Add(inputName.Data());    
-  // }
-  // ch->Add("/media/user/work/data/Analysed1811/siParTests/digi/he8_07*");
-  // ch->Add("/media/user/work/data/Analysed1811/digi/allTriggers/he8_*");
-  // ch->Add("/media/user/work/data/Analysed1811/digi/emptyTarget/he8_*");
-
-  ch->Add("/media/user/work/software/expertroot/macro/myFolder/beamtime/parallel/test.root");
+  ch->Add("/home/oem/work/data/exp1811/digi/triggerSelected/he8*");
+  // ch->Add("/home/oem/work/data/exp1811/digi/notarget/he8*");
+  // ch->Add("/home/oem/work/data/exp1811/digi/clb/dsd_20_l_03*");
   
-
   cout << "Found " << ch->GetEntries() << " entries" << endl;
 
-  readPar("SSD20_L",pSQ20_L1,pSQ20_L2);
-  readPar("SSD20_R",pSQ20_R1,pSQ20_R2);
+  // readPar("ssd20_l_ec",pSQ20_L1,pSQ20_L2);
+  readPar("ssd20_l_new_newthin",pSQ20_L1,pSQ20_L2);
+  // readPar("empty16",pSQ20_L1,pSQ20_L2);
 
+  readPar("SSD20_R",pSQ20_R1,pSQ20_R2);
   readPar("SSDY_R",pSSDY_R1,pSSDY_R2);
   
-  readPar("DSDY_L",pDSDY_L1,pDSDY_L2);
-  readPar("DSDX_L",pDSDX_L1,pDSDX_L2);
+  // readPar("empty16",pDSDY_L1,pDSDY_L2);
+  readPar("DSDY_L_newthin",pDSDY_L1,pDSDY_L2);
+  readPar("DSDX_L_newthin",pDSDX_L1,pDSDX_L2);
 
   readPar("SSD_R",pSSD_R1,pSSD_R2);
   readPar("SSD_L",pSSD_L1,pSSD_L2);
 
   readPar("DSDX_C",pDSDX_C1,pDSDX_C2,32);
   readPar("DSDY_C",pDSDY_C1,pDSDY_C2,32);
+  readPar("CsI",pCsI_1,pCsI_2);
 //--------------------------------------------------------------------------------
   ERBeamTimeEventHeader* header = new ERBeamTimeEventHeader();
 
@@ -153,8 +151,10 @@ void convert() {
 
   // Creating outfile,outtree
 
-  TFile *fw = new TFile("/media/user/work/data/Analysed1811/he8_alltriggers.root", "RECREATE");
-  TFile *fw = new TFile("test.root", "RECREATE");
+  TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/he8_trigger2.root", "RECREATE");
+  // TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/notarget.root", "RECREATE");
+  // TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/clb/dsd_20_l_03.root", "RECREATE");
+  // TFile *fw = new TFile("test.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("trigger",&trigger,"trigger/I");
@@ -171,6 +171,7 @@ void convert() {
   tw->Branch("wirey2.",&wirey2,"wirey2/F");
 
   tw->Branch("aCsI.",&aCsI,"aCsI/F");
+  tw->Branch("aCsI_cal.",&aCsI_cal,"aCsI_cal/F");
   tw->Branch("tCsI.",&tCsI,"tCsI/F");
   tw->Branch("nCsI.",&nCsI,"nCsI/I");
 
@@ -182,6 +183,10 @@ void convert() {
   tw->Branch("DSDY_C",&DSDY_C,"DSDY_C[32]/F");
   tw->Branch("tDSDY_C",&tDSDY_C,"tDSDY_C[32]/F");
 
+  tw->Branch("DSDX_L_ch",&DSDX_L_ch,"DSDX_L_ch[16]/F");
+  tw->Branch("DSDY_L_ch",&DSDY_L_ch,"DSDY_L_ch[16]/F");
+  tw->Branch("SSD20_L_ch",&SSD20_L_ch,"SSD20_L_ch[16]/F");
+
   tw->Branch("DSDX_L",&DSDX_L,"DSDX_L[16]/F");
   tw->Branch("DSDY_L",&DSDY_L,"DSDY_L[16]/F");
   tw->Branch("SSD20_L",&SSD20_L,"SSD20_L[16]/F");
@@ -190,6 +195,7 @@ void convert() {
   tw->Branch("tDSDY_L",&tDSDY_L,"tDSDY_L[16]/F");
   tw->Branch("tSSD20_L",&tSSD20_L,"tSSD20_L[16]/F");
   tw->Branch("tSSD_L",&tSSD_L,"tSSD_L[16]/F");
+
   tw->Branch("SSD20_R",&SSD20_R,"SSD20_R[16]/F");
   tw->Branch("SSDY_R",&SSDY_R,"SSDY_R[16]/F");
   tw->Branch("SSD_R",&SSD_R,"SSD_R[16]/F");
@@ -197,18 +203,17 @@ void convert() {
   tw->Branch("tSSDY_R",&tSSDY_R,"tSSDY_R[16]/F");
   tw->Branch("tSSD_R",&tSSD_R,"tSSD_R[16]/F");
 
-  // for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) {
-  for(Int_t nentry=0;nentry<15;nentry++) {    
+  for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) {
+  // for(Int_t nentry=0;nentry<15;nentry++) {    
     if(nentry%100000==0) cout << "#Event " << nentry << "#" << endl;
-    cout << "###EVENT" << nentry << " ###" << endl;
     ch->GetEntry(nentry);
     flagCsI = kTRUE;
-    // if (header->GetTrigger()!=2) continue; 
+    if (header->GetTrigger()!=2) continue; 
 
-    // if(v_MWPCx1->GetEntriesFast()==0) continue;
-    // if(v_MWPCx2->GetEntriesFast()==0) continue;
-    // if(v_MWPCy1->GetEntriesFast()==0) continue;
-    // if(v_MWPCy2->GetEntriesFast()==0) continue;
+    if(v_MWPCx1->GetEntriesFast()==0) continue;
+    if(v_MWPCx2->GetEntriesFast()==0) continue;
+    if(v_MWPCy1->GetEntriesFast()==0) continue;
+    if(v_MWPCy2->GetEntriesFast()==0) continue;
     if(v_F3->GetEntriesFast()==0) continue;
     if(v_F5->GetEntriesFast()==0) continue;
 
@@ -217,17 +222,17 @@ void convert() {
     if (GetClusterMWPC(v_MWPCy1)!=1) continue;
     if (GetClusterMWPC(v_MWPCy2)!=1) continue;
     
-    // if (GetClusterSi(v_DSDX_C)>1) continue;
-    // if (GetClusterSi(v_DSDY_C)>1) continue;
+    if (GetClusterSi(v_DSDX_C)>1) continue;
+    if (GetClusterSi(v_DSDY_C)>1) continue;
 
-    // if (GetClusterSi(v_SSD20_R)>1) continue;
-    // if (GetClusterSi(v_SSDY_R)>1) continue;
-    // if (GetClusterSi(v_SSD_R)>1) continue;
+    if (GetClusterSi(v_SSD20_R)>1) continue;
+    if (GetClusterSi(v_SSDY_R)>1) continue;
+    if (GetClusterSi(v_SSD_R)>1) continue;
 
-    // if (GetClusterSi(v_DSDX_L)>1) continue;
-    // if (GetClusterSi(v_DSDY_L)>1) continue;
-    // if (GetClusterSi(v_SSD20_L)>1) continue;
-    // if (GetClusterSi(v_SSD_L)>1) continue;
+    if (GetClusterSi(v_DSDX_L)>1) continue;
+    if (GetClusterSi(v_DSDY_L)>1) continue;
+    if (GetClusterSi(v_SSD20_L)>1) continue;
+    if (GetClusterSi(v_SSD_L)>1) continue;
 
     
     m_CsI = processCsI(v_CsI); // kinda CsIClusters
@@ -237,13 +242,13 @@ void convert() {
 
     zeroVars();
 
-    // // fill the vars
+    // // // fill the vars
     trigger = header->GetTrigger();
 
     fillF5(v_F5);
     fillF3(v_F3);
 
-    tMWPC = ((ERBeamDetMWPCDigi*)v_MWPCx1->At(0))->GetTime();
+    tMWPC = ((ERBeamDetMWPCDigi*)v_MWPCx1->At(0))->GetTime()*0.5;
     // cout << "first plane" << endl;
     fillMWPC(v_MWPCx1,&wirex1);
     // cout << "second plane" << endl;
@@ -263,6 +268,10 @@ void convert() {
     fillSi(v_DSDY_L,DSDY_L,tDSDY_L,pDSDY_L1,pDSDY_L2);
     fillSi(v_SSD20_L,SSD20_L,tSSD20_L,pSQ20_L1,pSQ20_L2);
     fillSi(v_SSD_L,SSD_L,tSSD_L,pSSD_L1,pSSD_L2);
+
+    fillSi(v_DSDX_L,DSDX_L_ch,tDSDX_L,nullPtr,nullPtr);
+    fillSi(v_DSDY_L,DSDY_L_ch,tDSDY_L,nullPtr,nullPtr);
+    fillSi(v_SSD20_L,SSD20_L_ch,tSSD20_L,nullPtr,nullPtr);
 
     fillSi(v_SSD20_R,SSD20_R,tSSD20_R,pSQ20_R1,pSQ20_R2);
     fillSi(v_SSDY_R,SSDY_R,tSSDY_R,pSSDY_R1,pSSDY_R2);
@@ -375,7 +384,7 @@ ERQTelescopeCsIDigi* processCsI(TClonesArray *data) {
   }
   if (nMax!=1) {
     cout << nMax << endl; 
-    flagCsI = kFALSE;
+    flagCsI=kFALSE;
     return NULL;
   }
 
@@ -452,6 +461,7 @@ void fillCsI(ERQTelescopeCsIDigi *data) {
   nCsI = data->GetBlockNb();
   tCsI = data->GetTime();
   aCsI = data->GetEdep();
+  aCsI_cal = data->GetEdep()*pCsI_2[nCsI] + pCsI_1[nCsI];
   return;  
 }
 
@@ -490,7 +500,7 @@ void fillF5(TClonesArray *data){
   if(!temp_F5) return;
 
   F5 = temp_F5->GetEdep();
-  tF5 = temp_F5->GetTime();
+  tF5 = temp_F5->GetTime()/2.;
 
   return; 
 }
@@ -501,7 +511,7 @@ void fillF3(TClonesArray *data){
   if(!temp_F3) return;
 
   F3 = temp_F3->GetEdep();
-  tF3 = temp_F3->GetTime();
+  tF3 = temp_F3->GetTime()/2.;
 
   return; 
 }
@@ -511,7 +521,7 @@ void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16){
   TString line;
   ifstream myfile;
   Int_t count=-2;
-  TString file = "/media/user/work/software/expertroot/input/parameters/" + fileName + ".cal";
+  TString file = "/home/oem/work/software/expertroot/input/parameters/" + fileName + ".cal";
   myfile.open(file.Data());
   while (! myfile.eof() ){
     line.ReadLine(myfile);

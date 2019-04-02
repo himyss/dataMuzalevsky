@@ -11,7 +11,7 @@ Float_t xCent,yCent,zCent;
 Float_t tF5,F5,tF3,F3;
 
 Int_t nCsI;
-Float_t aCsI,tCsI;
+Float_t aCsI,tCsI,aCsI_cal;
 
 Float_t X_C,tX_C,Y_C,tY_C,X_L,Y_L,a20_L,tX_L,tY_L,t20_L,a20_R,Y_R,t20_R,tY_R,a20_L_uncorr;
 Int_t nX_C,nY_C,nX_L,nY_L,n20_L,n20_R,nY_R;
@@ -35,8 +35,9 @@ Float_t thetah7,phih7,phih3,thetah3,phihe3,thetahe3;
 Float_t thetah7CM,phih7CM,phih3CM,thetah3CM,phihe3CM,thetahe3CM;
 Float_t mh7,eh7,eh3,ehe3,ehe8;
 
-Float_t angle_h3_h7,angle_h3_h7CM,angle_h3_h7CMreaction;
+Float_t angle_h3_h7,angle_h3_h7CM,angle_h3_h7CMreaction,angle_he3_h7,angle_he3_he8;
 Float_t qReaction;
+
 
 TVector3 bVect,bVect_H7;
 
@@ -49,7 +50,7 @@ void reco() {
 
   TChain *ch = new TChain("tree");
   // ch->Add("/home/oem/work/data/exp1811/analysed/he8_reco.root");
-  ch->Add("/home/oem/work/data/exp1811/analysed/noTarget/he8_emtpytarget_reco.root");
+  ch->Add("/home/oem/work/data/exp1811/analysed/he8_emtpytarget_reco.root");
   cout << ch->GetEntries() << " total number of Entries" << endl;
   //--------------------------------------------------------------------------------
 
@@ -65,6 +66,25 @@ void reco() {
   ch->SetBranchAddress("flagLeft.",&flagLeft);
   ch->SetBranchAddress("flagCent.",&flagCent);
   ch->SetBranchAddress("flagCent_arr.",&flagCent_arr);
+
+  ch->SetBranchAddress("X_C.",&X_C);
+  ch->SetBranchAddress("nX_C.",&nX_C);
+  ch->SetBranchAddress("Y_C.",&Y_C);
+  ch->SetBranchAddress("nY_C.",&nY_C);
+
+  ch->SetBranchAddress("aCsI.",&aCsI);
+  // ch->SetBranchAddress("tCsI.",&tCsI);
+  ch->SetBranchAddress("nCsI.",&nCsI);
+  ch->SetBranchAddress("aCsI_cal.",&aCsI_cal);
+
+
+  ch->SetBranchAddress("X_L.",&X_L);
+  ch->SetBranchAddress("Y_L.",&Y_L);
+  ch->SetBranchAddress("nY_L.",&nY_L);
+  ch->SetBranchAddress("nX_L.",&nX_L);
+  ch->SetBranchAddress("a20_L.",&a20_L);
+  ch->SetBranchAddress("n20_L.",&n20_L);
+  ch->SetBranchAddress("a20_L_uncorr.",&a20_L_uncorr); 
 
   ch->SetBranchAddress("x1c.",&x1c);
   ch->SetBranchAddress("y1c.",&y1c);
@@ -88,8 +108,25 @@ void reco() {
   ch->SetBranchAddress("centE.",&centE);
 
   // TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/he8_missing_mass.root", "RECREATE");
-  TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/noTarget/he8_emtpytarget_mm.root", "RECREATE");
+  TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/he8_emtpytarget_mm.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
+
+  tw->Branch("aCsI.",&aCsI,"aCsI/I");
+  tw->Branch("nCsI.",&nCsI,"nCsI/I");
+  tw->Branch("aCsI_cal.",&aCsI_cal,"aCsI_cal/F");
+
+  tw->Branch("X_C.",&X_C,"X_C/F");
+  tw->Branch("nX_C.",&nX_C,"nX_C/I");
+  tw->Branch("Y_C.",&Y_C,"Y_C/F");
+  tw->Branch("nY_C.",&nY_C),"nY_C/I";
+
+  tw->Branch("X_L.",&X_L,"X_L/F");
+  tw->Branch("Y_L.",&Y_L,"Y_L/F");
+  tw->Branch("nY_L.",&nY_L,"nY_L/I");
+  tw->Branch("nX_L.",&nX_L,"nY_L/I");
+  tw->Branch("a20_L.",&a20_L,"a20_L/F");
+  tw->Branch("n20_L.",&n20_L,"n20_L/I");
+  tw->Branch("a20_L_uncorr.",&a20_L_uncorr,"a20_L_uncorr/F"); 
 
   tw->Branch("nh3.",&nh3,"nh3/I");
   tw->Branch("nh3_s.",&nh3_s,"nh3_s/I");
@@ -126,6 +163,9 @@ void reco() {
   tw->Branch("angle_h3_h7.",&angle_h3_h7,"angle_h3_h7/F");
   tw->Branch("angle_h3_h7CM.",&angle_h3_h7CM,"angle_h3_h7CM/F");
   tw->Branch("angle_h3_h7CMreaction.",&angle_h3_h7CMreaction,"angle_h3_h7CMreaction/F");
+
+  tw->Branch("angle_he3_h7.",&angle_he3_h7,"angle_he3_h7/F");
+  tw->Branch("angle_he3_he8.",&angle_he3_he8,"angle_he3_he8/F");
 
   tw->Branch("h7.", "TLorentzVector", &h7);
   tw->Branch("h3.", "TLorentzVector", &h3);
@@ -222,7 +262,8 @@ void reco() {
       angle_h3_h7CM = h7CM_H7.Angle(h3CM_H7.Vect())*TMath::RadToDeg();
       angle_h3_h7 = h7.Angle(h3.Vect())*TMath::RadToDeg(); 
       angle_h3_h7CMreaction = h7CM.Angle(h3CM.Vect())*TMath::RadToDeg(); 
-
+      angle_he3_h7 = h7.Angle(he3.Vect())*TMath::RadToDeg();
+      angle_he3_he8 = he8.Angle(he3.Vect())*TMath::RadToDeg();
     }
 
     tw->Fill();
@@ -283,6 +324,8 @@ void zerovars() {
   angle_h3_h7CM = -100000;
   angle_h3_h7CMreaction = -100000;
   qReaction = -100.;
+  angle_he3_h7 = -100;
+  angle_he3_he8 = -100;
 
   mh7 = -1.;
   eh7 = -1.;

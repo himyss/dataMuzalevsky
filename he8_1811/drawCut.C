@@ -5,30 +5,30 @@ void drawCut(){
   Bool_t tCsI_s = kFALSE;
   Bool_t target = kFALSE;
   Bool_t centtimes = kFALSE;
-  Bool_t sq20times = kTRUE;
+  Bool_t sq20times = kFALSE;
   Bool_t X_Lcuts = kFALSE;
   Bool_t Y_Lcuts = kFALSE;
 
   TChain *ch = new TChain("tree");
   // ch->Add("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut.root");
 
-  ch->Add("/media/user/work/data/Analysed1811/selected/he8_full_cut_CsIarray.root");
+  ch->Add("/home/oem/work/data/exp1811/analysed/he8_trigger2_cut.root");
   
 
-  TCutG *cutCsI[16],*cut3h[16],*cutX_L[16],*cutY_L[16];
+  TCutG *cutCsI[16],*cut3h[16],*cutX_L[16],*cutY_L[16],*cut20_L[16];
   TString cutName;
   TFile *f1;
 
-  for(Int_t i=0;i<16;i++) {
-    // cutName.Form("/media/user/work/macro/exp201810/draw/cuts/CsI_%d.root",i);
-    cutName.Form("/media/user/work/macro/he8_1811/tritonCuts/CsI_%d.root",i);
-    f1 = new TFile(cutName.Data());
-    cut3h[i] = (TCutG*)f1->Get("CUTG");
-    delete f1;
-  }
+  // for(Int_t i=0;i<16;i++) {
+  //   // cutName.Form("/media/user/work/macro/exp201810/draw/cuts/CsI_%d.root",i);
+  //   cutName.Form("/media/user/work/macro/he8_1811/tritonCuts/CsI_%d.root",i);
+  //   f1 = new TFile(cutName.Data());
+  //   cut3h[i] = (TCutG*)f1->Get("CUTG");
+  //   delete f1;
+  // }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/media/user/work/macro/he8_1811/cutX_L/X_L_%d.root",i);
+    cutName.Form("/home/oem/work/macro/he8_1811/cutX_L/X_L_%d.root",i);
     f1 = new TFile(cutName.Data());
     cutX_L[i] = (TCutG*)f1->Get("CUTG");
     if (!cutX_L[i]) {
@@ -39,10 +39,21 @@ void drawCut(){
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/media/user/work/macro/he8_1811/cutY_L/Y_L_%d.root",i);
+    cutName.Form("/home/oem/work/macro/he8_1811/cutY_L/Y_L_%d.root",i);
     f1 = new TFile(cutName.Data());
     cutY_L[i] = (TCutG*)f1->Get("CUTG");
     if (!cutY_L[i]) {
+      cout << i  << " no cut"<< endl;
+      return;
+    }
+    delete f1;
+  }
+
+  for(Int_t i=0;i<16;i++) {
+    cutName.Form("/home/oem/work/macro/he8_1811/SQ20_Lcuts/sq20_L_%d.root",i);
+    f1 = new TFile(cutName.Data());
+    cut20_L[i] = (TCutG*)f1->Get("CUTG");
+    if (!cut20_L[i]) {
       cout << i  << " no cut"<< endl;
       return;
     }
@@ -127,12 +138,11 @@ void drawCut(){
       c6->cd(i+1);
       cut.Form("n20_L==%d",i);
       // tree->Draw("DSDX_C:aCsI","nCsI==0","", 1004737, 0);
-      hdraw.Form("a20_L_uncorr:t20_L-tF5");
-      ch->Draw(hdraw.Data(),cut.Data(),"", 1004737, 0);
-      ch->SetMarkerColor(kRed);
-      cut.Form("n20_L==%d && SQ20_L_flag==1",i);
-      ch->Draw(hdraw.Data(),cut.Data(),"same", 1004737, 0);
-      ch->SetMarkerColor(kBlack);
+      hdraw.Form("a20_L:t20_L-tF5");
+      ch->Draw(hdraw.Data(),cut.Data(),"");
+      // ch->SetMarkerColor(kRed);
+      cut20_L[i]->SetLineColor(kRed);
+      cut20_L[i]->Draw("same");
       c6->Update();
     }
 
@@ -150,6 +160,7 @@ void drawCut(){
       ch->SetMarkerColor(kBlack);
       ch->Draw(hdraw.Data(),cut.Data(),"", 1004737, 0);
 
+      cutX_L[i]->SetLineColor(kRed);
       cutX_L[i]->Draw("same");
       c7->Update();
     }
@@ -164,8 +175,9 @@ void drawCut(){
       cut.Form("nY_L==%d",i);
       hdraw.Form("Y_L:tY_L-tF5",i);
       ch->SetMarkerColor(kBlack);
-      ch->Draw(hdraw.Data(),cut.Data(),"", 1004737, 0);
-      cutX_L[i]->Draw("same");
+      ch->Draw(hdraw.Data(),cut.Data(),"");
+      cutY_L[i]->SetLineColor(kRed);
+      cutY_L[i]->Draw("same");
       c8->Update();
     }
   }
