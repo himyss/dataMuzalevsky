@@ -71,13 +71,16 @@ Int_t CsImap[32][32];
 
 TCutG *cutCsI[16],*cut3h[16],*cutX_L[16],*cutY_L[16],*cutSQ20_L[16],*cuthe3[16];
 Int_t nh3,nh3_s,nTarget,nHe8,nMWPC,nhe3;
-Int_t flagLeft,flagCent,flagCent_arr;
+Int_t flagLeft,flagCent,flagCent_arr,mult20,multX,multY;
 
 Int_t number = 0;
 
 void selection() {
   TChain *ch = new TChain("tree");
   ch->Add("/home/oem/work/data/exp1811/analysed/he8_trigger2.root");
+  // ch->Add("/home/oem/work/data/exp1811/analysed/notarget_all trigger.root");
+  // ch->Add("/home/oem/work/data/exp1811/analysed/he8_alltriggers.root");
+  
 
   // ch->Add("/home/oem/work/data/exp1811/analysed/notarget.root");
   
@@ -189,8 +192,9 @@ void selection() {
   readCsImap();
 
   TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/he8_trigger2_cut.root", "RECREATE");
+   // TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/he8_alltriggers_cut.root", "RECREATE");
   // TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/he8_trigger2_nocal_cut.root", "RECREATE");  
-  // TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/notarget_cut.root", "RECREATE");
+  // TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/notarget_cut_alltriggers.root", "RECREATE");
   // TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/clb/dsd_20_l_03_selected.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
@@ -256,7 +260,9 @@ void selection() {
   tw->Branch("zCent.",&zCent,"zCent/F");
 
   tw->Branch("nh3.",&nh3,"nh3/I");
-  // tw->Branch("nh3_s.",&nh3_s,"nh3_s/I");
+  tw->Branch("mult20.",&mult20,"mult20/I");
+  tw->Branch("multX.",&multX,"multX/I");  
+  tw->Branch("multY.",&multY,"multY/I");   
   tw->Branch("nhe3.",&nhe3,"nhe3/I");
   
   tw->Branch("flagLeft.",&flagLeft,"flagLeft/I");
@@ -265,16 +271,16 @@ void selection() {
 
   // tw->Branch("nTarget.",&nTarget,"nTarget/I");
 
-  Float_t xCent,yCent;
-  xCent = -1.;
-  yCent = 2.2;
+  Float_t xTarget,yTarget;
+  xTarget = -1.;
+  yTarget = 2.2;
 
   for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
   // for(Int_t nentry=0;nentry<10000;nentry++) {     
     if(nentry%100000==0) cout << "#ENTRY " << nentry << "#" << endl;
     // cout << "###ENTRY " << nentry << "###" << endl;
     ch->GetEntry(nentry);
-    // if (trigger!=2) continue;
+    // if (trigger!=1) continue;
 
     nh3 = 0;
     nh3_s = 0;
@@ -295,12 +301,12 @@ void selection() {
     for(Int_t i=0;i<16;i++) {
       if(SSD_L[i]>0 && tSSD_L[i]>0) vetoFlag = 1;
     }
-    if(vetoFlag) continue; 
+    // if(vetoFlag) continue; 
 
     zeroVars();
 
     MWPCprojection();
-    if ( ((fXt-xCent)*(fXt-xCent) + (fYt-yCent)*(fYt-yCent))>9*9 ) continue;
+    if ( ((fXt-xTarget)*(fXt-xTarget) + (fYt-yTarget)*(fYt-yTarget))>8*8 ) continue;
 
     fillSi();
     fillCsI();
@@ -335,6 +341,10 @@ void selection() {
 }
 
 void zeroVars() {
+  mult20 = 0;
+  multX = 0;
+  multY = 0;
+
   X_C = 0;
   tX_C = 0;
   Y_C = 0;
@@ -592,6 +602,7 @@ void fillSi() {
       count++;
     } 
   }
+  multX = count;
   if(count==1) {
     X_L = DSDX_L[nCh];
     tX_L = tDSDX_L[nCh];
@@ -607,6 +618,7 @@ void fillSi() {
       count++;
     } 
   }
+  multY = count;
   if(count==1) {
     Y_L = DSDY_L[nCh];
     Y_L_ch = DSDY_L_ch[nCh];
@@ -622,6 +634,7 @@ void fillSi() {
       count++;
     } 
   }
+  mult20 = count;
   if(count==1) {
     a20_L = SSD20_L[nCh];
     a20_L_ch = SSD20_L_ch[nCh];
@@ -834,7 +847,7 @@ void readCsImap() {
 void GetXYLeft() {
   // coordinates in the system of detector
   xLeft = 30. - nX_L*60./16;
-  yLeft = 30. - nY_L*60./16;
+  yLeft = - 30. + nY_L*60./16;
   zLeft = 0;
 
   // rotate the detector
