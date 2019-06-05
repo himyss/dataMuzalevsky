@@ -8,8 +8,10 @@ Float_t GetPosition(Float_t wire, Float_t wireStep,Float_t planeOffset);
 void CsIselect();
 void DSD_Cselect();
 void SSD20_Lselect();
+void SSD20_Rselect();
 void X_Lselect();
 void Y_Lselect();
+void Y_Rselect();
 
 void fillSi();
 
@@ -17,10 +19,12 @@ void readThickness();
 
 void triton();
 void checkHe3();
+void checkHe3_R();
 
 // reconstruction
 void GetXYLeft();
 void GetXYCent();
+void GetXYRight();
 
 const Double_t angleLeft =  17.;
 const Double_t leftDistance = 180.;
@@ -51,6 +55,7 @@ Float_t SSDY_R[16],SSD20_R[16],SSD_R[16],tSSDY_R[16],tSSD20_R[16],tSSD_R[16];
 Float_t fXt,fYt;
 Float_t x1c, y1c, x2c, y2c;
 Float_t xLeft,yLeft,zLeft;
+Float_t xRight,yRight,zRight;
 Float_t xCent,yCent,zCent;
 // flags
 Bool_t timesToF,timesMWPC,vetoFlag;
@@ -58,13 +63,13 @@ Bool_t timesToF,timesMWPC,vetoFlag;
 Double_t fThicknessRight[16][16];
 Double_t fThicknessLeft[16][16];
 
-TCutG *cutCsI[16],*cut3h[16],*cutX_L[16],*cutY_L[16],*cutSQ20_L[16],*cuthe3[16];
-Int_t nh3,nTarget,nhe3;
+TCutG *cutCsI[16],*cut3h[16],*cutX_L[16],*cutY_L[16],*cutSQ20_L[16],*cutSQ20_R[16],*cuthe3[16],*cutY_R[16],*cuthe3_R[16];
+Int_t nh3,nTarget,nhe3,nhe3_R;
 Int_t flagLeft,flagCent,flagRight;
 
 void selection() {
   TChain *ch = new TChain("tree");
-  ch->Add("/home/oem/work/data/exp1811/analysed/h7_all_test.root");
+  ch->Add("/home/oem/work/data/exp1811/analysed/h7_all.root");
 
   cout << ch->GetEntries() << endl;
   //--------------------------------------------------------------------------------
@@ -147,6 +152,17 @@ void selection() {
   }
 
   for(Int_t i=0;i<16;i++) {
+    cutName.Form("/home/oem/work/macro/he8_1811/cutY_R/Y_R_%d.root",i);
+    f2 = new TFile(cutName.Data());
+    cutY_R[i] = (TCutG*)f2->Get("CUTG");
+    if (!cutY_R[i]) {
+      cout << i  << " no cut"<< endl;
+      return;
+    }
+    delete f2;
+  }
+
+  for(Int_t i=0;i<16;i++) {
     cutName.Form("/home/oem/work/macro/he8_1811/SQ20_Lcuts/sq20_L_%d.root",i);
     f2 = new TFile(cutName.Data());
     cutSQ20_L[i] = (TCutG*)f2->Get("CUTG");
@@ -158,10 +174,32 @@ void selection() {
   }
 
   for(Int_t i=0;i<16;i++) {
+    cutName.Form("/home/oem/work/macro/he8_1811/SQ20_Rcuts/sq20_R_%d.root",i);
+    f2 = new TFile(cutName.Data());
+    cutSQ20_R[i] = (TCutG*)f2->Get("CUTG");
+    if (!cutSQ20_R[i]) {
+      cout << i  << " no cut"<< endl;
+      return;
+    }
+    delete f2;
+  }
+
+  for(Int_t i=0;i<16;i++) {
     cutName.Form("/home/oem/work/macro/he8_1811/helium3/he3_%d.root",i);
     f2 = new TFile(cutName.Data());
     cuthe3[i] = (TCutG*)f2->Get("CUTG");
     if (!cuthe3[i]) {
+      cout << i  << " no cut"<< endl;
+      return;
+    }
+    delete f2;
+  }
+
+  for(Int_t i=0;i<16;i++) {
+    cutName.Form("/home/oem/work/macro/he8_1811/he3_cut_R/he3_%d.root",i);
+    f2 = new TFile(cutName.Data());
+    cuthe3_R[i] = (TCutG*)f2->Get("CUTG");
+    if (!cuthe3_R[i]) {
       cout << i  << " no cut"<< endl;
       return;
     }
@@ -234,6 +272,7 @@ void selection() {
 
   tw->Branch("nh3.",&nh3,"nh3/I");
   tw->Branch("nhe3.",&nhe3,"nhe3/I");
+  tw->Branch("nhe3_R.",&nhe3_R,"nhe3_R/I");
   
   tw->Branch("flagLeft.",&flagLeft,"flagLeft/I");
   tw->Branch("flagCent.",&flagCent,"flagCent/I");
@@ -246,17 +285,15 @@ void selection() {
   yTarget = 2.2;
 
   for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
-  // for(Int_t nentry=0;nentry<10000000;nentry++) {     
+  // for(Int_t nentry=0;nentry<1000000;nentry++) {     
     if(nentry%100000==0) cout << "#ENTRY " << nentry << "#" << endl;
-    // cout << "###ENTRY " << nentry << "###" << endl;
     ch->GetEntry(nentry);
-    // if (trigger!=1) continue;
 
     nh3 = 0;
     nhe3 = 0;
+    nhe3_R = 0;
     timesMWPC = kTRUE;
     timesToF = kTRUE;
-    vetoFlag = 0;
     flagLeft = 1;
     flagRight = 1;
     flagCent = 1;
@@ -275,17 +312,21 @@ void selection() {
     fillSi();
 
     CsIselect();
-    // CsIselect_arr();
-
     DSD_Cselect();
-    SSD20_Lselect();
 
-    X_Lselect();
-    Y_Lselect();
+    if (trigger==2 && n20_L>-1 && nY_L>-1 && nX_L>-1) {
+      SSD20_Lselect();
+      X_Lselect();
+      Y_Lselect();
+    }
+
+    if (trigger==3 && n20_R>-1 && nY_R>-1) {
+      SSD20_Rselect();
+      Y_Rselect();
+    }
 
     if(flagCent) {
       triton();
-      // triton_arr();
       GetXYCent();
     }
 
@@ -293,6 +334,12 @@ void selection() {
       checkHe3();
       GetXYLeft();
     }
+
+    if (flagRight) {
+      checkHe3_R();
+      GetXYRight();
+    }
+    
 
     tw->Fill();
   }
@@ -316,15 +363,27 @@ void zeroVars() {
   tY_L = 0;
   t20_L = 0;
 
+  Y_R = 0;
+  a20_R = 0;
+  a20_R_uncorr = 0;
+  tY_R = 0;
+  t20_R = 0;
+
   nX_C = -1;
   nY_C = -1;
   nX_L = -1;
   nY_L = -1;
   n20_L = -1;
+  nY_R = -1;
+  n20_R = -1;
 
   xLeft = -50;
   yLeft = -50;
   zLeft = -50;
+
+  xRight= -50;
+  yRight= -50;
+  zRight= -50;
 
   xCent = -50;
   yCent = -50;
@@ -337,6 +396,7 @@ void zeroVars() {
 
   fXt = -100;
   fYt = -100;
+
 } 
 
 void checkToF() {
@@ -441,13 +501,6 @@ cout << "thickness Right detector " << endl;
   return;
 }
 
-  // if(fThicknessLeft[nCh20][nCh100]<10 || fThicknessLeft[nCh20][nCh100] > 30) return;
-
-  // Double_t dE = m_SSD20->GetValue()*par20_2 + par20_1;
-  // dE = dE*20./fThicknessLeft[nCh20][nCh100];
-  // Double_t Etotal = m_DSDX->GetValue()*par100_2 + par100_1 + dE;
-  // }
-
 
 void CsIselect() {
   if (nCsI==9) {
@@ -456,7 +509,8 @@ void CsIselect() {
   }
 
   // cout << " check " << endl;
-  if(nCsI>-1 && nCsI!=9 && cutCsI[nCsI]->IsInside(tCsI-tF5, aCsI)) {
+  if(nCsI>-1 && nCsI!=9 && cutCsI[nCsI]->IsInside(tCsI-tF5, aCsI)) {\
+    flagCent = 1;  
     return;
   }
   else {
@@ -544,6 +598,33 @@ void fillSi() {
     t20_L = tSSD20_L[nCh];
     n20_L = nCh;
   }
+
+  count = 0;
+  for(Int_t i=0;i<16;i++) {
+    if (SSD20_R[i]>0 && tSSD20_R[i]>0){
+      nCh = i;
+      count++;
+    } 
+  }
+  if(count==1) {
+    a20_R = SSD20_R[nCh];
+    t20_R = tSSD20_R[nCh];
+    n20_R = nCh;
+  }
+
+  count = 0;
+  for(Int_t i=0;i<16;i++) {
+    if (SSDY_R[i]>0 && tSSDY_R[i]>0){
+      nCh = i;
+      count++;
+    } 
+  }
+  if(count==1) {
+    Y_R = SSDY_R[nCh];
+    tY_R = tSSDY_R[nCh];
+    nY_R = nCh;    
+  }
+
 }
 
 void SSD20_Lselect() {
@@ -562,6 +643,26 @@ void SSD20_Lselect() {
     flagLeft = 0;
   }
 
+  return;
+}
+
+void SSD20_Rselect() {
+  a20_R_uncorr = a20_R;
+
+  a20_R = a20_R*20./fThicknessRight[n20_R][nY_R];
+
+  if (fThicknessRight[n20_R][nY_R]<10 || fThicknessRight[n20_R][nY_R] > 30) {
+    flagRight = 0;
+    return;
+  }
+
+  if (n20_R>-1 && n20_R<16 && a20_R>0 && cutSQ20_R[n20_R]->IsInside(t20_R-tF5, a20_R_uncorr)) {
+    return;
+  }
+  else {
+    flagRight = 0;
+    return;
+  }
   return;
 }
 
@@ -587,6 +688,18 @@ void checkHe3() {
     return;
   }
 }
+
+void checkHe3_R() {
+  if(nY_R>-1 && n20_R>-1 && cuthe3_R[n20_R]->IsInside(Y_R, a20_R)) {
+    nhe3_R = 1;
+    return;
+  }
+  else {
+    nhe3_R = 0;
+    return;
+  }
+}
+
 
 void X_Lselect() {
   // cout << " check " << endl;
@@ -618,6 +731,18 @@ void Y_Lselect() {
 
 }
 
+void Y_Rselect() {
+
+  if(nY_R>-1 && nY_R<16 && Y_R>0 && cutY_R[nY_R]->IsInside(tY_R-tF5, Y_R)) {
+    return;
+  }
+  else {
+    flagRight = 0;
+    return;
+  }
+
+}
+
 void GetXYLeft() {
   // coordinates in the system of detector
   xLeft = 30. - nX_L*60./16;
@@ -631,6 +756,23 @@ void GetXYLeft() {
   // transfer the detector
   xLeft = xLeft + leftDistance*sin(angleLeft*TMath::DegToRad());
   zLeft = zLeft + leftDistance*cos(angleLeft*TMath::DegToRad());
+
+  return;
+}
+
+void GetXYRight() {
+  // coordinates in the system of detector
+  xRight = 30. + n20_R*60./16;
+  yRight = - 30. + nY_R*60./16;
+  zRight = 0;
+
+  // rotate the detector
+  xRight = yRight*cos(-angleLeft*TMath::DegToRad());
+  yRight = xRight*sin(-angleLeft*TMath::DegToRad());
+
+  // transfer the detector
+  xRight = xRight + leftDistance*sin(-angleLeft*TMath::DegToRad());
+  zRight = zRight + leftDistance*cos(-angleLeft*TMath::DegToRad());
 
   return;
 }
