@@ -1,15 +1,40 @@
+
+//right telescope
+#include "cutsRTY.cxx"
+#include "cutsRT20X.cxx"
+#include "cutsHelium3.cxx"
+
+//left telescope
+#include "cutsLTHelium3.cxx"
+#include "cutsLTY.cxx"
+#include "cutsLT20X.cxx"
+//#include "cutsHelium3false.cxx"
+//#include "cutsHelium4.cxx"
+// #include "cutsTritium.cxx"
+#include "cutsTritium.cxx"
+// #include "cutsCsI.cxx"
+#include "cutsCsI_new.cxx"
+
+void InitExternalCuts();
+
+
+
 void drawCut_arr(){
+
+  InitExternalCuts();
+
   gStyle->SetOptStat(0);
   Bool_t tritium = 0;
   Bool_t he3 = 0;
-  Bool_t tCsI_s = 1;
+  Bool_t he3_R = 1;
+  Bool_t tCsI_s = 0;
   Bool_t target = 0;
   Bool_t centtimes = 0;
   Bool_t sq20times = 0;
   Bool_t sq20Rtimes = 0;
-  Bool_t X_Lcuts = 0;
   Bool_t Y_Lcuts = 0;
   Bool_t Y_Rcuts = 0;
+  Bool_t X_Lcuts = 0;
 
   TChain *ch = new TChain("tree");
   // ch->Add("/media/user/work/data/Analysed1811/siParTests/analysed/he8_full_cut.root");
@@ -116,13 +141,13 @@ void drawCut_arr(){
       ch->SetMarkerColor(kBlack);      
       cut.Form("nCsI==%d && flagCent",i);
       // hdraw.Form("X_C.:aCsI>>h%d(300,0,4000,800,0,60)",i);
-      hdraw.Form("X_C.:aCsI_cal>>h%d(300,0,150,800,0,20)",i);
+      hdraw.Form("X_C.:aCsI>>h%d(300,0,4000,800,0,20)",i);
       ch->Draw(hdraw.Data(),cut.Data(),"");
       c1->Update();
 
       ch->SetMarkerColor(kRed);
       cut.Form("nCsI==%d && nh3 && flagCent",i);
-      hdraw.Form("X_C.:aCsI_cal>>h_h3_%d(300,0,150,800,0,20)",i);
+      hdraw.Form("X_C.:aCsI>>h_h3_%d(300,0,4000,800,0,20)",i);
       ch->Draw(hdraw.Data(),cut.Data(),"same");
       c1->Update();
 
@@ -138,9 +163,16 @@ void drawCut_arr(){
       // ch->Draw(hdraw.Data(),cut.Data(),"same");
 
 
-      // cut3h[i]->SetLineWidth(1);
-      // cut3h[i]->SetLineColor(kRed);
-      // cut3h[i]->Draw("same");
+      if (i!=9) {
+        cut3h[i]->SetLineWidth(1);
+        cut3h[i]->SetLineColor(kBlack);
+        cut3h[i]->Draw("same");
+
+        cTritium[i]->SetLineWidth(1);
+        cTritium[i]->SetLineColor(kGreen);
+        cTritium[i]->Draw("same");
+      }
+
       c1->Update();
     }
 
@@ -232,12 +264,45 @@ void drawCut_arr(){
 
   }
 
+
+  if (he3_R) {
+    TCanvas *c1_h3 = new TCanvas("c1_h3","",1800,1000);  
+    c1_h3->Divide(4,4);
+    for(Int_t i=0;i<16;i++) {
+    // Int_t i=0;
+      c1_h3->cd(i+1);
+      ch->SetMarkerColor(kBlack);
+      ch->SetMarkerStyle(1);
+      cut.Form("n20_R==%d",i);
+      // tree->Draw("DSDX_C:aCsI_s","nCsI_s==0","", 1004737, 0);
+      hdraw.Form("a20_R.:Y_R>>h_%d(200,0,70,200,0,5)",i);
+      ch->Draw(hdraw.Data(),cut.Data(),"col");
+
+      cut.Form("n20_R==%d && nhe3_R && nh3",i);
+      // tree->Draw("DSDX_C:aCsI_s","nCsI_s==0","", 1004737, 0);
+      ch->SetMarkerColor(kRed);
+      ch->SetMarkerStyle(20);
+      hdraw.Form("a20_R.:Y_R>>h_he3%d(200,0,70,200,0,5)",i);
+      ch->Draw(hdraw.Data(),cut.Data(),"same");
+
+
+      cuthe3[i]->SetLineColor(kBlack);
+      cuthe3[i]->Draw("same");
+
+      // cHelium3[i]->SetLineColor(kGreen);
+      // cHelium3[i]->Draw("same");
+
+      c1_h3->Update();
+    } 
+
+  }
+
   if (tCsI_s) {
     TCanvas *c3 = new TCanvas("c3","",1800,1000);  
     c3->Divide(4,4);
     for(Int_t i=0;i<16;i++) {
       c3->cd(i+1);
-      // {Int_t i=6;
+      // {Int_t i=15;
       ch->SetMarkerStyle(1);
       ch->SetMarkerColor(kBlack);      
       cut.Form("nCsI==%d",i);
@@ -245,7 +310,9 @@ void drawCut_arr(){
       ch->Draw(hdraw.Data(),cut.Data(),"");
 
       ch->SetMarkerColor(kRed);
-      cut.Form("nCsI==%d && flagCent",i);
+      ch->SetMarkerStyle(20);
+      ch->SetMarkerSize(0.7);
+      cut.Form("nCsI==%d && nh3",i);
       hdraw.Form("aCsI:tCsI-tF5 >> h_CsI_h3_%d",i);
       ch->Draw(hdraw.Data(),cut.Data(),"same");
 
@@ -255,13 +322,16 @@ void drawCut_arr(){
       // ch->Draw(hdraw.Data(),cut.Data(),"same");
 
       // ch->SetMarkerColor(kBlack);
-      // cutCsI_s[i]->Draw("same");
-      // cutCsI_s[i]->SetLineColor(kBlack);
-      // cutCsI_s[i]->SetLineWidth(2);
-      // ch->SetMarkerColor(kRed);
-      // ch->SetMarkerStyle(20);
-      // ch->SetMarkerSize(0.1); 
 
+      if (i!=9) {
+        // cutCsI_s[i]->SetLineColor(kBlack);
+        // cutCsI_s[i]->SetLineWidth(2);
+        // cutCsI_s[i]->Draw("same");
+
+        cCsI[i]->SetLineColor(kGreen);
+        cCsI[i]->SetLineWidth(2);
+        cCsI[i]->Draw("same");
+      }
 
       c3->Update();
     }
@@ -304,12 +374,14 @@ void drawCut_arr(){
     for(Int_t i=0;i<16;i++) {
       c5->cd(i+1);
 // hdraw cutName
-      cutName.Form("trigger && nY_C==%d && tY_C - tF5>123 && tY_C - tF5<135",i);
+      cutName.Form("nY_C==%d && tY_C - tF5>80 && tY_C - tF5<200",i);
       ch->SetMarkerColor(kBlack);  
-      ch->Draw("Y_C:tY_C - tF5",cutName.Data(),"",10000000,0);
+      ch->SetMarkerStyle(1);
+      ch->Draw("Y_C:tY_C - tF5",cutName.Data(),"");
       ch->SetMarkerColor(kRed);
-      cutName = cutName + TString(" && flagCent==1");
-      ch->Draw("Y_C:tY_C - tF5",cutName.Data(),"same",10000000,0);
+      ch->SetMarkerStyle(20);
+      cutName = cutName + TString(" && nh3==1");
+      ch->Draw("Y_C:tY_C - tF5",cutName.Data(),"same");
 
       c5->Update();
     }
@@ -320,11 +392,13 @@ void drawCut_arr(){
     for(Int_t i=0;i<16;i++) {
       c5_1->cd(i+1);
 // hdraw cutName
-      cutName.Form("trigger && nX_C==%d && tX_C - tF5>80 && tX_C - tF5<135",i);
-      ch->SetMarkerColor(kBlack);  
+      cutName.Form("trigger && nX_C==%d && tX_C - tF5>80 && tX_C - tF5<200",i);
+      ch->SetMarkerColor(kBlack);
+      ch->SetMarkerStyle(1);
       ch->Draw("X_C:tX_C - tF5",cutName.Data(),"");
       ch->SetMarkerColor(kRed);
-      cutName = cutName + TString(" && flagCent==1");
+      ch->SetMarkerStyle(20);
+      cutName = cutName + TString(" && nh3");
       ch->Draw("X_C:tX_C - tF5",cutName.Data(),"same");
 
       c5_1->Update();
@@ -352,18 +426,32 @@ void drawCut_arr(){
     c6->Divide(4,4);
     for(Int_t i=0;i<16;i++) {
       c6->cd(i+1);
+
+      ch->SetMarkerStyle(1);
       ch->SetMarkerColor(kBlack);
       cut.Form("n20_L==%d",i);
       hdraw.Form("a20_L:t20_L-tF5 >> h_tsq20_%d(300,0,120,300,0,20)",i);
       ch->Draw(hdraw.Data(),cut.Data(),"");
 
+      // ch->SetMarkerColor(kRed);
+      // cut.Form("n20_L==%d && flagLeft ",i);
+      // hdraw.Form("a20_L:t20_L-tF5 >> h_tsq20_red_%d(300,0,120,300,0,20)",i);
+      // ch->Draw(hdraw.Data(),cut.Data(),"same");
+
+      ch->SetMarkerStyle(20);
       ch->SetMarkerColor(kRed);
-      cut.Form("n20_L==%d && flagLeft ",i);
-      hdraw.Form("a20_L:t20_L-tF5 >> h_tsq20_red_%d(300,0,120,300,0,20)",i);
+      cut.Form("n20_L==%d && flagLeft && nhe3",i);
+      hdraw.Form("a20_L:t20_L-tF5 >> h_tsq20_he3_%d(300,0,120,300,0,20)",i);
       ch->Draw(hdraw.Data(),cut.Data(),"same");
 
+
       cutSQ20_L[i]->SetLineColor(kBlack);
+      cutSQ20_L[i]->SetLineWidth(2.);
       cutSQ20_L[i]->Draw("same");
+
+      cLT20X[i]->SetLineColor(kGreen);
+      cLT20X[i]->SetLineWidth(2.);
+      cLT20X[i]->Draw("same");
 
       c6->Update();
     }
@@ -375,25 +463,35 @@ if (sq20Rtimes) {
 
     TCanvas *c6_R = new TCanvas("c6_R","sq20_L times",1800,1000);
     // c6_R->Divide(4,4);
-    // ch->SetMarkerStyle(20);
+    
     // for(Int_t i=0;i<16;i++) {
-    //   cout << "EVENT" << endl;
     //   c6_R->cd(i+1);
     { Int_t i =7;
+      ch->SetMarkerStyle(1);
       ch->SetMarkerColor(kBlack);
       cut.Form("n20_R==%d",i);
       // hdraw.Form("a20_R_uncorr:t20_R-tF5 >> h_tsq20_%d(300,-60,60,300,0,20)",i);
       hdraw.Form("a20_R_uncorr:t20_R-tF5 >> h_tsq20_%d",i);
-      cout << ch->Draw(hdraw.Data(),cut.Data(),"") << endl;
+      ch->Draw(hdraw.Data(),cut.Data(),"");
 
+
+      ch->SetMarkerStyle(20);
       ch->SetMarkerColor(kRed);
-      cut.Form("n20_R==%d && flagRight",i);
+      cut.Form("n20_R==%d && nhe3_R",i);
       // hdraw.Form("a20_R_uncorr:t20_R-tF5 >> h_tsq20_red_%d(300,-60,60,300,0,20)",i);
-      hdraw.Form("a20_R_uncorr:t20_R-tF5 >> h_tsq20_red_%d",i);
-      cout << ch->Draw(hdraw.Data(),cut.Data(),"same") << endl;
+      // hdraw.Form("a20_R_uncorr:t20_R-tF5 >> h_tsq20_red_%d",i);
+      hdraw.Form("a20_R:t20_R-tF5 >> h_tsq20_red_%d",i);
+      ch->Draw(hdraw.Data(),cut.Data(),"same");
 
-      // cutSQ20_R[i]->SetLineColor(kBlack);
-      // cutSQ20_R[i]->Draw("same");
+
+      cutSQ20_R[i]->SetLineWidth(2);
+      cutSQ20_R[i]->SetLineColor(kBlack);
+      cutSQ20_R[i]->Draw("same");
+
+      cRT20X[i]->SetLineWidth(2);
+      cRT20X[i]->SetLineColor(kGreen);
+      cRT20X[i]->Draw("same");
+
 
       // c6_R->Update();
     }
@@ -452,38 +550,44 @@ if (sq20Rtimes) {
     for(Int_t i=0;i<16;i++) {
       c8->cd(i+1);
       ch->SetMarkerColor(kBlack);
+      ch->SetMarkerStyle(1);
       cut.Form(" nY_L==%d && tY_L-tF5<200",i);
       hdraw.Form("Y_L:tY_L-tF5>>h_Y_L_%d(300,-70,100,500,0,100)",i);
       ch->Draw(hdraw.Data(),cut.Data(),"col");
 
       ch->SetMarkerColor(kRed);
-      cut.Form("nY_L==%d && tY_L-tF5<200 && flagLeft",i);
+      ch->SetMarkerStyle(20);
+      cut.Form("nY_L==%d && tY_L-tF5<200 && nhe3",i);
       hdraw.Form("Y_L:tY_L-tF5>>h_Y_L_red_%d(300,-70,100,500,0,100)",i);
       ch->Draw(hdraw.Data(),cut.Data(),"same");
 
       cutY_L[i]->SetLineColor(kBlack);
       cutY_L[i]->Draw("same");
+
+      cLTY[i]->SetLineColor(kGreen);
+      cLTY[i]->Draw("same");
+
       c8->Update();
     }
 
   }
 
 if (Y_Rcuts) {
-    // TCanvas *c10 = new TCanvas("c10","",1800,1000);  
-    // c10->Divide(4,4);
-  TString canName;
-  TCanvas *c_arr[16];
-  for(Int_t i=0;i<16;i++){
-    canName.Form("c%d",i+1);
-    c_arr[i] = new TCanvas(canName.Data(),"title",1800,1000);
-  }
+    TCanvas *c10 = new TCanvas("c10","",1800,1000);  
+    c10->Divide(4,4);
+  // TString canName;
+  // TCanvas *c_arr[16];
+  // for(Int_t i=0;i<16;i++){
+  //   canName.Form("c%d",i+1);
+  //   c_arr[i] = new TCanvas(canName.Data(),"title",1800,1000);
+  // }
 
     for(Int_t i=0;i<16;i++) {
-      c_arr[i]->cd();
+      c10->cd(i+1);
 
       ch->SetMarkerColor(kBlack);
       ch->SetMarkerStyle(1);
-      cut.Form("nY_R==%d && flagRight",i);
+      cut.Form("nY_R==%d",i);
       hdraw.Form("Y_R:tY_R-tF5>>h_Y_R_%d(300,-70,100,500,0,50)",i);
       ch->Draw(hdraw.Data(),cut.Data(),"");
 
@@ -494,31 +598,45 @@ if (Y_Rcuts) {
       hdraw.Form("Y_R:tY_R-tF5>>h_Y_R_red_%d(300,-70,100,500,0,50)",i);
       ch->Draw(hdraw.Data(),cut.Data(),"same");
 
-      ch->SetMarkerColor(kMagenta);
-      ch->SetMarkerStyle(20);
-      ch->SetMarkerSize(2);
-      cut.Form("nY_R==%d && flagRight && nhe3_R && nh3",i);
-      hdraw.Form("Y_R:tY_R-tF5>>h_Y_R_mag_%d(300,-70,100,500,0,50)",i);
-      ch->Draw(hdraw.Data(),cut.Data(),"same");
+      // c_arr[i]->Update();
+      cutY_R[i]->SetLineColor(kBlack);
+      cutY_R[i]->Draw("same");
 
+      cRTY[i]->SetLineColor(kGreen);
+      cRTY[i]->Draw("same");
+      // cout << cRTY[i]->GetN
 
-      c_arr[i]->Update();
-      // cutY_R[i]->SetLineColor(kBlack);
-      // cutY_R[i]->Draw("same");
-      // c10->Update();
+      c10->Update();
     }
 
-  c_arr[0]->Print("/home/oem/Desktop/pics/Y_Rtimes_all.pdf");
-  c_arr[0]->Print("/home/oem/Desktop/pics/Y_Rtimes_all.pdf[");
-  c_arr[0]->Print("/home/oem/Desktop/pics/Y_Rtimes_all.pdf");
-  for(Int_t i=1;i<15;i++) {
-    c_arr[i]->Print("/home/oem/Desktop/pics/Y_Rtimes_all.pdf");
-  }
-  c_arr[15]->Print("/home/oem/Desktop/pics/Y_Rtimes_all.pdf");
-  c_arr[15]->Print("/home/oem/Desktop/pics/Y_Rtimes_all.pdf]");
+  // c_arr[0]->Print("/home/oem/Desktop/pics/Y_Rtimes_all.pdf");
+  // c_arr[0]->Print("/home/oem/Desktop/pics/Y_Rtimes_all.pdf[");
+  // c_arr[0]->Print("/home/oem/Desktop/pics/Y_Rtimes_all.pdf");
+  // for(Int_t i=1;i<15;i++) {
+  //   c_arr[i]->Print("/home/oem/Desktop/pics/Y_Rtimes_all.pdf");
+  // }
+  // c_arr[15]->Print("/home/oem/Desktop/pics/Y_Rtimes_all.pdf");
+  // c_arr[15]->Print("/home/oem/Desktop/pics/Y_Rtimes_all.pdf]");
 
 
   }
 
 
+}
+
+void InitExternalCuts() {
+  cutsRT20X();
+  cutsLT20X();
+
+  cutsRTY();
+  cutsLTY();
+
+  cutsHelium3();
+  cutsLTHelium3();
+
+  cutsTritium();
+  // cutsTritiumCal();
+
+  // cutsCsI();
+  cutsCsI_new();
 }
