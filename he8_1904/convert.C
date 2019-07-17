@@ -3,7 +3,7 @@ Int_t GetClusterMWPC(TClonesArray *data);
 void MWPCprojection();
 Float_t GetPosition(Float_t wire, Float_t wireStep,Float_t planeOffset);
 
-void fillSi(TClonesArray *data,Float_t* amp,Float_t* time,Float_t *par1,Float_t *par2);
+void fillSi(TClonesArray *data,Float_t* amp,Float_t* time,Float_t *par1,Float_t *par2,Int_t *multiplicity,Float_t threshold = 0);
 void fillarrayCsI(TClonesArray *data,Float_t* amp,Float_t* time);
 
 void processCsI_cal(Float_t *par1,Float_t *par2);
@@ -94,7 +94,9 @@ Int_t multc_x,multc_y,multCsI;
 void convert() {
 
   TChain *ch = new TChain("er");
-  ch->Add("/media/oem/Extreme\ SSD/exp1904/digi/h7_*");  
+  ch->Add("/home/oem/work/data/exp1904/digi/h7/h7_ct*");
+  // ch->Add("/home/oem/work/data/exp1906/digi/be10_ct_10_*");
+    
   cout << "Found " << ch->GetEntries() << " entries" << endl;
 
   readPar("ssd_20u_1",pSQ201_1,pSQ201_2);
@@ -164,7 +166,7 @@ void convert() {
   ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_1_SingleSi_SSD20_1_X_0",&v_SSD20_1);
   ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_1_SingleSi_SSD_1_Y_1",&v_SSD_1);
   ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_1_SingleSi_SSD_V_1_Y_2",&v_SSD_V_1);  
-
+ 
   ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_2_SingleSi_SSD20_2_Y_3",&v_SSD20_2);
   ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_2_SingleSi_SSD_2_X_4",&v_SSD_2);
   ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_2_SingleSi_SSD_V_2_X_5",&v_SSD_V_2);  
@@ -185,6 +187,7 @@ void convert() {
   // Creating outfile,outtree
 
   TFile *fw = new TFile("/home/oem/work/data/exp1904/analysed/h7/h7_all.root", "RECREATE");
+  // /home/oem/work/data/exp1906/analysed 
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("trigger",&trigger,"trigger/I");
@@ -276,8 +279,8 @@ void convert() {
 
 
   for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) {
-  // for(Int_t nentry=0;nentry<1000;nentry++) {    
-    if(nentry%10000000==0) cout << "#Event " << nentry << "#" << endl;
+  // for(Int_t nentry=0;nentry<1000000;nentry++) {    
+    if(nentry%1000000==0) cout << "#Event " << nentry << "#" << endl;
     ch->GetEntry(nentry);
     
     if(v_MWPCx1->GetEntriesFast()==0) continue;
@@ -292,6 +295,35 @@ void convert() {
     if (GetClusterMWPC(v_MWPCy1)!=1) continue;
     if (GetClusterMWPC(v_MWPCy2)!=1) continue;  
 
+    mult20_1 = v_SSD20_1->GetEntries();
+    // if (mult20_1>1) continue;
+    mult1_1 = v_SSD_1->GetEntries();
+    // if (mult1_1>1) continue;    
+    multv_1 = v_SSD_V_1->GetEntries();
+
+    mult20_2 = v_SSD20_2->GetEntries();
+    // if (mult20_2>1) continue;      
+    mult1_2 = v_SSD_2->GetEntries();
+    // if (mult1_2>1) continue;    
+    multv_2 = v_SSD_V_2->GetEntries();    
+
+    mult20_3 = v_SSD20_3->GetEntries();
+    // if (mult20_3>1) continue;    
+    mult1_3 = v_SSD_3->GetEntries();
+    // if (mult1_3>1) continue;
+    multv_3 = v_SSD_V_3->GetEntries();
+
+    mult20_4 = v_SSD20_4->GetEntries();
+    // if (mult20_4>1) continue;
+    mult1_4 = v_SSD_4->GetEntries();
+    // if (mult1_4>1) continue;
+    multv_4 = v_SSD_V_4->GetEntries();
+
+    multc_x = v_DSDX_C->GetEntries();
+    multc_y = v_DSDY_C->GetEntries();
+    // if (multc_x>1 || multc_y>1) continue;
+    multCsI = v_CsI->GetEntries();
+
     zeroVars();
 
     trigger = header->GetTrigger();
@@ -302,7 +334,7 @@ void convert() {
 
     tMWPC = 0.5*((ERBeamDetMWPCDigi*)v_MWPCx1->At(0))->GetTime();
 
-    if (tMWPC - tF5 > 97.5 || tMWPC - tF5 <75) continue;
+    if (tMWPC - tF5 > 97.5 || tMWPC - tF5 < 75) continue;
 
     fillMWPC(v_MWPCx1,&wirex1);
     fillMWPC(v_MWPCy1,&wirey1);
@@ -321,45 +353,25 @@ void convert() {
       }
     }
 
-    mult20_1 = v_SSD20_1->GetEntries();
-    mult1_1 = v_SSD_1->GetEntries();
-    multv_1 = v_SSD_V_1->GetEntries();
-
-    mult20_2 = v_SSD20_2->GetEntries();
-    mult1_2 = v_SSD_2->GetEntries();
-    multv_2 = v_SSD_V_2->GetEntries();    
-
-    mult20_3 = v_SSD20_3->GetEntries();
-    mult1_3 = v_SSD_3->GetEntries();
-    multv_3 = v_SSD_V_3->GetEntries();
-
-    mult20_4 = v_SSD20_4->GetEntries();
-    mult1_4 = v_SSD_4->GetEntries();
-    multv_4 = v_SSD_V_4->GetEntries();
-
-    multc_x = v_DSDX_C->GetEntries();
-    multc_y = v_DSDY_C->GetEntries();
-    multCsI = v_CsI->GetEntries();
-
-    fillSi(v_DSDX_C,DSD_X,tDSD_X,pDSD_X1,pDSD_X2);
-    fillSi(v_DSDY_C,DSD_Y,tDSD_Y,pDSD_Y1,pDSD_Y2);
+    fillSi(v_DSDX_C,DSD_X,tDSD_X,pDSD_X1,pDSD_X2,&multc_x,2.5);
+    fillSi(v_DSDY_C,DSD_Y,tDSD_Y,pDSD_Y1,pDSD_Y2,&multc_y,2.5);
 
     // side telescopes
-    fillSi(v_SSD20_1,SQ20_1,tSQ20_1,pSQ201_1,pSQ201_2);
-    fillSi(v_SSD_1,SSD1,tSSD1,pSSD1_1,pSSD1_2);
-    fillSi(v_SSD_V_1,SSD_V1,tSSD_V1,pSSD_V1_1,pSSD_V1_2);
+    fillSi(v_SSD20_1,SQ20_1,tSQ20_1,pSQ201_1,pSQ201_2,&mult20_1);
+    fillSi(v_SSD_1,SSD1,tSSD1,pSSD1_1,pSSD1_2,&mult1_1);
+    fillSi(v_SSD_V_1,SSD_V1,tSSD_V1,pSSD_V1_1,pSSD_V1_2,&multv_1);
 
-    fillSi(v_SSD20_2,SQ20_2,tSQ20_2,pSQ202_1,pSQ202_2);
-    fillSi(v_SSD_2,SSD2,tSSD2,pSSD2_1,pSSD2_2);
-    fillSi(v_SSD_V_2,SSD_V2,tSSD_V2,pSSD_V2_1,pSSD_V2_2);
+    fillSi(v_SSD20_2,SQ20_2,tSQ20_2,pSQ202_1,pSQ202_2,&mult20_2);
+    fillSi(v_SSD_2,SSD2,tSSD2,pSSD2_1,pSSD2_2,&mult1_2);
+    fillSi(v_SSD_V_2,SSD_V2,tSSD_V2,pSSD_V2_1,pSSD_V2_2,&multv_2);
 
-    fillSi(v_SSD20_3,SQ20_3,tSQ20_3,pSQ203_1,pSQ203_2);
-    fillSi(v_SSD_3,SSD3,tSSD3,pSSD3_1,pSSD3_2);
-    fillSi(v_SSD_V_3,SSD_V3,tSSD_V3,pSSD_V3_1,pSSD_V3_2);
+    fillSi(v_SSD20_3,SQ20_3,tSQ20_3,pSQ203_1,pSQ203_2,&mult20_3);
+    fillSi(v_SSD_3,SSD3,tSSD3,pSSD3_1,pSSD3_2,&mult1_3);
+    fillSi(v_SSD_V_3,SSD_V3,tSSD_V3,pSSD_V3_1,pSSD_V3_2,&multv_3);
 
-    fillSi(v_SSD20_4,SQ20_4,tSQ20_4,pSQ204_1,pSQ204_2);
-    fillSi(v_SSD_4,SSD4,tSSD4,pSSD4_1,pSSD4_2);
-    fillSi(v_SSD_V_4,SSD_V4,tSSD_V4,pSSD_V4_1,pSSD_V4_2);
+    fillSi(v_SSD20_4,SQ20_4,tSQ20_4,pSQ204_1,pSQ204_2,&mult20_4);
+    fillSi(v_SSD_4,SSD4,tSSD4,pSSD4_1,pSSD4_2,&mult1_4);
+    fillSi(v_SSD_V_4,SSD_V4,tSSD_V4,pSSD_V4_1,pSSD_V4_2,&multv_4);
 
     tw->Fill();
   }
@@ -534,7 +546,7 @@ Float_t GetPosition(Float_t wire, Float_t wireStep,
   return (wire - 16.5)*wireStep + planeOffset;
 }
 
-void fillSi(TClonesArray *data,Float_t* amp,Float_t* time,Float_t *par1,Float_t *par2) {
+void fillSi(TClonesArray *data,Float_t* amp,Float_t* time,Float_t *par1,Float_t *par2,Int_t *multiplicity, Float_t threshold = 0) {
   if(!data) return;
   if(data->GetEntriesFast()==0) return;
   Bool_t isCal = kTRUE;
@@ -544,9 +556,14 @@ void fillSi(TClonesArray *data,Float_t* amp,Float_t* time,Float_t *par1,Float_t 
   for(Int_t i=0;i<data->GetEntriesFast();i++) { 
     nCh = ((ERQTelescopeSiDigi*)data->At(i))->GetStripNb();
     // cout << 1000*((ERQTelescopeSiDigi*)data->At(i))->GetEdep()*(*(par2+nCh)) + (*(par1+nCh)) << " " << nCh << " " << *(par2+nCh) << " " << *(par1+nCh) << endl;
-    if (isCal) *(amp+nCh) = 1000*((ERQTelescopeSiDigi*)data->At(i))->GetEdep()*(*(par2+nCh)) + (*(par1+nCh)) ;
-    if (!isCal) *(amp+nCh) = 1000*((ERQTelescopeSiDigi*)data->At(i))->GetEdep() ;
+    if (isCal) *(amp+nCh) = 1000*((ERQTelescopeSiDigi*)data->At(i))->GetEdep()*(*(par2+nCh)) + (*(par1+nCh));
+    if (!isCal) *(amp+nCh) = 1000*((ERQTelescopeSiDigi*)data->At(i))->GetEdep();
     *(time+nCh) = ((ERQTelescopeSiDigi*)data->At(i))->GetTime();
+    if (isCal && *(amp+nCh)<threshold) {
+      *(amp+nCh) = 0;
+      *(time+nCh) = 0;
+      *multiplicity = *multiplicity - 1;
+    } 
   } 
 }
 

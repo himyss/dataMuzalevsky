@@ -3,26 +3,57 @@ void zerovars();
 
 TELoss f8HeSi;
 
-Float_t fXt,fYt;
-Float_t x1c, y1c, x2c, y2c;
-Float_t xLeft,yLeft,zLeft;
-Float_t xCent,yCent,zCent;
+//outtree vars
+Int_t trigger; 
 
 Float_t tF5,F5,tF3,F3;
 
+Float_t tMWPC;
+Float_t wirex1,wirex2,wirey1,wirey2;
+
 Int_t nCsI;
-Float_t aCsI,tCsI,aCsI_cal;
+Float_t aCsI,tCsI;
 
-Float_t X_C,tX_C,Y_C,tY_C,X_L,Y_L,a20_L,tX_L,tY_L,t20_L,a20_R,Y_R,t20_R,tY_R,a20_L_uncorr;
-Int_t nX_C,nY_C,nX_L,nY_L,n20_L,n20_R,nY_R;
+Float_t a20_1,t20_1,a20_1_un;
+Int_t n20_1;
 
-Int_t flagLeft,flagCent,flagCent_arr;
+Float_t a1_1,t1_1;
+Int_t n1_1;
 
-Int_t nh3,nh3_s,nhe3;
+Float_t a20_2,t20_2,a20_2_un;
+Int_t n20_2;
 
-// new
-Float_t leftE4,leftE24,leftEcal;
+Float_t a1_2,t1_2;
+Int_t n1_2;
+
+Float_t a20_3,t20_3,a20_3_un;
+Int_t n20_3;
+
+Float_t a1_3,t1_3;
+Int_t n1_3;
+
+Float_t a20_4,t20_4,a20_4_un;
+Int_t n20_4;
+
+Float_t a1_4,t1_4;
+Int_t n1_4;
+
+Float_t X_C,tX_C,Y_C,tY_C;
+Int_t nX_C,nY_C;
+//
+
+Float_t fXt,fYt;
+Float_t x1c, y1c, x2c, y2c;
+
+Int_t flag1,flag2,flag3,flag4,flagCent;
+Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4;
+
+Float_t e_1,e_2,e_3,e_4;
 Float_t centE;
+
+Float_t th_he3_1,th_he3_2,th_he3_3,th_he3_4,th_h3;
+Float_t phi_he3_1,phi_he3_2,phi_he3_3,phi_he3_4,phi_h3;
+
 
 TLorentzVector h3,he8,d2,he3,h7,h3CM;
 TLorentzVector he3CM,h7CM; // reaction CMS
@@ -33,7 +64,7 @@ Double_t momentum,energy,mass;
 
 Float_t thetah7,phih7,phih3,thetah3,phihe3,thetahe3;
 Float_t thetah7CM,phih7CM,phih3CM,thetah3CM,phihe3CM,thetahe3CM;
-Float_t mh7,eh7,eh3,ehe3,ehe8;
+Float_t mh7,eh7,eh3,ehe3,ehe8,eh3_CM;
 
 Float_t angle_h3_h7,angle_h3_h7CM,angle_h3_h7CMreaction,angle_he3_h7,angle_he3_he8;
 Float_t qReaction;
@@ -49,93 +80,207 @@ void reco() {
   f8HeSi.SetDeltaEtab(300);
 
   TChain *ch = new TChain("tree");
-  ch->Add("/home/oem/work/data/exp1811/analysed/he8_reco.root");
-  // ch->Add("/home/oem/work/data/exp1811/analysed/he8_emtpytarget_reco.root");
+  ch->Add("/home/oem/work/data/exp1904/analysed/h7/h7_reco.root");
   cout << ch->GetEntries() << " total number of Entries" << endl;
   //--------------------------------------------------------------------------------
+
+  ch->SetBranchAddress("trigger.",&trigger);
+
+  ch->SetBranchAddress("aCsI.",&aCsI);
+  ch->SetBranchAddress("tCsI.",&tCsI);
+  ch->SetBranchAddress("nCsI.",&nCsI);
 
   ch->SetBranchAddress("F5.",&F5);
   ch->SetBranchAddress("tF5.",&tF5);
   ch->SetBranchAddress("F3.",&F3);
   ch->SetBranchAddress("tF3.",&tF3);
 
-  ch->SetBranchAddress("nh3.",&nh3);
-  ch->SetBranchAddress("nh3_s.",&nh3_s);
-  ch->SetBranchAddress("nhe3.",&nhe3);
-
-  ch->SetBranchAddress("flagLeft.",&flagLeft);
-  ch->SetBranchAddress("flagCent.",&flagCent);
-  ch->SetBranchAddress("flagCent_arr.",&flagCent_arr);
+  ch->SetBranchAddress("tMWPC.",&tMWPC);
+  ch->SetBranchAddress("wirex1.",&wirex1);
+  ch->SetBranchAddress("wirex2.",&wirex2);
+  ch->SetBranchAddress("wirey1.",&wirey1);
+  ch->SetBranchAddress("wirey2.",&wirey2);
 
   ch->SetBranchAddress("X_C.",&X_C);
   ch->SetBranchAddress("nX_C.",&nX_C);
+  ch->SetBranchAddress("tX_C.",&tX_C);
   ch->SetBranchAddress("Y_C.",&Y_C);
+  ch->SetBranchAddress("tY_C.",&tY_C);
   ch->SetBranchAddress("nY_C.",&nY_C);
 
-  ch->SetBranchAddress("aCsI.",&aCsI);
-  // ch->SetBranchAddress("tCsI.",&tCsI);
-  ch->SetBranchAddress("nCsI.",&nCsI);
-  ch->SetBranchAddress("aCsI_cal.",&aCsI_cal);
-
-
-  ch->SetBranchAddress("X_L.",&X_L);
-  ch->SetBranchAddress("Y_L.",&Y_L);
-  ch->SetBranchAddress("nY_L.",&nY_L);
-  ch->SetBranchAddress("nX_L.",&nX_L);
-  ch->SetBranchAddress("a20_L.",&a20_L);
-  ch->SetBranchAddress("n20_L.",&n20_L);
-  ch->SetBranchAddress("a20_L_uncorr.",&a20_L_uncorr); 
-
-  ch->SetBranchAddress("x1c.",&x1c);
-  ch->SetBranchAddress("y1c.",&y1c);
-  ch->SetBranchAddress("x2c.",&x2c);
-  ch->SetBranchAddress("y2c.",&y2c); 
   ch->SetBranchAddress("fXt.",&fXt);
   ch->SetBranchAddress("fYt.",&fYt); 
 
-  ch->SetBranchAddress("xLeft.",&xLeft);
-  ch->SetBranchAddress("yLeft.",&yLeft);
-  ch->SetBranchAddress("zLeft.",&zLeft);
+  ch->SetBranchAddress("a20_1.",&a20_1);
+  ch->SetBranchAddress("a20_1_un.",&a20_1_un);
+  ch->SetBranchAddress("t20_1.",&t20_1);
+  ch->SetBranchAddress("n20_1.",&n20_1);
 
-  ch->SetBranchAddress("xCent.",&xCent);
-  ch->SetBranchAddress("yCent.",&yCent);
-  ch->SetBranchAddress("zCent.",&zCent);
+  ch->SetBranchAddress("a1_1.",&a1_1);
+  ch->SetBranchAddress("t1_1.",&t1_1);
+  ch->SetBranchAddress("n1_1.",&n1_1);
 
-  ch->SetBranchAddress("leftE4.",&leftE4);
-  ch->SetBranchAddress("leftE24.",&leftE24);
-  ch->SetBranchAddress("leftEcal.",&leftEcal);
+  ch->SetBranchAddress("a20_2.",&a20_2);
+  ch->SetBranchAddress("a20_2_un.",&a20_2_un);
+  ch->SetBranchAddress("t20_2.",&t20_2);
+  ch->SetBranchAddress("n20_2.",&n20_2);
 
+  ch->SetBranchAddress("a1_2.",&a1_2);
+  ch->SetBranchAddress("t1_2.",&t1_2);
+  ch->SetBranchAddress("n1_2.",&n1_2);
+
+  ch->SetBranchAddress("a20_3.",&a20_3);
+  ch->SetBranchAddress("a20_3_un.",&a20_3_un);
+  ch->SetBranchAddress("t20_3.",&t20_3);
+  ch->SetBranchAddress("n20_3.",&n20_3);
+
+  ch->SetBranchAddress("a1_3.",&a1_3);
+  ch->SetBranchAddress("t1_3.",&t1_3);
+  ch->SetBranchAddress("n1_3.",&n1_3);
+
+  ch->SetBranchAddress("a20_4.",&a20_4);
+  ch->SetBranchAddress("a20_4_un.",&a20_4_un);
+  ch->SetBranchAddress("t20_4.",&t20_4);
+  ch->SetBranchAddress("n20_4.",&n20_4);
+
+  ch->SetBranchAddress("a1_4.",&a1_4);
+  ch->SetBranchAddress("t1_4.",&t1_4);
+  ch->SetBranchAddress("n1_4.",&n1_4);
+
+  ch->SetBranchAddress("flag1.",&flag1);
+  ch->SetBranchAddress("flag2.",&flag2);
+  ch->SetBranchAddress("flag3.",&flag3);
+  ch->SetBranchAddress("flag4.",&flag4);
+  ch->SetBranchAddress("flagCent.",&flagCent);
+
+  ch->SetBranchAddress("nh3.",&nh3);
+  ch->SetBranchAddress("nhe3_1.",&nhe3_1);
+  ch->SetBranchAddress("nhe3_2.",&nhe3_2);
+  ch->SetBranchAddress("nhe3_3.",&nhe3_3);
+  ch->SetBranchAddress("nhe3_4.",&nhe3_4);
+
+  ch->SetBranchAddress("th_he3_1.",&th_he3_1);
+  ch->SetBranchAddress("th_he3_2.",&th_he3_2);
+  ch->SetBranchAddress("th_he3_3.",&th_he3_3);
+  ch->SetBranchAddress("th_he3_4.",&th_he3_4);
+  ch->SetBranchAddress("th_h3.",&th_h3);
+
+  ch->SetBranchAddress("phi_he3_1.",&phi_he3_1);
+  ch->SetBranchAddress("phi_he3_2.",&phi_he3_2);
+  ch->SetBranchAddress("phi_he3_3.",&phi_he3_3);
+  ch->SetBranchAddress("phi_he3_4.",&phi_he3_4);
+  ch->SetBranchAddress("phi_h3.",&phi_h3);
+
+
+  ch->SetBranchAddress("e_1.",&e_1);
+  ch->SetBranchAddress("e_2.",&e_2);
+  ch->SetBranchAddress("e_3.",&e_3);
+  ch->SetBranchAddress("e_4.",&e_4);
   ch->SetBranchAddress("centE.",&centE);
 
-  TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/he8_missing_mass.root", "RECREATE");
+
+  TFile *fw = new TFile("/home/oem/work/data/exp1904/analysed/h7/h7_mm.root", "RECREATE");
   // TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/he8_emtpytarget_mm.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
-  tw->Branch("aCsI.",&aCsI,"aCsI/I");
+ 
+  tw->Branch("trigger.",&trigger,"trigger/I");
+
+  tw->Branch("F5.",&F5,"F5/F");
+  tw->Branch("tF5.",&tF5,"tF5/F");
+  tw->Branch("F3.",&F3,"F3/F");
+  tw->Branch("tF3.",&tF3,"tF3/F");
+
+  tw->Branch("tMWPC.",&tMWPC,"tMWPC/F");
+  tw->Branch("wirex1.",&wirex1,"wirex1/F");
+  tw->Branch("wirex2.",&wirex2,"wirex2/F");
+  tw->Branch("wirey1.",&wirey1,"wirey1/F");
+  tw->Branch("wirey2.",&wirey2,"wirey2/F");
+ 
+  tw->Branch("aCsI.",&aCsI,"aCsI/F");
+  tw->Branch("tCsI.",&tCsI,"tCsI/F");
   tw->Branch("nCsI.",&nCsI,"nCsI/I");
-  tw->Branch("aCsI_cal.",&aCsI_cal,"aCsI_cal/F");
 
   tw->Branch("X_C.",&X_C,"X_C/F");
   tw->Branch("nX_C.",&nX_C,"nX_C/I");
+  tw->Branch("tX_C.",&tX_C,"tX_C/F");
   tw->Branch("Y_C.",&Y_C,"Y_C/F");
-  tw->Branch("nY_C.",&nY_C),"nY_C/I";
+  tw->Branch("tY_C.",&tY_C,"tY_C/F");
+  tw->Branch("nY_C.",&nY_C,"nY_C/I");
 
-  tw->Branch("X_L.",&X_L,"X_L/F");
-  tw->Branch("Y_L.",&Y_L,"Y_L/F");
-  tw->Branch("nY_L.",&nY_L,"nY_L/I");
-  tw->Branch("nX_L.",&nX_L,"nY_L/I");
-  tw->Branch("a20_L.",&a20_L,"a20_L/F");
-  tw->Branch("n20_L.",&n20_L,"n20_L/I");
-  tw->Branch("a20_L_uncorr.",&a20_L_uncorr,"a20_L_uncorr/F"); 
+  tw->Branch("x1c.",&x1c,"x1c/F");
+  tw->Branch("y1c.",&y1c,"y1c/F");
+  tw->Branch("x2c.",&x2c,"x2c/F");
+  tw->Branch("y2c.",&y2c,"y2c/F"); 
+  tw->Branch("fXt.",&fXt,"fXt/F");
+  tw->Branch("fYt.",&fYt,"fYt/F"); 
+
+  tw->Branch("a20_1.",&a20_1,"a20_1/F");
+  tw->Branch("a20_1_un.",&a20_1_un,"a20_1_un/F");
+  tw->Branch("t20_1.",&t20_1,"t20_1/F");
+  tw->Branch("n20_1.",&n20_1,"n20_1/I");
+
+  tw->Branch("a1_1.",&a1_1,"a1_1/F");
+  tw->Branch("t1_1.",&t1_1,"t1_1/F");
+  tw->Branch("n1_1.",&n1_1,"n1_1/I");
+
+  tw->Branch("a20_2.",&a20_2,"a20_2/F");
+  tw->Branch("a20_2_un.",&a20_2_un,"a20_2_un/F");
+  tw->Branch("t20_2.",&t20_2,"t20_2/F");
+  tw->Branch("n20_2.",&n20_2,"n20_2/I");
+
+  tw->Branch("a1_2.",&a1_2,"a1_2/F");
+  tw->Branch("t1_2.",&t1_2,"t1_2/F");
+  tw->Branch("n1_2.",&n1_2,"n1_2/I");
+
+  tw->Branch("a20_3.",&a20_3,"a20_3/F");
+  tw->Branch("a20_3_un.",&a20_3_un,"a20_3_un/F");
+  tw->Branch("t20_3.",&t20_3,"t20_3/F");
+  tw->Branch("n20_3.",&n20_3,"n20_3/I");
+
+  tw->Branch("a1_3.",&a1_3,"a1_3/F");
+  tw->Branch("t1_3.",&t1_3,"t1_3/F");
+  tw->Branch("n1_3.",&n1_3,"n1_3/I");
+
+  tw->Branch("a20_4.",&a20_4,"a20_4/F");
+  tw->Branch("a20_4_un.",&a20_4_un,"a20_4_un/F");
+  tw->Branch("t20_4.",&t20_4,"t20_4/F");
+  tw->Branch("n20_4.",&n20_4,"n20_4/I");
+
+  tw->Branch("a1_4.",&a1_4,"a1_4/F");
+  tw->Branch("t1_4.",&t1_4,"t1_4/F");
+  tw->Branch("n1_4.",&n1_4,"n1_4/I");
+
+  tw->Branch("flag1.",&flag1,"flag1/I");
+  tw->Branch("flag2.",&flag2,"flag2/I");
+  tw->Branch("flag3.",&flag3,"flag3/I");
+  tw->Branch("flag4.",&flag4,"flag4/I");
+  tw->Branch("flagCent.",&flagCent,"flagCent/I");
 
   tw->Branch("nh3.",&nh3,"nh3/I");
-  tw->Branch("nh3_s.",&nh3_s,"nh3_s/I");
-  tw->Branch("nhe3.",&nhe3,"nhe3/I");
+  tw->Branch("nhe3_1.",&nhe3_1,"nhe3_1/I");
+  tw->Branch("nhe3_2.",&nhe3_2,"nhe3_2/I");
+  tw->Branch("nhe3_3.",&nhe3_3,"nhe3_3/I");
+  tw->Branch("nhe3_4.",&nhe3_4,"nhe3_4/I");
 
-  tw->Branch("flagLeft.",&flagLeft,"flagLeft/I");
-  tw->Branch("flagCent.",&flagCent,"flagCent/I");
-  tw->Branch("flagCent_arr.",&flagCent_arr,"flagCent_arr/I");
+  tw->Branch("th_he3_1.",&th_he3_1,"th_he3_1/F");
+  tw->Branch("th_he3_2.",&th_he3_2,"th_he3_2/F");
+  tw->Branch("th_he3_3.",&th_he3_3,"th_he3_3/F");
+  tw->Branch("th_he3_4.",&th_he3_4,"th_he3_4/F");
+  tw->Branch("th_h3.",&th_h3,"th_h3/F");
 
+  tw->Branch("phi_he3_1.",&phi_he3_1,"phi_he3_1/F");
+  tw->Branch("phi_he3_2.",&phi_he3_2,"phi_he3_2/F");
+  tw->Branch("phi_he3_3.",&phi_he3_3,"phi_he3_3/F");
+  tw->Branch("phi_he3_4.",&phi_he3_4,"phi_he3_4/F");
+  tw->Branch("phi_h3.",&phi_h3,"phi_h3/F");
+
+  tw->Branch("e_1.",&e_1,"e_1/F");
+  tw->Branch("e_2.",&e_2,"e_2/F");
+  tw->Branch("e_3.",&e_3,"e_3/F");
+  tw->Branch("e_4.",&e_4,"e_4/F");
+
+  tw->Branch("centE.",&centE,"centE/F");
   tw->Branch("thetah7.",&thetah7,"thetah7/F");
   tw->Branch("phih7.",&phih7,"phih7/F");
 
@@ -155,6 +300,7 @@ void reco() {
   tw->Branch("mh7.",&mh7,"mh7/F");
   tw->Branch("eh7.",&eh7,"eh7/F");
   tw->Branch("eh3.",&eh3,"eh3/F");
+  tw->Branch("eh3_CM.",&eh3_CM,"eh3_CM/F");
   tw->Branch("ehe3.",&ehe3,"ehe3/F");
   tw->Branch("ehe8.",&ehe8,"ehe8/F");
 
@@ -167,16 +313,12 @@ void reco() {
   tw->Branch("angle_he3_h7.",&angle_he3_h7,"angle_he3_h7/F");
   tw->Branch("angle_he3_he8.",&angle_he3_he8,"angle_he3_he8/F");
 
-  tw->Branch("h7.", "TLorentzVector", &h7);
-  tw->Branch("h3.", "TLorentzVector", &h3);
-  tw->Branch("he3.", "TLorentzVector", &he3);
-  tw->Branch("he8.", "TLorentzVector", &he8);
   // input options
   d2.SetPxPyPzE(0.,0.,0.,1.875612);
 
   for(Int_t nentry = 0; nentry<ch->GetEntries();nentry++) {
   // for(Int_t nentry = 0; nentry<200;nentry++) {
-    if(nentry%100==0) cout << "#ENTRY " << nentry << "#" << endl;
+    if(nentry%1000000==0) cout << "#ENTRY " << nentry << "#" << endl;
     // cout << nentry << endl;
     ch->GetEntry(nentry);
     zerovars();
@@ -186,14 +328,45 @@ void reco() {
     bVect = summVect.BoostVector();
     // cout << summVect.Px() << " " << bVect.Py() << " " << bVect.Pz() << endl;
 
-    if (nhe3) {
-      energy = leftE4/1000.;
+    // if (nhe3_1 || nhe3_2 || nhe3_3 || nhe3_4) cout << " wtf" << endl;
+
+    if (nhe3_1 || nhe3_2 || nhe3_3 || nhe3_4) {
+
+      if (nhe3_1) {
+        if (e_1>20 || centE<50) continue;
+        energy = e_1/1000.;
+        theta = th_he3_1;
+        phi = phi_he3_1;
+      } 
+
+      if (nhe3_2) {
+        if (n20_2==0 || n20_2==1 || e_2>20 || centE<50) continue;
+        energy = e_2/1000.;
+        theta = th_he3_2;
+        phi = phi_he3_2;
+      } 
+
+      if (nhe3_3) {
+        if (e_3>20 || centE<50) continue;
+        energy = e_3/1000.;
+        theta = th_he3_3;
+        phi = phi_he3_3;
+      } 
+
+      if (nhe3_4) {
+        if (e_4>20 || centE<50) continue;
+        energy = e_4/1000.;
+        theta = th_he3_4;
+        phi = phi_he3_4;
+      } 
+
+      // energy = leftE4/1000.;
       mass = 2.808391;  //MeV
 
-      TVector3 dir;
-      dir.SetXYZ(xLeft,yLeft,zLeft);
-      phi = dir.Phi();
-      theta = dir.Theta();
+      // TVector3 dir;
+      // dir.SetXYZ(xLeft,yLeft,zLeft);
+      // phi = dir.Phi();
+      // theta = dir.Theta();
 
       momentum = sqrt(energy*energy + 2*energy*mass);
 
@@ -231,10 +404,12 @@ void reco() {
       energy = centE/1000.;
       mass = 2.80892; //GeV
 
-      TVector3 dir;
-      dir.SetXYZ(xCent,yCent,zCent);
-      phi = dir.Phi();
-      theta = dir.Theta();
+      // TVector3 dir;
+      // dir.SetXYZ(xCent,yCent,zCent);
+      // phi = dir.Phi();
+      // theta = dir.Theta();
+      theta = th_h3;
+      phi = phi_h3;
 
       momentum = sqrt(energy*energy + 2*energy*mass);
 
@@ -256,9 +431,10 @@ void reco() {
 
       h3CM_H7 = h3;
       h3CM_H7.Boost(-bVect_H7);
+      eh3_CM = h3CM_H7.T() - mass;
     } 
     
-    if (nh3==1 && nhe3==1) {
+    if (nh3 && (nhe3_1 || nhe3_2 || nhe3_3 || nhe3_4)) {
       angle_h3_h7CM = h7CM_H7.Angle(h3CM_H7.Vect())*TMath::RadToDeg();
       angle_h3_h7 = h7.Angle(h3.Vect())*TMath::RadToDeg(); 
       angle_h3_h7CMreaction = h7CM.Angle(h3CM.Vect())*TMath::RadToDeg(); 
@@ -295,7 +471,7 @@ void calculateBeam() {
   kinEnergy =  f8HeSi.GetE(1000*kinEnergy, 644.)/1000.;
   // kinEnergy = kinEnergy*0.95;
   ehe8 = kinEnergy;
-
+  // cout << ehe8 << endl;
   // kinEnergy = 0.1979;
   // ehe8 = kinEnergy;
 
@@ -330,6 +506,7 @@ void zerovars() {
   mh7 = -1.;
   eh7 = -1.;
   eh3 = -1.;
+  eh3_CM = -1.;
   ehe3 = -1.;
 
   h7.SetXYZT(0,0,0,0);

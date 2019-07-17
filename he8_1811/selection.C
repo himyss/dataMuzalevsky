@@ -29,6 +29,7 @@ void GetXYRight();
 const Double_t angleLeft =  17.;
 const Double_t leftDistance = 180.;
 const Double_t rightDistance = 180.;
+const Double_t rightDistance_thin = 166.;
 
 //outtree vars
 Int_t trigger; 
@@ -56,6 +57,7 @@ Float_t fXt,fYt;
 Float_t x1c, y1c, x2c, y2c;
 Float_t xLeft,yLeft,zLeft;
 Float_t xRight,yRight,zRight;
+Float_t xRight_thin,yRight_thin,zRight_thin;
 Float_t xCent,yCent,zCent;
 // flags
 Bool_t timesToF,timesMWPC,vetoFlag;
@@ -266,6 +268,14 @@ void selection() {
   tw->Branch("yLeft.",&yLeft,"yLeft/F");
   tw->Branch("zLeft.",&zLeft,"zLeft/F");
 
+  tw->Branch("xRight.",&xRight,"xRight/F");
+  tw->Branch("yRight.",&yRight,"yRight/F");
+  tw->Branch("zRight.",&zRight,"zRight/F");
+
+  tw->Branch("xRight_thin.",&xRight_thin,"xRight_thin/F");
+  tw->Branch("yRight_thin.",&yRight_thin,"yRight_thin/F");
+  tw->Branch("zRight_thin.",&zRight_thin,"zRight_thin/F");
+
   tw->Branch("xCent.",&xCent,"xCent/F");
   tw->Branch("yCent.",&yCent,"yCent/F");
   tw->Branch("zCent.",&zCent,"zCent/F");
@@ -314,16 +324,24 @@ void selection() {
     CsIselect();
     DSD_Cselect();
 
-    if (trigger==2 && n20_L>-1 && nY_L>-1 && nX_L>-1) {
-      SSD20_Lselect();
-      X_Lselect();
-      Y_Lselect();
-    }
+    if (trigger==2) {
+      if (n20_L>-1 && nY_L>-1 && nX_L>-1) {
+        SSD20_Lselect();
+        X_Lselect();
+        Y_Lselect();
+      } else {
+        flagLeft = 0;
+      }
+    } else flagLeft = 0;
 
-    if (trigger==3 && n20_R>-1 && nY_R>-1) {
-      SSD20_Rselect();
-      Y_Rselect();
-    }
+    if (trigger==3) {
+      if (n20_R>-1 && nY_R>-1) {
+        SSD20_Rselect();
+        Y_Rselect();
+      } else {
+        flagRight = 0;
+      }
+    } else flagRight = 0;
 
     if(flagCent) {
       triton();
@@ -384,6 +402,10 @@ void zeroVars() {
   xRight= -50;
   yRight= -50;
   zRight= -50;
+
+  xRight_thin= -50;
+  yRight_thin= -50;
+  zRight_thin= -50;
 
   xCent = -50;
   yCent = -50;
@@ -762,17 +784,24 @@ void GetXYLeft() {
 
 void GetXYRight() {
   // coordinates in the system of detector
-  xRight = 30. + n20_R*60./16;
-  yRight = - 30. + nY_R*60./16;
-  zRight = 0;
+  Double_t x1,y1,z1,x2,y2,z2;
 
-  // rotate the detector
-  xRight = yRight*cos(-angleLeft*TMath::DegToRad());
-  yRight = xRight*sin(-angleLeft*TMath::DegToRad());
+  x1 = 25 - n20_R*50./16;
+  z1 = 0;
 
-  // transfer the detector
-  xRight = xRight + leftDistance*sin(-angleLeft*TMath::DegToRad());
-  zRight = zRight + leftDistance*cos(-angleLeft*TMath::DegToRad());
+  x1 = x1 + rightDistance_thin*sin(-angleLeft*TMath::DegToRad());
+  z1 = rightDistance_thin*cos(-angleLeft*TMath::DegToRad());
+
+  y2 = 30 - nY_R*60./16.; 
+  z2 = rightDistance*cos(-angleLeft*TMath::DegToRad());
+
+  xRight = (x1-fXt)*(180/166) + fXt;
+  yRight = y2;
+  zRight = z2;
+
+  xRight_thin = x1;
+  yRight_thin = (166./180)*(yRight-fYt) + fYt;
+  zRight_thin = z1;
 
   return;
 }

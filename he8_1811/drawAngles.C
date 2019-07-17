@@ -4,19 +4,19 @@ void drawAngles(){
   TCutG *mmCut;
   TFile *f1;
 
-  TString cutName;
-  cutName.Form("/home/oem/work/macro/he8_1811/graphCut_mm.root");
-  f1 = new TFile(cutName.Data());
-  mmCut = (TCutG*)f1->Get("CUTG");
-  if (!mmCut) {
-    cout << " no cut"<< endl;
-    return;
-  }
-  delete f1;
+  // TString cutName;
+  // cutName.Form("/home/oem/work/macro/he8_1811/graphCut_mm.root");
+  // f1 = new TFile(cutName.Data());
+  // mmCut = (TCutG*)f1->Get("CUTG");
+  // if (!mmCut) {
+  //   cout << " no cut"<< endl;
+  //   return;
+  // }
+  // delete f1;
 
 
   Bool_t MM,angles,nikolski,kin;
-  MM = 1;
+  MM = 0;
   angles = 0;
   nikolski = 0;
   kin = 0;
@@ -25,7 +25,7 @@ void drawAngles(){
   TChain *ch1 = new TChain("tree"); //e4
   ch1->Add("/home/oem/work/data/exp1811/analysed/he8_missing_mass.root");
   TChain *ch2 = new TChain("tree"); //e4
-  ch2->Add("/home/oem/work/data/exp1811/analysed/he8_emtpytarget_mm.root");
+  // ch2->Add("/home/oem/work/data/exp1811/analysed/he8_emtpytarget_mm.root");
   // cout << ch1->GetEntries() << " total number of Entries" << endl;
 
     ch2->SetLineColor(kRed);
@@ -38,24 +38,101 @@ void drawAngles(){
     ch1->SetMarkerStyle(20);
   //--------------------------------------------------------------------------------
 
-    TCanvas *c1 = new TCanvas("c1","",1800,1000);  
-    // c1->Divide(2,2);
+    TF1 *fa = new TF1("fa","x*4/7",-5,20);
 
-    // c1->cd(1);
-    // ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> h2D_1(18,-10,25)","nhe3 && flagLeft && flagCent && nh3 ","");
-    // ch2->Draw("1000*(mh7-4*0.939565-2.808920) >> h2D_2(18,-10,25)","nhe3 && flagLeft && flagCent && nh3 ","same");
+    TString cut, triangleCut;
+// //
+    TCanvas *c1 = new TCanvas("c1","",1800,1000);  
+    c1->Divide(2,1);
+
+
+    cut.Form("nhe3 && flagLeft && flagCent && nh3");
+    triangleCut.Form("nhe3 && flagLeft && flagCent && nh3 && (1000*eh3CM7H < 1000*(mh7-4*0.939565-2.808920)*4./7)");
+   
+    c1->cd(1);
+    ch1->SetLineColor(kBlack);
+    ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> h2D_L(20,-5,20)",cut.Data(),"");
+
+    ch1->SetLineColor(kRed);
+    ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> h2D_L_tt(20,-5,20)",triangleCut.Data(),"same");
+
+    c1->cd(2);
+    ch1->SetMarkerColor(kBlack);
+    ch1->Draw("1000*eh3CM7H : 1000*(mh7-4*0.939565-2.808920)",cut.Data(),"");
+
+    ch1->SetMarkerColor(kRed);
+    ch1->Draw("1000*eh3CM7H : 1000*(mh7-4*0.939565-2.808920)",triangleCut.Data(),"same");
+
+    fa->Draw("same");
+
+    TCanvas *c2 = new TCanvas("c2","",1800,1000);  
+    c2->Divide(2,1);
+
+    cut.Form("nhe3_R && flagRight && flagCent && nh3");
+    triangleCut.Form("nhe3_R && flagRight && flagCent && nh3 && (1000*eh3CM7H < 1000*(mh7-4*0.939565-2.808920)*4./7.)");
+   
+    c2->cd(1);
+    ch1->SetLineColor(kBlack);
+    ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> h2D_R(22,-5,20)",cut.Data(),"");
+
+    ch1->SetLineColor(kRed);
+    ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> h2D_R_tt(22,-5,20)",triangleCut.Data(),"same");
+
+    c2->cd(2);
+    ch1->SetMarkerColor(kBlack);
+    ch1->Draw("1000*eh3CM7H : 1000*(mh7-4*0.939565-2.808920)",cut.Data(),"");
+    
+    ch1->SetMarkerColor(kRed);
+    ch1->Draw("1000*eh3CM7H : 1000*(mh7-4*0.939565-2.808920)",triangleCut.Data(),"same");
+
+    fa->Draw("same");
+
+    TCanvas *с3 = new TCanvas("с3","",1800,1000);  
+    с3->Divide(2,1);
+
+    cut.Form("(nhe3_R && flagRight && flagCent && nh3) || (nhe3 && flagLeft && flagCent && nh3)");
+    triangleCut.Form("(nhe3_R && flagRight && flagCent && nh3 && (1000*eh3CM7H < 1000*(mh7-4*0.939565-2.808920)*4./7.)) || (nhe3 && flagLeft && flagCent && nh3 && (1000*eh3CM7H < 1000*(mh7-4*0.939565-2.808920)*4./7))");
+
+    ch1->SetLineColor(kBlack);
+    с3->cd(1);
+    ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> h2D_all(25,-5,20)",cut.Data(),"");
+    ch1->SetLineColor(kRed);
+    ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> h2D_all_tt(25,-5,20)",triangleCut.Data(),"same");
+
+    ch1->SetMarkerColor(kBlack);
+    с3->cd(2);
+    ch1->Draw("1000*eh3CM7H : 1000*(mh7-4*0.939565-2.808920)",cut.Data(),"");
+    ch1->SetMarkerColor(kRed); 
+    ch1->Draw("1000*eh3CM7H : 1000*(mh7-4*0.939565-2.808920)",triangleCut.Data(),"same");
+   
+
+    fa->Draw("same");
+
+    c1->Print("/home/oem/Desktop/MM_newL.png");
+    // c1->Print("/home/oem/Desktop/MM_new.pdf[");
+    // c1->Print("/home/oem/Desktop/MM_new.pdf");
+    c2->Print("/home/oem/Desktop/MM_newR.png");
+    с3->Print("/home/oem/Desktop/MM_new_summ.png");
+    // с3->Print("/home/oem/Desktop/MM_new.pdf]");
+
+    // ch2->Draw("1000*(mh7-4*0.939565-2.808920) >> h2D_2(20,-5,18)","nhe3 && flagLeft && flagCent && nh3 && eh3>0.065 ","same");
 
     // c1->cd(2);
-    ch1->Draw("1000*ehe3:1000*(mh7-4*0.939565-2.808920) >> h2D_3(18,-10,25,40,0,30)","nhe3 && flagLeft && flagCent && nh3","");
-    ch2->Draw("1000*ehe3:1000*(mh7-4*0.939565-2.808920) >> h2D_4(18,-10,25,40,0,30)","nhe3 && flagLeft && flagCent && nh3  ","same");
+    // ch1->Draw("1000*ehe3:1000*(mh7-4*0.939565-2.808920) >> h2D_3(20,-5,18,40,0,30)","nhe3 && flagLeft && flagCent && nh3 && eh3>0.065","");
+    // // ch2->Draw("1000*ehe3:1000*(mh7-4*0.939565-2.808920) >> h2D_4(20,-5,18,40,0,30)","nhe3 && flagLeft && flagCent && nh3 && eh3>0.065  ","same");
 
     // c1->cd(3);
-    // ch1->Draw("1000*ehe8:1000*(mh7-4*0.939565-2.808920) >> h2D_5(18,-10,25,40,180,220)","nhe3 && flagLeft && flagCent && nh3  ","");
-    // ch2->Draw("1000*ehe8:1000*(mh7-4*0.939565-2.808920) >> h2D_6(18,-10,25,40,180,220)","nhe3 && flagLeft && flagCent && nh3  ","same");
+    // ch1->Draw("1000*ehe8:1000*(mh7-4*0.939565-2.808920) >> h2D_5(20,-5,18,40,180,220)","nhe3 && flagLeft && flagCent && nh3 && eh3>0.065","");
+    // // ch2->Draw("1000*ehe8:1000*(mh7-4*0.939565-2.808920) >> h2D_6(20,-5,18,40,180,220)","nhe3 && flagLeft && flagCent && nh3  && eh3>0.065","same");
 
     // c1->cd(4);
-    // ch1->Draw("angle_h3_h7*angle_h3_h7:1000*(mh7-4*0.939565-2.808920) >> h2D_7(18,-10,25,40,0,120)","nhe3 && flagLeft && flagCent && nh3 ","");
-    // ch2->Draw("angle_h3_h7*angle_h3_h7:1000*(mh7-4*0.939565-2.808920) >> h2D_8(18,-10,25,40,0,120)","nhe3 && flagLeft && flagCent && nh3 ","same");
+    // ch1->Draw("angle_h3_h7*angle_h3_h7:1000*(mh7-4*0.939565-2.808920) >> h2D_7(20,-5,18,40,0,120)","nhe3 && flagLeft && flagCent && nh3 && eh3>0.065 ","");
+    // ch2->Draw("a ngle_h3_h7*angle_h3_h7:1000*(mh7-4*0.939565-2.808920) >> h2D_8(20,-5,18,40,0,120)","nhe3 && flagLeft && flagCent && nh3 && eh3>0.065","same");
+
+    // c1->cd(5);
+    // ch1->Draw("1000*eh3CM7H:1000*(mh7-4*0.939565-2.808920) >> h2D_9(20,-5,18,20,0,7)","nhe3 && flagLeft && flagCent && nh3 && eh3>0.065","");
+    // ch2->Draw("1000*eh3CM7H:1000*(mh7-4*0.939565-2.808920) >> h2D_10(20,-5,18,20,0,7)","nhe3 && flagLeft && flagCent && nh3 && eh3>0.065","same");
+ 
 
 
   // if (MM) {
@@ -81,13 +158,13 @@ void drawAngles(){
     // c1->Print("/home/oem/Desktop/2D_110.png");
 
 
-    TCanvas *c2 = new TCanvas("c2","",1800,1000);  
+   //  TCanvas *c2 = new TCanvas("c2","",1800,1000);  
 
-    // c2->Divide(2,2);
+   //  // c2->Divide(2,2);
 
-   // c2->cd(1);
-    ch1->Draw("angle_he3_he8:1000*(mh7-4*0.939565-2.808920) >> h2D_angle_1(18,-10,25,50,0,50)","nhe3 && flagLeft && flagCent && nh3","");
-    ch2->Draw("angle_he3_he8:1000*(mh7-4*0.939565-2.808920) >> h2D_angle_2(18,-10,25,50,0,50)","nhe3 && flagLeft && flagCent && nh3","same");
+   // // c2->cd(1);
+   //  ch1->Draw("angle_he3_he8:1000*(mh7-4*0.939565-2.808920) >> h2D_angle_1(18,-10,25,50,0,50)","nhe3 && flagLeft && flagCent && nh3","");
+   //  ch2->Draw("angle_he3_he8:1000*(mh7-4*0.939565-2.808920) >> h2D_angle_2(18,-10,25,50,0,50)","nhe3 && flagLeft && flagCent && nh3","same");
 
 
 

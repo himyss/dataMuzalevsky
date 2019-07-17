@@ -7,20 +7,24 @@ Float_t fXt,fYt;
 Float_t x1c, y1c, x2c, y2c;
 Float_t xLeft,yLeft,zLeft;
 Float_t xCent,yCent,zCent;
+Float_t xRight,yRight,zRight;
 
 Float_t tF5,F5,tF3,F3;
+
+Float_t trigger;
 
 Int_t nCsI;
 Float_t aCsI,tCsI,aCsI_cal;
 
-Float_t X_C,tX_C,Y_C,tY_C,X_L,Y_L,a20_L,tX_L,tY_L,t20_L,a20_R,Y_R,t20_R,tY_R,a20_L_uncorr;
+Float_t X_C,tX_C,Y_C,tY_C,X_L,Y_L,a20_L,tX_L,tY_L,t20_L,a20_L_uncorr,Y_R,tY_R,a20_R,t20_R,a20_R_uncorr;
 Int_t nX_C,nY_C,nX_L,nY_L,n20_L,n20_R,nY_R;
 
-Int_t flagLeft,flagCent,flagCent_arr;
+Int_t flagLeft,flagCent,flagRight;
 
-Int_t nh3,nh3_s,nhe3;
+Int_t nh3,nhe3_R,nhe3;
 
 // new
+Float_t rightE4,rightE24,rightEcal;
 Float_t leftE4,leftE24,leftEcal;
 Float_t centE;
 
@@ -33,7 +37,7 @@ Double_t momentum,energy,mass;
 
 Float_t thetah7,phih7,phih3,thetah3,phihe3,thetahe3;
 Float_t thetah7CM,phih7CM,phih3CM,thetah3CM,phihe3CM,thetahe3CM;
-Float_t mh7,eh7,eh3,ehe3,ehe8;
+Float_t mh7,eh7,eh3,ehe3,ehe8,eh3CM7H;
 
 Float_t angle_h3_h7,angle_h3_h7CM,angle_h3_h7CMreaction,angle_he3_h7,angle_he3_he8;
 Float_t qReaction;
@@ -49,10 +53,11 @@ void reco() {
   f8HeSi.SetDeltaEtab(300);
 
   TChain *ch = new TChain("tree");
-  // ch->Add("/home/oem/work/data/exp1811/analysed/he8_reco.root");
-  ch->Add("/home/oem/work/data/exp1811/analysed/he8_emtpytarget_reco.root");
+  ch->Add("/home/oem/work/data/exp1811/analysed/he8_reco.root");
+  // ch->Add("/home/oem/work/data/exp1811/analysed/he8_emtpytarget_reco.root");
   cout << ch->GetEntries() << " total number of Entries" << endl;
   //--------------------------------------------------------------------------------
+  ch->SetBranchAddress("trigger.",&trigger);
 
   ch->SetBranchAddress("F5.",&F5);
   ch->SetBranchAddress("tF5.",&tF5);
@@ -60,12 +65,12 @@ void reco() {
   ch->SetBranchAddress("tF3.",&tF3);
 
   ch->SetBranchAddress("nh3.",&nh3);
-  ch->SetBranchAddress("nh3_s.",&nh3_s);
   ch->SetBranchAddress("nhe3.",&nhe3);
+  ch->SetBranchAddress("nhe3_R.",&nhe3_R); 
 
   ch->SetBranchAddress("flagLeft.",&flagLeft);
   ch->SetBranchAddress("flagCent.",&flagCent);
-  ch->SetBranchAddress("flagCent_arr.",&flagCent_arr);
+  ch->SetBranchAddress("flagRight.",&flagRight);
 
   ch->SetBranchAddress("X_C.",&X_C);
   ch->SetBranchAddress("nX_C.",&nX_C);
@@ -77,7 +82,6 @@ void reco() {
   ch->SetBranchAddress("nCsI.",&nCsI);
   ch->SetBranchAddress("aCsI_cal.",&aCsI_cal);
 
-
   ch->SetBranchAddress("X_L.",&X_L);
   ch->SetBranchAddress("Y_L.",&Y_L);
   ch->SetBranchAddress("nY_L.",&nY_L);
@@ -85,6 +89,12 @@ void reco() {
   ch->SetBranchAddress("a20_L.",&a20_L);
   ch->SetBranchAddress("n20_L.",&n20_L);
   ch->SetBranchAddress("a20_L_uncorr.",&a20_L_uncorr); 
+
+  ch->SetBranchAddress("Y_R.",&Y_R);
+  ch->SetBranchAddress("nY_R.",&nY_R);
+  ch->SetBranchAddress("a20_R.",&a20_R);
+  ch->SetBranchAddress("n20_R.",&n20_R);
+  ch->SetBranchAddress("a20_R_uncorr.",&a20_R_uncorr); 
 
   ch->SetBranchAddress("x1c.",&x1c);
   ch->SetBranchAddress("y1c.",&y1c);
@@ -97,6 +107,10 @@ void reco() {
   ch->SetBranchAddress("yLeft.",&yLeft);
   ch->SetBranchAddress("zLeft.",&zLeft);
 
+  ch->SetBranchAddress("xRight.",&xRight);
+  ch->SetBranchAddress("yRight.",&yRight);
+  ch->SetBranchAddress("zRight.",&zRight);
+
   ch->SetBranchAddress("xCent.",&xCent);
   ch->SetBranchAddress("yCent.",&yCent);
   ch->SetBranchAddress("zCent.",&zCent);
@@ -105,11 +119,17 @@ void reco() {
   ch->SetBranchAddress("leftE24.",&leftE24);
   ch->SetBranchAddress("leftEcal.",&leftEcal);
 
+  ch->SetBranchAddress("rightE4.",&rightE4);
+  ch->SetBranchAddress("rightE24.",&rightE24);
+  ch->SetBranchAddress("rightEcal.",&rightEcal);
+
   ch->SetBranchAddress("centE.",&centE);
 
-  // TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/he8_missing_mass.root", "RECREATE");
-  TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/he8_emtpytarget_mm.root", "RECREATE");
+  TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/he8_missing_mass.root", "RECREATE");
+  // TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/he8_emtpytarget_mm.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
+
+  tw->Branch("trigger.",&trigger,"trigger/F");
 
   tw->Branch("aCsI.",&aCsI,"aCsI/I");
   tw->Branch("nCsI.",&nCsI,"nCsI/I");
@@ -128,13 +148,19 @@ void reco() {
   tw->Branch("n20_L.",&n20_L,"n20_L/I");
   tw->Branch("a20_L_uncorr.",&a20_L_uncorr,"a20_L_uncorr/F"); 
 
+  tw->Branch("Y_R.",&Y_R,"Y_R/F");
+  tw->Branch("nY_R.",&nY_R,"nY_R/I");
+  tw->Branch("a20_R.",&a20_R,"a20_R/F");
+  tw->Branch("n20_R.",&n20_R,"n20_R/I");
+  tw->Branch("a20_R_uncorr.",&a20_R_uncorr,"a20_R_uncorr/F"); 
+
   tw->Branch("nh3.",&nh3,"nh3/I");
-  tw->Branch("nh3_s.",&nh3_s,"nh3_s/I");
+  tw->Branch("nhe3_R.",&nhe3_R,"nhe3_R/I");
   tw->Branch("nhe3.",&nhe3,"nhe3/I");
 
   tw->Branch("flagLeft.",&flagLeft,"flagLeft/I");
   tw->Branch("flagCent.",&flagCent,"flagCent/I");
-  tw->Branch("flagCent_arr.",&flagCent_arr,"flagCent_arr/I");
+  tw->Branch("flagRight.",&flagRight,"flagRight/I");
 
   tw->Branch("thetah7.",&thetah7,"thetah7/F");
   tw->Branch("phih7.",&phih7,"phih7/F");
@@ -155,6 +181,7 @@ void reco() {
   tw->Branch("mh7.",&mh7,"mh7/F");
   tw->Branch("eh7.",&eh7,"eh7/F");
   tw->Branch("eh3.",&eh3,"eh3/F");
+  tw->Branch("eh3CM7H.",&eh3CM7H,"eh3CM7H/F");
   tw->Branch("ehe3.",&ehe3,"ehe3/F");
   tw->Branch("ehe8.",&ehe8,"ehe8/F");
 
@@ -175,8 +202,8 @@ void reco() {
   d2.SetPxPyPzE(0.,0.,0.,1.875612);
 
   for(Int_t nentry = 0; nentry<ch->GetEntries();nentry++) {
-  // for(Int_t nentry = 0; nentry<200;nentry++) {
-    if(nentry%100==0) cout << "#ENTRY " << nentry << "#" << endl;
+  // for(Int_t nentry = 0; nentry<20000;nentry++) {
+    if(nentry%10000==0) cout << "#ENTRY " << nentry << "#" << endl;
     // cout << nentry << endl;
     ch->GetEntry(nentry);
     zerovars();
@@ -186,10 +213,10 @@ void reco() {
     bVect = summVect.BoostVector();
     // cout << summVect.Px() << " " << bVect.Py() << " " << bVect.Pz() << endl;
 
-    if (nhe3) {
+    if (nhe3 && !nhe3_R) {
       energy = leftE4/1000.;
-      mass = 2.808391;  //MeV
-
+      mass = 2.808391000;  //MeV
+// 2809.431806
       TVector3 dir;
       dir.SetXYZ(xLeft,yLeft,zLeft);
       phi = dir.Phi();
@@ -227,6 +254,48 @@ void reco() {
       h7CM_H7.Boost(-bVect_H7);
     }
 
+   if (nhe3_R && !nhe3) {
+      energy = rightE4/1000.;
+      mass = 2.808391000;  //MeV
+// 2809.431806
+      TVector3 dir;
+      dir.SetXYZ(xRight,yRight,zRight);
+      phi = dir.Phi();
+      theta = dir.Theta();
+
+      momentum = sqrt(energy*energy + 2*energy*mass);
+
+      // he3.SetPtEtaPhiM(momentum, theta, phi, mass);
+      he3.SetXYZM(momentum*TMath::Sin(theta)*TMath::Cos(phi), momentum*TMath::Sin(theta)*TMath::Sin(phi), momentum*TMath::Cos(theta) ,mass);
+
+      thetahe3 = he3.Theta()*TMath::RadToDeg();
+      phihe3 = he3.Phi()*TMath::RadToDeg();
+      ehe3 = he3.T() - mass;
+
+      h7 = he8 + d2 + (-he3);
+      bVect_H7 = h7.BoostVector();
+
+      thetah7 = h7.Theta()*TMath::RadToDeg();
+      phih7 = h7.Phi()*TMath::RadToDeg();
+      mh7 = sqrt(h7.E()*h7.E() - h7.Px()*h7.Px() - h7.Py()*h7.Py() - h7.Pz()*h7.Pz());
+      eh7 = h7.E() - mh7;
+
+      // CM
+      he3CM = he3;
+      he3CM.Boost(-bVect); 
+      thetahe3CM = he3CM.Theta()*TMath::RadToDeg();
+      phihe3CM = he3CM.Phi()*TMath::RadToDeg();      
+
+      h7CM = h7;
+      h7CM.Boost(-bVect); 
+      thetah7CM = h7CM.Theta()*TMath::RadToDeg();
+      phih7CM = h7CM.Phi()*TMath::RadToDeg();
+
+      h7CM_H7 = h7;
+      h7CM_H7.Boost(-bVect_H7);
+    }
+
+
     if (nh3) {
       energy = centE/1000.;
       mass = 2.80892; //GeV
@@ -249,17 +318,23 @@ void reco() {
       //   // cout << h3.T() << " " << h3.Mag() << " " << mass << endl;
       // }
       // CM
+
       h3CM = h3;
       h3CM.Boost(-bVect); 
       thetah3CM = h3CM.Theta()*TMath::RadToDeg();
       phih3CM = h3CM.Phi()*TMath::RadToDeg();
 
-      h3CM_H7 = h3;
-      h3CM_H7.Boost(-bVect_H7);
+      if (nhe3==1 || nhe3_R){
+        h3CM_H7 = h3;
+        h3CM_H7.Boost(-bVect_H7);
+      }
+
     } 
     
-    if (nh3==1 && nhe3==1) {
+    if (nh3==1 && (nhe3==1 || nhe3_R==1)) {
       angle_h3_h7CM = h7CM_H7.Angle(h3CM_H7.Vect())*TMath::RadToDeg();
+      eh3CM7H = h3CM_H7.T() - 2.80892;
+
       angle_h3_h7 = h7.Angle(h3.Vect())*TMath::RadToDeg(); 
       angle_h3_h7CMreaction = h7CM.Angle(h3CM.Vect())*TMath::RadToDeg(); 
       angle_he3_h7 = h7.Angle(he3.Vect())*TMath::RadToDeg();
@@ -331,6 +406,7 @@ void zerovars() {
   eh7 = -1.;
   eh3 = -1.;
   ehe3 = -1.;
+  eh3CM7H = -1;
 
   h7.SetXYZT(0,0,0,0);
   h3.SetXYZT(0,0,0,0);
