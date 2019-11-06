@@ -1,0 +1,33 @@
+{
+//========= Macro generated from object: CUTG/Graph
+//========= by ROOT version6.10/08
+   
+   TCutG *cutg = new TCutG("CUTG",21);
+   cutg->SetVarX("tCsI-tF5");
+   cutg->SetVarY("aCsI");
+   cutg->SetTitle("Graph");
+   cutg->SetFillColor(1);
+   cutg->SetPoint(0,316.39,4064.01);
+   cutg->SetPoint(1,321.049,3040.02);
+   cutg->SetPoint(2,330.976,1804.72);
+   cutg->SetPoint(3,343.537,986.61);
+   cutg->SetPoint(4,357.314,607.353);
+   cutg->SetPoint(5,383.651,363.545);
+   cutg->SetPoint(6,410.19,179.334);
+   cutg->SetPoint(7,436.933,157.663);
+   cutg->SetPoint(8,454.761,141.409);
+   cutg->SetPoint(9,468.942,168.498);
+   cutg->SetPoint(10,473.4,385.217);
+   cutg->SetPoint(11,463.675,444.814);
+   cutg->SetPoint(12,400.669,688.622);
+   cutg->SetPoint(13,377.978,981.192);
+   cutg->SetPoint(14,362.176,1333.36);
+   cutg->SetPoint(15,351.844,1815.56);
+   cutg->SetPoint(16,336.649,2790.79);
+   cutg->SetPoint(17,327.938,4047.76);
+   cutg->SetPoint(18,325.912,4129.02);
+   cutg->SetPoint(19,319.023,4139.86);
+   cutg->SetPoint(20,316.39,4064.01);
+   cutg->Draw("");
+   cutg->SaveAs("tCsI_9.root");
+}
