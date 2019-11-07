@@ -74,7 +74,7 @@ Float_t thickness;
 void calcEnergies() {
 
   TChain *ch = new TChain("tree");
-  ch->Add("/media/ivan/data/exp1906/be10/analysed/be10_2_cal.root");
+  ch->Add("/media/ivan/data/exp1906/be10/analysed/be10_2_cut.root");
   // ch->Add("/media/ivan/data/exp1904/analysed/MKpars/select_noveto.root");
   // ch->Add("/home/oem/work/data/exp1811/analysed/notarget_cut.root");
   cout << ch->GetEntries() << " total number of Entries" << endl;
@@ -175,9 +175,6 @@ void calcEnergies() {
 
 
   TFile *fw = new TFile("/media/ivan/data/exp1906/be10/analysed/be10_2_reco.root", "RECREATE");
-  // TFile *fw = new TFile("/media/ivan/data/exp1904/analysed/MKpars/reco.root", "RECREATE");
-
-  // TFile *fw = new TFile("/home/oem/work/data/exp1811/analysed/he8_emtpytarget_reco.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("trigger.",&trigger,"trigger/I");
@@ -283,7 +280,7 @@ void calcEnergies() {
 
   // for(Int_t nentry = 0; nentry<1000;nentry++) {
   for(Int_t nentry = 0; nentry<ch->GetEntries();nentry++) {
-    if(nentry%100000==0) cout << "#ENTRY " << nentry << "#" << endl;
+    if(nentry%1000000==0) cout << "#ENTRY " << nentry << "#" << endl;
     // cout << nentry << endl;
     ch->GetEntry(nentry);
 

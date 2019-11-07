@@ -1,7 +1,8 @@
+#include "/home/ivan/work/macro/be10/cut/be10Cut.C"
 void readCuts();
 void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16);
 
-TCutG *cutCsI[16],*cutLi[16],*cutLi9[16],*cutX_C[16];
+TCutG *cutCsI[16],*cutLi[16],*cutLi9[16],*cutX_C[32];
 TCutG *cuthe3_1[16],*cutSQ20_1[16],*cutSQ1_1[16];
 TCutG *cuthe3_2[16],*cutSQ20_2[16],*cutSQ1_2[16];
 TCutG *cuthe3_3[16],*cutSQ20_3[16],*cutSQ1_3[16];
@@ -10,12 +11,13 @@ TCutG *cuthe3_4[16],*cutSQ20_4[16],*cutSQ1_4[16];
 Float_t pCsI_1[16],pCsI_2[16];
 
 void drawCut(){
+  be10Cut();
   gStyle->SetOptStat(0);
   readCuts();
   readPar("CsI_anh",pCsI_1,pCsI_2);
 
   TChain *ch = new TChain("tree");
-  // ch->Add("/media/ivan/data/exp1906/be10/analysed/be10_cut.root");
+  ch->Add("/media/ivan/data/exp1906/be10/analysed/be10_1_cut.root");
   ch->Add("/media/ivan/data/exp1906/be10/analysed/be10_2_cut.root");
   // ch->Add("/media/ivan/data/exp1904/analysed/oldPars/mm_400.root");
   cout << ch->GetEntries() << endl;
@@ -24,13 +26,14 @@ void drawCut(){
 
   Bool_t litium = 0;
   Bool_t he3_1 = 1;
-  Bool_t he3_2 = 0;
-  Bool_t he3_3 = 0;
-  Bool_t he3_4 = 0;
+  Bool_t he3_2 = 1;
+  Bool_t he3_3 = 1;
+  Bool_t he3_4 = 1;
   Bool_t tSQ20 = 0;
   Bool_t timesCsI = 0;
   Bool_t centTimes = 0;
-
+  Bool_t detectors = 0;
+  Bool_t ToF = 0;
 
   if (timesCsI) {
     TCanvas *c3h = new TCanvas("c3h","title",1800,1000);
@@ -55,7 +58,7 @@ void drawCut(){
 
     TCanvas *c3h = new TCanvas("c3h","title",1800,1000);
     c3h->Divide(4,4);
-    for(Int_t i=0;i<16;i++) {
+    for(Int_t i=0;i<32;i++) {
       c3h->cd(i+1);
       ch->SetMarkerStyle(1);
       ch->SetMarkerColor(kBlack);      
@@ -131,12 +134,6 @@ void drawCut(){
       c3h->Update();
       // c_arr[i]->Update();
 
-
-      // cuthe3_1[i]->SetLineWidth(2);
-      // cuthe3_1[i]->SetLineColor(kRed);
-      // cuthe3_1[i]->Draw("same");
-      // c_arr[i]->Update();
-
       // cutLi9[i]->SetLineWidth(2);
       // cutLi9[i]->SetLineColor(kGreen);
       // cutLi9[i]->Draw("same");
@@ -160,110 +157,6 @@ void drawCut(){
 
 
   if (he3_1) {
-    TCanvas *c3h = new TCanvas("c3h","",1800,1000);
-
-    // TString canName;
-    // TCanvas *c_arr[16];
-    // for(Int_t i=0;i<16;i++){
-    //   canName.Form("cHe3_1_%d",i+1);
-    //   c_arr[i] = new TCanvas(canName.Data(),"title",1800,1000);
-    // }
-
-    c3h->Divide(4,4);
-    for(Int_t i=0;i<16;i++) {
-      c3h->cd(i+1);
-      // c_arr[i]->cd();
-      ch->SetMarkerStyle(1);
-      ch->SetMarkerColor(kBlack);      
-      cut.Form("n20_1==%d && flag1",i);
-      hdraw.Form("a20_1:a1_1>>h%d1(100,1,30,100,0.5,5)",i);
-      // hdraw.Form("X_C.:aCsI>>h%d",i);
-      ch->Draw(hdraw.Data(),cut.Data(),"");
-      // c_arr[i]->Update();
-      c3h->Update();
-
-      ch->SetMarkerStyle(20);
-      ch->SetMarkerSize(0.8);
-      ch->SetMarkerColor(kRed);      
-      // cut.Form("n20_1==%d && nhe3_1 && nh3",i);
-      cut += " && nhe3_1";
-      hdraw.Form("a20_1:a1_1>>h%d1_coin(100,1,30,100,0.5,5)",i);
-      // hdraw.Form("X_C.:aCsI>>h%d",i);
-      ch->Draw(hdraw.Data(),cut.Data(),"same");
-      c3h->Update();
-      // c_arr[i]->Update();
-
-      cuthe3_1[i]->SetLineWidth(2);
-      cuthe3_1[i]->SetLineColor(kRed);
-      cuthe3_1[i]->Draw("same");
-      // c_arr[i]->Update();
-
-      c3h->Update();
-    }
-    
-    // c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E1_all.pdf");
-    // c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E1_all.pdf[");
-    // c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E1_all.pdf");
-    // for(Int_t i=1;i<15;i++) {
-    //   c_arr[i]->Print("/home/ivan/Desktop/tmp/de_E1_all.pdf");
-    // }
-    // c_arr[15]->Print("/home/ivan/Desktop/tmp/de_E1_all.pdf");
-    // c_arr[15]->Print("/home/ivan/Desktop/tmp/de_E1_all.pdf]");
-
-
-  }
-
-
-  if (he3_2) {
-    // TCanvas *c3h_2 = new TCanvas("c3h_2","",1800,1000);
-
-    TString canName;
-    TCanvas *c_arr[16];
-    for(Int_t i=0;i<16;i++){
-      canName.Form("cHe3_%d",i+1);
-      c_arr[i] = new TCanvas(canName.Data(),"title",1800,1000);
-    }
-
-    // c3h->Divide(4,4);
-    for(Int_t i=0;i<16;i++) {
-      // c3h->cd(i+1);
-      c_arr[i]->cd();
-      ch->SetMarkerStyle(1);
-      ch->SetMarkerColor(kBlack);      
-      cut.Form("n20_2==%d && a20_2<35 && a20_2>0 && a20_2>0.1 && a20_2<5",i);
-      hdraw.Form("a20_2:a1_2>>h%d1",i);
-      // hdraw.Form("X_C.:aCsI>>h%d",i);
-      ch->Draw(hdraw.Data(),cut.Data(),"");
-      // c3h->Update();
-      c_arr[i]->Update();
-
-      ch->SetMarkerColor(kRed);      
-      // cut.Form("n20_1==%d && nhe3_1 && nh3",i);
-      cut += " && nhe3_2";
-      hdraw.Form("a20_2:a1_2>>h%d1_coin",i);
-      // hdraw.Form("X_C.:aCsI>>h%d",i);
-      ch->Draw(hdraw.Data(),cut.Data(),"same");
-      // c3h->Update();
-
-      cuthe3_2[i]->SetLineWidth(1);
-      cuthe3_2[i]->SetLineColor(kRed);
-      cuthe3_2[i]->Draw("same");
-      c_arr[i]->Update();
-      // c3h->Update();
-    }
-    
-    c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E_all2.pdf");
-    c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E_all2.pdf[");
-    c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E_all2.pdf");
-    for(Int_t i=1;i<15;i++) {
-      c_arr[i]->Print("/home/ivan/Desktop/tmp/de_E_all2.pdf");
-    }
-    c_arr[15]->Print("/home/ivan/Desktop/tmp/de_E_all2.pdf");
-    c_arr[15]->Print("/home/ivan/Desktop/tmp/de_E_all2.pdf]");
-  }
-
-
-  if (he3_3) {
     // TCanvas *c3h = new TCanvas("c3h","",1800,1000);
 
     TString canName;
@@ -279,114 +172,313 @@ void drawCut(){
       c_arr[i]->cd();
       ch->SetMarkerStyle(1);
       ch->SetMarkerColor(kBlack);      
-      cut.Form("n20_3==%d && a20_3<35 && a20_3>0 && a20_3>0.1 && a20_3<5",i);
-      hdraw.Form("a20_3:a1_3>>h%d1",i);
+      cut.Form("n20_1==%d && flag1",i);
+      hdraw.Form("a20_1:a1_1>>h%d1(100,1,30,100,0.5,5)",i);
       // hdraw.Form("X_C.:aCsI>>h%d",i);
       ch->Draw(hdraw.Data(),cut.Data(),"");
+      // c_arr[i]->Update();
       // c3h->Update();
-      c_arr[i]->Update();
 
-      ch->SetMarkerColor(kRed);      
-      cut += " && nhe3_3";
-      hdraw.Form("a20_3:a1_3>>h%d1_coin",i);
+      ch->SetMarkerStyle(7);
+      // ch->SetMarkerSize(0.4);
+      ch->SetMarkerColor(kBlue);      
+      // cut.Form("n20_1==%d && nhe3_1 && nh3",i);
+      cut += " && nh3";
+      hdraw.Form("a20_1:a1_1>>h%d1_he(100,1,30,100,0.5,5)",i);
       // hdraw.Form("X_C.:aCsI>>h%d",i);
       ch->Draw(hdraw.Data(),cut.Data(),"same");
       // c3h->Update();
 
-      cuthe3_3[i]->SetLineWidth(2);
-      cuthe3_3[i]->SetLineColor(kRed);
-      cuthe3_3[i]->Draw("same");
+
+      ch->SetMarkerStyle(7);
+      // ch->SetMarkerSize(0.4);
+      ch->SetMarkerColor(kRed);      
+      // cut.Form("n20_1==%d && nhe3_1 && nh3",i);
+      cut += " && nhe3_1";
+      hdraw.Form("a20_1:a1_1>>h%d1_coin(100,1,30,100,0.5,5)",i);
+      // hdraw.Form("X_C.:aCsI>>h%d",i);
+      ch->Draw(hdraw.Data(),cut.Data(),"same");
+      // c3h->Update();
+
+
+      cuthe3_1[i]->SetLineWidth(2);
+      cuthe3_1[i]->SetLineColor(kRed);
+      cuthe3_1[i]->Draw("");
       c_arr[i]->Update();
+
       // c3h->Update();
     }
     
-    c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E_all3.pdf");
-    c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E_all3.pdf[");
-    c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E_all3.pdf");
+    c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E1_all.pdf");
+    c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E1_all.pdf[");
+    c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E1_all.pdf");
     for(Int_t i=1;i<15;i++) {
-      c_arr[i]->Print("/home/ivan/Desktop/tmp/de_E_all3.pdf");
+      c_arr[i]->Print("/home/ivan/Desktop/tmp/de_E1_all.pdf");
     }
-    c_arr[15]->Print("/home/ivan/Desktop/tmp/de_E_all3.pdf");
-    c_arr[15]->Print("/home/ivan/Desktop/tmp/de_E_all3.pdf]");
+    c_arr[15]->Print("/home/ivan/Desktop/tmp/de_E1_all.pdf");
+    c_arr[15]->Print("/home/ivan/Desktop/tmp/de_E1_all.pdf]");
+
+
+  }
+
+  if (he3_2) {
+    // TCanvas *c3h = new TCanvas("c3h","",1800,1000);
+
+    TString canName;
+    TCanvas *c_arr[16];
+    for(Int_t i=0;i<16;i++){
+      canName.Form("cHe3_2_%d",i+1);
+      c_arr[i] = new TCanvas(canName.Data(),"title",1800,1000);
+    }
+
+    // c3h->Divide(4,4);
+    for(Int_t i=0;i<16;i++) {
+      // c3h->cd(i+1);
+      c_arr[i]->cd();
+      ch->SetMarkerStyle(1);
+      ch->SetMarkerColor(kBlack);      
+      cut.Form("n20_2==%d && flag2",i);
+      hdraw.Form("a20_2:a1_2>>h%d2(100,1,30,100,0.5,5)",i);
+      // hdraw.Form("X_C.:aCsI>>h%d",i);
+      ch->Draw(hdraw.Data(),cut.Data(),"");
+      // c_arr[i]->Update();
+      // c3h->Update();
+
+      ch->SetMarkerStyle(7);
+      // ch->SetMarkerSize(0.4);
+      ch->SetMarkerColor(kBlue);      
+      // cut.Form("n20_1==%d && nhe3_1 && nh3",i);
+      cut += " && nh3";
+      hdraw.Form("a20_2:a1_2>>h%d2_he(100,1,30,100,0.5,5)",i);
+      // hdraw.Form("X_C.:aCsI>>h%d",i);
+      ch->Draw(hdraw.Data(),cut.Data(),"same");
+      // c3h->Update();
+
+
+      ch->SetMarkerStyle(7);
+      // ch->SetMarkerSize(0.4);
+      ch->SetMarkerColor(kRed);      
+      // cut.Form("n20_1==%d && nhe3_1 && nh3",i);
+      cut += " && nhe3_2";
+      hdraw.Form("a20_2:a1_2>>h%d2_coin(100,1,30,100,0.5,5)",i);
+      // hdraw.Form("X_C.:aCsI>>h%d",i);
+      ch->Draw(hdraw.Data(),cut.Data(),"same");
+      // c3h->Update();
+
+
+      cuthe3_2[i]->SetLineWidth(2);
+      cuthe3_2[i]->SetLineColor(kRed);
+      cuthe3_2[i]->Draw("");
+      c_arr[i]->Update();
+
+      // c3h->Update();
+    }
+    
+    c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E2_all.pdf");
+    c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E2_all.pdf[");
+    c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E2_all.pdf");
+    for(Int_t i=1;i<15;i++) {
+      c_arr[i]->Print("/home/ivan/Desktop/tmp/de_E2_all.pdf");
+    }
+    c_arr[15]->Print("/home/ivan/Desktop/tmp/de_E2_all.pdf");
+    c_arr[15]->Print("/home/ivan/Desktop/tmp/de_E2_all.pdf]");
+  }
+
+  if (he3_3) {
+    // TCanvas *c3h = new TCanvas("c3h","",1800,1000);
+
+    TString canName;
+    TCanvas *c_arr[16];
+    for(Int_t i=0;i<16;i++){
+      canName.Form("cHe3_3_%d",i+1);
+      c_arr[i] = new TCanvas(canName.Data(),"title",1800,1000);
+    }
+
+    // c3h->Divide(4,4);
+    for(Int_t i=0;i<16;i++) {
+      // c3h->cd(i+1);
+      c_arr[i]->cd();
+      ch->SetMarkerStyle(1);
+      ch->SetMarkerColor(kBlack);      
+      cut.Form("n20_3==%d && flag3",i);
+      hdraw.Form("a20_3:a1_3>>h%d3(100,1,30,100,0.5,5)",i);
+      // hdraw.Form("X_C.:aCsI>>h%d",i);
+      ch->Draw(hdraw.Data(),cut.Data(),"");
+      // c_arr[i]->Update();
+      // c3h->Update();
+
+      ch->SetMarkerStyle(7);
+      // ch->SetMarkerSize(0.4);
+      ch->SetMarkerColor(kBlue);      
+      // cut.Form("n20_1==%d && nhe3_1 && nh3",i);
+      cut += " && nh3";
+      hdraw.Form("a20_3:a1_3>>h%d3_he(100,1,30,100,0.5,5)",i);
+      // hdraw.Form("X_C.:aCsI>>h%d",i);
+      ch->Draw(hdraw.Data(),cut.Data(),"same");
+      // c3h->Update();
+
+
+      ch->SetMarkerStyle(7);
+      // ch->SetMarkerSize(0.4);
+      ch->SetMarkerColor(kRed);      
+      // cut.Form("n20_1==%d && nhe3_1 && nh3",i);
+      cut += " && nhe3_3";
+      hdraw.Form("a20_3:a1_3>>h%d3_coin(100,1,30,100,0.5,5)",i);
+      // hdraw.Form("X_C.:aCsI>>h%d",i);
+      ch->Draw(hdraw.Data(),cut.Data(),"same");
+      // c3h->Update();
+
+
+      cuthe3_3[i]->SetLineWidth(2);
+      cuthe3_3[i]->SetLineColor(kRed);
+      cuthe3_3[i]->Draw("");
+      c_arr[i]->Update();
+
+      // c3h->Update();
+    }
+    
+    c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E3_all.pdf");
+    c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E3_all.pdf[");
+    c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E3_all.pdf");
+    for(Int_t i=1;i<15;i++) {
+      c_arr[i]->Print("/home/ivan/Desktop/tmp/de_E3_all.pdf");
+    }
+    c_arr[15]->Print("/home/ivan/Desktop/tmp/de_E3_all.pdf");
+    c_arr[15]->Print("/home/ivan/Desktop/tmp/de_E3_all.pdf]");
   }
 
   if (he3_4) {
+    // TCanvas *c3h = new TCanvas("c3h","",1800,1000);
 
-    // TString canName;
-    // TCanvas *c_arr[16];
-    // for(Int_t i=0;i<16;i++){
-    //   canName.Form("cHe3_1_%d",i+1);
-    //   c_arr[i] = new TCanvas(canName.Data(),"title",1800,1000);
-    // }
-    TCanvas *c3h = new TCanvas("c3h","title",1800,1000);
-    c3h->Divide(4,4);
+    TString canName;
+    TCanvas *c_arr[16];
+    for(Int_t i=0;i<16;i++){
+      canName.Form("cHe3_4_%d",i+1);
+      c_arr[i] = new TCanvas(canName.Data(),"title",1800,1000);
+    }
+
+    // c3h->Divide(4,4);
     for(Int_t i=0;i<16;i++) {
       // c3h->cd(i+1);
-      // c_arr[i]->cd();
-      c3h->cd(i+1);
+      c_arr[i]->cd();
       ch->SetMarkerStyle(1);
       ch->SetMarkerColor(kBlack);      
-      cut.Form("n20_4==%d",i);
-      hdraw.Form("a20_4:a1_4>>h%d1",i);
+      cut.Form("n20_4==%d && flag4",i);
+      hdraw.Form("a20_4:a1_4>>h%d3(100,1,30,100,0.5,5)",i);
       // hdraw.Form("X_C.:aCsI>>h%d",i);
       ch->Draw(hdraw.Data(),cut.Data(),"");
-      c3h->Update();
       // c_arr[i]->Update();
+      // c3h->Update();
 
-      // ch->SetMarkerStyle(4);    
-      // ch->SetMarkerColor(kBlue);      
-      // // cut.Form("n20_1==%d && nhe3_1",i);
-      // cut += " && nh3";
-      // hdraw.Form("a20_4:a1_4>>h%d_triton1",i);
-      // ch->Draw(hdraw.Data(),cut.Data(),"same");
-      // // c3h->Update();
-      // c_arr[i]->Update();
+      ch->SetMarkerStyle(7);
+      // ch->SetMarkerSize(0.4);
+      ch->SetMarkerColor(kBlue);      
+      // cut.Form("n20_1==%d && nhe3_1 && nh3",i);
+      cut += " && nh3";
+      hdraw.Form("a20_4:a1_4>>h%d4_he(100,1,30,100,0.5,5)",i);
+      // hdraw.Form("X_C.:aCsI>>h%d",i);
+      ch->Draw(hdraw.Data(),cut.Data(),"same");
+      // c3h->Update();
 
-      // ch->SetMarkerColor(kRed);      
-      // // cut.Form("n20_1==%d && nhe3_1 && nh3",i);
-      // cut += " && nhe3_4";
-      // hdraw.Form("a20_4:a1_4>>h%d1_coin",i);
-      // // hdraw.Form("X_C.:aCsI>>h%d",i);
-      // ch->Draw(hdraw.Data(),cut.Data(),"same");
-      // // c3h->Update();
 
-      // cuthe3_4[i]->SetLineWidth(2);
-      // cuthe3_4[i]->SetLineColor(kRed);
-      // cuthe3_4[i]->Draw("same");
-      // c_arr[i]->Update();
+      ch->SetMarkerStyle(7);
+      // ch->SetMarkerSize(0.4);
+      ch->SetMarkerColor(kRed);      
+      // cut.Form("n20_1==%d && nhe3_1 && nh3",i);
+      cut += " && nhe3_4";
+      hdraw.Form("a20_4:a1_4>>h%d3_coin(100,1,30,100,0.5,5)",i);
+      // hdraw.Form("X_C.:aCsI>>h%d",i);
+      ch->Draw(hdraw.Data(),cut.Data(),"same");
+      // c3h->Update();
+
+
+      cuthe3_4[i]->SetLineWidth(2);
+      cuthe3_4[i]->SetLineColor(kRed);
+      cuthe3_4[i]->Draw("");
+      c_arr[i]->Update();
+
       // c3h->Update();
     }
     
-    // c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E_all4.pdf");
-    // c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E_all4.pdf[");
-    // c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E_all4.pdf");
-    // for(Int_t i=1;i<15;i++) {
-    //   c_arr[i]->Print("/home/ivan/Desktop/tmp/de_E_all4.pdf");
-    // }
-    // c_arr[15]->Print("/home/ivan/Desktop/tmp/de_E_all4.pdf");
-    // c_arr[15]->Print("/home/ivan/Desktop/tmp/de_E_all4.pdf]");
+    c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E4_all.pdf");
+    c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E4_all.pdf[");
+    c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E4_all.pdf");
+    for(Int_t i=1;i<15;i++) {
+      c_arr[i]->Print("/home/ivan/Desktop/tmp/de_E4_all.pdf");
+    }
+    c_arr[15]->Print("/home/ivan/Desktop/tmp/de_E4_all.pdf");
+    c_arr[15]->Print("/home/ivan/Desktop/tmp/de_E4_all.pdf]");
   }
 
   if (tSQ20) {
-    TCanvas * c1 = new TCanvas("c1","title",1800,1000);
-    // c1->Divide(4,4);
+    TCanvas * c2 = new TCanvas("c2","title",1800,1000);
+    c2->Divide(4,4);
 
-    // for(Int_t i =0;i<16;i++) {
-    //   c1->cd(i+1);
-      Int_t i = 1;
+    for(Int_t i =11;i<12;i++) {
+      c2->cd(i+1);
+      // Int_t i = 1;
       ch->SetMarkerStyle(1);
       ch->SetMarkerColor(kBlack);      
-      // cut.Form("nhe3_",i);
+      cut.Form("n1_4==%d",i);
       hdraw.Form("a1_4:t1_4-tF5>>h%d1",i);
       ch->Draw(hdraw.Data(),cut.Data(),"");
 
-      c1->Update();
+      c2->Update();
 
-      // cutSQ20_1[i]->SetLineColor(kRed);
-      // cutSQ20_1[i]->SetLineWidth(2);
-      // cutSQ20_1[i]->Draw("");
+      ch->SetMarkerColor(kRed);      
+      cut.Form("n1_4==%d && flag4",i);
+      hdraw.Form("a1_4:t1_4-tF5>>h%d",i);
+      ch->Draw(hdraw.Data(),cut.Data(),"same");
 
-    // }
+      c2->Update();
+
+
+      // cutSQ1_4[i]->SetLineColor(kRed);
+      // cutSQ1_4[i]->SetLineWidth(2);
+      // cutSQ1_4[i]->Draw("");
+
+    }
+  }
+
+  if (detectors) {
+    TCanvas * c1 = new TCanvas("c1","title",1000,1000);
+
+    ch->SetMarkerColor(1);
+    ch->SetMarkerStyle(20);
+    ch->Draw("y1t:x1t >> d1(300,-100,100,300,-100,100) ","flag1","");
+
+    ch->SetMarkerColor(2);
+    // ch->SetMarkerStyle(20);
+    ch->Draw("y2t:x2t >> d2(300,-100,100,300,-100,100)","flag2","same");
+
+    ch->SetMarkerColor(3);
+    // ch->SetMarkerStyle(20);
+    ch->Draw("y3t:x3t >> d3(300,-100,100,300,-100,100)","flag3","same");
+
+    ch->SetMarkerColor(4);
+    // ch->SetMarkerStyle(20);
+    ch->Draw("y4t:x4t >> d4(300,-100,100,300,-100,100)","flag4","same");
+
+  }
+
+  if (ToF) {
+    TCanvas *cToF = new TCanvas("cToF","title",1000,1000);
+    // cToF->Divide(2,1);
+
+    cToF->cd(1);
+    ch->Draw("F5:tF5-tF3 >> F5(1000,63,75,6000,3000,9000)","","col");
+
+    // cutF5->SetLineColor(kRed);
+    // cutF5->SetLineWidth(2);
+    // cutF5->Draw("same");
+
+    // cToF->cd(2);
+    // ch->Draw("F3:tF5-tF3 >> F3(1000,0,200,8000,0,8000)","col");
+
+    // cutF3->SetLineColor(kRed);
+    // cutF3->SetLineWidth(2);
+    // cutF3->Draw("same");
+
   }
 
 
@@ -404,7 +496,7 @@ void readCuts() {
     cutLi[i] = (TCutG*)f->Get("CUTG");
     if (!cutLi[i]) {
       cout << "no cut " << cutName.Data() << endl;
-      return;
+      exit(1);
     }    
     delete f;
   }
@@ -415,19 +507,8 @@ void readCuts() {
     cutLi9[i] = (TCutG*)f->Get("CUTG");
     if (!cutLi9[i]) {
       cout << "no cut " << cutName.Data() << endl;
-      return;
+      exit(1);
     }    
-    delete f;
-  }
-
-  for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/he8_1904/cuts/T1/he3/he3_%d.root",i);
-    f = new TFile(cutName.Data());
-    cuthe3_1[i] = (TCutG*)f->Get("CUTG");
-    if (!cuthe3_1[i]) {
-      cout << "no cut " << cutName.Data() << endl;
-      return;
-    }
     delete f;
   }
 
@@ -437,73 +518,95 @@ void readCuts() {
     cutCsI[i] = (TCutG*)f->Get("CUTG");
     if (!cutCsI[i]) {
       cout << "no cut " << cutName.Data() << endl;
-      return;
+      exit(1);
     }
     delete f;
   }
 
-  for(Int_t i=0;i<16;i++) {
+  for(Int_t i=0;i<32;i++) {
     cutName.Form("/home/ivan/work/macro/be10/cut/CT/tX_C/tX_C_%d.root",i);
     f = new TFile(cutName.Data());
     cutX_C[i] = (TCutG*)f->Get("CUTG");
     if (!cutX_C[i]) {
       cout << i  << " no cut"<< endl;
-      return;
+      exit(1);
     }
     delete f;
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/he8_1904/cuts/T1/tSQ20/tSQ20_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/be10/cut/T1/tSQ20/tSQ20_%d.root",i);
     f = new TFile(cutName.Data());
     cutSQ20_1[i] = (TCutG*)f->Get("CUTG");
     if (!cutSQ20_1[i]) {
       cout << i  << " no cut"<< endl;
-      return;
+      exit(1);
     }
     delete f;
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/he8_1904/cuts/T1/SQ1_1/tSQ1_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/be10/cut/T1/SQ1_1/tSQ1_%d.root",i);
     f = new TFile(cutName.Data());
     cutSQ1_1[i] = (TCutG*)f->Get("CUTG");
     if (!cutSQ1_1[i]) {
       cout << i  << " no cut"<< endl;
-      return;
+      exit(1);
     }
     delete f;
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/he8_1904/cuts/T2/he3/he3_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/be10/cut/T1/he3/he3_%d.root",i);
+    f = new TFile(cutName.Data());
+    cuthe3_1[i] = (TCutG*)f->Get("CUTG");
+    if (!cuthe3_1[i]) {
+      cout << "no cut " << cutName.Data() << endl;
+      exit(1);
+    }
+    delete f;
+  }
+
+  for(Int_t i=0;i<16;i++) {
+    cutName.Form("/home/ivan/work/macro/be10/cut/T2/he3/he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_2[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_2[i]) {
       cout << "no cut " << cutName.Data() << endl;
-      return;
+      exit(1);
     }
     delete f;
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/he8_1904/cuts/T3/he3/he3_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/be10/cut/T3/he3/he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_3[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_3[i]) {
       cout << "no cut " << cutName.Data() << endl;
-      return;
+      exit(1);
     }
     delete f;
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/he8_1904/cuts/T4/he3/he3_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/be10/cut/T4/he3/he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_4[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_4[i]) {
       cout << "no cut " << cutName.Data() << endl;
-      return;
+      exit(1);
+    }
+    delete f;
+  }
+
+  for(Int_t i=0;i<16;i++) {
+    cutName.Form("/home/ivan/work/macro/be10/cut/T4/tSSD4/tSSD4_%d.root",i);
+    f = new TFile(cutName.Data());
+    cutSQ1_4[i] = (TCutG*)f->Get("CUTG");
+    if (!cutSQ1_4[i]) {
+      cout << "no cut " << cutName.Data() << endl;
+      exit(1);
     }
     delete f;
   }

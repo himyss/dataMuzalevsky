@@ -1,3 +1,5 @@
+#include "/home/ivan/work/macro/be10/cut/be10Cut.C"
+
 void calcVectorTel1(Int_t n20, Int_t n1);
 void calcVectorTel2(Int_t n20, Int_t n1);
 void calcVectorTel3(Int_t n20, Int_t n1);
@@ -102,7 +104,7 @@ Double_t fThickness1[16][16],fThickness2[16][16],fThickness3[16][16],fThickness4
 Int_t flag1,flag2,flag3,flag4,flagCent;
 Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4;
 
-TCutG *cutCsI[16],*cutLi[16],*cutLi9[16],*cutX_C[16];
+TCutG *cutCsI[16],*cutLi[16],*cutLi9[16],*cutX_C[32];
 TCutG *cuthe3_1[16],*cutSQ20_1[16],*cutSQ1_1[16];
 TCutG *cuthe3_2[16],*cutSQ20_2[16],*cutSQ1_2[16];
 TCutG *cuthe3_3[16],*cutSQ20_3[16],*cutSQ1_3[16];
@@ -116,6 +118,8 @@ Float_t pCsI_1[16],pCsI_2[16];
 Float_t x1t,y1t,x2t,y2t,x3t,y3t,x4t,y4t,xCt,yCt;
 
 void selection() {
+  be10Cut();
+
   readPar("CsI_anh",pCsI_1,pCsI_2);
   readCuts();
 
@@ -312,8 +316,8 @@ void selection() {
   xCent = 0.5;
   yCent = 1;
 
-  // for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
-  for(Int_t nentry=0;nentry<10000;nentry++) {     
+  for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
+  // for(Int_t nentry=0;nentry<10000;nentry++) {     
     if(nentry%1000000==0) cout << "#ENTRY " << nentry << "#" << endl;
 
     ch->GetEntry(nentry);
@@ -321,6 +325,9 @@ void selection() {
     if (trigger==1) continue;
 
     zeroVars();
+
+    checkToF();
+    if (!timesToF) continue;
 
     MWPCprojection();
     if ( ((fXt-xCent)*(fXt-xCent) + (fYt-yCent)*(fYt-yCent))>9*9 ) continue;
@@ -341,8 +348,6 @@ void selection() {
 
     timesSQ20();
     timesSQ1();
-
-    if (flag1) cout << a1_1 << " " << a20_1 << " " << n1_1 << " " << n20_1 << endl;
 
     checkHe3(); 
     if (nhe3_1) calcVectorTel1(n20_1, n1_1);
@@ -404,6 +409,7 @@ void zeroVars() {
   flag3 = 1;
   flag4 = 1;
   flagCent = 1;
+  timesToF = 0;
 
   nh3 = 0;
   nhe3_1 = 0;
@@ -452,8 +458,8 @@ void zeroVars() {
 } 
 
 void checkToF() {
-  if (F5<2200 || F5>4200 || tF5-tF3<103 || tF5-tF3>117 || F3<2200 || F3>4200 ) timesToF = kFALSE;
-  else timesToF = kTRUE;
+  if ( cutF5->IsInside(tF5-tF3, 0.25*F5) && cutF3->IsInside(tF5-tF3, 0.25*F3)) timesToF = kTRUE;
+  else timesToF = kFALSE;
   return;
 }
 
@@ -896,7 +902,7 @@ void litium9() {
 }
 
 void checkHe3() {
-  if(n1_1>-1 && n20_1>-1 && a1_1<20 && cuthe3_1[n20_1]->IsInside(a1_1, a20_1)) {
+  if(flag1 && n1_1>-1 && n20_1>-1 && a1_1<20 && cuthe3_1[n20_1]->IsInside(a1_1, a20_1)) {
     nhe3_1 = 1;
     return;
   }
@@ -904,7 +910,7 @@ void checkHe3() {
     nhe3_1 = 0;
   }
 
-  if(n1_2>-1 && n20_2>-1 && a1_2<20 && cuthe3_2[n20_2]->IsInside(a1_2, a20_2)) {
+  if(flag2 && n1_2>-1 && n20_2>-1 && a1_2<20 && cuthe3_2[n20_2]->IsInside(a1_2, a20_2)) {
     nhe3_2 = 1;
     return;
   }
@@ -912,7 +918,7 @@ void checkHe3() {
     nhe3_2 = 0;
   }
 
-  if(n1_3>-1 && n20_3>-1 && a1_3<20 && cuthe3_3[n20_3]->IsInside(a1_3, a20_3)) {
+  if(flag3 && n1_3>-1 && n20_3>-1 && a1_3<20 && cuthe3_3[n20_3]->IsInside(a1_3, a20_3)) {
     nhe3_3 = 1;
     return;
   }
@@ -920,7 +926,7 @@ void checkHe3() {
     nhe3_3 = 0;
   }
 
-  if(n1_4-1 && n20_4>-1 && a1_4<20 && cuthe3_4[n20_4]->IsInside(a1_4, a20_4)) {
+  if(flag4 && n1_4>-1 && n20_4>-1 && a1_4<20 && cuthe3_4[n20_4]->IsInside(a1_4, a20_4)) {
     nhe3_4 = 1;
     return;
   }
@@ -978,7 +984,11 @@ void timesSQ1() {
 
   if (t1_3-tF5 < 0 && t1_3-tF5>50) flag3=0;
 
-  if (t1_4-tF5 < 0 && t1_4-tF5>50) flag4=0;
+  if(n1_4>-1 && cutSQ1_4[n1_4]->IsInside(t1_4-tF5,a1_4) ) { 
+    flag4 = flag4*1;
+  }
+  else flag4 = 0;
+
 }  
 
 void readCuts() {
@@ -992,7 +1002,7 @@ void readCuts() {
     cutLi[i] = (TCutG*)f->Get("CUTG");
     if (!cutLi[i]) {
       cout << "no cut " << cutName.Data() << endl;
-      return;
+      exit(1);
     }    
     delete f;
   }
@@ -1003,19 +1013,8 @@ void readCuts() {
     cutLi9[i] = (TCutG*)f->Get("CUTG");
     if (!cutLi9[i]) {
       cout << "no cut " << cutName.Data() << endl;
-      return;
+      exit(1);
     }    
-    delete f;
-  }
-
-  for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/he8_1904/cuts/T1/he3/he3_%d.root",i);
-    f = new TFile(cutName.Data());
-    cuthe3_1[i] = (TCutG*)f->Get("CUTG");
-    if (!cuthe3_1[i]) {
-      cout << "no cut " << cutName.Data() << endl;
-      return;
-    }
     delete f;
   }
 
@@ -1025,7 +1024,7 @@ void readCuts() {
     cutCsI[i] = (TCutG*)f->Get("CUTG");
     if (!cutCsI[i]) {
       cout << "no cut " << cutName.Data() << endl;
-      return;
+      exit(1);
     }
     delete f;
   }
@@ -1036,62 +1035,84 @@ void readCuts() {
     cutX_C[i] = (TCutG*)f->Get("CUTG");
     if (!cutX_C[i]) {
       cout << i  << " no cut"<< endl;
-      return;
+      exit(1);
     }
     delete f;
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/he8_1904/cuts/T1/tSQ20/tSQ20_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/be10/cut/T1/tSQ20/tSQ20_%d.root",i);
     f = new TFile(cutName.Data());
     cutSQ20_1[i] = (TCutG*)f->Get("CUTG");
     if (!cutSQ20_1[i]) {
       cout << i  << " no cut"<< endl;
-      return;
+      exit(1);
     }
     delete f;
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/he8_1904/cuts/T1/SQ1_1/tSQ1_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/be10/cut/T1/SQ1_1/tSQ1_%d.root",i);
     f = new TFile(cutName.Data());
     cutSQ1_1[i] = (TCutG*)f->Get("CUTG");
     if (!cutSQ1_1[i]) {
       cout << i  << " no cut"<< endl;
-      return;
+      exit(1);
     }
     delete f;
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/he8_1904/cuts/T2/he3/he3_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/be10/cut/T1/he3/he3_%d.root",i);
+    f = new TFile(cutName.Data());
+    cuthe3_1[i] = (TCutG*)f->Get("CUTG");
+    if (!cuthe3_1[i]) {
+      cout << "no cut " << cutName.Data() << endl;
+      exit(1);
+    }
+    delete f;
+  }
+
+  for(Int_t i=0;i<16;i++) {
+    cutName.Form("/home/ivan/work/macro/be10/cut/T2/he3/he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_2[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_2[i]) {
       cout << "no cut " << cutName.Data() << endl;
-      return;
+      exit(1);
     }
     delete f;
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/he8_1904/cuts/T3/he3/he3_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/be10/cut/T3/he3/he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_3[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_3[i]) {
       cout << "no cut " << cutName.Data() << endl;
-      return;
+      exit(1);
     }
     delete f;
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/he8_1904/cuts/T4/he3/he3_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/be10/cut/T4/he3/he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_4[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_4[i]) {
       cout << "no cut " << cutName.Data() << endl;
-      return;
+      exit(1);
+    }
+    delete f;
+  }
+
+  for(Int_t i=0;i<16;i++) {
+    cutName.Form("/home/ivan/work/macro/be10/cut/T4/tSSD4/tSSD4_%d.root",i);
+    f = new TFile(cutName.Data());
+    cutSQ1_4[i] = (TCutG*)f->Get("CUTG");
+    if (!cutSQ1_4[i]) {
+      cout << "no cut " << cutName.Data() << endl;
+      exit(1);
     }
     delete f;
   }
