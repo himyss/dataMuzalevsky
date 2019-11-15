@@ -1,0 +1,19 @@
+{
+//========= Macro generated from object: CUTG/Graph
+//========= by ROOT version6.10/08
+   
+   TCutG *cutg = new TCutG("CUTG",8);
+   cutg->SetVarX("BeamDetToFDigi2.fTime-BeamDetToFDigi1.fTime ");
+   cutg->SetVarY("BeamDetToFDigi2.fEdep/4.");
+   cutg->SetTitle("Graph");
+   cutg->SetFillColor(1);
+   cutg->SetPoint(0,64.9487,2427.05);
+   cutg->SetPoint(1,62.3555,2072.95);
+   cutg->SetPoint(2,62.1934,1742.07);
+   cutg->SetPoint(3,63.0578,1492.45);
+   cutg->SetPoint(4,66.3533,1335.72);
+   cutg->SetPoint(5,66.7315,2020.7);
+   cutg->SetPoint(6,65.9751,2485.1);
+   cutg->SetPoint(7,64.9487,2427.05);
+   cutg->Draw("");
+}

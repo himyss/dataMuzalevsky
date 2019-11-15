@@ -62,7 +62,7 @@ TLorentzVector he3CM_H7,h3CM_H7,h7CM_H7; // reaction CMS
 Double_t phi,theta;
 Double_t momentum,energy,mass;
 
-Float_t thetah7,phih7,phih3,thetah3,phihe3,thetahe3;
+Float_t thetah7,phih7,phih3,thetah3,phihe3,thetahe3,thetahe8,phihe8;
 Float_t thetah7CM,phih7CM,phih3CM,thetah3CM,phihe3CM,thetahe3CM;
 Float_t mh7,eh7,eh3,ehe3,ehe8,eh3_CM;
 
@@ -82,8 +82,10 @@ void reco() {
 
   TChain *ch = new TChain("tree");
   // ch->Add("/media/ivan/data/exp1904/analysed/oldPars/reco.root");
-// ch->Add("/media/ivan/data/exp1904/analysed/MKpars/reco.root");
-  ch->Add("/media/ivan/data/exp1906/be10/analysed/be10_2_reco.root");
+  ch->Add("/media/ivan/data/exp1906/be10/analysed/be10_thinT_reco.root");
+  // ch->Add("/media/ivan/data/exp1906/be10/analysed/be10_2_reco.root");
+  // ch->Add("/media/ivan/data/exp1906/be10/analysed/beamDiagnostics/be10_reco.root");
+  // ch->Add("/media/ivan/data/exp1906/be10/analysed/be10_etarget_reco.root");
 
   cout << ch->GetEntries() << " total number of Entries" << endl;
   //--------------------------------------------------------------------------------
@@ -185,7 +187,8 @@ void reco() {
   ch->SetBranchAddress("e_4.",&e_4);
   ch->SetBranchAddress("centE.",&centE);
 
-  TFile *fw = new TFile("/media/ivan/data/exp1906/be10/analysed/be10_2_mm.root", "RECREATE");
+  // TFile *fw = new TFile("/media/ivan/data/exp1906/be10/analysed/be10_thinT_mm_4.root", "RECREATE");
+  TFile *fw = new TFile("/media/ivan/data/exp1906/be10/analysed/be10_thinT_mm.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
  
   tw->Branch("trigger.",&trigger,"trigger/I");
@@ -317,6 +320,9 @@ void reco() {
   tw->Branch("angle_he3_h7.",&angle_he3_h7,"angle_he3_h7/F");
   tw->Branch("angle_he3_he8.",&angle_he3_he8,"angle_he3_he8/F");
 
+  tw->Branch("thetahe8.",&thetahe8,"thetahe8/F");
+  tw->Branch("phihe8.",&phihe8,"phihe8/F");
+
   // input options
   d2.SetPxPyPzE(0.,0.,0.,1.875612);
 
@@ -369,7 +375,7 @@ void reco() {
         coincidence++;
       } 
 
-      if(coincidence!=1) continue;
+      // if(coincidence!=1) continue;
       // energy = leftE4/1000.;
       mass = 2.808391;  //MeV
 
@@ -478,7 +484,7 @@ void calculateBeam() {
   Double_t beta = sqrt(1 - (velocity*velocity/(299.792458*299.792458) ) );
   Double_t kinEnergy = mass*((1/beta) - 1);
 
-  kinEnergy =  f8HeSi.GetE(1000*kinEnergy, 644.)/1000.;
+  // kinEnergy =  f8HeSi.GetE(1000*kinEnergy, 644.)/1000.;
   // kinEnergy = kinEnergy*0.95;
   ehe8 = kinEnergy;
   // cout << ehe8 << endl;
@@ -489,6 +495,8 @@ void calculateBeam() {
 
   momentum = TMath::Abs(momentum);
   he8.SetXYZM(momentum*TMath::Sin(theta)*TMath::Cos(phi), momentum*TMath::Sin(theta)*TMath::Sin(phi), momentum*TMath::Cos(theta) ,mass);
+  thetahe8 = he8.Theta()*TMath::RadToDeg();
+  phihe8 = he8.Phi()*TMath::RadToDeg();
 
   // he8.SetPtEtaPhiM(momentum, theta, phi, mass);
   // cout << he8.Px() << " " << he8.Py() << " " << he8.Pz() << endl;
@@ -497,6 +505,8 @@ void calculateBeam() {
 }
 
 void zerovars() {
+  thetahe8 = -1000;
+  phihe8 = -1000;
   thetah7 = -10.;
   phih7 = -100.;
   thetah3 = -1000.;

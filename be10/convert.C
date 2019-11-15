@@ -92,8 +92,7 @@ void convert() {
 
   TChain *ch = new TChain("er");
   // ch->Add("/media/ivan/data/exp1904/digi/vetoOff/h7_*.root");
-  // ch->Add("/media/ivan/data/exp1904/digi/beamDiagnostics/h7_ct_*");
-  
+  // ch->Add("/media/ivan/data/exp1906/be10/digi/emptyTarget/be10*");
   ch->Add("/media/ivan/data/exp1906/be10/digi/all/firstVol/be10_ct_*");
     
   cout << "Found " << ch->GetEntries() << " entries" << endl;
@@ -186,7 +185,7 @@ void convert() {
 
   // Creating outfile,outtree
 
-  TFile *fw = new TFile("/media/ivan/data/exp1906/be10/analysed/be10_1_cal1.root", "RECREATE");
+  TFile *fw = new TFile("/media/ivan/data/exp1906/be10/analysed/beamDiagnostics/be10_1_cal.root", "RECREATE");
   // /home/oem/work/data/exp1906/analysed 
   TTree *tw = new TTree("tree", "data");
 
@@ -278,8 +277,8 @@ void convert() {
   tw->Branch("multCsI",&multCsI,"multCsI/I");  
 
 
-  // for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) {
-  for(Int_t nentry=0;nentry<1000;nentry++) {    
+  for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) {
+  // for(Int_t nentry=0;nentry<10000;nentry++) {    
     if(nentry%1000000==0) cout << "#Event " << nentry << "#" << endl;
     ch->GetEntry(nentry);
     
@@ -294,9 +293,9 @@ void convert() {
     if (GetClusterMWPC(v_MWPCx2)!=1) continue;
     if (GetClusterMWPC(v_MWPCy1)!=1) continue;
     if (GetClusterMWPC(v_MWPCy2)!=1) continue;  
-
+    // cout << trigger << endl;
     trigger = header->GetTrigger();
-    if (trigger==1) continue;
+    if (trigger!=1) continue;
 
     mult20_1 = v_SSD20_1->GetEntries();
     // if (mult20_1>1) continue;
@@ -353,20 +352,13 @@ void convert() {
         continue;
       }
     }
-
+  
     fillSi(v_DSDX_C,DSD_X,tDSD_X,pDSD_X1,pDSD_X2,&multc_x,2.5);
     fillSi(v_DSDY_C,DSD_Y,tDSD_Y,pDSD_Y1,pDSD_Y2,&multc_y,2.5);
 
     // side telescopes
-    if (mult1_1>1) cout << endl << mult1_1 << endl;
     fillSi(v_SSD20_1,SQ20_1,tSQ20_1,pSQ201_1,pSQ201_2,&mult20_1,0.5);
     fillSi(v_SSD_1,SSD1,tSSD1,pSSD1_1,pSSD1_2,&mult1_1,1);
-    if (mult1_1>1) {
-      cout << mult1_1 << " after" << endl;
-      for(Int_t i = 0;i<16;i++) {
-        if (SSD1[i]>0) cout << SSD1[i] << " " << tSSD1[i] << endl;
-      }
-    }
     fillSi(v_SSD_V_1,SSD_V1,tSSD_V1,pSSD_V1_1,pSSD_V1_2,&multv_1,1);
 
     fillSi(v_SSD20_2,SQ20_2,tSQ20_2,pSQ202_1,pSQ202_2,&mult20_2,0.5);
@@ -385,8 +377,8 @@ void convert() {
   }
 
   fw->cd();
-  // tw->Write();
-  // fw->Close();
+  tw->Write();
+  fw->Close();
 
   return;
 }

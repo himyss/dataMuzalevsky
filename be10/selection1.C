@@ -103,7 +103,7 @@ Double_t fThickness1[16][16],fThickness2[16][16],fThickness3[16][16],fThickness4
 Int_t flag1,flag2,flag3,flag4,flagCent;
 Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4;
 
-TCutG *cutCsI[16],*cutLi[16],*cutLi9[16],*cutX_C[32];
+TCutG *cutCsI[16],*cutLi[16],*cutLi9[16],*cutLi8[16],*cutX_C[32];
 TCutG *cuthe3_1[16],*cutSQ20_1[16],*cutSQ1_1[16];
 TCutG *cuthe3_2[16],*cutSQ20_2[16],*cutSQ1_2[16];
 TCutG *cuthe3_3[16],*cutSQ20_3[16],*cutSQ1_3[16];
@@ -123,7 +123,11 @@ void selection1() {
   readCuts();
 
   TChain *ch = new TChain("tree");
-  ch->Add("/media/ivan/data/exp1906/be10/analysed/be10_2_cal.root");
+  
+  // ch->Add("/media/ivan/data/exp1906/be10/analysed/be10_2_cal.root");
+  // ch->Add("/media/ivan/data/exp1906/be10/analysed/be10_thinT_cal.root");
+  // ch->Add("/media/ivan/data/exp1906/be10/analysed/be10_etarget.root");
+  ch->Add("/media/ivan/data/exp1906/be10/analysed/beamDiagnostics/be10_2_cal.root");
 
   cout << ch->GetEntries() << endl;
   //--------------------------------------------------------------------------------
@@ -200,8 +204,9 @@ void selection1() {
 
   readThickness();
 
-  // TFile *fw = new TFile("/media/ivan/data/exp1906/be10/analysed/be10_cut.root", "RECREATE");
-  TFile *fw = new TFile("/media/ivan/data/exp1906/be10/analysed/be10_2_cut.root", "RECREATE");
+  TFile *fw = new TFile("/media/ivan/data/exp1906/be10/analysed/beamDiagnostics/be10_2_cut.root", "RECREATE");
+  // TFile *fw = new TFile("/media/ivan/data/exp1906/be10/analysed/be10_2_li8_cut.root", "RECREATE");
+  // TFile *fw = new TFile("/media/ivan/data/exp1906/be10/analysed/be10_thinT_cut.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("trigger.",&trigger,"trigger/I");
@@ -321,7 +326,7 @@ void selection1() {
 
     ch->GetEntry(nentry);
 
-    if (trigger==1) continue;
+    if (trigger!=1) continue;
 
     checkToF();
     if (!timesToF) continue;
@@ -329,7 +334,7 @@ void selection1() {
     zeroVars();
 
     MWPCprojection();
-    if ( ((fXt-xCent)*(fXt-xCent) + (fYt-yCent)*(fYt-yCent))>9*9 ) continue;
+    // if ( ((fXt-xCent)*(fXt-xCent) + (fYt-yCent)*(fYt-yCent))>9*9 ) continue;
 
     fillSi();
 
@@ -995,6 +1000,17 @@ void readCuts() {
     f = new TFile(cutName.Data());
     cutLi[i] = (TCutG*)f->Get("CUTG");
     if (!cutLi[i]) {
+      cout << "no cut " << cutName.Data() << endl;
+      exit(1);
+    }    
+    delete f;
+  }
+
+  for(Int_t i=0;i<16;i++) {
+    cutName.Form("/home/ivan/work/macro/be10/cut/CT/litium/secondPars/li8/Li8_%d.root",i);
+    f = new TFile(cutName.Data());
+    cutLi8[i] = (TCutG*)f->Get("CUTG");
+    if (!cutLi8[i]) {
       cout << "no cut " << cutName.Data() << endl;
       exit(1);
     }    

@@ -2,7 +2,7 @@
 void readCuts();
 void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16);
 
-TCutG *cutCsI[16],*cutLi[16],*cutLi9[16],*cutX_C[32];
+TCutG *cutCsI[16],*cutLi[16],*cutLi9[16],*cutLi8[16],*cutX_C[32];
 TCutG *cuthe3_1[16],*cutSQ20_1[16],*cutSQ1_1[16];
 TCutG *cuthe3_2[16],*cutSQ20_2[16],*cutSQ1_2[16];
 TCutG *cuthe3_3[16],*cutSQ20_3[16],*cutSQ1_3[16];
@@ -18,21 +18,26 @@ void drawCut(){
 
   TChain *ch = new TChain("tree");
   ch->Add("/media/ivan/data/exp1906/be10/analysed/be10_1_cut.root");
-  ch->Add("/media/ivan/data/exp1906/be10/analysed/be10_2_cut.root");
+  // ch->Add("/media/ivan/data/exp1906/be10/analysed/be10_2_cut.root");
+
+  // ch->Add("/media/ivan/data/exp1906/be10/analysed/be10_1_allLi_cut.root");
+  // ch->Add("/media/ivan/data/exp1906/be10/analysed/be10_2_li8_cut.root");
+
+  
   // ch->Add("/media/ivan/data/exp1904/analysed/oldPars/mm_400.root");
   cout << ch->GetEntries() << endl;
 
   TString cut,hdraw;
 
   Bool_t litium = 0;
-  Bool_t he3_1 = 1;
-  Bool_t he3_2 = 1;
-  Bool_t he3_3 = 1;
-  Bool_t he3_4 = 1;
+  Bool_t he3_1 = 0;
+  Bool_t he3_2 = 0;
+  Bool_t he3_3 = 0;
+  Bool_t he3_4 = 0;
   Bool_t tSQ20 = 0;
   Bool_t timesCsI = 0;
   Bool_t centTimes = 0;
-  Bool_t detectors = 0;
+  Bool_t detectors = 1;
   Bool_t ToF = 0;
 
   if (timesCsI) {
@@ -134,16 +139,16 @@ void drawCut(){
       c3h->Update();
       // c_arr[i]->Update();
 
-      // cutLi9[i]->SetLineWidth(2);
-      // cutLi9[i]->SetLineColor(kGreen);
-      // cutLi9[i]->Draw("same");
+      cutLi8[i]->SetLineWidth(2);
+      cutLi8[i]->SetLineColor(kGreen);
+      cutLi8[i]->Draw("same");
 
       // cutLi[i]->SetLineWidth(2);
       // cutLi[i]->SetLineColor(kRed);
       // cutLi[i]->Draw("same");
       // c_arr[i]->Update();
     }
-    c3h->Print("/home/ivan/Desktop/tmp/de_E_1.pdf");
+    c3h->Print("/home/ivan/Desktop/tmp/de_E_cent_second.pdf");
     // c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E_li_all.pdf");
     // c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E_li_all.pdf[");
     // c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E_li_all.pdf");
@@ -502,6 +507,17 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
+    cutName.Form("/home/ivan/work/macro/be10/cut/CT/litium/secondPars/li8/Li8_%d.root",i);
+    f = new TFile(cutName.Data());
+    cutLi8[i] = (TCutG*)f->Get("CUTG");
+    if (!cutLi8[i]) {
+      cout << "no cut " << cutName.Data() << endl;
+      exit(1);
+    }    
+    delete f;
+  }
+
+  for(Int_t i=0;i<16;i++) {
     cutName.Form("/home/ivan/work/macro/be10/cut/CT/litium/firstPars/Li9_%d.root",i);
     f = new TFile(cutName.Data());
     cutLi9[i] = (TCutG*)f->Get("CUTG");
@@ -612,6 +628,7 @@ void readCuts() {
   }
 
 }
+
 
 void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16){
 

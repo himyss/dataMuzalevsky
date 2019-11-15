@@ -8,25 +8,20 @@
 
 
   TChain *ch = new TChain("tree");
-  ch->Add("/media/ivan/data/exp1906/be10/analysed/be10_cut.root");
+  ch->Add("/media/ivan/data/exp1906/be10/analysed/be10_1_cut.root");
+  ch->Add("/media/ivan/data/exp1906/be10/analysed/be10_2_cut.root");
   cout << ch->GetEntries() << endl;
 
   TString cut,hdraw;
 
   TCanvas *c3h = new TCanvas("c3h","",1800,1000);  
 
-  Int_t i = 15;
+  Int_t i = 10;
 
   ch->SetMarkerColor(kBlack);      
-  cut.Form("nCsI==%d && tX_C-tF5<-140",i);
+  cut.Form("nCsI==%d && flagCent",i);
 
-  hdraw.Form("X_C:aCsI");
+  hdraw.Form("X_C:aCsI >> (4200,0,4200,300,20,100)");
   ch->Draw(hdraw.Data(),cut.Data(),"");
-
-  // cutL->SetLineColor(kRed);
-  // cutL->Draw("same");
-
-  // c3h->Update();
-
 
 }

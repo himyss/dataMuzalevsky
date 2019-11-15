@@ -95,6 +95,7 @@ void convert1() {
   // ch->Add("/media/ivan/data/exp1904/digi/beamDiagnostics/h7_ct_*");
   
   ch->Add("/media/ivan/data/exp1906/be10/digi/all/secondVol/be10_ct_*");
+  // ch->Add("/media/ivan/data/exp1906/be10/digi/all/secondVol/be10_ct_39*");
     
   cout << "Found " << ch->GetEntries() << " entries" << endl;
 
@@ -186,7 +187,7 @@ void convert1() {
 
   // Creating outfile,outtree
 
-  TFile *fw = new TFile("/media/ivan/data/exp1906/be10/analysed/be10_21_cal.root", "RECREATE");
+  TFile *fw = new TFile("/media/ivan/data/exp1906/be10/analysed/beamDiagnostics/be10_2_cal.root", "RECREATE");
   // /home/oem/work/data/exp1906/analysed 
   TTree *tw = new TTree("tree", "data");
 
@@ -296,7 +297,7 @@ void convert1() {
     if (GetClusterMWPC(v_MWPCy2)!=1) continue;  
 
     trigger = header->GetTrigger();
-    if (trigger==1) continue;
+    if (trigger!=1) continue;
 
     mult20_1 = v_SSD20_1->GetEntries();
     // if (mult20_1>1) continue;
