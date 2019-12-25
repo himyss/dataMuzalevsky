@@ -37,5 +37,5 @@
    cutg->SetPoint(27,5.22819,2.34656);
    cutg->SetPoint(28,4.40566,2.7529);
    cutg->Draw("");
-   cutg->Draw("cut_he3_11.root");
+   cutg->SaveAs("cut_he3_11.root");
 }
