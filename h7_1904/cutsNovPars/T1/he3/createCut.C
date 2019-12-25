@@ -152,16 +152,16 @@ void createCut(){
     //   canName.Form("cHe3_1_%d",i+1);
     //   c_arr[i] = new TCanvas(canName.Data(),"title",1800,1000);
     // }
-
+    ch->SetMarkerStyle(6);
     // c3h->Divide(4,4);
     // for(Int_t i=0;i<16;i++) 
     { 
     
-      Int_t i=1;
+      Int_t i=15;
       // c_arr->cd(i+1);
       c3h_1->cd();
       // c_arr[i]->cd();
-      ch->SetMarkerStyle(1);
+      ch->SetMarkerStyle(6);
       ch->SetMarkerColor(kBlack);      
       cut.Form("n20_1==%d && flag1",i);
       hdraw.Form("a20_1:a1_1+a20_1_un>>h%d1(100,1,30,100,0.5,5)",i);

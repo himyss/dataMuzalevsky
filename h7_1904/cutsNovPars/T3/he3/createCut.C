@@ -6,6 +6,7 @@ TCutG *cuthe3_1[16],*cutSQ20_1[16],*cutSQ1_1[16];
 TCutG *cuthe3_2[16],*cutSQ20_2[16],*cutSQ1_2[16];
 TCutG *cuthe3_3[16],*cutSQ20_3[16],*cutSQ1_3[16];
 TCutG *cuthe3_4[16],*cutSQ20_4[16],*cutSQ1_4[16];
+TCutG *cutHe3_total1;
 
 Float_t pCsI_1[16],pCsI_2[16];
 
@@ -30,8 +31,10 @@ void createCut(){
 
 
   TChain *ch = new TChain("tree");
+
   ch->Add("/media/ivan/data/exp1904/analysed/novPars/selected/h7_*.root");
   cout << ch->GetEntries() << endl;
+
 
   TString cut,hdraw;
 
@@ -149,62 +152,68 @@ void createCut(){
     //   canName.Form("cHe3_1_%d",i+1);
     //   c_arr[i] = new TCanvas(canName.Data(),"title",1800,1000);
     // }
-
+    ch->SetMarkerStyle(6);
     // c3h->Divide(4,4);
     // for(Int_t i=0;i<16;i++) 
     { 
     
-      Int_t i=11;
+      Int_t i=15;
       // c_arr->cd(i+1);
-      // c3h_1->cd();
-      // c_arr[i.q]->cd();
-      ch->SetMarkerStyle(1);
-      ch->SetMarkerColor(kBlack);  
-      // ch->SetMarkerColor(i+1);       
-      cut.Form("flag3 && n20_3==%d",i);
-      // cut.Form("flag1");
-      hdraw.Form("a20_3:a1_3+a20_3_un>>h%d1(700,1,30,500,0.5,4)",i);
+      c3h_1->cd();
+      // c_arr[i]->cd();
+      ch->SetMarkerStyle(6);
+      ch->SetMarkerColor(kBlack);      
+      cut.Form("n20_3==%d && flag3",i);
+      hdraw.Form("a20_3:a1_3+a20_3_un>>h%d1(100,1,30,100,0.5,4)",i);
       // hdraw.Form("X_C.:aCsI>>h%d",i);
-      ch->Draw(hdraw.Data(),cut.Data(),"col");
+      ch->Draw(hdraw.Data(),cut.Data(),"");
       // c_arr[i]->Update();
       // c_ar/r[i]->Update();
       // c3h
 
       ch->SetMarkerStyle(20);
       ch->SetMarkerSize(0.7);   
-      ch->SetMarkerColor(kGreen);           
+      ch->SetMarkerColor(kGreen);      
       // cut.Form("n20_1==%d && nhe3_1",i);
       cut += " && nh3";
-      hdraw.Form("a20_3:a1_3+a20_3_un>>h%d_triton1(700,1,30,500,0.5,4)",i);
+      hdraw.Form("a20_3:a1_3+a20_3_un>>h%d_triton1(100,1,30,100,0.5,4)",i);
       ch->Draw(hdraw.Data(),cut.Data(),"same");
       c3h_1->Update();
+      // c_arr[i]->Update();
 
-      // ch->SetMarkerStyle(20);
-      // ch->SetMarkerSize(1);
+      // ch->SetMarkerStyle(4);    
       // ch->SetMarkerColor(kRed);      
-      // // cut.Form("n20_1==%d && nhe3_1 && nh3",i);
-      // cut += " && nhe3_1 && a1_1<20";
-      // hdraw.Form("a20_1:a1_1>>h%d1_coin(100,1,30,100,0.5,5)",i);
-      // // hdraw.Form("X_C.:aCsI>>h%d",i);
-      // nCoins+= ch->Draw(hdraw.Data(),cut.Data(),"same");
-      // // c3h->Update();
+      // // cut.Form("n20_1==%d && nhe3_1",i);
+      // cut += " && nhe3_1";
+      // hdraw.Form("a20_1:a1_1+a20_1_un>>h%d_he31",i);
+      // ch->Draw(hdraw.Data(),cut.Data(),"same");
+      // // c_arr[i]->Update();
 
-      // cuthe3_1[i]->SetLineWidth(1);
+      // // ch->SetMarkerStyle(20);
+      // // ch->SetMarkerSize(1);
+      // // ch->SetMarkerColor(kRed);      
+      // // // cut.Form("n20_1==%d && nhe3_1 && nh3",i);
+      // // cut += " && nhe3_1 && a1_1<20";
+      // // hdraw.Form("a20_1:a1_1>>h%d1_coin(100,1,30,100,0.5,5)",i);
+      // // // hdraw.Form("X_C.:aCsI>>h%d",i);
+      // // nCoins+= ch->Draw(hdraw.Data(),cut.Data(),"same");
+      // // // c3h->Update();
+
       // cuthe3_1[i]->SetLineColor(kRed);
       // cuthe3_1[i]->Draw("same");
-      // c_arr[i]->Update();
-      // c_arr[i]->Update();
-      // c3h->Update();
+      // // c_arr[i]->Update();
+      // // c_arr[i]->Update();
+      // c3h_1->Update();
     }
     
-    // c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E_1.pdf");
-    // c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E_1.pdf[");
-    // c_arr[0]->Print("/home/ivan/Desktop/tmp/de_E_1.pdf");
+    // c_arr[0]->Print("/home/ivan/Desktop/de_E_1.pdf");
+    // c_arr[0]->Print("/home/ivan/Desktop/de_E_1.pdf[");
+    // c_arr[0]->Print("/home/ivan/Desktop/de_E_1.pdf");
     // for(Int_t i=1;i<15;i++) {
-    //   c_arr[i]->Print("/home/ivan/Desktop/tmp/de_E_1.pdf");
+    //   c_arr[i]->Print("/home/ivan/Desktop/de_E_1.pdf");
     // }
-    // c_arr[15]->Print("/home/ivan/Desktop/tmp/de_E_1.pdf");
-    // c_arr[15]->Print("/home/ivan/Desktop/tmp/de_E_1.pdf]");
+    // c_arr[15]->Print("/home/ivan/Desktop/de_E_1.pdf");
+    // c_arr[15]->Print("/home/ivan/Desktop/de_E_1.pdf]");
   }
 
   if (he3_2) {
@@ -468,18 +477,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cuts_MKpars/he3_1/he3_%d.root",i);
-    f = new TFile(cutName.Data());
-    cuthe3_1[i] = (TCutG*)f->Get("CUTG");
-    if (!cuthe3_1[i]) {
-      cout << "no cut " << cutName.Data() << endl;
-      exit(-1);
-    }
-    delete f;
-  }
-
-  for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cuts/C_T/tCsI/tCsI_full_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/C_T/tCsI/tCsI_full_%d.root",i);
     f = new TFile(cutName.Data());
     cutCsI[i] = (TCutG*)f->Get("CUTG");
     if (!cutCsI[i]) {
@@ -501,7 +499,18 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cuts/T2/he3/he3_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T1/he3/he3_%d.root",i);
+    f = new TFile(cutName.Data());
+    cuthe3_1[i] = (TCutG*)f->Get("CUTG");
+    if (!cuthe3_1[i]) {
+      cout << "no cut " << cutName.Data() << endl;
+      exit(-1);
+    }
+    delete f;
+  }
+
+  for(Int_t i=0;i<16;i++) {
+    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T2/he3/he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_2[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_2[i]) {
@@ -512,7 +521,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cuts_MKpars/he3_3/he3_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T3/he3/he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_3[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_3[i]) {
@@ -523,7 +532,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cuts_MKpars/he3_4/he3_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T4/he3/he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_4[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_4[i]) {
@@ -535,6 +544,7 @@ void readCuts() {
 
   cout << " CUTS are read" << endl;
 }
+
 
 void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16){
 
