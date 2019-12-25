@@ -1,0 +1,30 @@
+{
+//========= Macro generated from object: CUTG/Graph
+//========= by ROOT version6.10/08
+   
+   TCutG *cutg = new TCutG("CUTG",19);
+   cutg->SetVarX("0.0625*0.25*(Beam_detector_tF5.fData.fValue[0] + Beam_detector_tF5.fData.fValue[1] + Beam_detector_tF5.fData.fValue[2] + Beam_detector_tF5.fData.fValue[3] - Beam_detector_tF3.fData.fValue[0] - Beam_detector_tF3.fData.fValue[1] - Beam_detector_tF3.fData.fValue[2] - Beam_detector_tF3.fData.fValue[3])");
+   cutg->SetVarY("(Beam_detector_F5.fData.fValue[0] + Beam_detector_F5.fData.fValue[1] + Beam_detector_F5.fData.fValue[2] + Beam_detector_F5.fData.fValue[3])/4.");
+   cutg->SetTitle("Graph");
+   cutg->SetFillColor(1);
+   cutg->SetPoint(0,66.5998,1392.22);
+   cutg->SetPoint(1,66.5998,1597.33);
+   cutg->SetPoint(2,66.9105,1736.65);
+   cutg->SetPoint(3,67.4372,1833.4);
+   cutg->SetPoint(4,68.6122,1901.12);
+   cutg->SetPoint(5,69.4766,1922.41);
+   cutg->SetPoint(6,70.2127,1885.64);
+   cutg->SetPoint(7,70.6044,1804.37);
+   cutg->SetPoint(8,70.8745,1632.16);
+   cutg->SetPoint(9,70.9286,1458.01);
+   cutg->SetPoint(10,70.8475,1297.41);
+   cutg->SetPoint(11,70.3343,1163.89);
+   cutg->SetPoint(12,69.2673,1123.26);
+   cutg->SetPoint(13,68.4907,1082.62);
+   cutg->SetPoint(14,67.8019,1082.62);
+   cutg->SetPoint(15,67.1873,1096.17);
+   cutg->SetPoint(16,66.8227,1225.81);
+   cutg->SetPoint(17,66.6201,1324.5);
+   cutg->SetPoint(18,66.5998,1392.22);
+   cutg->Draw("");
+}
