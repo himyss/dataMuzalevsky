@@ -14,6 +14,8 @@ TELoss *f3HSi;
 TELoss *f3HMylar;
 TELoss *f3HSteel;
 TELoss *f3HTarget;
+TELoss *f3HPlastic;
+TELoss *f3HKeramic;
 
 //outtree vars
 Int_t trigger; 
@@ -23,8 +25,11 @@ Float_t tF5,F5,tF3,F3;
 Float_t tMWPC;
 Int_t wirex1,wirex2,wirey1,wirey2;
 
-Int_t nCsI;
+Int_t nCsI,nCsI_track;
 Float_t aCsI,tCsI;
+Float_t aCsI_reco;
+
+Float_t arCsI[16],trCsI[16];
 
 Float_t a20_1,t20_1,a20_1_un;
 Int_t n20_1;
@@ -81,12 +86,13 @@ Float_t phi_he3_1,phi_he3_2,phi_he3_3,phi_he3_4,phi_h3;
 Float_t thickness;
 //--------------------------------------------------------------------------------
 
-void calcEnergies() {
+void calcEnergies(Int_t nRun=0) {
 
   TChain *ch = new TChain("tree");
-  ch->Add("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/h7_*");
-  // ch->Add("/media/ivan/data/exp1904/analysed/MKpars/select_noveto.root");
-  // ch->Add("/home/oem/work/data/exp1811/analysed/notarget_cut.root");
+
+  TString inPutFileName;
+  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/h7_%d_cut.root",nRun);
+  ch->Add(inPutFileName.Data());
   cout << ch->GetEntries() << " total number of Entries" << endl;
   //--------------------------------------------------------------------------------
   ch->SetBranchAddress("trigger.",&trigger);
@@ -94,6 +100,10 @@ void calcEnergies() {
   ch->SetBranchAddress("aCsI.",&aCsI);
   ch->SetBranchAddress("tCsI.",&tCsI);
   ch->SetBranchAddress("nCsI.",&nCsI);
+
+  ch->SetBranchAddress("nCsI_track.",&nCsI_track);
+  ch->SetBranchAddress("arCsI",&arCsI);
+  ch->SetBranchAddress("trCsI",&trCsI);
 
   ch->SetBranchAddress("F5.",&F5);
   ch->SetBranchAddress("tF5.",&tF5);
@@ -199,8 +209,10 @@ void calcEnergies() {
   ch->SetBranchAddress("phi_h3.",&phi_h3);
 
 
-  TFile *fw = new TFile("/media/ivan/data/exp1904/analysed/novPars/reco/h7_reco.root", "RECREATE");
-  // TFile *fw = new TFile("/media/ivan/data/exp1904/analysed/MKpars/reco_25.root", "RECREATE");
+  TString outPutFileName;
+  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calcEnergies/thinVar/h7_%d_reco.root",nRun);
+
+  TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("trigger.",&trigger,"trigger/I");
@@ -219,6 +231,10 @@ void calcEnergies() {
   tw->Branch("aCsI.",&aCsI,"aCsI/F");
   tw->Branch("tCsI.",&tCsI,"tCsI/F");
   tw->Branch("nCsI.",&nCsI,"nCsI/I");
+
+  tw->Branch("nCsI_track.",&nCsI_track,"nCsI_track/I");
+  tw->Branch("arCsI",&arCsI,"arCsI[16]/F");
+  tw->Branch("trCsI",&trCsI,"trCsI[16]/F");
 
   tw->Branch("X_C.",&X_C,"X_C/F");
   tw->Branch("nX_C.",&nX_C,"nX_C/I");
@@ -251,13 +267,6 @@ void calcEnergies() {
   tw->Branch("y4t",&y4t,"y4t/F");
   tw->Branch("xCt",&xCt,"xCt/F");
   tw->Branch("yCt",&yCt,"yCt/F");
-
-  tw->Branch("tritonX1",&tritonX1,"tritonX1/F");
-  tw->Branch("tritonY1",&tritonY1,"tritonY1/F");
-  tw->Branch("tritonX2",&tritonX2,"tritonX2/F");
-  tw->Branch("tritonY2",&tritonY2,"tritonY2/F");
-  tw->Branch("tritonX3",&tritonX3,"tritonX3/F");
-  tw->Branch("tritonY3",&tritonY3,"tritonY3/F");
 
   tw->Branch("a20_1.",&a20_1,"a20_1/F");
   tw->Branch("a20_1_un.",&a20_1_un,"a20_1_un/F");
@@ -329,6 +338,11 @@ void calcEnergies() {
   // readThickness();
   setTables();
 
+  Float_t thCoeff1 = 0.94;
+  Float_t thCoeff2 = 0.98;
+  Float_t thCoeff3 = 0.97;
+  Float_t thCoeff4 = 0.88;
+
   // for(Int_t nentry = 0; nentry<1000;nentry++) {
   for(Int_t nentry = 0; nentry<ch->GetEntries();nentry++) {
     if(nentry%100000==0) cout << "#ENTRY " << nentry << "#" << endl;
@@ -344,7 +358,7 @@ void calcEnergies() {
       // e_1 = f3HeSi->GetE0(e_1,0.5/cos(th_he3_1)); //dl of thin det
       e_1 = a1_1;
 
-      thickness = (fThickness1[n20_1][n1_1]+1.87)/cos(th_he3_1); // 0.5 - DL of thick det
+      thickness = (fThickness1[n20_1][n1_1]*thCoeff1+1.87)/cos(th_he3_1); // 0.5 - DL of thick det
       e_1 = f3HeSi->GetE0(e_1,thickness);
 
       // mylar
@@ -368,7 +382,7 @@ void calcEnergies() {
 
       e_2 = a1_2;
 
-      thickness = (fThickness2[n20_2][n1_2]+1.87)/cos(th_he3_2); // 0.5 - DL of thick det
+      thickness = (fThickness2[n20_2][n1_2]*thCoeff2+1.87)/cos(th_he3_2); // 0.5 - DL of thick det
       e_2 = f3HeSi->GetE0(e_2,thickness);
 
       // mylar
@@ -391,7 +405,7 @@ void calcEnergies() {
 
       e_3 = a1_3;
 
-      thickness = (fThickness3[n20_3][n1_3]+2.53)/cos(th_he3_3); // 0.5 - DL of thick det
+      thickness = (fThickness3[n20_3][n1_3]*thCoeff3+2.53)/cos(th_he3_3); // 0.5 - DL of thick det
       e_3 = f3HeSi->GetE0(e_3,thickness);    
 
       // mylar
@@ -414,7 +428,7 @@ void calcEnergies() {
 
       e_4 = a1_4;
 
-      thickness = (fThickness4[n20_4][n1_4]+2.27)/cos(th_he3_4); // 0.5 - DL of thick det
+      thickness = (fThickness4[n20_4][n1_4]*thCoeff3+2.27)/cos(th_he3_4); // 0.5 - DL of thick det
       e_4 = f3HeSi->GetE0(e_4,thickness);   
 
       // mylar
@@ -432,19 +446,39 @@ void calcEnergies() {
 
     if(nh3) {
       // Si
-      centE = aCsI + X_C; 
+      centE = arCsI[nCsI_track] + X_C; 
+
+      // if (frame3X>12.5 || frame3X<-12.5 || frame3Y>12.5 || frame3Y<-12.5) {
+      //   if (frame3X<-12.5 && frame3Y>-12.5) { // 1 telescope
+      //     if (frame3X<-18.5 && frame3Y>-6.5) { // Si sensitive area
+
+      //     }
+      //     else { // FR4 frame
+
+      //     }
+      //   }
+      //   cout << "reco triton in the 3 plane" << endl;
+      // }
+
+      // if (frame2X>12.5 || frame2X<-12.5 || frame2Y>12.5 || frame2Y<-12.5) {
+      //   cout << "reco triton in the 2 plane" << endl;
+      // }
+
+      // if (frame1X>12.5 || frame1X<-12.5 || frame1Y>12.5 || frame1Y<-12.5) {
+      //   cout << "reco triton in the 1 plane" << endl;
+      // }
 
       // mylar
       thickness = 3.5/cos(th_h3);
-      centE = f3HeMylar->GetE0(centE,thickness);
+      centE = f3HMylar->GetE0(centE,thickness);
 
       // steel
       thickness = 6./cos(th_h3);
-      centE = f3HeSteel->GetE0(centE,thickness);
+      centE = f3HSteel->GetE0(centE,thickness);
 
       // deuterium target
       thickness = 3000./cos(th_h3);
-      centE = f3HeTarget->GetE0(centE,thickness);
+      centE = f3HTarget->GetE0(centE,thickness);
     }
 
     tw->Fill();
@@ -633,6 +667,25 @@ void setTables() {
   f3HTarget->SetZP(1., 3.);   //alphas, Z, A
   f3HTarget->SetEtab(100000, 200.); // ?, MeV calculate ranges
   f3HTarget->SetDeltaEtab(300);
+
+  f3HPlastic = new TELoss();
+  f3HPlastic->SetEL(1, 2.); // density in g/cm3
+  f3HPlastic->AddEL(6., 12.0096, 0.403846);  //Z, mass
+  f3HPlastic->AddEL(1., 1.00784, 0.480769);
+  f3HPlastic->AddEL(17., 32.564584, 0.019231);
+  f3HPlastic->AddEL(8., 15.99903, 0.096154);
+  f3HPlastic->SetZP(1., 3.);   //alphas, Z, A
+  f3HPlastic->SetEtab(100000, 200.); // ?, MeV calculate ranges
+  f3HPlastic->SetDeltaEtab(300);
+
+  f3HKeramic = new TELoss();
+  f3HKeramic->SetEL(1, 3.8); // density in g/cm3
+  f3HKeramic->AddEL(13., 25.126494, 0.4);  //Z, mass
+  f3HKeramic->AddEL(8., 15.99903, 0.6);
+  f3HKeramic->SetZP(1., 3.);   //alphas, Z, A
+  f3HKeramic->SetEtab(100000, 200.); // ?, MeV calculate ranges
+  f3HKeramic->SetDeltaEtab(300);
+
   //--------------------------------------------------------------------------------
   return;
 }
@@ -656,17 +709,3 @@ void zeroVars() {
 
 return;
 } 
-
-void calculateCoordinates() {
-  tritonProjection(&tritonX1,&tritonY1,173.);
-  tritonProjection(&tritonX2,&tritonY2,188.);
-  tritonProjection(&tritonX3,&tritonY3,198.);
-  tritonProjection(&tritonX4,&tritonY4,201.);
-}
-
-void tritonProjection(Float_t *x,Float_t *y,Double_t distance) {
-
-  x = 
-
-
-}

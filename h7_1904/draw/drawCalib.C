@@ -25,13 +25,13 @@ void drawCalib(){
 
   TString cut,hdraw;
 
-  Bool_t litium = 0;
+  Bool_t litium = 1;
   Bool_t he3_1 = 0;
   Bool_t he3_2 = 0;
   Bool_t he3_3 = 0;
   Bool_t he3_4 = 0;
   Bool_t tSQ20 = 0;
-  Bool_t centTimes = 1;
+  Bool_t centTimes = 0;
 
   if (centTimes) {
 

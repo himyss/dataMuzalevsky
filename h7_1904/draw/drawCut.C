@@ -14,17 +14,16 @@ Int_t nCoins;
 
 void drawCut(){
   nCoins = 0;
-  readPar("CsI",pCsI_1,pCsI_2);
+  readPar("CsI_anh",pCsI_1,pCsI_2);
   readCuts();
   // return;
-// return;
   gStyle->SetOptStat(0);
   Bool_t tritium = 0;
-  Bool_t he3_1 = 1;
+  Bool_t he3_1 = 0;
   Bool_t he3_2 = 0;
   Bool_t he3_3 = 0;
   Bool_t he3_4 = 0;
-  Bool_t tCsI_s = 0;
+  Bool_t tCsI_s = 1;
   Bool_t target = 0;
   Bool_t centtimes = 0;
   Bool_t CsI_tracking = 0;
@@ -32,7 +31,7 @@ void drawCut(){
 
   TChain *ch = new TChain("tree");
 
-  ch->Add("/media/ivan/data/exp1904/analysed/novPars/selected/h7_*.root");
+  ch->Add("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/h7_*.root");
   cout << ch->GetEntries() << endl;
 
 
@@ -78,26 +77,37 @@ void drawCut(){
     c3h->Divide(4,4);
     for(Int_t i=0;i<16;i++) {
       c3h->cd(i+1);    
-      cut.Form("flagCent && nCsI_track==%d",i);
+      cut.Form("nCsI_track==%d",i);
       // hdraw.Form("X_C:aCsI>>h%d(300,0,150,300,2,90)",pCsI_1[i],pCsI_2[i],i);
 
       hdraw.Form("X_C:(arCsI[%d]-%f)/%f >>h%d(500,0,4000,200,0,25)",i,pCsI_1[i],pCsI_2[i],i);
       // hdraw.Form("X_C.:aCsI>>h%d",i);
       ch->SetMarkerColor(kBlack);
       ch->SetMarkerStyle(7);
-      ch->Draw(hdraw.Data(),cut.Data(),"",10000000,0);
+      ch->Draw(hdraw.Data(),cut.Data(),"",1000000,0);
+      c3h->Update();
+
+      // cut.Form("flagCent && nCsI_track==%d && nh3",i);
+      // // hdraw.Form("X_C:aCsI>>h%d(300,0,150,300,2,90)",pCsI_1[i],pCsI_2[i],i);
+
+      // hdraw.Form("X_C:(arCsI[%d]-%f)/%f >>h%d_cut(500,0,4000,200,0,25)",i,pCsI_1[i],pCsI_2[i],i);
+      // // hdraw.Form("X_C.:aCsI>>h%d",i);
+      // ch->SetMarkerColor(kRed);
+      // ch->SetMarkerStyle(7);
+      // ch->Draw(hdraw.Data(),cut.Data(),"same",10000000,0);
 
 
-      cut.Form("flagCent && nCsI_track==%d && nh3",i);
-      // hdraw.Form("X_C:aCsI>>h%d(300,0,150,300,2,90)",pCsI_1[i],pCsI_2[i],i);
+      // cut.Form("nCsI_track==%d && nh3 && (nhe3_1 || nhe3_2 || nhe3_3 || nhe3_4)",i);
+      // // hdraw.Form("X_C:aCsI>>h%d(300,0,150,300,2,90)",pCsI_1[i],pCsI_2[i],i);
 
-      hdraw.Form("X_C:(arCsI[%d]-%f)/%f >>h%d_cut(500,0,4000,200,0,25)",i,pCsI_1[i],pCsI_2[i],i);
-      // hdraw.Form("X_C.:aCsI>>h%d",i);
-      ch->SetMarkerColor(kRed);
-      ch->SetMarkerStyle(7);
-      ch->Draw(hdraw.Data(),cut.Data(),"same",10000000,0);
+      // hdraw.Form("X_C:(arCsI[%d]-%f)/%f >>h%d_cut(500,0,4000,200,0,25)",i,pCsI_1[i],pCsI_2[i],i);
+      // // hdraw.Form("X_C.:aCsI>>h%d",i);
+      // ch->SetMarkerColor(kRed);
+      // ch->SetMarkerStyle(7);
+      // ch->Draw(hdraw.Data(),cut.Data(),"same",1000000,0);
 
-      cut3h[i]->Draw("same");
+
+      // cut3h[i]->Draw("same");
       // ch->Draw(hdraw.Data(),cut.Data(),"");
      
       c3h->Update();
@@ -117,8 +127,8 @@ void drawCut(){
   if (centtimes) {
     TCanvas *c3h = new TCanvas("c3h","",1800,1000);  
     c3h->Divide(4,4);
-    for(Int_t i=0;i<16;i++) {
-      c3h->cd(i+1);
+    for(Int_t i=16;i<32;i++) {
+      c3h->cd(i+1-16);
       ch->SetMarkerColor(kBlack);      
       cut.Form("nX_C==%d && trigger!=1",i);
       hdraw.Form("X_C:tX_C-tF5>>h%d",i);
@@ -551,7 +561,7 @@ void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16){
   TString line;
   ifstream myfile;
   Int_t count=0;
-  TString file = "/home/ivan/work/soft/er/input/exp1904_pars/" + fileName + ".cal";
+  TString file = "/home/ivan/work/macro/h7_1904/parameters/" + fileName + ".cal";
   myfile.open(file.Data());
   while (! myfile.eof() ){
     line.ReadLine(myfile);

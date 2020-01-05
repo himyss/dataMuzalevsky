@@ -13,7 +13,7 @@ void drawSetup() {
   // TString cutTriangle("(eh3_CM*1000<(0.5 + 1000*(mh7-4*0.939565-2.808920)*4/7.))");
 
   TChain *ch1 = new TChain("tree"); //e4
-  ch1->Add("/media/ivan/data/exp1904/analysed/oldPars/mm1.root");
+  ch1->Add("/media/ivan/data/exp1904/analysed/novPars/reco/thinVar/h7_*");
 
   TCanvas *setupCan = new TCanvas("setupCan","reconstruction scheme",1000,1000);
   setupCan->cd();
@@ -42,7 +42,7 @@ void drawSetup() {
   ch1->SetMarkerColor(kRed);
   ch1->SetMarkerSize(0.8);
   hDraw.Form("y1t:x1t >> distr1");
-  hCut.Form("e_1<20 && nhe3_1 && nh3 && y1t!=0 && x1t!=0");
+  hCut.Form("e_1<25 && nhe3_1 && nh3 && y1t!=0 && x1t!=0");
   // hCut += " && ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
   hCut += " && nX_C>-1 && nY_C>-1";
   // hCut += " && " + cutTriangle;
@@ -54,7 +54,7 @@ void drawSetup() {
   ch1->SetMarkerColor(kMagenta);
   ch1->SetMarkerSize(1.);
   hDraw.Form("y1t:x1t >> distr1Low");
-  hCut.Form("e_1<20 & nhe3_1 && nh3 && y1t!=0 && x1t!=0");
+  hCut.Form("e_1<25 & nhe3_1 && nh3 && y1t!=0 && x1t!=0");
   // hCut += " && ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
   hCut += " && 1000*(mh7-4*0.939565-2.808920)< 3.8";
   hCut += " && nX_C>-1 && nY_C>-1";
@@ -67,7 +67,7 @@ void drawSetup() {
   ch1->SetMarkerColor(kRed);
   ch1->SetMarkerSize(0.8);
   hDraw.Form("y2t:x2t >> distr2");
-  hCut.Form("e_2<20 & nhe3_2 && nh3 && y2t!=0 && x2t!=0");
+  hCut.Form("e_2<25 & nhe3_2 && nh3 && y2t!=0 && x2t!=0");
   // hCut += " && ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
   hCut += " && nX_C>-1 && nY_C>-1";
   // hCut += " && " + cutTriangle;
@@ -79,7 +79,7 @@ void drawSetup() {
   ch1->SetMarkerColor(kMagenta);
   ch1->SetMarkerSize(1.);
   hDraw.Form("y2t:x2t >> distr2Low");
-  hCut.Form("e_2<20 & nhe3_2 && nh3 && y2t!=0 && x2t!=0");
+  hCut.Form("e_2<25 & nhe3_2 && nh3 && y2t!=0 && x2t!=0");
   // hCut += " && ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
   hCut += " && 1000*(mh7-4*0.939565-2.808920)< 3.8";
   hCut += " && nX_C>-1 && nY_C>-1";
@@ -92,7 +92,7 @@ void drawSetup() {
   ch1->SetMarkerColor(kRed);
   ch1->SetMarkerSize(0.8);
   hDraw.Form("y3t:x3t >> distr3");
-  hCut.Form("e_3<20 & nhe3_3 && nh3 && y3t!=0 && x3t!=0");
+  hCut.Form("e_3<25 & nhe3_3 && nh3 && y3t!=0 && x3t!=0");
   // hCut += " && ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
   hCut += " && nX_C>-1 && nY_C>-1";
   // hCut += " && " + cutTriangle;
@@ -104,7 +104,7 @@ void drawSetup() {
   ch1->SetMarkerColor(kMagenta);
   ch1->SetMarkerSize(1.);
   hDraw.Form("y3t:x3t >> distr3Low");
-  hCut.Form("e_3<20 & nhe3_3 && nh3 && y3t!=0 && x3t!=0");
+  hCut.Form("e_3<25 & nhe3_3 && nh3 && y3t!=0 && x3t!=0");
   // hCut += " && ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
   hCut += " && nX_C>-1 && nY_C>-1";
   // hCut += " && " + cutTriangle;
@@ -117,7 +117,7 @@ void drawSetup() {
   ch1->SetMarkerColor(kRed);
   ch1->SetMarkerSize(0.8);
   hDraw.Form("y4t:x4t >> distr4");
-  hCut.Form("e_4<20 & nhe3_4 && nh3 && y4t!=0 && x4t!=0");
+  hCut.Form("e_4<25 & nhe3_4 && nh3 && y4t!=0 && x4t!=0");
   // hCut += " && ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
   hCut += " && nX_C>-1 && nY_C>-1";
   // hCut += " && " + cutTriangle;
@@ -129,7 +129,7 @@ void drawSetup() {
   ch1->SetMarkerColor(kMagenta);
   ch1->SetMarkerSize(1.);
   hDraw.Form("y4t:x4t >> distr4Low");
-  hCut.Form("e_4<20 & nhe3_4 && nh3 && y4t!=0 && x4t!=0");
+  hCut.Form("e_4<25 & nhe3_4 && nh3 && y4t!=0 && x4t!=0");
   // hCut += " && ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
   hCut += " && nX_C>-1 && nY_C>-1";
   // hCut += " && " + cutTriangle;

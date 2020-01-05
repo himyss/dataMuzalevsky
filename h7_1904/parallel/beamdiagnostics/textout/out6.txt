@@ -1,0 +1,11 @@
+
+Processing beamDiagnostics.C(5)...
+xtab[i0+1] 	0.0420674	ytab[i0+1] 	0.00200002
+xtab[i0+1] 	0.0420674	ytab[i0+1] 	0.00200002
+xtab[i0+1] 	0.0420674	ytab[i0+1] 	0.00200002
+xtab[i0+1] 	0.0420674	ytab[i0+1] 	0.00200002
+3139988
+#ENTRY 0#
+#ENTRY 1000000#
+#ENTRY 2000000#
+#ENTRY 3000000#

@@ -3,6 +3,7 @@ void calcVectorTel2(Int_t n20, Int_t n1);
 void calcVectorTel3(Int_t n20, Int_t n1);
 void calcVectorTel4(Int_t n20, Int_t n1);
 void calcVectorCent(Int_t nX,Int_t nY);
+void calcFrameCoordinates(Float_t* x, Float_t* y,Float_t distanance);
 
 void readCuts();
 
@@ -98,7 +99,7 @@ Float_t SSD4[16],SQ20_4[16],tSSD4[16],tSQ20_4[16],SSD_V4[16],tSSD_V4[16];
 
 Float_t fXt,fYt;
 Float_t x1c, y1c, x2c, y2c;
-
+Float_t frame1X,frame1Y,frame2X,frame2Y,frame3X,frame3Y;
 // flags
 Bool_t timesToF,timesMWPC;
 
@@ -155,14 +156,12 @@ void selection(Int_t nFile=0) {
   f3HSi->SetDeltaEtab(300);
 
   readPar("CsI_anh",pCsI_1,pCsI_2);
-  readPar("SSD_20u_2_cal",pSQ202_1_new,pSQ202_2_new);
-  readPar("SSD_20u_2_cal_misha",pSQ202_1,pSQ202_2);
 
   readCuts();
 
   TChain *ch = new TChain("tree");
   TString inPutFileName;
-  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calibrated/h7_%d_cal.root",nFile);
+  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calibrated/newCal/h7_%d_cal.root",nFile);
   ch->Add(inPutFileName.Data());
 
   cout << ch->GetEntries() << endl;
@@ -239,10 +238,11 @@ void selection(Int_t nFile=0) {
   readThickness();
 
   TString outPutFileName;
-  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/h7_%d_cut.root",nFile);
+  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/h7_%d_cut.root",nFile);
   // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/test.root",nFile);
 
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
+  // TFile *fw = new TFile("test.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("trigger.",&trigger,"trigger/I");
@@ -262,7 +262,7 @@ void selection(Int_t nFile=0) {
   tw->Branch("tCsI.",&tCsI,"tCsI/F");
   tw->Branch("nCsI.",&nCsI,"nCsI/I");
 
-  tw->Branch("aCsI_reco.",&aCsI_reco,"aCsI_reco/F");
+  // tw->Branch("aCsI_reco.",&aCsI_reco,"aCsI_reco/F");
 
   tw->Branch("nCsI_track.",&nCsI_track,"nCsI_track/I");
   tw->Branch("arCsI",&arCsI,"arCsI[16]/F");
@@ -281,6 +281,13 @@ void selection(Int_t nFile=0) {
   tw->Branch("y2c.",&y2c,"y2c/F"); 
   tw->Branch("fXt.",&fXt,"fXt/F");
   tw->Branch("fYt.",&fYt,"fYt/F"); 
+
+  tw->Branch("frame1X",&frame1X,"frame1X/F");
+  tw->Branch("frame2X",&frame2X,"frame2X/F");
+  tw->Branch("frame3X",&frame3X,"frame3X/F");
+  tw->Branch("frame1Y",&frame1Y,"frame1Y/F");
+  tw->Branch("frame2Y",&frame2Y,"frame2Y/F");
+  tw->Branch("frame3Y",&frame3Y,"frame3Y/F");
 
   tw->Branch("a20_1.",&a20_1,"a20_1/F");
   tw->Branch("a20_1_un.",&a20_1_un,"a20_1_un/F");
@@ -371,10 +378,10 @@ void selection(Int_t nFile=0) {
 
     if (trigger==1) continue;
 
-    // tmp recalibration
-    for(Int_t i=0;i<16;i++) {
-      SQ20_2[i] = ((SQ20_2[i] - pSQ202_1[i])/pSQ202_2[i])*pSQ202_2_new[i] + pSQ202_1_new[i];
-    }
+    // // tmp recalibration
+    // for(Int_t i=0;i<16;i++) {
+    //   SQ20_2[i] = ((SQ20_2[i] - pSQ202_1[i])/pSQ202_2[i])*pSQ202_2_new[i] + pSQ202_1_new[i];
+    // }
 
     zeroVars();
 
@@ -383,7 +390,13 @@ void selection(Int_t nFile=0) {
 
     fillSi();
 
-    
+    if (nX_C>-1 && nY_C>-1) {
+      calcVectorCent(nX_C,nY_C);
+      calcFrameCoordinates(&frame1X,&frame1Y,173.);
+      calcFrameCoordinates(&frame2X,&frame2Y,188.);
+      calcFrameCoordinates(&frame3X,&frame3Y,198.);      
+    }
+
     // tmp swich the positions of the strips
     switch (n20_3) {
       case 7:
@@ -395,32 +408,32 @@ void selection(Int_t nFile=0) {
       default:
         break;
     }
-
-    calcVectorCent(nX_C,nY_C);
-    calcVectorTel1(n20_1, n1_1);
-    calcVectorTel2(n20_2, n1_2);
-    calcVectorTel3(n20_3, n1_3);
-    calcVectorTel4(n20_4, n1_4);
-
-    DSD_Cselect();
-
+    
     timesSQ20();
     timesSQ1();
 
-    correct();
-    checkHe3();
-
-    if (flagCent==1 && multCsI>0){
+    if (multCsI>0){
       CsI_max();
       trackCsI();
       CsItimes();
     }
+
+    DSD_Cselect();
+
+    if (flag1) calcVectorTel1(n20_1, n1_1);
+    if (flag2) calcVectorTel2(n20_2, n1_2);
+    if (flag3) calcVectorTel3(n20_3, n1_3);
+    if (flag4) calcVectorTel4(n20_4, n1_4);
+
+    correct();
+    checkHe3();
+
     if (flagCent) triton();
 
-    if (nCsI>-1) aCsI = aCsI*pCsI_2[nCsI] + pCsI_1[nCsI];
-    for (Int_t i=0;i<16;i++) {
-      arCsI[i] = arCsI[i]*pCsI_2[i] + pCsI_1[i];
-    }
+    // if (nCsI>-1) aCsI = aCsI*pCsI_2[nCsI] + pCsI_1[nCsI];
+    // for (Int_t i=0;i<16;i++) {
+    //   arCsI[i] = arCsI[i]*pCsI_2[i] + pCsI_1[i];
+    // }
 
     tw->Fill();
   }
@@ -432,6 +445,13 @@ void selection(Int_t nFile=0) {
 }
 
 void zeroVars() {
+
+  frame1X = -1000.;
+  frame2X = -1000.;
+  frame3X = -1000.;
+  frame1Y = -1000.;
+  frame2Y = -1000.;
+  frame3Y = -1000.;
 
   aCsI_reco = -10;
   aCsI = -10;
@@ -902,7 +922,7 @@ void correct() {
 }
 
 void triton() {
-  if(nCsI_track>-1 && nX_C>-1 && cut3h[nCsI_track]->IsInside(arCsI[nCsI_track], X_C)) {
+  if(nCsI_track>-1 && nX_C>-1 && cut3h[nCsI_track]->IsInside( (arCsI[nCsI_track]-pCsI_1[nCsI_track])/pCsI_2[nCsI_track] , X_C)) {
     nh3 = 1;
     return;
   }
@@ -934,7 +954,7 @@ void checkHe3() {
     nhe3_3 = 0;
   }
 
-  if(n1_4-1 && n20_4>-1 && cuthe3_4[n20_4]->IsInside(a1_4+a20_4_un, a20_4)) {
+  if(n1_4>-1 && n20_4>-1 && cuthe3_4[n20_4]->IsInside(a1_4+a20_4_un, a20_4)) {
     nhe3_4 = 1;
   }
   else {
@@ -944,7 +964,7 @@ void checkHe3() {
 }
 
 void CsItimes() {
-  if(nCsI_track>-1 && cutCsI[nCsI_track]->IsInside(trCsI[nCsI_track]-tF5, arCsI[nCsI_track]) ) { 
+  if(nCsI_track>-1 && cutCsI[nCsI_track]->IsInside(trCsI[nCsI_track]-tF5, (arCsI[nCsI_track]-pCsI_1[nCsI_track])/pCsI_2[nCsI_track] )) { 
     return;
   }
   else {
@@ -1029,7 +1049,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T1/he3/he3_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T1/he3/cut_he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_1[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_1[i]) {
@@ -1040,7 +1060,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T2/he3/he3_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T2/he3/cut_he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_2[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_2[i]) {
@@ -1051,7 +1071,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T3/he3/he3_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T3/he3/cut_he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_3[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_3[i]) {
@@ -1062,7 +1082,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T4/he3/he3_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T4/he3/cut_he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_4[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_4[i]) {
@@ -1253,8 +1273,7 @@ void CsI_max() {
   return;
 }
 
-void CsI_reco() {
-
-
-
+void calcFrameCoordinates(Float_t* x, Float_t* y,Float_t distanance) {
+  *x = fXt + (xCt-fXt)*distanance/323.;
+  *y = fYt + (yCt-fYt)*distanance/323.;
 }

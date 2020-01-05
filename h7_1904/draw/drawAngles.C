@@ -6,7 +6,7 @@ void drawAngles(){
 
   Bool_t MM,angles,nikolski,kin;
   MM = 0;
-  angles = 0;
+  angles = 1;
   nikolski = 0;
   kin = 0;
 
@@ -24,9 +24,10 @@ void drawAngles(){
   // ch2->AddFriend("treeNew","/media/ivan/data/exp1904/analysed/oldPars/mm_400_25_new.root");
 
   TChain *ch1 = new TChain("tree"); //e4
-  ch1->Add("/media/ivan/data/exp1904/analysed/oldPars/mm.root");
+  ch1->Add("/media/ivan/data/exp1904/analysed/novPars/reco/thinVar/h7_*_mm_frame.root");
   // ch1->Add("/media/ivan/data/exp1904/analysed/MKpars/mma_400.root");
   cout << ch1->GetEntries() << endl;
+  Int_t nEvents = ch1->GetEntries();
   // ch1->SetName("treeNew");
   // cout << ch1->GetName() << endl;
   // return;
@@ -56,6 +57,8 @@ void drawAngles(){
     Bool_t heliumE = 0;
     Bool_t target = 0;
     Bool_t setupReco = 0;
+    Bool_t fourMM = 1;
+    Bool_t fourTriangles = 1;
 
     if (twoTriangles) {
 
@@ -86,24 +89,40 @@ void drawAngles(){
         c2->Divide(3,1);
 
         c2->cd(1);
-        cut.Form("((flag1 && nhe3_1 && e_1<20) || (flag2 && nhe3_2 && e_2<20) || (flag3 && nhe3_3 && e_3<20) || (flag4 && nhe3_4 && e_4<20)) && nh3 && flagCent");
-        cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
-        ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> h5(30,-5,25)",cut.Data(),"");
-        TH1F *hMM = (TH1F*)gPad->GetPrimitive("h5");
-        hMM->GetXaxis()->SetRangeUser(-5,20);
+        cut.Form("((flag1 && nhe3_1 && e_1<25) || (flag2 && nhe3_2 && e_2<25) || (flag3 && nhe3_3 && e_3<25) || (flag4 && nhe3_4 && e_4<25)) && nh3 && flagCent");
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> h5(30,-5,25)",cut.Data(),"",nEvents,0);
+        TH1F *hMM_tel1 = (TH1F*)gPad->GetPrimitive("h5");
+        // hMM_tel1->GetXaxis()->SetRangeUser(-5,20);
         // hMM->SetBinOffset(0.25); 
         c2->Update();
 
         ch1->SetLineColor(kRed);
-        cut.Form("((nhe3_1 && e_1<20) || (nhe3_2 && e_2<20) || (nhe3_3 && e_3<20) || (nhe3_4 && e_4<20)) && nh3");
+        cut.Form("((flag1 && nhe3_1 && e_1<25) || (flag2 && nhe3_2 && e_2<25) || (flag3 && nhe3_3 && e_3<25) || (flag4 && nhe3_4 && e_4<25)) && nh3 && flagCent");
         cut += " && " + cutTriangle;
-        cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
-        ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> h5_cut(30,-5,25)",cut.Data(),"same");
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> h5_cut(30,-5,25)",cut.Data(),"same",nEvents,0);
         c2->Update();
 
-        // // cut.Form("(nhe3_1 || nhe3_2 || nhe3_3 || nhe3_4) && nh3 && (e_1<20 && e_2<20 && e_3<20 && e_4<20)");
-        // // ch1->SetLineColor(kRed);
-        // // ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> h5_cut(25,-5,20)",cut.Data(),"same");
+
+        ch1->SetLineColor(kBlue);
+        cut.Form("((flag1 && nhe3_1 && e_1<25) || (flag2 && nhe3_2 && e_2<25) || (flag3 && nhe3_3 && e_3<25) || (flag4 && nhe3_4 && e_4<25)) && nh3 && flagCent");
+        // cut += " && " + cutTriangle;
+
+        cut += " && frame1X<12.5 && frame1X>-12.5";
+        cut += " && frame1Y<12.5 && frame1Y>-12.5";
+        cut += " && frame2X<12.5 && frame2X>-12.5";
+        cut += " && frame2Y<12.5 && frame2Y>-12.5";
+        cut += " && frame3X<12.5 && frame3X>-12.5";
+        cut += " && frame3Y<12.5 && frame3Y>-12.5"; 
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> h5_cut_sq(30,-5,25)",cut.Data(),"same",nEvents,0);
+        c2->Update();
+
+
+        // cut.Form("(nhe3_1 || nhe3_2 || nhe3_3 || nhe3_4) && nh3 && (e_1<20 && e_2<20 && e_3<20 && e_4<20)");
+        // ch1->SetLineColor(kRed);
+        // ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> h5_cut(25,-5,20)",cut.Data(),"same");
 
         c2->cd(2);
 
@@ -115,19 +134,36 @@ void drawAngles(){
 
        
         ch1->SetMarkerColor(kBlack);
-        cut.Form("((nhe3_1 && e_1<20) || (nhe3_2 && e_2<20) || (nhe3_3 && e_3<20) || (nhe3_4 && e_4<20)) && nh3");
+        cut.Form("((flag1 && nhe3_1 && e_1<25) || (flag2 && nhe3_2 && e_2<25) || (flag3 && nhe3_3 && e_3<25) || (flag4 && nhe3_4 && e_4<25)) && nh3 && flagCent");
         // cut.Form("(nhe3_2 && e_2<25)  && nh3");
-        cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
-        ch1->Draw("eh3_CM*1000:1000*(mh7-4*0.939565-2.808920) >> triangle(10000,-5,20,10000,0,12)",cut.Data(),"");
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("eh3_CM*1000:1000*(mh7-4*0.939565-2.808920) >> triangle(10000,-5,20,10000,0,12)",cut.Data(),"",nEvents,0);
         c2->Update();
 
         // 
         ch1->SetMarkerColor(kRed);
-        cut.Form("((nhe3_1 && e_1<20) || (nhe3_2 && e_2<20) || (nhe3_3 && e_3<20) || (nhe3_4 && e_4<20)) && nh3");
+        cut.Form("((flag1 && nhe3_1 && e_1<25) || (flag2 && nhe3_2 && e_2<25) || (flag3 && nhe3_3 && e_3<25) || (flag4 && nhe3_4 && e_4<25)) && nh3 && flagCent");
         // cut.Form("(nhe3_2 && e_2<25)  && nh3");
         cut += " && " + cutTriangle;
-        cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
-        ch1->Draw("eh3_CM*1000:1000*(mh7-4*0.939565-2.808920) >> triangle_cut(10000,-5,20,10000,0,12)",cut.Data(),"same");
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("eh3_CM*1000:1000*(mh7-4*0.939565-2.808920) >> triangle_cut(10000,-5,20,10000,0,12)",cut.Data(),"same",nEvents,0);
+        c2->Update();
+
+
+        ch1->SetMarkerColor(kBlue);
+        cut.Form("((flag1 && nhe3_1 && e_1<25) || (flag2 && nhe3_2 && e_2<25) || (flag3 && nhe3_3 && e_3<25) || (flag4 && nhe3_4 && e_4<25)) && nh3 && flagCent");
+        // cut.Form("(nhe3_2 && e_2<25)  && nh3");
+        // cut += " && " + cutTriangle;
+
+        cut += " && frame1X<12.5 && frame1X>-12.5";
+        cut += " && frame1Y<12.5 && frame1Y>-12.5";
+        cut += " && frame2X<12.5 && frame2X>-12.5";
+        cut += " && frame2Y<12.5 && frame2Y>-12.5";
+        cut += " && frame3X<12.5 && frame3X>-12.5";
+        cut += " && frame3Y<12.5 && frame3Y>-12.5"; 
+
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        cout << ch1->Draw("eh3_CM*1000:1000*(mh7-4*0.939565-2.808920) >> triangle_cut_sq(10000,-5,20,10000,0,12)",cut.Data(),"same",nEvents,0) << endl;
         c2->Update();
 
         fa->Draw("same");
@@ -136,21 +172,308 @@ void drawAngles(){
 
         c2->cd(3);
         ch1->SetMarkerColor(kBlack);
-        cut.Form("((nhe3_1 && e_1<20) || (nhe3_2 && e_2<20) || (nhe3_3 && e_3<20) || (nhe3_4 && e_4<20)) && nh3");
+        cut.Form("((flag1 && nhe3_1 && e_1<25) || (flag2 && nhe3_2 && e_2<25) || (flag3 && nhe3_3 && e_3<25) || (flag4 && nhe3_4 && e_4<25)) && nh3 && flagCent");
         // cut.Form("(nhe3_2 && e_2<25)  && nh3");
-        cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
-        ch1->Draw("thetah7CM:1000*(mh7-4*0.939565-2.808920) >> rAngle",cut.Data(),"");
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("thetah7CM:1000*(mh7-4*0.939565-2.808920) >> rAngle",cut.Data(),"",nEvents,0);
         c2->Update();
 
         ch1->SetMarkerColor(kRed);
-        cut.Form("((nhe3_1 && e_1<20) || (nhe3_2 && e_2<20) || (nhe3_3 && e_3<20) || (nhe3_4 && e_4<20)) && nh3");
+        cut.Form("((flag1 && nhe3_1 && e_1<25) || (flag2 && nhe3_2 && e_2<25) || (flag3 && nhe3_3 && e_3<25) || (flag4 && nhe3_4 && e_4<25)) && nh3 && flagCent");
         // cut.Form("(nhe3_2 && e_2<25)  && nh3");
         cut += " && " + cutTriangle;
-        cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
-        ch1->Draw("thetah7CM:1000*(mh7-4*0.939565-2.808920) >> rAngleCut",cut.Data(),"same");
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("thetah7CM:1000*(mh7-4*0.939565-2.808920) >> rAngleCut",cut.Data(),"same",nEvents,0);
         c2->Update();
 
+        ch1->SetMarkerColor(kBlue);
+        cut.Form("((flag1 && nhe3_1 && e_1<25) || (flag2 && nhe3_2 && e_2<25) || (flag3 && nhe3_3 && e_3<25) || (flag4 && nhe3_4 && e_4<25)) && nh3 && flagCent");
+        // cut.Form("(nhe3_2 && e_2<25)  && nh3");
+        // cut += " && " + cutTriangle;
+
+        cut += " && frame1X<12.5 && frame1X>-12.5";
+        cut += " && frame1Y<12.5 && frame1Y>-12.5";
+        cut += " && frame2X<12.5 && frame2X>-12.5";
+        cut += " && frame2Y<12.5 && frame2Y>-12.5";
+        cut += " && frame3X<12.5 && frame3X>-12.5";
+        cut += " && frame3Y<12.5 && frame3Y>-12.5";                
+
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("thetah7CM:1000*(mh7-4*0.939565-2.808920) >> rAngleCut_sq",cut.Data(),"same",nEvents,0);
+        c2->Update();
+
+        c2->Print("/home/ivan/Desktop/tmp/png/mm.png");
+
     }
+
+    if (fourMM) {
+
+
+        TString cutTriangle("(eh3_CM*1000<(0.5 + 1000*(mh7-4*0.939565-2.808920)*4/7.))");
+
+        TCanvas *cFourMM = new TCanvas("cFourMM","",1800,1000); 
+        cFourMM->Divide(2,2);
+
+        cFourMM->cd(1);
+        ch1->SetLineColor(kBlack);
+        // cut.Form("((flag1 && nhe3_1 && e_1<25) || (flag2 && nhe3_2 && e_2<25) || (flag3 && nhe3_3 && e_3<25) || (flag4 && nhe3_4 && e_4<25)) && nh3 && flagCent");
+        cut.Form("flag1 && nhe3_1 && e_1<25 && nh3 && flagCent");
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> mm_tel1(30,-5,25)",cut.Data(),"",nEvents,0);
+        // TH1F *hMM = (TH1F*)gPad->GetPrimitive("mm_tel1");
+        // hMM->GetXaxis()->SetRangeUser(-5,20);
+        // hMM->SetBinOffset(0.25); 
+        cFourMM->Update();
+
+        ch1->SetLineColor(kRed);
+        cut.Form("flag1 && nhe3_1 && e_1<25 && nh3 && flagCent");
+        cut += " && " + cutTriangle;
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> mm_tel1_cut(30,-5,25)",cut.Data(),"same",nEvents,0);
+        cFourMM->Update();
+
+
+        ch1->SetLineColor(kBlue);
+        cut.Form("flag1 && nhe3_1 && e_1<25 && nh3 && flagCent");
+        // cut += " && " + cutTriangle;
+
+        cut += " && frame1X<12.5 && frame1X>-12.5";
+        cut += " && frame1Y<12.5 && frame1Y>-12.5";
+        cut += " && frame2X<12.5 && frame2X>-12.5";
+        cut += " && frame2Y<12.5 && frame2Y>-12.5";
+        cut += " && frame3X<12.5 && frame3X>-12.5";
+        cut += " && frame3Y<12.5 && frame3Y>-12.5"; 
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> mm_tel1_sq(30,-5,25)",cut.Data(),"same",nEvents,0);
+        cFourMM->Update();
+
+        cFourMM->cd(2);
+        ch1->SetLineColor(kBlack);
+        // cut.Form("((flag1 && nhe3_1 && e_1<25) || (flag2 && nhe3_2 && e_2<25) || (flag3 && nhe3_3 && e_3<25) || (flag4 && nhe3_4 && e_4<25)) && nh3 && flagCent");
+        cut.Form("flag2 && nhe3_2 && e_2<25 && nh3 && flagCent");
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> mm_tel2(30,-5,25)",cut.Data(),"");
+        // TH1F *hMM = (TH1F*)gPad->GetPrimitive("mm_tel2");
+        // hMM->GetXaxis()->SetRangeUser(-5,20);
+        // hMM->SetBinOffset(0.25); 
+        cFourMM->Update();
+
+        ch1->SetLineColor(kRed);
+        cut.Form("flag2 && nhe3_2 && e_2<25 && nh3 && flagCent");
+        cut += " && " + cutTriangle;
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> mm_tel2_cut(30,-5,25)",cut.Data(),"same",nEvents,0);
+        cFourMM->Update();
+
+
+        ch1->SetLineColor(kBlue);
+        cut.Form("flag2 && nhe3_2 && e_2<25 && nh3 && flagCent");
+        // cut += " && " + cutTriangle;
+
+        cut += " && frame1X<12.5 && frame1X>-12.5";
+        cut += " && frame1Y<12.5 && frame1Y>-12.5";
+        cut += " && frame2X<12.5 && frame2X>-12.5";
+        cut += " && frame2Y<12.5 && frame2Y>-12.5";
+        cut += " && frame3X<12.5 && frame3X>-12.5";
+        cut += " && frame3Y<12.5 && frame3Y>-12.5"; 
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> mm_tel2_sq(30,-5,25)",cut.Data(),"same",nEvents,0);
+        cFourMM->Update();
+
+
+        cFourMM->cd(3);
+        ch1->SetLineColor(kBlack);
+        // cut.Form("((flag1 && nhe3_1 && e_1<25) || (flag2 && nhe3_2 && e_2<25) || (flag3 && nhe3_3 && e_3<25) || (flag4 && nhe3_4 && e_4<25)) && nh3 && flagCent");
+        cut.Form("flag3 && nhe3_3 && e_3<25 && nh3 && flagCent");
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> mm_tel3(30,-5,25)",cut.Data(),"",nEvents,0);
+        // TH1F *hMM = (TH1F*)gPad->GetPrimitive("mm_tel2");
+        // hMM->GetXaxis()->SetRangeUser(-5,20);
+        // hMM->SetBinOffset(0.25); 
+        cFourMM->Update();
+
+        ch1->SetLineColor(kRed);
+        cut.Form("flag3 && nhe3_3 && e_3<25 && nh3 && flagCent");
+        cut += " && " + cutTriangle;
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> mm_tel3_cut(30,-5,25)",cut.Data(),"same",nEvents,0);
+        cFourMM->Update();
+
+
+        ch1->SetLineColor(kBlue);
+        cut.Form("flag3 && nhe3_3 && e_3<25 && nh3 && flagCent");
+        // cut += " && " + cutTriangle;
+
+        cut += " && frame1X<12.5 && frame1X>-12.5";
+        cut += " && frame1Y<12.5 && frame1Y>-12.5";
+        cut += " && frame2X<12.5 && frame2X>-12.5";
+        cut += " && frame2Y<12.5 && frame2Y>-12.5";
+        cut += " && frame3X<12.5 && frame3X>-12.5";
+        cut += " && frame3Y<12.5 && frame3Y>-12.5"; 
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> mm_tel3_sq(30,-5,25)",cut.Data(),"same",nEvents,0);
+        cFourMM->Update();
+
+        cFourMM->cd(4);
+        ch1->SetLineColor(kBlack);
+        // cut.Form("((flag1 && nhe3_1 && e_1<25) || (flag2 && nhe3_2 && e_2<25) || (flag3 && nhe3_3 && e_3<25) || (flag4 && nhe3_4 && e_4<25)) && nh3 && flagCent");
+        cut.Form("flag4 && nhe3_4 && e_4<25 && nh3 && flagCent");
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> mm_tel4(30,-5,25)",cut.Data(),"",nEvents,0);
+        // TH1F *hMM = (TH1F*)gPad->GetPrimitive("mm_tel2");
+        // hMM->GetXaxis()->SetRangeUser(-5,20);
+        // hMM->SetBinOffset(0.25); 
+        cFourMM->Update();
+
+        ch1->SetLineColor(kRed);
+        cut.Form("flag4 && nhe3_4 && e_4<25 && nh3 && flagCent");
+        cut += " && " + cutTriangle;
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> mm_tel4_cut(30,-5,25)",cut.Data(),"same",nEvents,0);
+        cFourMM->Update();
+
+
+        ch1->SetLineColor(kBlue);
+        cut.Form("flag4 && nhe3_4 && e_4<25 && nh3 && flagCent");
+        // cut += " && " + cutTriangle;
+
+        cut += " && frame1X<12.5 && frame1X>-12.5";
+        cut += " && frame1Y<12.5 && frame1Y>-12.5";
+        cut += " && frame2X<12.5 && frame2X>-12.5";
+        cut += " && frame2Y<12.5 && frame2Y>-12.5";
+        cut += " && frame3X<12.5 && frame3X>-12.5";
+        cut += " && frame3Y<12.5 && frame3Y>-12.5"; 
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("1000*(mh7-4*0.939565-2.808920) >> mm_tel4_sq(30,-5,25)",cut.Data(),"same",nEvents,0);
+        cFourMM->Update();
+
+
+        cFourMM->Print("/home/ivan/Desktop/tmp/png/fourMM.png");
+    }
+
+
+    if (fourTriangles) {
+
+
+        TString cutTriangle("(eh3_CM*1000<(0.5 + 1000*(mh7-4*0.939565-2.808920)*4/7.))");
+
+        TCanvas *cFourT = new TCanvas("cFourT","",1800,1000); 
+        cFourT->Divide(2,2);
+
+        cFourT->cd(1);
+        ch1->SetMarkerColor(kBlack);
+        // cut.Form("((flag1 && nhe3_1 && e_1<25) || (flag2 && nhe3_2 && e_2<25) || (flag3 && nhe3_3 && e_3<25) || (flag4 && nhe3_4 && e_4<25)) && nh3 && flagCent");
+        cut.Form("flag1 && nhe3_1 && e_1<25 && nh3 && flagCent");
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("eh3_CM*1000:1000*(mh7-4*0.939565-2.808920) >> triangle1(10000,-5,20,10000,0,12)",cut.Data(),"",nEvents,0);
+        // TH1F *hMM = (TH1F*)gPad->GetPrimitive("mm_tel1");
+        // hMM->GetXaxis()->SetRangeUser(-5,20);
+        // hMM->SetBinOffset(0.25); 
+        cFourT->Update();
+        fa->Draw("same");
+
+        ch1->SetMarkerColor(kBlue);
+        cut.Form("flag1 && nhe3_1 && e_1<25 && nh3 && flagCent");
+        // cut += " && " + cutTriangle;
+
+        cut += " && frame1X<12.5 && frame1X>-12.5";
+        cut += " && frame1Y<12.5 && frame1Y>-12.5";
+        cut += " && frame2X<12.5 && frame2X>-12.5";
+        cut += " && frame2Y<12.5 && frame2Y>-12.5";
+        cut += " && frame3X<12.5 && frame3X>-12.5";
+        cut += " && frame3Y<12.5 && frame3Y>-12.5"; 
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        cout << ch1->Draw("eh3_CM*1000:1000*(mh7-4*0.939565-2.808920) >> triangle1_sq(10000,-5,20,10000,0,12)",cut.Data(),"same",nEvents,0) << endl;
+        cFourT->Update();
+
+        cFourT->cd(2);
+        ch1->SetMarkerColor(kBlack);
+        // cut.Form("((flag1 && nhe3_1 && e_1<25) || (flag2 && nhe3_2 && e_2<25) || (flag3 && nhe3_3 && e_3<25) || (flag4 && nhe3_4 && e_4<25)) && nh3 && flagCent");
+        cut.Form("flag2 && nhe3_2 && e_2<25 && nh3 && flagCent");
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("eh3_CM*1000:1000*(mh7-4*0.939565-2.808920) >> triangle2(10000,-5,20,10000,0,12)",cut.Data(),"",nEvents,0);
+        // TH1F *hMM = (TH1F*)gPad->GetPrimitive("mm_tel2");
+        // hMM->GetXaxis()->SetRangeUser(-5,20);
+        // hMM->SetBinOffset(0.25); 
+        cFourT->Update();
+
+        fa->Draw("same");
+
+        ch1->SetMarkerColor(kBlue);
+        cut.Form("flag2 && nhe3_2 && e_2<25 && nh3 && flagCent");
+        // cut += " && " + cutTriangle;
+
+        cut += " && frame1X<12.5 && frame1X>-12.5";
+        cut += " && frame1Y<12.5 && frame1Y>-12.5";
+        cut += " && frame2X<12.5 && frame2X>-12.5";
+        cut += " && frame2Y<12.5 && frame2Y>-12.5";
+        cut += " && frame3X<12.5 && frame3X>-12.5";
+        cut += " && frame3Y<12.5 && frame3Y>-12.5"; 
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        cout << ch1->Draw("eh3_CM*1000:1000*(mh7-4*0.939565-2.808920) >> triangle2_sq(10000,-5,20,10000,0,12)",cut.Data(),"same",nEvents,0) << endl;
+        cFourT->Update();
+
+
+        cFourT->cd(3);
+        ch1->SetMarkerColor(kBlack);
+        // cut.Form("((flag1 && nhe3_1 && e_1<25) || (flag2 && nhe3_2 && e_2<25) || (flag3 && nhe3_3 && e_3<25) || (flag4 && nhe3_4 && e_4<25)) && nh3 && flagCent");
+        cut.Form("flag3 && nhe3_3 && e_3<25 && nh3 && flagCent");
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("eh3_CM*1000:1000*(mh7-4*0.939565-2.808920) >> triangle3(10000,-5,20,10000,0,12)",cut.Data(),"",nEvents,0);
+        // TH1F *hMM = (TH1F*)gPad->GetPrimitive("mm_tel2");
+        // hMM->GetXaxis()->SetRangeUser(-5,20);
+        // hMM->SetBinOffset(0.25); 
+        cFourT->Update();
+
+        fa->Draw("same");
+
+        ch1->SetMarkerColor(kBlue);
+        cut.Form("flag3 && nhe3_3 && e_3<25 && nh3 && flagCent");
+        // cut += " && " + cutTriangle;
+
+        cut += " && frame1X<12.5 && frame1X>-12.5";
+        cut += " && frame1Y<12.5 && frame1Y>-12.5";
+        cut += " && frame2X<12.5 && frame2X>-12.5";
+        cut += " && frame2Y<12.5 && frame2Y>-12.5";
+        cut += " && frame3X<12.5 && frame3X>-12.5";
+        cut += " && frame3Y<12.5 && frame3Y>-12.5"; 
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        cout << ch1->Draw("eh3_CM*1000:1000*(mh7-4*0.939565-2.808920) >> triangle3_sq(10000,-5,20,10000,0,12)",cut.Data(),"same",nEvents,0) << endl;
+        cFourT->Update();
+
+        cFourT->cd(4);
+        ch1->SetMarkerColor(kBlack);
+        // cut.Form("((flag1 && nhe3_1 && e_1<25) || (flag2 && nhe3_2 && e_2<25) || (flag3 && nhe3_3 && e_3<25) || (flag4 && nhe3_4 && e_4<25)) && nh3 && flagCent");
+        cut.Form("flag4 && nhe3_4 && e_4<25 && nh3 && flagCent");
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        ch1->Draw("eh3_CM*1000:1000*(mh7-4*0.939565-2.808920) >> triangle4(10000,-5,20,10000,0,12)",cut.Data(),"",nEvents,0);
+        // TH1F *hMM = (TH1F*)gPad->GetPrimitive("mm_tel2");
+        // hMM->GetXaxis()->SetRangeUser(-5,20);
+        // hMM->SetBinOffset(0.25); 
+        cFourT->Update();
+
+        fa->Draw("same");
+
+        ch1->SetMarkerColor(kBlue);
+        cut.Form("flag4 && nhe3_4 && e_4<25 && nh3 && flagCent");
+        // cut += " && " + cutTriangle;
+
+        cut += " && frame1X<12.5 && frame1X>-12.5";
+        cut += " && frame1Y<12.5 && frame1Y>-12.5";
+        cut += " && frame2X<12.5 && frame2X>-12.5";
+        cut += " && frame2Y<12.5 && frame2Y>-12.5";
+        cut += " && frame3X<12.5 && frame3X>-12.5";
+        cut += " && frame3Y<12.5 && frame3Y>-12.5"; 
+        // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
+        cout << ch1->Draw("eh3_CM*1000:1000*(mh7-4*0.939565-2.808920) >> triangle4_sq(10000,-5,20,10000,0,12)",cut.Data(),"same",nEvents,0) << endl;
+        cFourT->Update();
+
+
+        cFourT->Print("/home/ivan/Desktop/tmp/png/fourT.png");
+    }
+
+
+
 
     if (heliumE) {
 
@@ -276,5 +599,7 @@ void drawAngles(){
 
 
     }
+
+    // ch1->Draw("thetahe8.",cut.Data(),"");
 
 }

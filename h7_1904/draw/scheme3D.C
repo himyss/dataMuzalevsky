@@ -17,7 +17,7 @@ void scheme3D() {
   gStyle->SetCanvasPreferGL(kTRUE);
 
   TChain *ch = new TChain("tree");
-  ch->Add("/media/ivan/data/exp1904/analysed/oldPars/select_noveto.root");
+  ch->Add("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/h7_*");
 
   ch->SetBranchAddress("fXt.",&fXt);
   ch->SetBranchAddress("fYt.",&fYt); 
@@ -37,15 +37,15 @@ void scheme3D() {
   TH3F *canVas = new TH3F("canVas","background hist",100,-100,100,100,-100,100,100,-1,400);
   canVas->Draw();
 
-  // drawFrame(173.);
-  // drawFrame(188.);
-  // drawFrame(198.);
+  drawFrame(173.);
+  drawFrame(188.);
+  drawFrame(198.);
 
-  // drawSensitive(173.);
+  drawSensitive(173.);
 
   drawHole(201.);
 
-  Int_t nEvents = 1000;
+  Int_t nEvents = 30000;
 
   ch->SetLineColor(kBlack);  
   ch->Draw("0:fYt:fXt >> hTarget(60,-10,10,60,-10,10,1,-0.3,0.3)","trigger!=1 && nh3","same",nEvents,0);
