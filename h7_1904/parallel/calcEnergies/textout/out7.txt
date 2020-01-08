@@ -1,6 +1,6 @@
 
 Processing calcEnergies_frame.C(6)...
-1413994 total number of Entries
+461883 total number of Entries
 xtab[i0+1] 	17.2028	ytab[i0+1] 	0.00200002
 xtab[i0+1] 	17.2028	ytab[i0+1] 	0.00200002
 xtab[i0+1] 	17.2028	ytab[i0+1] 	0.00200002
@@ -236,13 +236,3 @@ xtab[i0+1] 	2222.18	ytab[i0+1] 	0.670007
 #ENTRY 200000#
 #ENTRY 300000#
 #ENTRY 400000#
-#ENTRY 500000#
-#ENTRY 600000#
-#ENTRY 700000#
-#ENTRY 800000#
-#ENTRY 900000#
-#ENTRY 1000000#
-#ENTRY 1100000#
-#ENTRY 1200000#
-#ENTRY 1300000#
-#ENTRY 1400000#

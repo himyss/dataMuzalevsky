@@ -1,6 +1,0 @@
-Error in <TCling::RegisterModule>: cannot find dictionary module AculDataCint_rdict.pcm
-Error in <TCling::RegisterModule>: cannot find dictionary module TELossCint_rdict.pcm
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.011731
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.011731
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.011731
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.011731

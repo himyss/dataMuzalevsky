@@ -4,6 +4,11 @@ xtab[i0+1] 	0.0420674	ytab[i0+1] 	0.00200002
 xtab[i0+1] 	0.0420674	ytab[i0+1] 	0.00200002
 xtab[i0+1] 	0.0420674	ytab[i0+1] 	0.00200002
 xtab[i0+1] 	0.0420674	ytab[i0+1] 	0.00200002
-1413994 total number of Entries
+461883 total number of Entries
 #ENTRY 0#
-#ENTRY 1000000#
+
+69.723 1.66412
+
+96.2168 2.47017
+
+67.3117 1.67311

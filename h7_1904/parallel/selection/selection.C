@@ -161,7 +161,7 @@ void selection(Int_t nFile=0) {
 
   TChain *ch = new TChain("tree");
   TString inPutFileName;
-  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calibrated/newCal/h7_%d_cal.root",nFile);
+  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calibrated/newCal/eTarget/h7_ect_%d_cal.root",nFile);
   ch->Add(inPutFileName.Data());
 
   cout << ch->GetEntries() << endl;
@@ -238,7 +238,7 @@ void selection(Int_t nFile=0) {
   readThickness();
 
   TString outPutFileName;
-  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/h7_%d_cut.root",nFile);
+  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/eTarget/h7_ect_%d_cut.root",nFile);
   // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/test.root",nFile);
 
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");

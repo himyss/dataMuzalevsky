@@ -1,0 +1,41 @@
+{
+//========= Macro generated from object: CUTG/Graph
+//========= by ROOT version6.10/08
+   
+   TCutG *cutg = new TCutG("CUTG",28);
+   cutg->SetVarX("aCsI ");
+   cutg->SetVarY("X_C");
+   cutg->SetTitle("Graph");
+   cutg->SetFillColor(1);
+   cutg->SetPoint(0,320.219,97.3065);
+   cutg->SetPoint(1,487.561,87.2962);
+   cutg->SetPoint(2,637.885,79.453);
+   cutg->SetPoint(3,791.045,72.1259);
+   cutg->SetPoint(4,1000.93,65.934);
+   cutg->SetPoint(5,1159.76,60.4644);
+   cutg->SetPoint(6,1386.67,54.8916);
+   cutg->SetPoint(7,1593.72,50.5573);
+   cutg->SetPoint(8,1851.82,45.7069);
+   cutg->SetPoint(9,2277.27,39.8246);
+   cutg->SetPoint(10,2685.7,34.7678);
+   cutg->SetPoint(11,3031.73,30.9494);
+   cutg->SetPoint(12,3139.51,29.6078);
+   cutg->SetPoint(13,3170.71,30.6398);
+   cutg->SetPoint(14,3159.36,33.5294);
+   cutg->SetPoint(15,2767.95,36.935);
+   cutg->SetPoint(16,2092.91,45.3973);
+   cutg->SetPoint(17,1749.72,50.8669);
+   cutg->SetPoint(18,1398.01,58.4004);
+   cutg->SetPoint(19,1190.96,63.2508);
+   cutg->SetPoint(20,1017.95,69.6491);
+   cutg->SetPoint(21,873.298,74.3963);
+   cutg->SetPoint(22,714.465,80.2786);
+   cutg->SetPoint(23,595.34,86.9866);
+   cutg->SetPoint(24,481.888,93.4881);
+   cutg->SetPoint(25,405.308,98.9577);
+   cutg->SetPoint(26,328.728,99.2673);
+   cutg->SetPoint(27,320.219,97.3065);
+   cutg->Draw("");
+   cutg->SaveAs("Li8_2.root");
+
+}

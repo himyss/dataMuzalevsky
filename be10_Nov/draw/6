@@ -1,0 +1,79 @@
+{
+//========= Macro generated from object: Graph/Graph
+//========= by ROOT version6.10/08
+   
+   Double_t Graph_fx1[20] = {
+   0.737779,
+   2.23409,
+   3.7304,
+   5.2267,
+   6.72301,
+   8.21932,
+   9.71563,
+   11.2119,
+   12.7082,
+   14.2046,
+   15.7009,
+   17.247,
+   18.7434,
+   20.2397,
+   21.736,
+   23.2323,
+   24.7286,
+   26.2249,
+   27.7212,
+   29.2175};
+   Double_t Graph_fy1[20] = {
+   0.0640265,
+   0.0640265,
+   0.0640265,
+   1.0521,
+   3.02824,
+   11.0316,
+   20.0231,
+   33.0656,
+   27.0384,
+   55.0008,
+   63.0042,
+   70.0195,
+   61.028,
+   68.0433,
+   55.0008,
+   49.0724,
+   6.09126,
+   6.09126,
+   0.0640265,
+   0.0640265};
+   TGraph *graph = new TGraph(20,Graph_fx1,Graph_fy1);
+   graph->SetName("Graph");
+   graph->SetTitle("Graph");
+   graph->SetFillColor(1);
+   graph->SetMarkerStyle(3);
+   
+   TH1F *Graph_Graph1 = new TH1F("Graph_Graph1","Graph",100,0,32.1);
+   Graph_Graph1->SetMinimum(0);
+   Graph_Graph1->SetMaximum(77);
+   Graph_Graph1->SetDirectory(0);
+   Graph_Graph1->SetStats(0);
+
+   Int_t ci;      // for color index setting
+   TColor *color; // for color definition with alpha
+   ci = TColor::GetColor("#000099");
+   Graph_Graph1->SetLineColor(ci);
+   Graph_Graph1->GetXaxis()->SetLabelFont(42);
+   Graph_Graph1->GetXaxis()->SetLabelSize(0.035);
+   Graph_Graph1->GetXaxis()->SetTitleSize(0.035);
+   Graph_Graph1->GetXaxis()->SetTitleFont(42);
+   Graph_Graph1->GetYaxis()->SetLabelFont(42);
+   Graph_Graph1->GetYaxis()->SetLabelSize(0.035);
+   Graph_Graph1->GetYaxis()->SetTitleSize(0.035);
+   Graph_Graph1->GetYaxis()->SetTitleOffset(0);
+   Graph_Graph1->GetYaxis()->SetTitleFont(42);
+   Graph_Graph1->GetZaxis()->SetLabelFont(42);
+   Graph_Graph1->GetZaxis()->SetLabelSize(0.035);
+   Graph_Graph1->GetZaxis()->SetTitleSize(0.035);
+   Graph_Graph1->GetZaxis()->SetTitleFont(42);
+   graph->SetHistogram(Graph_Graph1);
+   
+   graph->Draw("");
+}

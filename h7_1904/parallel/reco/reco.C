@@ -88,7 +88,8 @@ void reco(Int_t nRun=0) {
 
   TChain *ch = new TChain("tree");
   TString inPutFileName;
-  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calcEnergies/thinVar/h7_%d_reco_frame.root",nRun);
+  // inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calcEnergies/eTarget/h7_ect_%d_reco.root",nRun);
+  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calcEnergies/thinVar/h7_ct_%d_reco.root",nRun);
   ch->Add(inPutFileName.Data());;
 
   cout << ch->GetEntries() << " total number of Entries" << endl;
@@ -216,8 +217,9 @@ void reco(Int_t nRun=0) {
 
 
   TString outPutFileName;
-  // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/reco/thinVar/h7_%d_mm_frame.root",nRun);
-  outPutFileName.Form("test.root",nRun);
+  // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/reco/eTarget/h7_ect_%d_mm_frame.root",nRun);
+  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/reco/thinVar/h7_ct_%d_mm_frame.root",nRun);
+  // outPutFileName.Form("test.root",nRun);
 
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
   TTree *tw = new TTree("tree", "data");
