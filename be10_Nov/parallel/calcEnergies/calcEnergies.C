@@ -76,8 +76,8 @@ void calcEnergies() {
 
   TChain *ch = new TChain("tree");
 
-  ch->Add("/media/ivan/data/exp1906/be10/analysed/novPars/selection/be10_ct_firstVol_cut.root");
-  ch->Add("/media/ivan/data/exp1906/be10/analysed/novPars/selection/be10_ct_secondVol_cut.root");
+  // ch->Add("/media/ivan/data/exp1906/be10/analysed/novPars/selection/be10_ct_thinTarget_cut.root");
+  ch->Add("/media/ivan/data/exp1906/be10/analysed/novPars/selection/parVariation/sideTel/be10_ct_thinTarget_cut.root");
 
   cout << ch->GetEntries() << " total number of Entries" << endl;
   //--------------------------------------------------------------------------------
@@ -190,7 +190,8 @@ void calcEnergies() {
   ch->SetBranchAddress("phi_he3_4.",&phi_he3_4);
   ch->SetBranchAddress("phi_h3.",&phi_h3);
   
-  TFile *fw = new TFile("/media/ivan/data/exp1906/be10/analysed/novPars/reco/parVariation/thinDetTh/be10_ct_thick_reco.root", "RECREATE");
+  TFile *fw = new TFile("/media/ivan/data/exp1906/be10/analysed/novPars/calcEnergies/parVariation/sideTel/be10_ct_thin_reco.root", "RECREATE");
+  // TFile *fw = new TFile("/media/ivan/data/exp1906/be10/analysed/novPars/calcEnergies/be10_ct_thin_reco.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("trigger.",&trigger,"trigger/I");
@@ -312,10 +313,15 @@ void calcEnergies() {
   readThickness();
   setTables();
 
-  Float_t thCoeff1 = 0.9;
-  Float_t thCoeff2 = 0.99;
-  Float_t thCoeff3 = 0.95;
-  Float_t thCoeff4 = 0.86;
+  // Float_t thCoeff1 = 0.97;
+  // Float_t thCoeff2 = 0.99;
+  // Float_t thCoeff3 = 0.97;
+  // Float_t thCoeff4 = 0.93;
+
+  Float_t thCoeff1 = 1.;
+  Float_t thCoeff2 = 1.;
+  Float_t thCoeff3 = 1.;
+  Float_t thCoeff4 = 1.;
 
   // for(Int_t nentry = 0; nentry<1000000;nentry++) {
   for(Int_t nentry = 0; nentry<ch->GetEntries();nentry++) {
@@ -333,7 +339,7 @@ void calcEnergies() {
       // e_1 = f3HeSi->GetE0(e_1,0.5/cos(th_he3_1)); //dl of thin det
       e_1 = a1_1;
 
-      thickness = (fThickness1[n20_1][n1_1]*thCoeff1+1.87)/cos(th_he3_1); // 0.5 - DL of thick det
+      thickness = (fThickness1[n20_1][n1_1]*thCoeff1+1.8)/cos(th_he3_1); // 0.5 - DL of thick det
       e_1 = f3HeSi->GetE0(e_1,thickness);
 
       // mylar
@@ -351,13 +357,10 @@ void calcEnergies() {
 
     if(nhe3_2) {
       // Si
-      // e_2 = f3HeSi->GetE0(a20_2_un,4./cos(th_he3_2)) + a1_2; // 1.5 micron - DL between thin and thick sensitive areas (DL thin about 1 mik)
-      // e_2 = f3HeSi->GetE0(e_2,0.5/cos(th_he3_2)); //dl of thin det
-
 
       e_2 = a1_2;
 
-      thickness = (fThickness2[n20_2][n1_2]*thCoeff2+1.87)/cos(th_he3_2); // 0.5 - DL of thick det
+      thickness = (fThickness2[n20_2][n1_2]*thCoeff2+1.8)/cos(th_he3_2); // 0.5 - DL of thick det
       e_2 = f3HeSi->GetE0(e_2,thickness);
 
       // mylar
@@ -380,7 +383,7 @@ void calcEnergies() {
 
       e_3 = a1_3;
 
-      thickness = (fThickness3[n20_3][n1_3]*thCoeff3+2.53)/cos(th_he3_3); // 0.5 - DL of thick det
+      thickness = (fThickness3[n20_3][n1_3]*thCoeff3+2.44)/cos(th_he3_3); // 0.5 - DL of thick det
       e_3 = f3HeSi->GetE0(e_3,thickness);    
 
       // mylar
@@ -403,7 +406,7 @@ void calcEnergies() {
 
       e_4 = a1_4;
 
-      thickness = (fThickness4[n20_4][n1_4]*thCoeff4+2.27)/cos(th_he3_4); // 0.5 - DL of thick det
+      thickness = (fThickness4[n20_4][n1_4]*thCoeff4+2.19)/cos(th_he3_4); // 0.5 - DL of thick det
       e_4 = f3HeSi->GetE0(e_4,thickness);   
 
       // mylar
@@ -569,8 +572,8 @@ void setTables() {
 
   // deuterium target
   f3HeTarget = new TELoss();
-  // f3HeTarget->SetEL(1, 0.0010049); // density in g/cm3
-  f3HeTarget->SetEL(1, 0.0020635); // density in g/cm3
+  f3HeTarget->SetEL(1, 0.0010049); // density in g/cm3
+  // f3HeTarget->SetEL(1, 0.0020635); // density in g/cm3
   f3HeTarget->AddEL(1., 2.0141017778, 1);  //Z, mass
   f3HeTarget->SetZP(2., 3.);   //alphas, Z, A
   f3HeTarget->SetEtab(100000, 200.); // ?, MeV calculate ranges

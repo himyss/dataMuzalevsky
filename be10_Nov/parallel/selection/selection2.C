@@ -145,8 +145,19 @@ Float_t pCsI_1[16],pCsI_2[16];
 Float_t x1t,y1t,x2t,y2t,x3t,y3t,x4t,y4t,xCt,yCt;
 
 // TELoss *f3HSi;
+Float_t xOffset,yOffset,zOffset;
 
 void selection2(Int_t nFile=0) {
+
+  // xOffset = -0.61;
+  // yOffset = 2.88;
+
+  // xOffset = -0.12;
+  // yOffset = 3.63;
+  
+  xOffset = 0.55;
+  yOffset = 1.33;
+  zOffset = 2.;
 
   // readPar("CsI_anh",pCsI_1,pCsI_2);
   // readPar("SSD_20u_2_cal",pSQ202_1_new,pSQ202_2_new);
@@ -233,8 +244,9 @@ void selection2(Int_t nFile=0) {
   readThickness();
 
   TString outPutFileName;
-  outPutFileName.Form("/media/ivan/data/exp1906/be10/analysed/novPars/selection/be10_ct_secondVol_cut.root");
-  // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/test.root",nFile);
+  // outPutFileName.Form("/media/ivan/data/exp1906/be10/analysed/novPars/selection/be10_ct_secondVol_cut.root");
+  outPutFileName.Form("/media/ivan/data/exp1906/be10/analysed/novPars/selection/parVariation/sideTel/be10_ct_secondVol_cut.root");
+
 
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
   TTree *tw = new TTree("tree", "data");
@@ -361,8 +373,8 @@ void selection2(Int_t nFile=0) {
   tw->Branch("multv_4",&multv_4,"multv_4/I");
 
   Float_t xCent,yCent;
-  xCent = 0.5;
-  yCent = 1;
+  xCent = 0;
+  yCent = 0;
 
   for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
   // for(Int_t nentry=0;nentry<10000;nentry++) {     
@@ -370,12 +382,12 @@ void selection2(Int_t nFile=0) {
 
     ch->GetEntry(nentry);
 
-    // if (trigger==1) continue;
+    if (trigger==1) continue;
 
     zeroVars();
 
     MWPCprojection();
-    if ( ((fXt-xCent)*(fXt-xCent) + (fYt-yCent)*(fYt-yCent))>9*9 ) continue;
+    // if ( ((fXt-xCent)*(fXt-xCent) + (fYt-yCent)*(fYt-yCent))>10*10 ) continue;
 
     fillSi();
 
@@ -394,10 +406,11 @@ void selection2(Int_t nFile=0) {
 
     if (nX_C>-1 && nY_C>-1) {
       calcVectorCent(nX_C,nY_C);
-      calcFrameCoordinates(&frame1X,&frame1Y,173.);
-      calcFrameCoordinates(&frame2X,&frame2Y,188.);
-      calcFrameCoordinates(&frame3X,&frame3Y,198.);  
+      calcFrameCoordinates(&frame1X,&frame1Y,173 - zOffset);
+      calcFrameCoordinates(&frame2X,&frame2Y,188 - zOffset);
+      calcFrameCoordinates(&frame3X,&frame3Y,198 - zOffset);       
     }
+
     if (n20_1>-1 && n1_1>-1) calcVectorTel1(n20_1, n1_1);
     if (n20_2>-1 && n1_2>-1) calcVectorTel2(n20_2, n1_2);
     if (n20_3>-1 && n1_3>-1) calcVectorTel3(n20_3, n1_3);
@@ -539,13 +552,13 @@ void MWPCprojection() {
   const Float_t fMWPCwireStepX2 = -1.25;    //step between two wires
   const Float_t fMWPCwireStepY2 = 1.25;   //step between two wires
 
-  const Float_t fMWPC1_X_offset = 0.;
-  const Float_t fMWPC1_Y_offset = 0.;
+  const Float_t fMWPC1_X_offset = -0.9;
+  const Float_t fMWPC1_Y_offset = -3;
   // const Float_t fMWPC2_X_offset = 0;
   // const Float_t fMWPC2_Y_offset = 0;
 
-  const Float_t fMWPC2_X_offset = 0.112500;
-  const Float_t fMWPC2_Y_offset = 0.537500;
+  const Float_t fMWPC2_X_offset = 0.3;
+  const Float_t fMWPC2_Y_offset = -1.55;
 
   const Float_t fMWPCz1 = -815.;  //z coordinate of the center of MWPC1
   const Float_t fMWPCz2 = -270.;  //z coordinate of the center of MWPC2
@@ -1085,16 +1098,16 @@ void readCuts() {
 void calcVectorTel1(Int_t n20, Int_t n1) {
 
   Double_t x20;
-  x20 = -(22.8625 + n20*50./16);
+  x20 = -(22.8625 + n20*50./16) + xOffset;
 
   Double_t y1;
-  y1 = 51.625 - n1*60./16;
+  y1 = 51.625 - n1*60./16 + yOffset;
 
   TVector3 tel1V;
-  tel1V.SetXYZ(x20 - fXt,y1*173./188 - fYt,173.);
+  tel1V.SetXYZ(x20 - fXt,(y1 - fYt)*(173-zOffset)/(188-zOffset),(173-zOffset));
 
   x1t = x20;
-  y1t = y1*173./188;
+  y1t = (y1 - fYt)*(173-zOffset)/(188-zOffset) + fYt;
 
   th_he3_1 = tel1V.Theta();
   phi_he3_1 = tel1V.Phi();
@@ -1105,15 +1118,15 @@ void calcVectorTel1(Int_t n20, Int_t n1) {
 void calcVectorTel2(Int_t n20, Int_t n1) {
 
   Double_t y20;
-  y20 = -(22.8625 + n20*50./16);
+  y20 = -(22.8625 + n20*50./16) + yOffset;
 
   Double_t x1;
-  x1 = -(51.625 - n1*60./16);
+  x1 = -(51.625 - n1*60./16) + xOffset;
 
   TVector3 tel1V;
-  tel1V.SetXYZ(x1*173./188 - fXt,y20 - fYt,173);
+  tel1V.SetXYZ((173-zOffset)/(188-zOffset)*(x1 - fXt),y20 - fYt,(173-zOffset));
 
-  x2t = x1*173./188;
+  x2t = (173-zOffset)/(188-zOffset)*(x1 - fXt) + fXt;
   y2t = y20;
 
   th_he3_2 = tel1V.Theta();
@@ -1125,16 +1138,16 @@ void calcVectorTel2(Int_t n20, Int_t n1) {
 void calcVectorTel3(Int_t n20, Int_t n1) {
 
   Double_t x20;
-  x20 = 22.8625 + n20*50./16;
+  x20 = 22.8625 + n20*50./16 + xOffset;
 
   Double_t y1;
-  y1 = -(51.625 - n1*60./16);
+  y1 = -(51.625 - n1*60./16) + yOffset;
 
   TVector3 tel1V;
-  tel1V.SetXYZ(x20 - fXt,y1*173./188 - fYt,173);
+  tel1V.SetXYZ(x20 - fXt,(y1 - fYt)*(173-zOffset)/(188-zOffset),(173-zOffset));
 
   x3t = x20;
-  y3t = y1*173./188;
+  y3t = (y1 - fYt)*(173-zOffset)/(188-zOffset) + fYt;
 
   th_he3_3 = tel1V.Theta();
   phi_he3_3 = tel1V.Phi();
@@ -1145,15 +1158,15 @@ void calcVectorTel3(Int_t n20, Int_t n1) {
 void calcVectorTel4(Int_t n20, Int_t n1) {
 
   Double_t y20;
-  y20 = 22.8625 + n20*50./16;
+  y20 = 22.8625 + n20*50./16 + yOffset;
 
   Double_t x1;
-  x1 = 51.625 - n1*60./16;
+  x1 = 51.625 - n1*60./16 + xOffset;
 
   TVector3 tel1V;
-  tel1V.SetXYZ(x1*173./188 - fXt,y20 - fYt,173);
+  tel1V.SetXYZ((x1 - fXt)*(173-zOffset)/(188-zOffset),y20 - fYt,(173-zOffset));
 
-  x4t = x1*173./188;
+  x4t = (x1 - fXt)*(173-zOffset)/(188-zOffset) + fXt;
   y4t = y20;
 
   th_he3_4 = tel1V.Theta();

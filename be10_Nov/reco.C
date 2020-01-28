@@ -85,8 +85,8 @@ void reco() {
 
   TChain *ch = new TChain("tree");
   // ch->Add("/media/ivan/data/exp1906/be10/analysed/full_data/be10_reco.root");
-  ch->Add("/media/ivan/data/exp1906/be10/analysed/novPars/reco/parVariation/thinDetTh/be10_ct_thick_reco.root");
-  ch->Add("/media/ivan/data/exp1906/be10/analysed/novPars/reco/parVariation/thinDetTh/be10_ct_thin_reco.root");
+  ch->Add("/media/ivan/data/exp1906/be10/analysed/novPars/reco/parVariation/beamDetTh/be10_ct_thick_reco_644.root");
+  // ch->Add("/media/ivan/data/exp1906/be10/analysed/novPars/reco/parVariation/beamDetTh/be10_ct_thin_reco_644.root");
   // ch->Add("/media/ivan/data/exp1906/be10/analysed/novPars/reco/parVariation/thinDetTh/be10_ct_thick_reco2.root");
   // ch->Add("/media/ivan/data/exp1906/be10/analysed/novPars/reco/be10_ct_thick_reco.root");
   // ch->Add("/media/ivan/data/exp1906/be10/analysed/novPars/reco/be10_ct_thin_reco.root");
@@ -210,7 +210,7 @@ void reco() {
   ch->SetBranchAddress("e_4.",&e_4);
   ch->SetBranchAddress("centE.",&centE);
 
-  TFile *fw = new TFile("/media/ivan/data/exp1906/be10/analysed/novPars/reco/parVariation/thinDetTh/be10_ct_all_mmThin.root", "RECREATE");
+  TFile *fw = new TFile("/media/ivan/data/exp1906/be10/analysed/novPars/reco/parVariation/beamDetTh/be10_ct_mm_thick_644.root", "RECREATE");
   // TFile *fw = new TFile("test.root", "RECREATE");  
   TTree *tw = new TTree("tree", "data");
  
@@ -536,7 +536,8 @@ void calculateBeam() {
   Double_t kinEnergy = mass*((1/beta) - 1);
 
 
-  kinEnergy =  f8HeSi.GetE(1000*kinEnergy, 450.8)/1000.;
+  // kinEnergy =  f8HeSi.GetE(1000*kinEnergy, 450.8)/1000.;
+  kinEnergy =  f8HeSi.GetE(1000*kinEnergy, 644.)/1000.;
   // kinEnergy = kinEnergy*0.95;
   ehe8 = kinEnergy;
   // cout << ehe8 << endl;

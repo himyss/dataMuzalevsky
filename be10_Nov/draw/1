@@ -1,89 +1,24 @@
 {
-//========= Macro generated from object: Graph/Graph
+//========= Macro generated from object: CUTG/Graph
 //========= by ROOT version6.10/08
    
-   Double_t Graph_fx1[25] = {
-   0.08,
-   0.24,
-   0.4,
-   0.56,
-   0.72,
-   0.88,
-   1.04,
-   1.2,
-   1.35618,
-   1.52,
-   1.68,
-   1.84,
-   2,
-   2.16,
-   2.32,
-   2.48,
-   2.64,
-   2.8,
-   2.96,
-   3.12,
-   3.28,
-   3.44,
-   3.6,
-   3.76,
-   3.92};
-   Double_t Graph_fy1[25] = {
-   7,
-   34,
-   70,
-   117,
-   122,
-   178,
-   180,
-   239,
-   255.062,
-   241,
-   231,
-   221,
-   201,
-   163,
-   111,
-   90,
-   75,
-   49,
-   24,
-   20,
-   15,
-   9,
-   6,
-   1,
-   1};
-   TGraph *graph = new TGraph(25,Graph_fx1,Graph_fy1);
-   graph->SetName("Graph");
-   graph->SetTitle("Graph");
-   graph->SetFillColor(1);
-   graph->SetMarkerStyle(3);
-   
-   TH1F *Graph_Graph1 = new TH1F("Graph_Graph1","Graph",100,0,4.304);
-   Graph_Graph1->SetMinimum(0.9);
-   Graph_Graph1->SetMaximum(280.4);
-   Graph_Graph1->SetDirectory(0);
-   Graph_Graph1->SetStats(0);
-
-   Int_t ci;      // for color index setting
-   TColor *color; // for color definition with alpha
-   ci = TColor::GetColor("#000099");
-   Graph_Graph1->SetLineColor(ci);
-   Graph_Graph1->GetXaxis()->SetLabelFont(42);
-   Graph_Graph1->GetXaxis()->SetLabelSize(0.035);
-   Graph_Graph1->GetXaxis()->SetTitleSize(0.035);
-   Graph_Graph1->GetXaxis()->SetTitleFont(42);
-   Graph_Graph1->GetYaxis()->SetLabelFont(42);
-   Graph_Graph1->GetYaxis()->SetLabelSize(0.035);
-   Graph_Graph1->GetYaxis()->SetTitleSize(0.035);
-   Graph_Graph1->GetYaxis()->SetTitleOffset(0);
-   Graph_Graph1->GetYaxis()->SetTitleFont(42);
-   Graph_Graph1->GetZaxis()->SetLabelFont(42);
-   Graph_Graph1->GetZaxis()->SetLabelSize(0.035);
-   Graph_Graph1->GetZaxis()->SetTitleSize(0.035);
-   Graph_Graph1->GetZaxis()->SetTitleFont(42);
-   graph->SetHistogram(Graph_Graph1);
-   
-   graph->Draw("");
+   TCutG *cutg = new TCutG("CUTG",13);
+   cutg->SetVarX("1000*(mh7-8.406868788) ");
+   cutg->SetVarY("e_1");
+   cutg->SetTitle("Graph");
+   cutg->SetFillColor(1);
+   cutg->SetPoint(0,-1.05011,11.1196);
+   cutg->SetPoint(1,-1.50932,10.0515);
+   cutg->SetPoint(2,-1.61737,9.05302);
+   cutg->SetPoint(3,-1.48231,8.01974);
+   cutg->SetPoint(4,-1.02985,7.82237);
+   cutg->SetPoint(5,-0.145192,7.93847);
+   cutg->SetPoint(6,1.48906,8.77438);
+   cutg->SetPoint(7,1.69841,9.83088);
+   cutg->SetPoint(8,1.6849,11.0848);
+   cutg->SetPoint(9,1.61062,11.793);
+   cutg->SetPoint(10,1.28647,12.0252);
+   cutg->SetPoint(11,-0.192464,11.5259);
+   cutg->SetPoint(12,-1.05011,11.1196);
+   cutg->Draw("");
 }
