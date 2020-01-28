@@ -57,22 +57,23 @@ Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4;
 Float_t e_1,e_2,e_3,e_4;
 Float_t centE;
 
-Float_t th_he3_1,th_he3_2,th_he3_3,th_he3_4,th_h3;
+Float_t th_he3_1,th_he3_2,th_he3_3,th_he3_4,th_h3,th_4n;
 Float_t phi_he3_1,phi_he3_2,phi_he3_3,phi_he3_4,phi_h3;
 
 
-TLorentzVector h3,he8,d2,he3,h7,h3CM;
+TLorentzVector h3,he8,d2,he3,h7,h3CM,h4n,hBinary;
 TLorentzVector he3CM,h7CM; // reaction CMS
-TLorentzVector he3CM_H7,h3CM_H7,h7CM_H7; // reaction CMS
+TLorentzVector he3CM_H7,h3CM_H7,h7CM_H7,h4nCM_H7,hBinary_CM; // reaction CMS
 
 Double_t phi,theta;
 Double_t momentum,energy,mass;
 
 Float_t thetah7,phih7,phih3,thetah3,phihe3,thetahe3,thetahe8;
-Float_t thetah7CM,phih7CM,phih3CM,thetah3CM,phihe3CM,thetahe3CM;
-Float_t mh7,eh7,eh3,ehe3,ehe8,eh3_CM;
+Float_t thetah7CM,phih7CM,phih3CM,thetah3CM,phihe3CM,thetahe3CM,theta4nCM;
+Float_t mh7,eh7,eh3,ehe3,ehe8,eh3_CM,m4n,e4n,e4n_CM;
 
 Float_t angle_h3_h7,angle_h3_h7CM,angle_h3_h7CMreaction,angle_he3_h7,angle_he3_he8;
+Float_t angle_n4_h3,angle_n4_h7,angle_bin_h3_CM,angle_bin_h3;
 Float_t qReaction;
 
 Int_t coincidence;
@@ -83,13 +84,13 @@ void reco(Int_t nRun=0) {
   f8HeSi.SetEL(1, 2.321); // density in g/cm3
   f8HeSi.AddEL(14., 28.086, 1);  //Z, mass
   f8HeSi.SetZP(2., 8.);   //alphas, Z, A
-  f8HeSi.SetEtab(100000, 200.); // ?, MeV calculate ranges
+  f8HeSi.SetEtab(300000, 250.); // ?, MeV calculate ranges
   f8HeSi.SetDeltaEtab(300);
 
   TChain *ch = new TChain("tree");
   TString inPutFileName;
-  // inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calcEnergies/eTarget/h7_ect_%d_reco.root",nRun);
-  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calcEnergies/thinVar/h7_ct_%d_reco.root",nRun);
+  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calcEnergies/track0/targetCut/13/h7_ct_%d_reco_newPars.root",nRun);
+  // inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calcEnergies/track0/eTarget/h7_ct_%d_reco_newPars.root",nRun);
   ch->Add(inPutFileName.Data());;
 
   cout << ch->GetEntries() << " total number of Entries" << endl;
@@ -218,7 +219,7 @@ void reco(Int_t nRun=0) {
 
   TString outPutFileName;
   // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/reco/eTarget/h7_ect_%d_mm_frame.root",nRun);
-  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/reco/thinVar/h7_ct_%d_mm_frame.root",nRun);
+  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/reco/track0/targetCut/13/h7_ct_%d_mm_frame_newPars.root",nRun);
   // outPutFileName.Form("test.root",nRun);
 
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
@@ -378,11 +379,23 @@ void reco(Int_t nRun=0) {
   tw->Branch("angle_he3_h7.",&angle_he3_h7,"angle_he3_h7/F");
   tw->Branch("angle_he3_he8.",&angle_he3_he8,"angle_he3_he8/F");
 
+  tw->Branch("m4n.",&m4n,"m4n/F");
+  tw->Branch("e4n.",&e4n,"e4n/F");
+  tw->Branch("th_4n.",&th_4n,"th_4n/F");
+
+  tw->Branch("e4n_CM.",&e4n_CM,"e4n_CM/F");
+  tw->Branch("theta4nCM.",&theta4nCM,"theta4nCM/F");
+
+  tw->Branch("angle_bin_h3_CM.",&angle_bin_h3_CM,"angle_bin_h3_CM/F");
+  tw->Branch("angle_bin_h3.",&angle_bin_h3,"angle_bin_h3/F");
+  tw->Branch("angle_n4_h7.",&angle_n4_h7,"angle_n4_h7/F");
+  tw->Branch("angle_n4_h3.",&angle_n4_h3,"angle_n4_h3/F");
+
   // input options
   d2.SetPxPyPzE(0.,0.,0.,1.875612);
 
   for(Int_t nentry = 0; nentry<ch->GetEntries();nentry++) {
-  // for(Int_t nentry = 0; nentry<20000;nentry++) {
+  // for(Int_t nentry = 0; nentry<2000000;nentry++) {
     if(nentry%1000000==0) cout << "#ENTRY " << nentry << "#" << endl;
     // cout << nentry << endl;
     ch->GetEntry(nentry);
@@ -471,6 +484,11 @@ void reco(Int_t nRun=0) {
       h7 = he8 + d2 + (-he3);
       bVect_H7 = h7.BoostVector();
 
+      hBinary.SetXYZT(he8.X()/8, he8.Y()/8, he8.Z()/8, he8.T()/8);
+      hBinary += -he3;
+      hBinary_CM = hBinary;
+      h7CM_H7.Boost(-bVect_H7);
+
       thetah7 = h7.Theta()*TMath::RadToDeg();
       phih7 = h7.Phi()*TMath::RadToDeg();
       mh7 = sqrt(h7.E()*h7.E() - h7.Px()*h7.Px() - h7.Py()*h7.Py() - h7.Pz()*h7.Pz());
@@ -527,7 +545,18 @@ void reco(Int_t nRun=0) {
         eh3_CM = h3CM_H7.T() - mass;
         thetah3CM = h3CM_H7.Theta()*TMath::RadToDeg();
         phih3CM = h3CM_H7.Phi()*TMath::RadToDeg();
-        cout << endl << 1000*eh3 << " " << 1000*eh3_CM << endl;       
+
+        h4n = he8 + d2 + (-he3) + (-h3);
+        // m4n = sqrt(h4n.E()*h4n.E() - h4n.Px()*h4n.Px() - h4n.Py()*h4n.Py() - h4n.Pz()*h4n.Pz());
+        m4n = h4n.Mag();
+        e4n = h4n.E() - m4n;
+        // e4n = h4n.Mag() - m4n;
+        th_4n = h4n.Theta()*TMath::RadToDeg();
+
+        h4nCM_H7 = h4n;
+        h4nCM_H7.Boost(-bVect_H7);
+        e4n_CM = h4nCM_H7.T() - m4n;
+        theta4nCM = h4nCM_H7.Theta()*TMath::RadToDeg();
       }
       
     } 
@@ -538,6 +567,12 @@ void reco(Int_t nRun=0) {
       angle_h3_h7CMreaction = h7CM.Angle(h3CM.Vect())*TMath::RadToDeg(); 
       angle_he3_h7 = h7.Angle(he3.Vect())*TMath::RadToDeg();
       angle_he3_he8 = he8.Angle(he3.Vect())*TMath::RadToDeg();
+
+      angle_n4_h7 = h7.Angle(h4n.Vect())*TMath::RadToDeg();
+      angle_n4_h3 = h3.Angle(h4n.Vect())*TMath::RadToDeg();
+
+      angle_bin_h3_CM = h3CM_H7.Angle(hBinary.Vect())*TMath::RadToDeg();
+      angle_bin_h3 = h3.Angle(hBinary.Vect())*TMath::RadToDeg();
     }
 
     tw->Fill();
@@ -566,7 +601,7 @@ void calculateBeam() {
   Double_t beta = sqrt(1 - (velocity*velocity/(299.792458*299.792458) ) );
   Double_t kinEnergy = mass*((1/beta) - 1);
 
-  kinEnergy =  f8HeSi.GetE(1000*kinEnergy, 450.8)/1000.;
+  kinEnergy =  f8HeSi.GetE(1000*kinEnergy, 565.5)/1000.;
   // kinEnergy = kinEnergy*0.95;
   ehe8 = kinEnergy;
 
@@ -596,6 +631,12 @@ void zerovars() {
   phih3 = -500.;
   angle_h3_h7 = -100;
 
+  angle_bin_h3_CM = -100;
+  angle_bin_h3 = -100;;
+  angle_n4_h7 = -100;
+  angle_n4_h3 = -100;
+
+  theta4nCM = -10;
   thetah7CM = -10.;
   phih7CM = -100.;
   thetah3CM = -1000.;
@@ -605,7 +646,11 @@ void zerovars() {
   qReaction = -100.;
   angle_he3_h7 = -100;
   angle_he3_he8 = -100;
+  th_4n = -100;
 
+  m4n = -1.;
+  e4n = -1.;
+  e4n_CM = -1.;
   mh7 = -1.;
   eh7 = -1.;
   eh3 = -1.;

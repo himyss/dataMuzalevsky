@@ -76,6 +76,7 @@ Double_t fThickness1[16][16],fThickness2[16][16],fThickness3[16][16],fThickness4
 
 Int_t flag1,flag2,flag3,flag4,flagCent;
 Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4;
+Int_t frame;
 
 Float_t e_1,e_2,e_3,e_4;
 Float_t centE;
@@ -91,7 +92,7 @@ void calcEnergies_frame(Int_t nRun=0) {
   TChain *ch = new TChain("tree");
 
   TString inPutFileName;
-  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/eTarget/h7_ect_%d_cut.root",nRun);
+  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/targetCut/13/h7_ct_%d_cut.root",nRun);
   ch->Add(inPutFileName.Data());
   cout << ch->GetEntries() << " total number of Entries" << endl;
   //--------------------------------------------------------------------------------
@@ -210,7 +211,7 @@ void calcEnergies_frame(Int_t nRun=0) {
 
 
   TString outPutFileName;
-  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calcEnergies/eTarget/h7_ect_%d_reco.root",nRun);
+  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calcEnergies/track0/targetCut/13/h7_ct_%d_reco_newPars.root",nRun);
 
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
   TTree *tw = new TTree("tree", "data");
@@ -338,10 +339,10 @@ void calcEnergies_frame(Int_t nRun=0) {
   // readThickness();
   setTables();
 
-  Float_t thCoeff1 = 0.9;
-  Float_t thCoeff2 = 0.99;
-  Float_t thCoeff3 = 0.95;
-  Float_t thCoeff4 = 0.84;
+  Float_t thCoeff1 = 1.;
+  Float_t thCoeff2 = 1.;
+  Float_t thCoeff3 = 1.;
+  Float_t thCoeff4 = 1.;
 
   // for(Int_t nentry = 0; nentry<1000;nentry++) {
   for(Int_t nentry = 0; nentry<ch->GetEntries();nentry++) {
@@ -370,8 +371,8 @@ void calcEnergies_frame(Int_t nRun=0) {
       e_1 = f3HeSteel->GetE0(e_1,thickness);
 
       // deuterium target
-      // thickness = 3000./cos(th_he3_1);
-      // e_1 = f3HeTarget->GetE0(e_1,thickness);
+      thickness = 3000./cos(th_he3_1);
+      e_1 = f3HeTarget->GetE0(e_1,thickness);
     }
 
     if(nhe3_2) {
@@ -394,8 +395,8 @@ void calcEnergies_frame(Int_t nRun=0) {
       e_2 = f3HeSteel->GetE0(e_2,thickness);
 
       // deuterium target
-      // thickness = 3000./cos(th_he3_2);
-      // e_2 = f3HeTarget->GetE0(e_2,thickness);
+      thickness = 3000./cos(th_he3_2);
+      e_2 = f3HeTarget->GetE0(e_2,thickness);
     }
 
     if(nhe3_3) {
@@ -417,8 +418,8 @@ void calcEnergies_frame(Int_t nRun=0) {
       e_3 = f3HeSteel->GetE0(e_3,thickness);
 
       // deuterium target
-      // thickness = 3000./cos(th_he3_3);
-      // e_3 = f3HeTarget->GetE0(e_3,thickness);
+      thickness = 3000./cos(th_he3_3);
+      e_3 = f3HeTarget->GetE0(e_3,thickness);
     }
 
     if(nhe3_4) {
@@ -440,8 +441,8 @@ void calcEnergies_frame(Int_t nRun=0) {
       e_4 = f3HeSteel->GetE0(e_4,thickness);
 
       // deuterium target
-      // thickness = 3000./cos(th_he3_4);
-      // e_4 = f3HeTarget->GetE0(e_4,thickness);
+      thickness = 3000./cos(th_he3_4);
+      e_4 = f3HeTarget->GetE0(e_4,thickness);
     }
 
     if(nh3) {
@@ -792,6 +793,7 @@ void setTables() {
 
 void zeroVars() {
 
+  frame = 0;
   centE = 0;
   e_1 = 0;
   e_2 = 0;

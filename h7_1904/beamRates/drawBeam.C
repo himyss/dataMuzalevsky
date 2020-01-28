@@ -1,78 +1,54 @@
-#include "/home/ivan/work/macro/he8_1904/beamRates/be10Cut.C"
-
 void drawBeam() {
-  
-  be10Cut();
 
-  gStyle->SetOptStat(0);
 
-  TChain *ch = new TChain("stepRepackingxTree");
-  ch->Add("/media/ivan/data/exp1904/be10/raw/be10_ct_05_1.lml.root");
+  TF2 *f2 = new TF2("f2","[0]*TMath::Gaus(x,[1],[2])*TMath::Gaus(y,[3],[4])");
+
+  // gStyle->SetOptStat(0);
+
+  TH1F *htemp1;
+  TH2F *htemp2;
+
+  TChain *ch = new TChain("tree");
+  ch->Add("/media/ivan/data/exp1906/be10/analysed/novPars/selection/parVariation/sideTel/be10_ct_thinTarget_cut_171.root");
+  ch->Add("/media/ivan/data/exp1906/be10/analysed/novPars/selection/parVariation/sideTel/be10_ct_firstVol_cut_171.root");
+  ch->Add("/media/ivan/data/exp1906/be10/analysed/novPars/selection/parVariation/sideTel/be10_ct_secondVol_cut_171.root");  
   cout << ch->GetEntries() << endl;
 
-  ch->SetMarkerStyle(7);
 
-  TCanvas *c1 = new TCanvas("c1","title",1800,1000);
-  c1->Divide(2,1);
+  TCanvas *c1 = new TCanvas("c1","title",1100,1100);
 
-  c1->cd(1);
 
-  TString F3,F5,ToF;
+  ch->Draw("fYt:fXt >> profile(64,-20,20,64,-20,20)","trigger!=1 && nX_C>0 && nY_C>0","col");
+  // htemp2 = (TH2F*)gPad->GetPrimitive("profile");
 
-  F3 = "(Beam_detector_F3.fData.fValue[0] + "; 
-  F3 = F3 + "Beam_detector_F3.fData.fValue[1] + ";
-  F3 = F3 + "Beam_detector_F3.fData.fValue[2] + ";
-  F3 = F3 + "Beam_detector_F3.fData.fValue[3])/4.";
 
-  cout << F3 << endl;
+  // gPad->SetLogz();
 
-  ToF = "0.0625*0.25*(Beam_detector_tF5.fData.fValue[0] + "; 
-  ToF = ToF + "Beam_detector_tF5.fData.fValue[1] + ";
-  ToF = ToF + "Beam_detector_tF5.fData.fValue[2] + ";
-  ToF = ToF + "Beam_detector_tF5.fData.fValue[3] - ";
+  // Float_t xCent = -0.93;
+  // Float_t yCent = 1.52;
 
-  ToF = ToF + "Beam_detector_tF3.fData.fValue[0] - "; 
-  ToF = ToF + "Beam_detector_tF3.fData.fValue[1] - ";
-  ToF = ToF + "Beam_detector_tF3.fData.fValue[2] - ";
-  ToF = ToF + "Beam_detector_tF3.fData.fValue[3])";
+  Float_t xCent = 0;
+  Float_t yCent = 0;
 
-  cout << ToF << endl;
+  TEllipse *dia = new TEllipse(xCent,yCent,12.5);
+  dia->SetLineColor(kRed);
+  dia->SetLineWidth(3);
+  dia->SetFillStyle(0); 
+  dia->Draw();
 
-  TString hdraw,hcut;
+  TLine *lh = new TLine(xCent,yCent-12.5,xCent,yCent+12.5);
+  lh->SetLineColor(kRed);
+  lh->SetLineWidth(2);
+  lh->Draw();
 
-  ch->SetMarkerColor(kBlack);
-  hdraw  = F3 + TString(":") + ToF + ">>f3(500,20,150,3000,0,3000)";
-  hcut.Form("DetEventCommon.trigger==1");
-  ch->Draw(hdraw.Data(),hcut.Data(),"");
 
-  ch->SetMarkerColor(kRed);
-  hdraw  = F3 + TString(":") + ToF + ">>f3_cut(500,20,150,3000,0,3000)";
-  hcut.Append(" && " + (TString)cutF3->GetName());
-  ch->Draw(hdraw.Data(),hcut.Data(),"same");
+  TLine *lv = new TLine(xCent-12.5,yCent,xCent+12.5,yCent);
+  lv->SetLineColor(kRed);
+  lv->SetLineWidth(2);
+  lv->Draw();
 
   c1->Update();
 
-  c1->cd(2);
-
-  F5 = "(Beam_detector_F5.fData.fValue[0] + "; 
-  F5 = F5 + "Beam_detector_F5.fData.fValue[1] + ";
-  F5 = F5 + "Beam_detector_F5.fData.fValue[2] + ";
-  F5 = F5 + "Beam_detector_F5.fData.fValue[3])/4.";
-
-  cout << F5 << endl;
-
-  cout << ToF << endl;
-
-  ch->SetMarkerColor(kBlack);
-  hdraw  = F5 + TString(":") + ToF + ">>f5(500,20,150,3000,0,3000)";
-  hcut.Form("DetEventCommon.trigger==1");
-  ch->Draw(hdraw.Data(),hcut.Data(),"");
-
-  ch->SetMarkerColor(kRed);
-  hdraw  = F5 + TString(":") + ToF + ">>f5_cut(500,20,150,3000,0,3000)";
-  hcut.Append(" && " + (TString)cutF5->GetName());
-  ch->Draw(hdraw.Data(),hcut.Data(),"same");
-
-  c1->Update();
+  // c1->Print("tranc.png");
 
 }

@@ -1,14 +1,12 @@
 
 Processing reco.C(6)...
-xtab[i0+1] 	0.0420674	ytab[i0+1] 	0.00200002
-xtab[i0+1] 	0.0420674	ytab[i0+1] 	0.00200002
-xtab[i0+1] 	0.0420674	ytab[i0+1] 	0.00200002
-xtab[i0+1] 	0.0420674	ytab[i0+1] 	0.00200002
-461883 total number of Entries
+xtab[i0+1] 	0	ytab[i0+1] 	0.00166667
+xtab[i0+1] 	0	ytab[i0+1] 	0.00166667
+xtab[i0+1] 	0	ytab[i0+1] 	0.00166667
+xtab[i0+1] 	0	ytab[i0+1] 	0.00166667
+xtab[i0+1] 	0	ytab[i0+1] 	0.00166667
+xtab[i0+1] 	0	ytab[i0+1] 	0.00166667
+xtab[i0+1] 	0.0468393	ytab[i0+1] 	0.00250001
+xtab[i0+1] 	0.0468393	ytab[i0+1] 	0.00250001
+338159 total number of Entries
 #ENTRY 0#
-
-69.723 1.66412
-
-96.2168 2.47017
-
-67.3117 1.67311
