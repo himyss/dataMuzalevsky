@@ -87,12 +87,12 @@ Float_t phi_he3_1,phi_he3_2,phi_he3_3,phi_he3_4,phi_h3;
 Float_t thickness;
 //--------------------------------------------------------------------------------
 
-void calcEnergies_frame(Int_t nRun=0) {
+void calc(Int_t nRun=0) {
 
   TChain *ch = new TChain("tree");
 
   TString inPutFileName;
-  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/targetCut/13/h7_ct_%d_cut.root",nRun);
+  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/tmp/h7_ct_%d_cut.root",nRun);
   ch->Add(inPutFileName.Data());
   cout << ch->GetEntries() << " total number of Entries" << endl;
   //--------------------------------------------------------------------------------
@@ -211,7 +211,7 @@ void calcEnergies_frame(Int_t nRun=0) {
 
 
   TString outPutFileName;
-  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calcEnergies/track0/targetCut/13/h7_ct_%d_reco_newPars.root",nRun);
+  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/tmp/h7_ct_%d_reco_newPars.root",nRun);
 
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
   TTree *tw = new TTree("tree", "data");
@@ -358,21 +358,26 @@ void calcEnergies_frame(Int_t nRun=0) {
       // e_1 = f3HeSi->GetE0(a20_1_un,4./cos(th_he3_1)) + a1_1; // 1.5 micron - DL between thin and thick sensitive areas (DL thin about 1 mik)
       // e_1 = f3HeSi->GetE0(e_1,0.5/cos(th_he3_1)); //dl of thin det
       e_1 = a1_1;
+      if (nentry<10) cout << e_1 << " ";
 
-      thickness = (fThickness1[n20_1][n1_1]*thCoeff1+1.87)/cos(th_he3_1); // 0.5 - DL of thick det
+      thickness = (fThickness1[n20_1][n1_1]*thCoeff1)/cos(th_he3_1); // 0.5 - DL of thick det
       e_1 = f3HeSi->GetE0(e_1,thickness);
+      if (nentry<10) cout << e_1 << " ";
 
       // mylar
       thickness = 3.5/cos(th_he3_1);
       e_1 = f3HeMylar->GetE0(e_1,thickness);
+      if (nentry<10) cout << e_1 << " ";
 
       // steel
       thickness = 6./cos(th_he3_1);
       e_1 = f3HeSteel->GetE0(e_1,thickness);
+      if (nentry<10) cout << e_1 << " ";
 
       // deuterium target
       thickness = 3000./cos(th_he3_1);
       e_1 = f3HeTarget->GetE0(e_1,thickness);
+      if (nentry<10) cout << e_1 << endl;
     }
 
     if(nhe3_2) {
@@ -382,21 +387,26 @@ void calcEnergies_frame(Int_t nRun=0) {
 
 
       e_2 = a1_2;
+      if (nentry>2499 && nentry<2509) cout << e_2 << " ";
 
-      thickness = (fThickness2[n20_2][n1_2]*thCoeff2+1.87)/cos(th_he3_2); // 0.5 - DL of thick det
+      thickness = (fThickness2[n20_2][n1_2]*thCoeff2)/cos(th_he3_2); // 0.5 - DL of thick det
       e_2 = f3HeSi->GetE0(e_2,thickness);
+      if (nentry>2499 && nentry<2509) cout << e_2 << " ";
 
       // mylar
       thickness = 3.5/cos(th_he3_2);
       e_2 = f3HeMylar->GetE0(e_2,thickness);
+      if (nentry>2499 && nentry<2509) cout << e_2 << " ";
 
       // steel
       thickness = 6./cos(th_he3_2);
       e_2 = f3HeSteel->GetE0(e_2,thickness);
+      if (nentry>2499 && nentry<2509) cout << e_2 << " ";
 
       // deuterium target
       thickness = 3000./cos(th_he3_2);
       e_2 = f3HeTarget->GetE0(e_2,thickness);
+      if (nentry>2499 && nentry<2509) cout << e_2 << endl;
     }
 
     if(nhe3_3) {
@@ -405,21 +415,26 @@ void calcEnergies_frame(Int_t nRun=0) {
       // e_3 = f3HeSi->GetE0(e_3,0.5/cos(th_he3_3)); //dl of thin det
 
       e_3 = a1_3;
+      if (nentry>5000 && nentry<5010) cout << e_3 << " ";
 
-      thickness = (fThickness3[n20_3][n1_3]*thCoeff3+2.53)/cos(th_he3_3); // 0.5 - DL of thick det
+      thickness = (fThickness3[n20_3][n1_3]*thCoeff3)/cos(th_he3_3); // 0.5 - DL of thick det
       e_3 = f3HeSi->GetE0(e_3,thickness);    
+      if (nentry>5000 && nentry<5010) cout << e_3 << " ";
 
       // mylar
       thickness = 3.5/cos(th_he3_3);
       e_3 = f3HeMylar->GetE0(e_3,thickness);
+      if (nentry>5000 && nentry<5010) cout << e_3 << " ";
 
       // steel
       thickness = 6./cos(th_he3_3);
       e_3 = f3HeSteel->GetE0(e_3,thickness);
+      if (nentry>5000 && nentry<5010) cout << e_3 << " ";
 
       // deuterium target
       thickness = 3000./cos(th_he3_3);
       e_3 = f3HeTarget->GetE0(e_3,thickness);
+      if (nentry>5000 && nentry<5010) cout << e_3 << endl;
     }
 
     if(nhe3_4) {
@@ -428,146 +443,28 @@ void calcEnergies_frame(Int_t nRun=0) {
       // e_4 = f3HeSi->GetE0(e_4,0.5/cos(th_he3_4)); //dl of thin det
 
       e_4 = a1_4;
+      if (nentry>7500 && nentry<7510) cout << e_4 << " ";
 
-      thickness = (fThickness4[n20_4][n1_4]*thCoeff3+2.27)/cos(th_he3_4); // 0.5 - DL of thick det
+      thickness = (fThickness4[n20_4][n1_4]*thCoeff3)/cos(th_he3_4); // 0.5 - DL of thick det
       e_4 = f3HeSi->GetE0(e_4,thickness);   
-
+      if (nentry>7500 && nentry<7510) cout << e_4 << " ";
       // mylar
       thickness = 3.5/cos(th_he3_4);
       e_4 = f3HeMylar->GetE0(e_4,thickness);
-
+      if (nentry>7500 && nentry<7510) cout << e_4 << " ";
       // steel
       thickness = 6./cos(th_he3_4);
       e_4 = f3HeSteel->GetE0(e_4,thickness);
-
+      if (nentry>7500 && nentry<7510) cout << e_4 << " ";
       // deuterium target
       thickness = 3000./cos(th_he3_4);
       e_4 = f3HeTarget->GetE0(e_4,thickness);
+      if (nentry>7500 && nentry<7510) cout << e_4 << endl;
     }
 
     if(nh3) {
       // Si
       centE = arCsI[nCsI_track] + X_C; 
-
-      // 3 plane
-      if (frame3X>12.5 || frame3X<-12.5 || frame3Y>12.5 || frame3Y<-12.5) {
-
-        if (frame3X<-12.5 && frame3Y>-12.5) { // 1 telescope
-          if (frame3X<-18.5 && frame3Y>-6.5) {  // Si sensitive area
-            centE = f3HSi->GetE0(centE,1000./cos(th_h3));
-          }
-          else { // FR4 frame
-            centE = f3HPlastic->GetE0(centE,3000./cos(th_h3));
-          }
-        }
-
-        if (frame3X<12.5 && frame3Y<-12.5) { // 2 telescope
-          if (frame3X<6.5 && frame3Y<-18.5) { // Si sensitive area
-            centE = f3HSi->GetE0(centE,1000./cos(th_h3));
-          }
-          else { // FR4 frame
-            centE = f3HPlastic->GetE0(centE,3000./cos(th_h3));
-          }
-        }
-
-        if (frame3X>12.5 && frame3Y<12.5) { // 3 telescope
-          if (frame3X>18.5 && frame3Y<6.5) { // Si sensitive area
-            centE = f3HSi->GetE0(centE,1000./cos(th_h3));
-          }
-          else { // FR4 frame
-            centE = f3HPlastic->GetE0(centE,3000./cos(th_h3));
-          }
-        }
-
-        if (frame3X>-12.5 && frame3Y>12.5) { // 4 telescope
-          if (frame3X>-6.5 && frame3Y>18.5) { // Si sensitive area
-            centE = f3HSi->GetE0(centE,1000./cos(th_h3));
-          }
-          else { // FR4 frame
-            centE = f3HPlastic->GetE0(centE,3000./cos(th_h3));
-          }
-        }
-      }
-
-      // 2 plane
-      if (frame2X>12.5 || frame2X<-12.5 || frame2Y>12.5 || frame2Y<-12.5) {
-
-        if (frame2X<-12.5 && frame2Y>-12.5) { // 1 telescope
-          if (frame2X<-18.5 && frame2Y>-6.5) {  // Si sensitive area
-            centE = f3HSi->GetE0(centE,1000./cos(th_h3));
-          }
-          else { // FR4 frame
-            centE = f3HPlastic->GetE0(centE,3000./cos(th_h3));
-          }
-        }
-
-        if (frame2X<12.5 && frame2Y<-12.5) { // 2 telescope
-          if (frame2X<6.5 && frame2Y<-18.5) { // Si sensitive area
-            centE = f3HSi->GetE0(centE,1000./cos(th_h3));
-          }
-          else { // FR4 frame
-            centE = f3HPlastic->GetE0(centE,3000./cos(th_h3));
-          }
-        }
-
-        if (frame2X>12.5 && frame2Y<12.5) { // 3 telescope
-          if (frame2X>18.5 && frame2Y<6.5) { // Si sensitive area
-            centE = f3HSi->GetE0(centE,1000./cos(th_h3));
-          }
-          else { // FR4 frame
-            centE = f3HPlastic->GetE0(centE,3000./cos(th_h3));
-          }
-        }
-
-        if (frame2X>-12.5 && frame2Y>12.5) { // 4 telescope
-          if (frame2X>-6.5 && frame2Y>18.5) { // Si sensitive area
-            centE = f3HSi->GetE0(centE,1000./cos(th_h3));
-          }
-          else { // FR4 frame
-            centE = f3HPlastic->GetE0(centE,3000./cos(th_h3));
-          }
-        }
-      }
-
-      if (frame1X>12.5 || frame1X<-12.5 || frame1Y>12.5 || frame1Y<-12.5) {
-
-        if (frame1X<-12.5 && frame1Y>-12.5) { // 1 telescope
-          if (frame1X<-21.2 && frame1Y>-3.8) {  // Si sensitive area
-            centE = f3HSi->GetE0(centE,20./cos(th_h3));
-          }
-          else { // Keramik frame
-            centE = f3HKeramic->GetE0(centE,500./cos(th_h3));
-          }
-        }
-
-        if (frame1X<12.5 && frame1Y<-12.5) { // 2 telescope
-          if (frame1X<3.8 && frame1Y<-21.2) {  // Si sensitive area
-            centE = f3HSi->GetE0(centE,20./cos(th_h3));
-          }
-          else { // Keramik frame
-            centE = f3HKeramic->GetE0(centE,500./cos(th_h3));
-          }
-        }
-
-        if (frame1X>12.5 && frame1Y<12.5) { // 3 telescope
-          if (frame1X>21.2 && frame1Y<3.8) {  // Si sensitive area
-            centE = f3HSi->GetE0(centE,20./cos(th_h3));
-          }
-          else { // Keramik frame
-            centE = f3HKeramic->GetE0(centE,500./cos(th_h3));
-          }
-        }
-
-        if (frame1X>-12.5 && frame1Y>12.5) { // 3 telescope
-          if (frame1X>-3.8 && frame1Y>21.2) {  // Si sensitive area
-            centE = f3HSi->GetE0(centE,20./cos(th_h3));
-          }
-          else { // Keramik frame
-            centE = f3HKeramic->GetE0(centE,500./cos(th_h3));
-          }
-        }
-
-      }
 
       // mylar
       thickness = 3.5/cos(th_h3);
@@ -594,7 +491,7 @@ void calcEnergies_frame(Int_t nRun=0) {
 
 void readThickness() {
   cout << "thickness of the first detector " << endl;
-  TFile *f1 = new TFile("/home/ivan/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_1_real.root","READ");
+  TFile *f1 = new TFile("/home/ivan/work/macro/h7_1asd904/parameters/thicknessMap_calib_90_all_SSD_1m_1_real.root","READ");
   if (f1->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -618,7 +515,7 @@ void readThickness() {
   delete f1;
 
   cout  << endl << "thickness of the SECOND detector " << endl;
-  TFile *f2 = new TFile("/home/ivan/work/macro/h7_1904/parameters/thicknessMap_alltel_90_SSD_1m_2_real.root","READ");
+  TFile *f2 = new TFile("/home/ivan/work/macro/h7_1904asd/parameters/thicknessMap_alltel_90_SSD_1m_2_real.root","READ");
   if (f2->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -643,7 +540,7 @@ void readThickness() {
 
 
   cout  << endl << "thickness of the THIRD detector " << endl;
-  TFile *f3 = new TFile("/home/ivan/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_3_switch_new.root","READ");
+  TFile *f3 = new TFile("/home/ivan/work/macro/h7_19asd04/parameters/thicknessMap_calib_90_all_SSD_1m_3_switch_new.root","READ");
   if (f3->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -668,7 +565,7 @@ void readThickness() {
 
 
   cout  << endl << "thickness of the FOURTH detector " << endl;
-  TFile *f4 = new TFile("/home/ivan/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_4_real.root","READ");
+  TFile *f4 = new TFile("/home/ivan/work/macro/h7_asd1904/parameters/thicknessMap_calib_90_all_SSD_1m_4_real.root","READ");
   if (f4->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {

@@ -18,7 +18,7 @@ void drawCut(){
   readCuts();
   // return;
   gStyle->SetOptStat(0);
-  Bool_t tritium = 1;
+  Bool_t tritium = 0;
   Bool_t he3_1 = 0;
   Bool_t he3_2 = 0;
   Bool_t he3_3 = 0;
@@ -27,11 +27,13 @@ void drawCut(){
   Bool_t target = 0;
   Bool_t centtimes = 0;
   Bool_t CsI_tracking = 0;
+  Bool_t tSQ20 = 0;
+  Bool_t tSQThick = 1;
 
 
   TChain *ch = new TChain("tree");
 
-  ch->Add("/media/ivan/data/exp1904/analysed/novPars/reco/track0/h7_ct_*_mm_frame_newPars.root");
+  ch->Add("/media/ivan/data/exp1904/analysed/novPars/reco/track0/targetCut/13/h7_ct_*_mm_frame_newPars.root");
   cout << ch->GetEntries() << endl;
 
 
@@ -468,6 +470,79 @@ void drawCut(){
     ch->Draw("nCsI-nCsI_track","flagCent","");
 
   }
+
+
+  if (tSQ20) {
+
+    TCanvas *c_sq20 = new TCanvas("c_sq20","",1000,1800);
+    c_sq20->Divide(2,2);
+
+    c_sq20->cd(1);
+    ch->SetMarkerColor(kBlack);
+    ch->Draw("a20_1:t20_1-tF5","","",1000000,0);
+
+    ch->SetMarkerColor(kRed);
+    ch->Draw("a20_1:t20_1-tF5","flag1","same",1000000,0);
+
+    c_sq20->cd(2);
+    ch->SetMarkerColor(kBlack);
+    ch->Draw("a20_2:t20_2-tF5","","",1000000,0);
+
+    ch->SetMarkerColor(kRed);
+    ch->Draw("a20_2:t20_2-tF5","flag2","same",1000000,0);
+
+    c_sq20->cd(3);
+    ch->SetMarkerColor(kBlack);
+    ch->Draw("a20_3:t20_3-tF5","","",1000000,0);
+
+    ch->SetMarkerColor(kRed);
+    ch->Draw("a20_3:t20_3-tF5","flag3","same",1000000,0);
+
+    c_sq20->cd(4);
+    ch->SetMarkerColor(kBlack);
+    ch->Draw("a20_4:t20_4-tF5","","",1000000,0);
+
+    ch->SetMarkerColor(kRed);
+    ch->Draw("a20_4:t20_4-tF5","flag4","same",1000000,0);
+  }
+
+  if (tSQThick) {
+
+    TCanvas *c_sqthick = new TCanvas("c_sqthick","",1000,1800);
+    c_sqthick->Divide(2,2);
+
+    c_sqthick->cd(1);
+    ch->SetMarkerColor(kBlack);
+    ch->Draw("a1_1:t1_1-tF5","","",1000000,0);
+
+    ch->SetMarkerColor(kRed);
+    ch->Draw("a1_1:t1_1-tF5","flag1","same",1000000,0);
+
+    c_sqthick->cd(2);
+    ch->SetMarkerColor(kBlack);
+    ch->Draw("a1_2:t1_2-tF5","","",1000000,0);
+
+    ch->SetMarkerColor(kRed);
+    ch->Draw("a1_2:t1_2-tF5","flag2","same",1000000,0);
+
+    c_sqthick->cd(3);
+    ch->SetMarkerColor(kBlack);
+    ch->Draw("a1_3:t1_3-tF5","","",1000000,0);
+
+    ch->SetMarkerColor(kRed);
+    ch->Draw("a1_3:t1_3-tF5","flag3","same",1000000,0);
+
+    c_sqthick->cd(4);
+    ch->SetMarkerColor(kBlack);
+    ch->Draw("a1_4:t1_4-tF5","","",1000000,0);
+
+    ch->SetMarkerColor(kRed);
+    ch->Draw("a1_4:t1_4-tF5","flag4","same",1000000,0);
+    c_sqthick->Update();
+  }
+
+
+
 
 }
 

@@ -14,7 +14,7 @@ void drawSetup() {
   TString cutTriangle2("(eh3_CM*1000>(1000*(mh7-4*0.939565-2.808920)*2/7.))");
 
   TChain *ch1 = new TChain("tree"); //e4
-  ch1->Add("/media/ivan/data/exp1904/analysed/novPars/reco/track0/h7_ct_*_mm_frame_newPars.root");
+  ch1->Add("/media/ivan/data/exp1904/analysed/novPars/reco/track0/targetCut/13/h7_ct_*_mm_frame_newPars.root");
 
 
   TCanvas *c_Profile = new TCanvas("c_Profile","title",1000,1000);
@@ -29,7 +29,7 @@ void drawSetup() {
   c_Profile->Update();
 
   hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) ) && ");
-  hCut += cutTriangle2;
+  hCut += cutTriangle;
   ch1->SetMarkerColor(kRed);
   ch1->Draw("y1c:x1c",hCut.Data(),"same");
   c_Profile->Update();
@@ -42,7 +42,7 @@ void drawSetup() {
   c_Profile->Update();
 
   hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) ) && ");
-  hCut += cutTriangle2;
+  hCut += cutTriangle;
   ch1->SetMarkerColor(kRed);
   ch1->Draw("y2c:x2c",hCut.Data(),"same");
   c_Profile->Update();
@@ -55,7 +55,7 @@ void drawSetup() {
   c_Profile->Update();
 
   hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) ) && ");
-  hCut += cutTriangle2;
+  hCut += cutTriangle;
   ch1->SetMarkerColor(kRed);
   ch1->Draw("fYt:fXt",hCut.Data(),"same");
   c_Profile->Update();
@@ -67,55 +67,55 @@ void drawSetup() {
   c_Profile->Update();
 
   hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) ) && ");
-  hCut += cutTriangle2;
+  hCut += cutTriangle;
   ch1->SetMarkerColor(kRed);
   ch1->Draw("yCt:xCt",hCut.Data(),"same");
   c_Profile->Update();
 
-  TCanvas *c_Frames = new TCanvas("c_Frames","title",1800,600);
-  c_Frames->Divide(3,1);
+//   TCanvas *c_Frames = new TCanvas("c_Frames","title",1800,600);
+//   c_Frames->Divide(3,1);
 
-  c_Frames->cd(1);
+//   c_Frames->cd(1);
 
-  ch1->SetMarkerColor(kBlack);
-  hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-  ch1->Draw("frame1Y:frame1X >> frame1Profile(32,-32,32,32,-32,32)",hCut.Data(),"");
-  c_Frames->Update();
+//   ch1->SetMarkerColor(kBlack);
+//   hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
+//   ch1->Draw("frame1Y:frame1X >> frame1Profile(32,-32,32,32,-32,32)",hCut.Data(),"");
+//   c_Frames->Update();
 
-  hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) ) && ");
-  hCut += cutTriangle2;
-  ch1->SetMarkerColor(kRed);
-  ch1->Draw("frame1Y:frame1X",hCut.Data(),"same");
-  c_Frames->Update();
+//   hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) ) && ");
+//   hCut += cutTriangle;
+//   ch1->SetMarkerColor(kRed);
+//   ch1->Draw("frame1Y:frame1X",hCut.Data(),"same");
+//   c_Frames->Update();
 
 
-  c_Frames->cd(2);
+//   c_Frames->cd(2);
 
-  ch1->SetMarkerColor(kBlack);
-  hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-  ch1->Draw("frame2Y:frame2X >> frame2Profile(32,-32,32,32,-32,32)",hCut.Data(),"");
-  c_Frames->Update();
+//   ch1->SetMarkerColor(kBlack);
+//   hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
+//   ch1->Draw("frame2Y:frame2X >> frame2Profile(32,-32,32,32,-32,32)",hCut.Data(),"");
+//   c_Frames->Update();
 
-  hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) ) && ");
-  hCut += cutTriangle2;
-  ch1->SetMarkerColor(kRed);
-  ch1->Draw("frame2Y:frame2X",hCut.Data(),"same");
-  c_Frames->Update();
+//   hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) ) && ");
+//   hCut += cutTriangle;
+//   ch1->SetMarkerColor(kRed);
+//   ch1->Draw("frame2Y:frame2X",hCut.Data(),"same");
+//   c_Frames->Update();
 
-  c_Frames->cd(3);
+//   c_Frames->cd(3);
 
-  ch1->SetMarkerColor(kBlack);
-  hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-  ch1->Draw("frame3Y:frame3X >> frame3Profile(32,-32,32,32,-32,32)",hCut.Data(),"");
-  c_Frames->Update();
+//   ch1->SetMarkerColor(kBlack);
+//   hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
+//   ch1->Draw("frame3Y:frame3X >> frame3Profile(32,-32,32,32,-32,32)",hCut.Data(),"");
+//   c_Frames->Update();
 
-  hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) ) && ");
-  hCut += cutTriangle2;
-  ch1->SetMarkerColor(kRed);
-  ch1->Draw("frame2Y:frame2X",hCut.Data(),"same");
-  c_Frames->Update();
+//   hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) ) && ");
+//   hCut += cutTriangle;
+//   ch1->SetMarkerColor(kRed);
+//   ch1->Draw("frame2Y:frame2X",hCut.Data(),"same");
+//   c_Frames->Update();
 
-return;
+// return;
 
   TCanvas *setupCan = new TCanvas("setupCan","reconstruction scheme",1000,1000);
   setupCan->cd();
@@ -166,7 +166,7 @@ return;
 
   cout << ch1->Draw(hDraw.Data(),hCut.Data(),"same") << endl;
   setupCan->Update();
-
+return;
   ch1->SetMarkerColor(kRed);
   ch1->SetMarkerSize(0.8);
   hDraw.Form("y2t:x2t >> distr2");
@@ -408,9 +408,11 @@ return;
 
 void setLinesBorders() {
 
-  Float_t xOffset = 1.53;
-  Float_t yOffset = 2.24;
-  // Float_t zOffset = 1.17876;
+  Float_t xOffset = 0.55;
+  Float_t yOffset = 1.33;
+
+  Float_t xOffset_cent = 0;
+  Float_t yOffset_cent = 1.18;
 
   lSide[0] = new TLine(-21.3+xOffset,-4.2+yOffset,-71.3+xOffset,-4.2+yOffset);
   lSide[1] = new TLine(-71.3+xOffset,-4.2+yOffset,-71.3+xOffset,45.8+yOffset);
@@ -432,15 +434,15 @@ void setLinesBorders() {
   lSide[14] = new TLine(45.8+xOffset,71.3+yOffset,-4.2+xOffset,71.3+yOffset);
   lSide[15] = new TLine(-4.2+xOffset,71.3+yOffset,-4.2+xOffset,21.3+yOffset);
 
-  lCent[0] = new TLine(-32,-32,32,-32);
-  lCent[1] = new TLine(32,-32,32,32);
-  lCent[2] = new TLine(32,32,-32,32);
-  lCent[3] = new TLine(-32,32,-32,-32);
+  lCent[0] = new TLine(-32+xOffset_cent,-32+yOffset_cent,32+xOffset_cent,-32+yOffset_cent);
+  lCent[1] = new TLine(32+xOffset_cent,-32+yOffset_cent,32+xOffset_cent,32+yOffset_cent);
+  lCent[2] = new TLine(32+xOffset_cent,32+yOffset_cent,-32+xOffset_cent,32+yOffset_cent);
+  lCent[3] = new TLine(-32+xOffset_cent,32+yOffset_cent,-32+xOffset_cent,-32+yOffset_cent);
 
-  lHol[0] = new TLine(-12.5,-12.5,12.5,-12.5);
-  lHol[1] = new TLine(12.5,-12.5,12.5,12.5);
-  lHol[2] = new TLine(12.5,12.5,-12.5,12.5);
-  lHol[3] = new TLine(-12.5,12.5,-12.5,-12.5);
+  lHol[0] = new TLine(-12.5+xOffset,-12.5+yOffset,12.5+xOffset,-12.5+yOffset);
+  lHol[1] = new TLine(12.5+xOffset,-12.5+yOffset,12.5+xOffset,12.5+yOffset);
+  lHol[2] = new TLine(12.5+xOffset,12.5+yOffset,-12.5+xOffset,12.5+yOffset);
+  lHol[3] = new TLine(-12.5+xOffset,12.5+yOffset,-12.5+xOffset,-12.5+yOffset);
 
 
 

@@ -71,8 +71,6 @@ Double_t momentum,energy,mass;
 Float_t thetah7,phih7,phih3,thetah3,phihe3,thetahe3,thetahe8;
 Float_t thetah7CM,phih7CM,phih3CM,thetah3CM,phihe3CM,thetahe3CM,theta4nCM;
 Float_t mh7,eh7,eh3,ehe3,ehe8,eh3_CM,m4n,e4n,e4n_CM;
-Float_t v_he3,tof_he3;
-
 
 Float_t angle_h3_h7,angle_h3_h7CM,angle_h3_h7CMreaction,angle_he3_h7,angle_he3_he8;
 Float_t angle_n4_h3,angle_n4_h7,angle_bin_h3_CM,angle_bin_h3;
@@ -91,7 +89,7 @@ void reco(Int_t nRun=0) {
 
   TChain *ch = new TChain("tree");
   TString inPutFileName;
-  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calcEnergies/track0/targetCut/13/h7_ct_%d_reco_newPars.root",nRun);
+  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/tmp/h7_ct_%d_reco_newPars.root",nRun);
   // inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calcEnergies/track0/eTarget/h7_ct_%d_reco_newPars.root",nRun);
   ch->Add(inPutFileName.Data());;
 
@@ -221,7 +219,7 @@ void reco(Int_t nRun=0) {
 
   TString outPutFileName;
   // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/reco/eTarget/h7_ect_%d_mm_frame.root",nRun);
-  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/reco/track0/targetCut/13/h7_ct_%d_mm_frame_newPars.root",nRun);
+  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/tmp/h7_ct_%d_mm_newPars.root",nRun);
   // outPutFileName.Form("test.root",nRun);
 
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
@@ -372,9 +370,6 @@ void reco(Int_t nRun=0) {
   tw->Branch("ehe3.",&ehe3,"ehe3/F");
   tw->Branch("ehe8.",&ehe8,"ehe8/F");
 
-  tw->Branch("v_he3.",&v_he3,"v_he3/F");
-  tw->Branch("tof_he3.",&tof_he3,"tof_he3/F");
-
   // tw->Branch("qReaction.",&qReaction,"qReaction/F");
 
   tw->Branch("angle_h3_h7.",&angle_h3_h7,"angle_h3_h7/F");
@@ -404,9 +399,6 @@ void reco(Int_t nRun=0) {
     if(nentry%1000000==0) cout << "#ENTRY " << nentry << "#" << endl;
     // cout << nentry << endl;
     ch->GetEntry(nentry);
-
-    if ( (fXt*fXt + fYt*fYt)>9*9 ) continue;
-
     zerovars();
 
     if (trigger==2) {
@@ -473,6 +465,12 @@ void reco(Int_t nRun=0) {
 
       if(coincidence!=1) continue;
       // energy = leftE4/1000.;
+
+      // energy = 9.54247/1000.;
+      // theta = 14.04*TMath::DegToRad();
+      // phi = 0;
+
+
       mass = 2.808391;  //MeV
 
       // TVector3 dir;
@@ -488,8 +486,6 @@ void reco(Int_t nRun=0) {
       thetahe3 = he3.Theta()*TMath::RadToDeg();
       phihe3 = he3.Phi()*TMath::RadToDeg();
       ehe3 = he3.T() - mass;
-      v_he3 = sqrt(1-(mass/he3.T()*(mass/he3.T())) )*299.792458; // mm per nanosec
-      tof_he3 = sqrt( (x1t - fXt)*(x1t - fXt) + (y1t - fYt)*(y1t - fYt) )/(v_he3);
 
       h7 = he8 + d2 + (-he3);
       bVect_H7 = h7.BoostVector();
@@ -603,6 +599,9 @@ void calculateBeam() {
   phi = dir.Phi();
   theta = dir.Theta();
 
+  theta = 0;
+  phi = 0;
+
   Double_t len = dir.Mag();
 
   mass = 7.482538;
@@ -613,6 +612,7 @@ void calculateBeam() {
 
   kinEnergy =  f8HeSi.GetE(1000*kinEnergy, 565.5)/1000.;
   // kinEnergy = kinEnergy*0.95;
+  kinEnergy = 0.2;
   ehe8 = kinEnergy;
 
   // cout << ehe8 << endl;
@@ -631,10 +631,6 @@ void calculateBeam() {
 }
 
 void zerovars() {
-
-  v_he3 = 0;
-  tof_he3 = 0;
-
   sideY = 0;
   sideX = 0;
 

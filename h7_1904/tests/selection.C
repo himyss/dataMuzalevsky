@@ -153,9 +153,9 @@ void selection(Int_t nFile=0) {
   // xOffset = -0.12;
   // yOffset = 3.63;
   
-  xOffset = 0.55;
-  yOffset = 1.33;
-  zOffset = 2;
+  xOffset =0;
+  yOffset =0;
+  zOffset =0;
 
 
   f3HSi = new TELoss();
@@ -249,9 +249,7 @@ void selection(Int_t nFile=0) {
 
   TString outPutFileName;
   // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/beamDiagnostics/selected/h7_ct_%d_cut_newPars.root",nFile);
-  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/targetCut/13/h7_ct_%d_cut.root",nFile);
-  // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/targetCut/13/h7_ct_%d_cut.root",nFile);
-  // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/test.root",nFile);
+  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/tmp/h7_ct_%d_cut.root",nFile);
 
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
   // TFile *fw = new TFile("test.root", "RECREATE");
@@ -382,70 +380,88 @@ void selection(Int_t nFile=0) {
   xCent = 0;
   yCent = 0;
 
-  for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
-  // for(Int_t nentry=0;nentry<10000;nentry++) {     
+  // for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
+  for(Int_t nentry=0;nentry<10000;nentry++) {     
     if(nentry%1000000==0) cout << "#ENTRY " << nentry << "#" << endl;
 
     ch->GetEntry(nentry);
 
-    if (trigger==1) continue;
-
-    // // tmp recalibration
-    // for(Int_t i=0;i<16;i++) {
-    //   SQ20_2[i] = ((SQ20_2[i] - pSQ202_1[i])/pSQ202_2[i])*pSQ202_2_new[i] + pSQ202_1_new[i];
-    // }
-
     zeroVars();
 
-    MWPCprojection();
-    if ( ((fXt-xCent)*(fXt-xCent) + (fYt-yCent)*(fYt-yCent))>13*13 ) continue;
+    // DSD_Cselect();
 
-    fillSi();
+    flag1 = 0;
+    flag2 = 0;
+    flag3 = 0;
+    flag4 = 0;
+    flagCent = 1;
+    nh3 = 1;
 
-    if (nX_C>-1 && nY_C>-1) {
-      calcVectorCent(nX_C,nY_C);
-      calcFrameCoordinates(&frame1X,&frame1Y,173 - zOffset);
-      calcFrameCoordinates(&frame2X,&frame2Y,188 - zOffset);
-      calcFrameCoordinates(&frame3X,&frame3Y,198 - zOffset);       
+    if (nentry<2500) {
+      flag1 = 1;
+      trigger = 2;
+      n20_1 = 12;
+      n1_1 = 3;
+      nhe3_1 = 1;
+      a20_1 = 1;
+      a1_1 = 15;
+      fXt = 0;
+      fYt = 0;
     }
 
-    // tmp swich the positions of the strips
-    switch (n20_3) {
-      case 7:
-        n20_3=8;
-        break;
-      case 8:
-        n20_3=7;
-        break;
-      default:
-        break;
-    }
-    
-    timesSQ20();
-    timesSQ1();
-
-    if (multCsI>0){
-      CsI_max();
-      trackCsI();
-      CsItimes();
+    if (nentry>2499 && nentry<5000) {
+      flag2 = 1;
+      trigger = 3;
+      n20_2 = 12;
+      n1_2 = 3;
+      nhe3_2 = 1;
+      a20_2 = 1;
+      a1_2 = 15;
+      fXt = 0;
+      fYt = 0;
     }
 
-    DSD_Cselect();
+    if (nentry>5000 && nentry<7499) {
+      flag3 = 1;
+      trigger = 4;
+      n20_3 = 12;
+      n1_3 = 3;
+      nhe3_3 = 1;
+      a20_3 = 1;
+      a1_3 = 15;
+      fXt = 0;
+      fYt = 0;
+    }
+
+    if (nentry>7500) {
+      flag4 = 1;
+      trigger = 5;
+      n20_4 = 12;
+      n1_4 = 3;
+      nhe3_4 = 1;
+      a20_4 = 1;
+      a1_4 = 15;
+      fXt = 0;
+      fYt = 0;
+    }
+
+    x1c = 0;
+    x2c = 0;
+    y1c = 0;
+    y2c = 0;
 
     if (flag1) calcVectorTel1(n20_1, n1_1);
     if (flag2) calcVectorTel2(n20_2, n1_2);
     if (flag3) calcVectorTel3(n20_3, n1_3);
     if (flag4) calcVectorTel4(n20_4, n1_4);
 
-    correct();
-    checkHe3();
+    if (nentry<10) cout << th_he3_1 << endl;
+    if (nentry>2499 && nentry<2509) cout << th_he3_2 << endl;
+    if (nentry>5000 && nentry<5010) cout << th_he3_3 << endl;
+    if (nentry>7500 && nentry<7510) cout << th_he3_4 << endl;
 
-    if (flagCent) triton();
+    // if (flagCent) triton();
 
-    // if (nCsI>-1) aCsI = aCsI*pCsI_2[nCsI] + pCsI_1[nCsI];
-    // for (Int_t i=0;i<16;i++) {
-    //   arCsI[i] = arCsI[i]*pCsI_2[i] + pCsI_1[i];
-    // }
 
     tw->Fill();
   }
@@ -1011,13 +1027,13 @@ void timesSQ1() {
   // if(n1_1>-1 && !cutSQ1_1[n1_1]->IsInside(t1_1-tF5, a1_1)) {  
   //   flag1 = 0;  
   // }
-  if (t1_1-tF5 < 0 || t1_1-tF5>60) flag1=0;
+  if (t1_1-tF5 < 0 && t1_1-tF5>60) flag1=0;
 
-  if (t1_2-tF5 < 0 || t1_2-tF5>60) flag2=0;
+  if (t1_2-tF5 < 0 && t1_2-tF5>60) flag2=0;
 
-  if (t1_3-tF5 < 0 || t1_3-tF5>60) flag3=0;
+  if (t1_3-tF5 < 0 && t1_3-tF5>60) flag3=0;
 
-  if (t1_4-tF5 < -100 || t1_4-tF5>200) flag4=0;
+  if (t1_4-tF5 < -100 && t1_4-tF5>200) flag4=0;
 
 }  
 
@@ -1123,14 +1139,20 @@ void calcVectorTel1(Int_t n20, Int_t n1) {
   Double_t x20;
   x20 = -(22.8625 + n20*50./16) + xOffset;
 
+  // cout << x20 << " ";
+
   Double_t y1;
   y1 = 51.625 - n1*60./16 + yOffset;
+
+  // cout << y1 << endl;
 
   TVector3 tel1V;
   tel1V.SetXYZ(x20 - fXt,(y1 - fYt)*(173-zOffset)/(188-zOffset),(173-zOffset));
 
   x1t = x20;
   y1t = (y1 - fYt)*(173-zOffset)/(188-zOffset) + fYt;
+
+  // cout << x1t << " " << y1t << endl;
 
   th_he3_1 = tel1V.Theta();
   phi_he3_1 = tel1V.Phi();

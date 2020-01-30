@@ -31,7 +31,7 @@ void drawAngles(){
 
   TChain *ch1 = new TChain("tree"); //e4
   // ch1->Add("/media/ivan/data/exp1904/analysed/novPars/reco/eTarget/h7_ect_*_mm_frame.root");
-  ch1->Add("/media/ivan/data/exp1904/analysed/novPars/reco/track0/h7_ct_*_mm_frame_newPars.root");
+  ch1->Add("/media/ivan/data/exp1904/analysed/novPars/reco/track0/targetCut/13/h7_ct_*_mm_frame_newPars.root");
   // ch1->Add("/media/ivan/data/exp1904/analysed/novPars/reco/track0/h7_ct_*_mm_frame_newPars.root");
 
 
@@ -754,12 +754,12 @@ return;
         // // cut.Form("(nhe3_2 && e_2<25)  && nh3");
         // // cut += " && " + cutTriangle;
 
-        // cut += " && frame1X<12.5 && frame1X>-12.5";
-        // cut += " && frame1Y<12.5 && frame1Y>-12.5";
-        // cut += " && frame2X<12.5 && frame2X>-12.5";
-        // cut += " && frame2Y<12.5 && frame2Y>-12.5";
-        // cut += " && frame3X<12.5 && frame3X>-12.5";
-        // cut += " && frame3Y<12.5 && frame3Y>-12.5"; 
+        // cut += " && frame1X<13.05 && frame1X>-11.95";
+        // cut += " && frame1Y<13.83 && frame1Y>-11.17";
+        // cut += " && frame2X<13.05 && frame2X>-11.95";
+        // cut += " && frame2Y<13.83 && frame2Y>-11.17";
+        // cut += " && frame3X<13.05 && frame3X>-11.95";
+        // cut += " && frame3Y<13.83 && frame3Y>-11.17"; 
 
         // cut += " && " + cutTriangle;
 
@@ -798,12 +798,12 @@ return;
         // // cut.Form("(nhe3_2 && e_2<25)  && nh3");
         // cut += " && " + cutTriangle;
 
-        // cut += " && frame1X<12.5 && frame1X>-12.5";
-        // cut += " && frame1Y<12.5 && frame1Y>-12.5";
-        // cut += " && frame2X<12.5 && frame2X>-12.5";
-        // cut += " && frame2Y<12.5 && frame2Y>-12.5";
-        // cut += " && frame3X<12.5 && frame3X>-12.5";
-        // cut += " && frame3Y<12.5 && frame3Y>-12.5";                
+        // cut += " && frame1X<13.05 && frame1X>-11.95";
+        // cut += " && frame1Y<13.83 && frame1Y>-11.17";
+        // cut += " && frame2X<13.05 && frame2X>-11.95";
+        // cut += " && frame2Y<13.83 && frame2Y>-11.17";
+        // cut += " && frame3X<13.05 && frame3X>-11.95";
+        // cut += " && frame3Y<13.83 && frame3Y>-11.17";                
 
         // // cut += " &&  ((fXt-0.5)*(fXt-0.5) + (fYt-1)*(fYt-1))<8*8";
         // ch1->Draw("thetah7CM:1000*(mh7-4*0.939565-2.808920) >> rAngleCut_sq",cut.Data(),"same",nEvents,0);
@@ -1208,12 +1208,12 @@ return;
 
         ch1->SetMarkerColor(kBlue);
         cut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        cut += " && frame1X<12.5 && frame1X>-12.5";
-        cut += " && frame1Y<12.5 && frame1Y>-12.5";
-        cut += " && frame2X<12.5 && frame2X>-12.5";
-        cut += " && frame2Y<12.5 && frame2Y>-12.5";
-        cut += " && frame3X<12.5 && frame3X>-12.5";
-        cut += " && frame3Y<12.5 && frame3Y>-12.5"; 
+        cut += " && frame1X<13.05 && frame1X>-11.95";
+        cut += " && frame1Y<13.83 && frame1Y>-11.17";
+        cut += " && frame2X<13.05 && frame2X>-11.95";
+        cut += " && frame2Y<13.83 && frame2Y>-11.17";
+        cut += " && frame3X<13.05 && frame3X>-11.95";
+        cut += " && frame3Y<13.83 && frame3Y>-11.17"; 
         cout << ch1->Draw("eh3_CM:eh3",cut.Data(),"same") << endl;
         tAngle->Update();
 
@@ -1278,12 +1278,12 @@ return;
         // cut += " && thetah3CM<60";
         // cut += " && thetah7CM>17";
 
-        // cut += " && frame1X<12.5 && frame1X>-12.5";
-        // cut += " && frame1Y<12.5 && frame1Y>-12.5";
-        // cut += " && frame2X<12.5 && frame2X>-12.5";
-        // cut += " && frame2Y<12.5 && frame2Y>-12.5";
-        // cut += " && frame3X<12.5 && frame3X>-12.5";
-        // cut += " && frame3Y<12.5 && frame3Y>-12.5"; 
+        // cut += " && frame1X<13.05 && frame1X>-11.95";
+        // cut += " && frame1Y<13.83 && frame1Y>-11.17";
+        // cut += " && frame2X<13.05 && frame2X>-11.95";
+        // cut += " && frame2Y<13.83 && frame2Y>-11.17";
+        // cut += " && frame3X<13.05 && frame3X>-11.95";
+        // cut += " && frame3Y<13.83 && frame3Y>-11.17"; 
 
         // cout << ch1->Draw("1000*(mh7-4*0.939565-2.808920)>>nn_cut_angle_r_fr(20,-4,21)",cut.Data(),"same") << endl;
         // hMM_3h->Update();                
@@ -1324,12 +1324,12 @@ return;
         // cut += " && " + cutTriangle;
         // cut += " && thetah3CM<60";
         // cut += " && thetah7CM>17"; 
-        // cut += " && frame1X<12.5 && frame1X>-12.5";
-        // cut += " && frame1Y<12.5 && frame1Y>-12.5";
-        // cut += " && frame2X<12.5 && frame2X>-12.5";
-        // cut += " && frame2Y<12.5 && frame2Y>-12.5";
-        // cut += " && frame3X<12.5 && frame3X>-12.5";
-        // cut += " && frame3Y<12.5 && frame3Y>-12.5";         
+        // cut += " && frame1X<13.05 && frame1X>-11.95";
+        // cut += " && frame1Y<13.83 && frame1Y>-11.17";
+        // cut += " && frame2X<13.05 && frame2X>-11.95";
+        // cut += " && frame2Y<13.83 && frame2Y>-11.17";
+        // cut += " && frame3X<13.05 && frame3X>-11.95";
+        // cut += " && frame3Y<13.83 && frame3Y>-11.17";         
         // cout << ch1->Draw("eh3_CM*1000:1000*(mh7-4*0.939565-2.808920)",cut.Data(),"same") << endl;
         // hMM_3h->Update();
 
@@ -1365,12 +1365,12 @@ return;
         // cut += " && " + cutTriangle;
         // cut += " && thetah3CM<60";
         // cut += " && thetah7CM>17";  
-        // cut += " && frame1X<12.5 && frame1X>-12.5";
-        // cut += " && frame1Y<12.5 && frame1Y>-12.5";
-        // cut += " && frame2X<12.5 && frame2X>-12.5";
-        // cut += " && frame2Y<12.5 && frame2Y>-12.5";
-        // cut += " && frame3X<12.5 && frame3X>-12.5";
-        // cut += " && frame3Y<12.5 && frame3Y>-12.5";                
+        // cut += " && frame1X<13.05 && frame1X>-11.95";
+        // cut += " && frame1Y<13.83 && frame1Y>-11.17";
+        // cut += " && frame2X<13.05 && frame2X>-11.95";
+        // cut += " && frame2Y<13.83 && frame2Y>-11.17";
+        // cut += " && frame3X<13.05 && frame3X>-11.95";
+        // cut += " && frame3Y<13.83 && frame3Y>-11.17";                 
         // cout << ch1->Draw("thetah3CM >> angle_cut_r_fr",cut.Data(),"same") << endl;
         // hMM_3h->Update(); 
 
