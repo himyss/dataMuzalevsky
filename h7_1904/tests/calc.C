@@ -85,14 +85,21 @@ Float_t th_he3_1,th_he3_2,th_he3_3,th_he3_4,th_h3;
 Float_t phi_he3_1,phi_he3_2,phi_he3_3,phi_he3_4,phi_h3;
 
 Float_t thickness;
+
+Float_t xOffset,yOffset,zOffset;
 //--------------------------------------------------------------------------------
 
 void calc(Int_t nRun=0) {
 
+  xOffset = 0.55;
+  yOffset = 1.33;
+  zOffset = 2;
+
+
   TChain *ch = new TChain("tree");
 
   TString inPutFileName;
-  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/tmp/h7_ct_%d_cut.root",nRun);
+  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/targetCut/13/h7_ct_%d_cut.root",nRun);
   ch->Add(inPutFileName.Data());
   cout << ch->GetEntries() << " total number of Entries" << endl;
   //--------------------------------------------------------------------------------
@@ -210,132 +217,6 @@ void calc(Int_t nRun=0) {
   ch->SetBranchAddress("phi_h3.",&phi_h3);
 
 
-  TString outPutFileName;
-  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/tmp/h7_ct_%d_reco_newPars.root",nRun);
-
-  TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
-  TTree *tw = new TTree("tree", "data");
-
-  tw->Branch("trigger.",&trigger,"trigger/I");
-
-  tw->Branch("F5.",&F5,"F5/F");
-  tw->Branch("tF5.",&tF5,"tF5/F");
-  tw->Branch("F3.",&F3,"F3/F");
-  tw->Branch("tF3.",&tF3,"tF3/F");
-
-  tw->Branch("tMWPC.",&tMWPC,"tMWPC/F");
-  tw->Branch("wirex1.",&wirex1,"wirex1/F");
-  tw->Branch("wirex2.",&wirex2,"wirex2/F");
-  tw->Branch("wirey1.",&wirey1,"wirey1/F");
-  tw->Branch("wirey2.",&wirey2,"wirey2/F");
- 
-  tw->Branch("aCsI.",&aCsI,"aCsI/F");
-  tw->Branch("tCsI.",&tCsI,"tCsI/F");
-  tw->Branch("nCsI.",&nCsI,"nCsI/I");
-
-  tw->Branch("nCsI_track.",&nCsI_track,"nCsI_track/I");
-  tw->Branch("arCsI",&arCsI,"arCsI[16]/F");
-  tw->Branch("trCsI",&trCsI,"trCsI[16]/F");
-
-  tw->Branch("X_C.",&X_C,"X_C/F");
-  tw->Branch("nX_C.",&nX_C,"nX_C/I");
-  tw->Branch("tX_C.",&tX_C,"tX_C/F");
-  tw->Branch("Y_C.",&Y_C,"Y_C/F");
-  tw->Branch("tY_C.",&tY_C,"tY_C/F");
-  tw->Branch("nY_C.",&nY_C,"nY_C/I");
-
-  tw->Branch("x1c.",&x1c,"x1c/F");
-  tw->Branch("y1c.",&y1c,"y1c/F");
-  tw->Branch("x2c.",&x2c,"x2c/F");
-  tw->Branch("y2c.",&y2c,"y2c/F"); 
-  tw->Branch("fXt.",&fXt,"fXt/F");
-  tw->Branch("fYt.",&fYt,"fYt/F"); 
-
-  tw->Branch("frame1X",&frame1X,"frame1X/F");
-  tw->Branch("frame2X",&frame2X,"frame2X/F");
-  tw->Branch("frame3X",&frame3X,"frame3X/F");
-  tw->Branch("frame1Y",&frame1Y,"frame1Y/F");
-  tw->Branch("frame2Y",&frame2Y,"frame2Y/F");
-  tw->Branch("frame3Y",&frame3Y,"frame3Y/F");
-
-  tw->Branch("x1t",&x1t,"x1t/F");
-  tw->Branch("x2t",&x2t,"x2t/F");
-  tw->Branch("x3t",&x3t,"x3t/F");
-  tw->Branch("x4t",&x4t,"x4t/F");
-  tw->Branch("y1t",&y1t,"y1t/F");
-  tw->Branch("y2t",&y2t,"y2t/F");
-  tw->Branch("y3t",&y3t,"y3t/F");
-  tw->Branch("y4t",&y4t,"y4t/F");
-  tw->Branch("xCt",&xCt,"xCt/F");
-  tw->Branch("yCt",&yCt,"yCt/F");
-
-  tw->Branch("a20_1.",&a20_1,"a20_1/F");
-  tw->Branch("a20_1_un.",&a20_1_un,"a20_1_un/F");
-  tw->Branch("t20_1.",&t20_1,"t20_1/F");
-  tw->Branch("n20_1.",&n20_1,"n20_1/I");
-
-  tw->Branch("a1_1.",&a1_1,"a1_1/F");
-  tw->Branch("t1_1.",&t1_1,"t1_1/F");
-  tw->Branch("n1_1.",&n1_1,"n1_1/I");
-
-  tw->Branch("a20_2.",&a20_2,"a20_2/F");
-  tw->Branch("a20_2_un.",&a20_2_un,"a20_2_un/F");
-  tw->Branch("t20_2.",&t20_2,"t20_2/F");
-  tw->Branch("n20_2.",&n20_2,"n20_2/I");
-
-  tw->Branch("a1_2.",&a1_2,"a1_2/F");
-  tw->Branch("t1_2.",&t1_2,"t1_2/F");
-  tw->Branch("n1_2.",&n1_2,"n1_2/I");
-
-  tw->Branch("a20_3.",&a20_3,"a20_3/F");
-  tw->Branch("a20_3_un.",&a20_3_un,"a20_3_un/F");
-  tw->Branch("t20_3.",&t20_3,"t20_3/F");
-  tw->Branch("n20_3.",&n20_3,"n20_3/I");
-
-  tw->Branch("a1_3.",&a1_3,"a1_3/F");
-  tw->Branch("t1_3.",&t1_3,"t1_3/F");
-  tw->Branch("n1_3.",&n1_3,"n1_3/I");
-
-  tw->Branch("a20_4.",&a20_4,"a20_4/F");
-  tw->Branch("a20_4_un.",&a20_4_un,"a20_4_un/F");
-  tw->Branch("t20_4.",&t20_4,"t20_4/F");
-  tw->Branch("n20_4.",&n20_4,"n20_4/I");
-
-  tw->Branch("a1_4.",&a1_4,"a1_4/F");
-  tw->Branch("t1_4.",&t1_4,"t1_4/F");
-  tw->Branch("n1_4.",&n1_4,"n1_4/I");
-
-  tw->Branch("flag1.",&flag1,"flag1/I");
-  tw->Branch("flag2.",&flag2,"flag2/I");
-  tw->Branch("flag3.",&flag3,"flag3/I");
-  tw->Branch("flag4.",&flag4,"flag4/I");
-  tw->Branch("flagCent.",&flagCent,"flagCent/I");
-
-  tw->Branch("nh3.",&nh3,"nh3/I");
-  tw->Branch("nhe3_1.",&nhe3_1,"nhe3_1/I");
-  tw->Branch("nhe3_2.",&nhe3_2,"nhe3_2/I");
-  tw->Branch("nhe3_3.",&nhe3_3,"nhe3_3/I");
-  tw->Branch("nhe3_4.",&nhe3_4,"nhe3_4/I");
-
-  tw->Branch("th_he3_1.",&th_he3_1,"th_he3_1/F");
-  tw->Branch("th_he3_2.",&th_he3_2,"th_he3_2/F");
-  tw->Branch("th_he3_3.",&th_he3_3,"th_he3_3/F");
-  tw->Branch("th_he3_4.",&th_he3_4,"th_he3_4/F");
-  tw->Branch("th_h3.",&th_h3,"th_h3/F");
-
-  tw->Branch("phi_he3_1.",&phi_he3_1,"phi_he3_1/F");
-  tw->Branch("phi_he3_2.",&phi_he3_2,"phi_he3_2/F");
-  tw->Branch("phi_he3_3.",&phi_he3_3,"phi_he3_3/F");
-  tw->Branch("phi_he3_4.",&phi_he3_4,"phi_he3_4/F");
-  tw->Branch("phi_h3.",&phi_h3,"phi_h3/F");
-
-  tw->Branch("e_1.",&e_1,"e_1/F");
-  tw->Branch("e_2.",&e_2,"e_2/F");
-  tw->Branch("e_3.",&e_3,"e_3/F");
-  tw->Branch("e_4.",&e_4,"e_4/F");
-
-  tw->Branch("centE.",&centE,"centE/F");
-
   readThickness();
   setTables();
 
@@ -344,154 +225,45 @@ void calc(Int_t nRun=0) {
   Float_t thCoeff3 = 1.;
   Float_t thCoeff4 = 1.;
 
+  Float_t x[5],y[5],z[5];
+
   // for(Int_t nentry = 0; nentry<1000;nentry++) {
-  for(Int_t nentry = 0; nentry<ch->GetEntries();nentry++) {
-    if(nentry%100000==0) cout << "#ENTRY " << nentry << "#" << endl;
+
     // cout << nentry << endl;
-    ch->GetEntry(nentry);
+  ch->GetEntry(10);
 
-    zeroVars(); 
+  x[0] = fXt;
+  x[1] = frame1X;
+  x[2] = frame2X;
+  x[3] = frame3X;
+  x[4] = xCt;
 
-  if(nhe3_1) {
-      // Si
+  y[0] = fYt;
+  y[1] = frame1Y;
+  y[2] = frame2Y;
+  y[3] = frame3Y;
+  y[4] = yCt;
 
-      // e_1 = f3HeSi->GetE0(a20_1_un,4./cos(th_he3_1)) + a1_1; // 1.5 micron - DL between thin and thick sensitive areas (DL thin about 1 mik)
-      // e_1 = f3HeSi->GetE0(e_1,0.5/cos(th_he3_1)); //dl of thin det
-      e_1 = a1_1;
-      if (nentry<10) cout << e_1 << " ";
+  z[0] = 0;
+  z[1] = 173 - zOffset;
+  z[2] = 188 - zOffset;
+  z[3] = 198 - zOffset;
+  z[4] = 323;
 
-      thickness = (fThickness1[n20_1][n1_1]*thCoeff1)/cos(th_he3_1); // 0.5 - DL of thick det
-      e_1 = f3HeSi->GetE0(e_1,thickness);
-      if (nentry<10) cout << e_1 << " ";
+  
+  TPolyLine3D *lArr = new TPolyLine3D(5, x, y, z);
 
-      // mylar
-      thickness = 3.5/cos(th_he3_1);
-      e_1 = f3HeMylar->GetE0(e_1,thickness);
-      if (nentry<10) cout << e_1 << " ";
+  lArr->Draw("");
 
-      // steel
-      thickness = 6./cos(th_he3_1);
-      e_1 = f3HeSteel->GetE0(e_1,thickness);
-      if (nentry<10) cout << e_1 << " ";
-
-      // deuterium target
-      thickness = 3000./cos(th_he3_1);
-      e_1 = f3HeTarget->GetE0(e_1,thickness);
-      if (nentry<10) cout << e_1 << endl;
-    }
-
-    if(nhe3_2) {
-      // Si
-      // e_2 = f3HeSi->GetE0(a20_2_un,4./cos(th_he3_2)) + a1_2; // 1.5 micron - DL between thin and thick sensitive areas (DL thin about 1 mik)
-      // e_2 = f3HeSi->GetE0(e_2,0.5/cos(th_he3_2)); //dl of thin det
-
-
-      e_2 = a1_2;
-      if (nentry>2499 && nentry<2509) cout << e_2 << " ";
-
-      thickness = (fThickness2[n20_2][n1_2]*thCoeff2)/cos(th_he3_2); // 0.5 - DL of thick det
-      e_2 = f3HeSi->GetE0(e_2,thickness);
-      if (nentry>2499 && nentry<2509) cout << e_2 << " ";
-
-      // mylar
-      thickness = 3.5/cos(th_he3_2);
-      e_2 = f3HeMylar->GetE0(e_2,thickness);
-      if (nentry>2499 && nentry<2509) cout << e_2 << " ";
-
-      // steel
-      thickness = 6./cos(th_he3_2);
-      e_2 = f3HeSteel->GetE0(e_2,thickness);
-      if (nentry>2499 && nentry<2509) cout << e_2 << " ";
-
-      // deuterium target
-      thickness = 3000./cos(th_he3_2);
-      e_2 = f3HeTarget->GetE0(e_2,thickness);
-      if (nentry>2499 && nentry<2509) cout << e_2 << endl;
-    }
-
-    if(nhe3_3) {
-      // Si
-      // e_3 = f3HeSi->GetE0(a20_3_un,4./cos(th_he3_3)) + a1_3; // 4 micron - DL between thin and thick sensitive areas (DL thin about 1 mik)
-      // e_3 = f3HeSi->GetE0(e_3,0.5/cos(th_he3_3)); //dl of thin det
-
-      e_3 = a1_3;
-      if (nentry>5000 && nentry<5010) cout << e_3 << " ";
-
-      thickness = (fThickness3[n20_3][n1_3]*thCoeff3)/cos(th_he3_3); // 0.5 - DL of thick det
-      e_3 = f3HeSi->GetE0(e_3,thickness);    
-      if (nentry>5000 && nentry<5010) cout << e_3 << " ";
-
-      // mylar
-      thickness = 3.5/cos(th_he3_3);
-      e_3 = f3HeMylar->GetE0(e_3,thickness);
-      if (nentry>5000 && nentry<5010) cout << e_3 << " ";
-
-      // steel
-      thickness = 6./cos(th_he3_3);
-      e_3 = f3HeSteel->GetE0(e_3,thickness);
-      if (nentry>5000 && nentry<5010) cout << e_3 << " ";
-
-      // deuterium target
-      thickness = 3000./cos(th_he3_3);
-      e_3 = f3HeTarget->GetE0(e_3,thickness);
-      if (nentry>5000 && nentry<5010) cout << e_3 << endl;
-    }
-
-    if(nhe3_4) {
-      // Si
-      // e_4 = f3HeSi->GetE0(a20_4_un,4./cos(th_he3_4)) + a1_4; // 1.5 micron - DL between thin and thick sensitive areas (DL thin about 1 mik)
-      // e_4 = f3HeSi->GetE0(e_4,0.5/cos(th_he3_4)); //dl of thin det
-
-      e_4 = a1_4;
-      if (nentry>7500 && nentry<7510) cout << e_4 << " ";
-
-      thickness = (fThickness4[n20_4][n1_4]*thCoeff3)/cos(th_he3_4); // 0.5 - DL of thick det
-      e_4 = f3HeSi->GetE0(e_4,thickness);   
-      if (nentry>7500 && nentry<7510) cout << e_4 << " ";
-      // mylar
-      thickness = 3.5/cos(th_he3_4);
-      e_4 = f3HeMylar->GetE0(e_4,thickness);
-      if (nentry>7500 && nentry<7510) cout << e_4 << " ";
-      // steel
-      thickness = 6./cos(th_he3_4);
-      e_4 = f3HeSteel->GetE0(e_4,thickness);
-      if (nentry>7500 && nentry<7510) cout << e_4 << " ";
-      // deuterium target
-      thickness = 3000./cos(th_he3_4);
-      e_4 = f3HeTarget->GetE0(e_4,thickness);
-      if (nentry>7500 && nentry<7510) cout << e_4 << endl;
-    }
-
-    if(nh3) {
-      // Si
-      centE = arCsI[nCsI_track] + X_C; 
-
-      // mylar
-      thickness = 3.5/cos(th_h3);
-      centE = f3HMylar->GetE0(centE,thickness);
-
-      // steel
-      thickness = 6./cos(th_h3);
-      centE = f3HSteel->GetE0(centE,thickness);
-
-      // deuterium target
-      thickness = 3000./cos(th_h3);
-      centE = f3HTarget->GetE0(centE,thickness);
-    }
-
-    tw->Fill();
-  }
-
-  fw->cd();
-  tw->Write();
-  fw->Close();
+  
+  
 
   return;
 }
 
 void readThickness() {
   cout << "thickness of the first detector " << endl;
-  TFile *f1 = new TFile("/home/ivan/work/macro/h7_1asd904/parameters/thicknessMap_calib_90_all_SSD_1m_1_real.root","READ");
+  TFile *f1 = new TFile("/home/ivan/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_1_real.root","READ");
   if (f1->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -515,7 +287,7 @@ void readThickness() {
   delete f1;
 
   cout  << endl << "thickness of the SECOND detector " << endl;
-  TFile *f2 = new TFile("/home/ivan/work/macro/h7_1904asd/parameters/thicknessMap_alltel_90_SSD_1m_2_real.root","READ");
+  TFile *f2 = new TFile("/home/ivan/work/macro/h7_1904/parameters/thicknessMap_alltel_90_SSD_1m_2_real.root","READ");
   if (f2->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -540,7 +312,7 @@ void readThickness() {
 
 
   cout  << endl << "thickness of the THIRD detector " << endl;
-  TFile *f3 = new TFile("/home/ivan/work/macro/h7_19asd04/parameters/thicknessMap_calib_90_all_SSD_1m_3_switch_new.root","READ");
+  TFile *f3 = new TFile("/home/ivan/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_3_switch_new.root","READ");
   if (f3->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -565,7 +337,7 @@ void readThickness() {
 
 
   cout  << endl << "thickness of the FOURTH detector " << endl;
-  TFile *f4 = new TFile("/home/ivan/work/macro/h7_asd1904/parameters/thicknessMap_calib_90_all_SSD_1m_4_real.root","READ");
+  TFile *f4 = new TFile("/home/ivan/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_4_real.root","READ");
   if (f4->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {

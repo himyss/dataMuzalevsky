@@ -56,6 +56,7 @@ Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4;
 
 Float_t e_1,e_2,e_3,e_4;
 Float_t centE;
+Float_t px,py,pz,pBeam;
 
 Float_t th_he3_1,th_he3_2,th_he3_3,th_he3_4,th_h3,th_4n;
 Float_t phi_he3_1,phi_he3_2,phi_he3_3,phi_he3_4,phi_h3;
@@ -221,7 +222,7 @@ void reco(Int_t nRun=0) {
 
   TString outPutFileName;
   // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/reco/eTarget/h7_ect_%d_mm_frame.root",nRun);
-  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/reco/track0/targetCut/13/h7_ct_%d_mm_frame_newPars.root",nRun);
+  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/reco/h7_ct_%d_mm_frame.root",nRun);
   // outPutFileName.Form("test.root",nRun);
 
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
@@ -372,6 +373,11 @@ void reco(Int_t nRun=0) {
   tw->Branch("ehe3.",&ehe3,"ehe3/F");
   tw->Branch("ehe8.",&ehe8,"ehe8/F");
 
+  tw->Branch("px",&px,"px/F");
+  tw->Branch("py",&py,"py/F");
+  tw->Branch("pz",&pz,"pz/F");
+  tw->Branch("pBeam",&pBeam,"pBeam/F");
+
   tw->Branch("v_he3.",&v_he3,"v_he3/F");
   tw->Branch("tof_he3.",&tof_he3,"tof_he3/F");
 
@@ -405,7 +411,7 @@ void reco(Int_t nRun=0) {
     // cout << nentry << endl;
     ch->GetEntry(nentry);
 
-    if ( (fXt*fXt + fYt*fYt)>9*9 ) continue;
+    // if ( (fXt*fXt + fYt*fYt)>9*9 ) continue;
 
     zerovars();
 
@@ -436,89 +442,88 @@ void reco(Int_t nRun=0) {
 
     // if (nhe3_1 || nhe3_2 || nhe3_3 || nhe3_4) cout << " wtf" << endl;
 
-    if (nhe3_1 || nhe3_2 || nhe3_3 || nhe3_4) {
-      coincidence = 0;
-      if (nhe3_1 && !nhe3_2 && !nhe3_3 && !nhe3_4) {
-        // if (e_1>20 || centE<40) continue;
-        energy = e_1/1000.;
-        theta = th_he3_1;
-        phi = phi_he3_1;
-        coincidence++;
-      } 
+    
+    coincidence = 0;
+    if (nh3 && flagCent && nh3 && nhe3_1 && flag1 && !nhe3_2 && !nhe3_3 && !nhe3_4) {
+      // if (e_1>20 || centE<40) continue;
+      energy = e_1/1000.;
+      theta = th_he3_1;
+      phi = phi_he3_1;
+      coincidence++;
+    } 
 
-      if (nhe3_2 && !nhe3_1 && !nhe3_3 && !nhe3_4) {
-        // if (n20_2==0 || n20_2==1) continue;
-        // if (e_2>20 || centE<40) continue;
-        energy = e_2/1000.;
-        theta = th_he3_2;
-        phi = phi_he3_2;
-        coincidence++;
-      } 
+    if (nh3 && flagCent && nh3 && nhe3_2 && flag2 && !nhe3_1 && !nhe3_3 && !nhe3_4) {
+      // if (n20_2==0 || n20_2==1) continue;
+      // if (e_2>20 || centE<40) continue;
+      energy = e_2/1000.;
+      theta = th_he3_2;
+      phi = phi_he3_2;
+      coincidence++;
+    } 
 
-      if (nhe3_3 && !nhe3_1 && !nhe3_2 && !nhe3_4 ) {
-        // if (e_3>20 || centE<40) continue;
-        energy = e_3/1000.;
-        theta = th_he3_3;
-        phi = phi_he3_3;
-        coincidence++;
-      } 
+    if (nh3 && flagCent && nh3 && nhe3_3 && flag3 && !nhe3_1 && !nhe3_2 && !nhe3_4 ) {
+      // if (e_3>20 || centE<40) continue;
+      energy = e_3/1000.;
+      theta = th_he3_3;
+      phi = phi_he3_3;
+      coincidence++;
+    } 
 
-      if (nhe3_4 && !nhe3_2 && !nhe3_3 && !nhe3_1) {
-        // if (e_4>20 || centE<40) continue;
-        energy = e_4/1000.;
-        theta = th_he3_4;
-        phi = phi_he3_4;
-        coincidence++;
-      } 
+    if (nh3 && flagCent && nh3 && nhe3_4 && flag4 && !nhe3_2 && !nhe3_3 && !nhe3_1) {
+      // if (e_4>20 || centE<40) continue;
+      energy = e_4/1000.;
+      theta = th_he3_4;
+      phi = phi_he3_4;
+      coincidence++;
+    } 
 
-      if(coincidence!=1) continue;
-      // energy = leftE4/1000.;
-      mass = 2.808391;  //MeV
+    if(coincidence!=1) continue;
+    // energy = leftE4/1000.;
+    mass = 2.808391;  //MeV
 
-      // TVector3 dir;
-      // dir.SetXYZ(xLeft,yLeft,zLeft);
-      // phi = dir.Phi();
-      // theta = dir.Theta();
+    // TVector3 dir;
+    // dir.SetXYZ(xLeft,yLeft,zLeft);
+    // phi = dir.Phi();
+    // theta = dir.Theta();
 
-      momentum = sqrt(energy*energy + 2*energy*mass);
+    momentum = sqrt(energy*energy + 2*energy*mass);
 
-      // he3.SetPtEtaPhiM(momentum, theta, phi, mass);
-      he3.SetXYZM(momentum*TMath::Sin(theta)*TMath::Cos(phi), momentum*TMath::Sin(theta)*TMath::Sin(phi), momentum*TMath::Cos(theta) ,mass);
+    // he3.SetPtEtaPhiM(momentum, theta, phi, mass);
+    he3.SetXYZM(momentum*TMath::Sin(theta)*TMath::Cos(phi), momentum*TMath::Sin(theta)*TMath::Sin(phi), momentum*TMath::Cos(theta) ,mass);
 
-      thetahe3 = he3.Theta()*TMath::RadToDeg();
-      phihe3 = he3.Phi()*TMath::RadToDeg();
-      ehe3 = he3.T() - mass;
-      v_he3 = sqrt(1-(mass/he3.T()*(mass/he3.T())) )*299.792458; // mm per nanosec
-      tof_he3 = sqrt( (x1t - fXt)*(x1t - fXt) + (y1t - fYt)*(y1t - fYt) )/(v_he3);
+    thetahe3 = he3.Theta()*TMath::RadToDeg();
+    phihe3 = he3.Phi()*TMath::RadToDeg();
+    ehe3 = he3.T() - mass;
+    v_he3 = sqrt(1-(mass/he3.T()*(mass/he3.T())) )*299.792458; // mm per nanosec
+    tof_he3 = sqrt( (x1t - fXt)*(x1t - fXt) + (y1t - fYt)*(y1t - fYt) )/(v_he3);
 
-      h7 = he8 + d2 + (-he3);
-      bVect_H7 = h7.BoostVector();
+    h7 = he8 + d2 + (-he3);
+    bVect_H7 = h7.BoostVector();
 
-      hBinary.SetXYZT(he8.X()/8, he8.Y()/8, he8.Z()/8, he8.T()/8);
-      hBinary += -he3;
-      hBinary_CM = hBinary;
-      h7CM_H7.Boost(-bVect_H7);
+    hBinary.SetXYZT(he8.X()/8, he8.Y()/8, he8.Z()/8, he8.T()/8);
+    hBinary += -he3;
+    hBinary_CM = hBinary;
+    h7CM_H7.Boost(-bVect_H7);
 
-      thetah7 = h7.Theta()*TMath::RadToDeg();
-      phih7 = h7.Phi()*TMath::RadToDeg();
-      mh7 = sqrt(h7.E()*h7.E() - h7.Px()*h7.Px() - h7.Py()*h7.Py() - h7.Pz()*h7.Pz());
-      eh7 = h7.E() - mh7;
+    thetah7 = h7.Theta()*TMath::RadToDeg();
+    phih7 = h7.Phi()*TMath::RadToDeg();
+    mh7 = sqrt(h7.E()*h7.E() - h7.Px()*h7.Px() - h7.Py()*h7.Py() - h7.Pz()*h7.Pz());
+    eh7 = h7.E() - mh7;
 
-      // CM
-      he3CM = he3;
-      he3CM.Boost(-bVect); 
-      thetahe3CM = he3CM.Theta()*TMath::RadToDeg();
-      phihe3CM = he3CM.Phi()*TMath::RadToDeg();      
+    // CM
+    he3CM = he3;
+    he3CM.Boost(-bVect); 
+    thetahe3CM = he3CM.Theta()*TMath::RadToDeg();
+    phihe3CM = he3CM.Phi()*TMath::RadToDeg();      
 
-      h7CM = h7;
-      h7CM.Boost(-bVect); 
-      thetah7CM = h7CM.Theta()*TMath::RadToDeg();
-      phih7CM = h7CM.Phi()*TMath::RadToDeg();
+    h7CM = h7;
+    h7CM.Boost(-bVect); 
+    thetah7CM = h7CM.Theta()*TMath::RadToDeg();
+    phih7CM = h7CM.Phi()*TMath::RadToDeg();
 
-      h7CM_H7 = h7;
-      h7CM_H7.Boost(-bVect_H7);
-      // cout << h7CM_H7.T();
-    }
+    h7CM_H7 = h7;
+    h7CM_H7.Boost(-bVect_H7);
+    // cout << h7CM_H7.T();
 
     if (nh3) {
       energy = centE/1000.;
@@ -619,18 +624,25 @@ void calculateBeam() {
   // kinEnergy = 0.1979;
   // ehe8 = kinEnergy;
 
-  momentum = sqrt(kinEnergy*kinEnergy + 2*kinEnergy*mass);
+  pBeam = sqrt(kinEnergy*kinEnergy + 2*kinEnergy*mass);
+  pBeam = TMath::Abs(pBeam);
 
-  momentum = TMath::Abs(momentum);
-  he8.SetXYZM(momentum*TMath::Sin(theta)*TMath::Cos(phi), momentum*TMath::Sin(theta)*TMath::Sin(phi), momentum*TMath::Cos(theta) ,mass);
+  he8.SetXYZM(pBeam*TMath::Sin(theta)*TMath::Cos(phi), pBeam*TMath::Sin(theta)*TMath::Sin(phi), pBeam*TMath::Cos(theta) ,mass);
   thetahe8 = he8.Theta();
-  // he8.SetPtEtaPhiM(momentum, theta, phi, mass);
-  // cout << he8.Px() << " " << he8.Py() << " " << he8.Pz() << endl;
+
+  px = he8.Px();
+  py = he8.Py();
+  pz = he8.Pz();
 
   return;
 }
 
 void zerovars() {
+
+  px = -1000;
+  py = -1000;
+  pz = -1000;
+  pBeam = -1000;
 
   v_he3 = 0;
   tof_he3 = 0;

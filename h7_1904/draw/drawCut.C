@@ -7,6 +7,7 @@ TCutG *cuthe3_2[16],*cutSQ20_2[16],*cutSQ1_2[16];
 TCutG *cuthe3_3[16],*cutSQ20_3[16],*cutSQ1_3[16];
 TCutG *cuthe3_4[16],*cutSQ20_4[16],*cutSQ1_4[16];
 TCutG *cutHe3_total1;
+TCutG *cut6Li_1;
 
 Float_t pCsI_1[16],pCsI_2[16];
 
@@ -18,7 +19,7 @@ void drawCut(){
   readCuts();
   // return;
   gStyle->SetOptStat(0);
-  Bool_t tritium = 0;
+  Bool_t tritium = 1;
   Bool_t he3_1 = 0;
   Bool_t he3_2 = 0;
   Bool_t he3_3 = 0;
@@ -28,7 +29,7 @@ void drawCut(){
   Bool_t centtimes = 0;
   Bool_t CsI_tracking = 0;
   Bool_t tSQ20 = 0;
-  Bool_t tSQThick = 1;
+  Bool_t tSQThick = 0;
 
 
   TChain *ch = new TChain("tree");
@@ -82,12 +83,12 @@ void drawCut(){
       cut.Form("nCsI_track==%d && flagCent",i);
       // hdraw.Form("X_C:aCsI>>h%d(300,0,150,300,2,90)",pCsI_1[i],pCsI_2[i],i);
 
-      hdraw.Form("X_C:arCsI[%d] >>h%d",i,i);
-      // hdraw.Form("X_C.:aCsI>>h%d",i);
-      ch->SetMarkerColor(kBlack);
-      ch->SetMarkerStyle(7);
-      ch->Draw(hdraw.Data(),cut.Data(),"",1000000,0);
-      c3h->Update();
+       hdraw.Form("X_C:(arCsI[%d]-%f)/%f >>h%d_cut(500,0,4000,200,0,25)",i,pCsI_1[i],pCsI_2[i],i);
+      // // hdraw.Form("X_C.:aCsI>>h%d",i);
+      // ch->SetMarkerColor(kBlack);
+      // ch->SetMarkerStyle(7);
+      ch->Draw(hdraw.Data(),cut.Data(),"col",10000000);
+      // c3h->Update();
 
       // cut.Form("flagCent && nCsI_track==%d && nh3",i);
       // // hdraw.Form("X_C:aCsI>>h%d(300,0,150,300,2,90)",pCsI_1[i],pCsI_2[i],i);
@@ -99,17 +100,17 @@ void drawCut(){
       // ch->Draw(hdraw.Data(),cut.Data(),"same",10000000,0);
 
 
-      ch->SetMarkerColor(kRed);
-      cut.Form("nCsI_track==%d && flagCent && nh3",i);
+      // ch->SetMarkerColor(kRed);
+      // cut.Form("nCsI_track==%d && flagCent && nh3",i);
 
-      hdraw.Form("X_C:arCsI[%d] >>h%d_coin",i,i);
-      // hdraw.Form("X_C.:aCsI>>h%d",i);
-      ch->SetMarkerStyle(7);
-      ch->Draw(hdraw.Data(),cut.Data(),"same",1000000,0);
-      c3h->Update();
+      // hdraw.Form("X_C:arCsI[%d] >>h%d_coin",i,i);
+      // // hdraw.Form("X_C.:aCsI>>h%d",i);
+      // ch->SetMarkerStyle(7);
+      // ch->Draw(hdraw.Data(),cut.Data(),"same",1000000,0);
+      // c3h->Update();
 
 
-      // cut3h[i]->Draw("same");
+      cut3h[i]->Draw("same");
       // ch->Draw(hdraw.Data(),cut.Data(),"");
      
       c3h->Update();
@@ -158,49 +159,57 @@ void drawCut(){
   if (he3_1) {
     TCanvas *c3h_1 = new TCanvas("c3h_1","",1800,1000);
 
-    TString canName;
-    TCanvas *c_arr[16];
-    for(Int_t i=0;i<16;i++){
-      canName.Form("cHe3_1_%d",i+1);
-      c_arr[i] = new TCanvas(canName.Data(),"title",1800,1000);
-    }
+    // TString canName;
+    // TCanvas *c_arr[16];
+    // for(Int_t i=0;i<16;i++){
+    //   canName.Form("cHe3_1_%d",i+1);
+    //   c_arr[i] = new TCanvas(canName.Data(),"title",1800,1000);
+    // }
 
     // c3h->Divide(4,4);
-    for(Int_t i=0;i<16;i++) 
-    { 
+    // for(Int_t i=0;i<16;i++) 
+    // { 
     
-      // Int_t i=0;
+      Int_t i=0;
       // c_arr->cd(i+1);
-      // c3h_1->cd();
-      c_arr[i]->cd();
+      c3h_1->cd();
+      // c_arr[i]->cd();
       ch->SetMarkerStyle(1);
       ch->SetMarkerColor(kBlack);      
-      cut.Form("n20_1==%d && flag1",i);
-      hdraw.Form("a20_1:a1_1+a20_1_un>>h%d1(100,1,30,100,0.5,5)",i);
+      // cut.Form("n20_1==%d && flag1",i);
+      cut.Form("flag4 && a1_4+a20_4_un<65 && a20_4<8",i);
+      hdraw.Form("a20_4:a1_4+a20_4_un>>h%d1",i);
       // hdraw.Form("X_C.:aCsI>>h%d",i);
       ch->Draw(hdraw.Data(),cut.Data(),"");
-      c_arr[i]->Update();
+      // c_arr[i]->Update();
       // c_ar/r[i]->Update();
       // c3h
 
-      ch->SetMarkerStyle(20);
-      ch->SetMarkerSize(0.7);   
-      ch->SetMarkerColor(kGreen);      
-      // cut.Form("n20_1==%d && nhe3_1",i);
-      cut += " && nh3 && flagCent";
-      hdraw.Form("a20_1:a1_1+a20_1_un>>h%d_triton1(100,1,30,100,0.5,5)",i);
-      ch->Draw(hdraw.Data(),cut.Data(),"same");
+      // ch->SetMarkerStyle(20);
+      // ch->SetMarkerSize(0.7);   
+      // ch->SetMarkerColor(kGreen);      
+      // // cut.Form("n20_1==%d && nhe3_1",i);
+      // cut += " && nh3";
+      // hdraw.Form("a20_4:a1_4+a20_4_un>>h%d_triton1",i);
+      // ch->Draw(hdraw.Data(),cut.Data(),"same");
+      // c3h_1->Update();
+
+      cut6Li_1->SetLineColor(kRed);
+      cut6Li_1->Draw("same");
       c3h_1->Update();
-      c_arr[i]->Update();
+
+      c3h_1->Print("/home/ivan/Desktop/li6_4.png");
+
+      // c_arr[i]->Update();
 
       // ch->SetMarkerStyle(4);
-      ch->SetMarkerSize(1.2);    
-      ch->SetMarkerColor(kRed);      
-      // cut.Form("n20_1==%d && nhe3_1",i);
-      cut += " && nhe3_1";
-      hdraw.Form("a20_1:a1_1+a20_1_un>>h%d_he31",i);
-      ch->Draw(hdraw.Data(),cut.Data(),"same");
-      c_arr[i]->Update();
+      // ch->SetMarkerSize(1.2);    
+      // ch->SetMarkerColor(kRed);      
+      // // cut.Form("n20_1==%d && nhe3_1",i);
+      // cut += " && nhe3_1";
+      // hdraw.Form("a20_1:a1_1+a20_1_un>>h%d_he31",i);
+      // ch->Draw(hdraw.Data(),cut.Data(),"same");
+      // c_arr[i]->Update();
 
       // ch->SetMarkerStyle(20);
       // ch->SetMarkerSize(1);
@@ -212,21 +221,21 @@ void drawCut(){
       // nCoins+= ch->Draw(hdraw.Data(),cut.Data(),"same");
       // // c3h->Update();
 
-      cuthe3_1[i]->SetLineColor(kRed);
-      cuthe3_1[i]->Draw("same");
-      c_arr[i]->Update();
+      // cuthe3_1[i]->SetLineColor(kRed);
+      // cuthe3_1[i]->Draw("same");
+      // c_arr[i]->Update();
       // c_arr[i]->Update();
       // c3h->Update();
-    }
+    // }
     
-    c_arr[0]->Print("/home/ivan/Desktop/de_E_1.pdf");
-    c_arr[0]->Print("/home/ivan/Desktop/de_E_1.pdf[");
-    c_arr[0]->Print("/home/ivan/Desktop/de_E_1.pdf");
-    for(Int_t i=1;i<15;i++) {
-      c_arr[i]->Print("/home/ivan/Desktop/de_E_1.pdf");
-    }
-    c_arr[15]->Print("/home/ivan/Desktop/de_E_1.pdf");
-    c_arr[15]->Print("/home/ivan/Desktop/de_E_1.pdf]");
+    // c_arr[0]->Print("/home/ivan/Desktop/de_E_1.pdf");
+    // c_arr[0]->Print("/home/ivan/Desktop/de_E_1.pdf[");
+    // c_arr[0]->Print("/home/ivan/Desktop/de_E_1.pdf");
+    // for(Int_t i=1;i<15;i++) {
+    //   c_arr[i]->Print("/home/ivan/Desktop/de_E_1.pdf");
+    // }
+    // c_arr[15]->Print("/home/ivan/Desktop/de_E_1.pdf");
+    // c_arr[15]->Print("/home/ivan/Desktop/de_E_1.pdf]");
   }
 
   if (he3_2) {
@@ -550,6 +559,15 @@ void readCuts() {
 
   TFile *f;
   TString cutName;
+
+  cutName.Form("/home/ivan/work/macro/h7_1904/cuts/T1/li6_cut.root");
+  f = new TFile(cutName.Data());
+  cut6Li_1 = (TCutG*)f->Get("CUTG");
+  if (!cut6Li_1) {
+    cout << "no cut " << cutName.Data() << endl;
+    exit(-1);
+  }    
+  delete f;
 
   for(Int_t i=0;i<16;i++) {
     cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/C_T/triton/h3_%d.root",i);

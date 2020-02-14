@@ -1,390 +1,167 @@
 Error in <TCling::RegisterModule>: cannot find dictionary module AculDataCint_rdict.pcm
 Error in <TCling::RegisterModule>: cannot find dictionary module TELossCint_rdict.pcm
-Error in <TChain::SetBranchAddress>: The pointer type given "Int_t" (3) does not correspond to the type needed "Float_t" (5) by the branch: wirex1.
-Error in <TChain::SetBranchAddress>: The pointer type given "Int_t" (3) does not correspond to the type needed "Float_t" (5) by the branch: wirex2.
-Error in <TChain::SetBranchAddress>: The pointer type given "Int_t" (3) does not correspond to the type needed "Float_t" (5) by the branch: wirey1.
-Error in <TChain::SetBranchAddress>: The pointer type given "Int_t" (3) does not correspond to the type needed "Float_t" (5) by the branch: wirey2.
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 10.903781
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 10.903781
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 10.903781
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 10.903781
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 10.903781
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 10.903781
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 10.903781
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 10.903781
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 10.903781
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 10.903781
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 10.903781
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 10.903781
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 10.903781
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 10.903781
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 10.903781
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 10.903781
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 10.903781
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 10.903781
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.600012
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.600012
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.600012
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.600012
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.449223
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.449223
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.449223
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.449223
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.313838
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.313838
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.313838
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.313838
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.443120
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.443120
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.443120
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.443120
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.233339
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.233339
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.214344
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.214344
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.214344
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.214344
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.176267
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.176267
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.148130
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.148130
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.148130
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.148130
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.126655
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.126655
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.126655
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.126655
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.109829
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.109829
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.096356
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.096356
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.085372
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.085372
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.085372
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.085372
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.076277
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.076277
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.068646
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.068646
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.068646
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.068646
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.062168
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.062168
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.056615
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.056615
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.051810
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.051810
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.051810
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.051810
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.047620
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.047620
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.043940
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.043940
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.040687
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.040687
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.037794
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.037794
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.037794
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.037794
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.035209
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.035209
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.032886
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.032886
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.030791
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.030791
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.028893
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.028893
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.028893
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.028893
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.027166
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.027166
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.025591
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.025591
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.024148
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.024148
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.022824
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.022824
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.021604
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.021604
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.020477
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.020477
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.020477
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.020477
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.019435
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.019435
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.018467
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.018467
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.017567
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.017567
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.016729
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.016729
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.015946
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.015946
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.015214
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.015214
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.014527
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.014527
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.014527
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.014527
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.013883
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.013883
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.013278
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.013278
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.012707
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.012707
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.012170
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.012170
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.011662
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.011662
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.011182
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.011182
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.010728
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.010728
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.010297
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.010297
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.483709
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.483709
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.262123
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.262123
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.256542
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.256542
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.010388
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.010388
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.010388
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.010388
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.010388
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.010388
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.014099
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.014099
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.014099
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.014099
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.014099
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.014099
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 22.772948
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 22.772948
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 22.772948
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 22.772948
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 22.772948
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 22.772948
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 22.772948
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 22.772948
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 22.772948
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 22.772948
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 22.772948
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 22.772948
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 22.772948
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 22.772948
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 22.772948
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 22.772948
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 22.772948
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 22.772948
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 22.772948
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 22.772948
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 22.772948
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 22.772948
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.958136
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.958136
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.958136
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.958136
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.305350
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.305350
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.305350
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.305350
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.343296
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.343296
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.343296
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.343296
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.291566
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.291566
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.291566
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.291566
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.240904
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.240904
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.240904
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.240904
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.200500
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.200500
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.200500
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.200500
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.169167
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.169167
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.169167
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.169167
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.144726
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.144726
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.125390
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.125390
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.125390
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.125390
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.109852
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.109852
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.109852
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.109852
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.097178
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.097178
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.086699
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.086699
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.086699
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.086699
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.077927
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.077927
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.077927
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.077927
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.070504
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.070504
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.064159
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.064159
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.064159
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.064159
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.058688
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.058688
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.053933
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.053933
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.053933
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.053933
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.049771
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.049771
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.046104
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.046104
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.046104
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.046104
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.042853
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.042853
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.039957
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.039957
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.039957
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.039957
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.037363
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.037363
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.035029
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.035029
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.035029
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.035029
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.032921
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.032921
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.031010
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.031010
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.031010
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.031010
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.029270
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.029270
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.027681
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.027681
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.027681
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.027681
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.026225
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.026225
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.024888
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.024888
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.023656
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.023656
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.023656
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.023656
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.022518
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.022518
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.021465
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.021465
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.021465
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.021465
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.020487
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.020487
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.019578
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.019578
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.019578
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.019578
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.018731
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.018731
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.017941
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.017941
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.017201
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.017201
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.017201
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.017201
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.016509
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.016509
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.917916
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.917916
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.747192
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.747192
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.022073
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.022073
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.022073
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.022073
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.021298
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.021298
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.020567
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.020567
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.019875
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.019875
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.019875
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.019875
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.019221
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.019221
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.018601
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.018601
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.018013
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.018013
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.018013
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.018013
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.017454
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.017454
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.016923
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.016923
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.016418
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.016418
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.015936
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.015936
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.015936
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.015936
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.015477
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.015477
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.015040
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.015040
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.014621
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.014621
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.014221
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.014221
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.014221
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.014221
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.013839
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.013839
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.013473
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.013473
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.013122
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.013122
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.012786
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.012786
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.012786
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.012786
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.012463
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.012463
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.012153
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.012153
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.011855
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.011855
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.011569
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.011569
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.011569
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.011569
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.011294
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.011294
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.011029
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.011029
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.010774
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.010774
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.010528
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.010528
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.010291
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.010291
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.010291
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.010291
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.010062
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 0.010062
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 1.990186
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 1.990186
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 1.961865
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 1.961865
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 1.047445
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 1.047445
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 1.039868
-Warning in <TELoss::linear>: Linear interpolation does not give sufficient precision: 1.039868
+In file included from input_line_11:1:
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:90:39: error: use of undeclared identifier 'nCsI_track'
+  ch->SetBranchAddress("nCsI_track.",&nCsI_track);
+                                      ^
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:91:33: error: use of undeclared identifier 'arCsI'
+  ch->SetBranchAddress("arCsI",&arCsI);
+                                ^
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:92:33: error: use of undeclared identifier 'trCsI'
+  ch->SetBranchAddress("trCsI",&trCsI);
+                                ^
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:220:29: error: use of undeclared identifier 'nCsI_track'
+  tw->Branch("nCsI_track.",&nCsI_track,"nCsI_track/I");
+                            ^
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:221:23: error: use of undeclared identifier 'arCsI'
+  tw->Branch("arCsI",&arCsI,"arCsI[16]/F");
+                      ^
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:222:23: error: use of undeclared identifier 'trCsI'
+  tw->Branch("trCsI",&trCsI,"trCsI[16]/F");
+                      ^
+Error in <TInterpreter::AutoParse>: Error parsing payload code for class TELoss with content:
+
+#line 1 "TELossCint dictionary payload"
+
+#ifndef G__VECTOR_HAS_CLASS_ITERATOR
+  #define G__VECTOR_HAS_CLASS_ITERATOR 1
+#endif
+
+#define _BACKWARD_BACKWARD_WARNING_H
+#include "TELoss/TELoss.h"
+
+#undef  _BACKWARD_BACKWARD_WARNING_H
+
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:356:19: error: member access into incomplete type 'TELoss'
+      e_1 = f3HeSi->GetE0(e_1,thickness);
+                  ^
+TELossCint dictionary forward declarations' payload:5:68: note: forward declaration of 'TELoss'
+class __attribute__((annotate("$clingAutoload$TELoss/TELoss.h")))  TELoss;
+                                                                   ^
+In file included from input_line_11:1:
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:360:22: error: member access into incomplete type 'TELoss'
+      e_1 = f3HeMylar->GetE0(e_1,thickness);
+                     ^
+TELossCint dictionary forward declarations' payload:5:68: note: forward declaration of 'TELoss'
+class __attribute__((annotate("$clingAutoload$TELoss/TELoss.h")))  TELoss;
+                                                                   ^
+In file included from input_line_11:1:
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:364:22: error: member access into incomplete type 'TELoss'
+      e_1 = f3HeSteel->GetE0(e_1,thickness);
+                     ^
+TELossCint dictionary forward declarations' payload:5:68: note: forward declaration of 'TELoss'
+class __attribute__((annotate("$clingAutoload$TELoss/TELoss.h")))  TELoss;
+                                                                   ^
+In file included from input_line_11:1:
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:368:23: error: member access into incomplete type 'TELoss'
+      e_1 = f3HeTarget->GetE0(e_1,thickness);
+                      ^
+TELossCint dictionary forward declarations' payload:5:68: note: forward declaration of 'TELoss'
+class __attribute__((annotate("$clingAutoload$TELoss/TELoss.h")))  TELoss;
+                                                                   ^
+In file included from input_line_11:1:
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:377:19: error: member access into incomplete type 'TELoss'
+      e_2 = f3HeSi->GetE0(e_2,thickness);
+                  ^
+TELossCint dictionary forward declarations' payload:5:68: note: forward declaration of 'TELoss'
+class __attribute__((annotate("$clingAutoload$TELoss/TELoss.h")))  TELoss;
+                                                                   ^
+In file included from input_line_11:1:
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:381:22: error: member access into incomplete type 'TELoss'
+      e_2 = f3HeMylar->GetE0(e_2,thickness);
+                     ^
+TELossCint dictionary forward declarations' payload:5:68: note: forward declaration of 'TELoss'
+class __attribute__((annotate("$clingAutoload$TELoss/TELoss.h")))  TELoss;
+                                                                   ^
+In file included from input_line_11:1:
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:385:22: error: member access into incomplete type 'TELoss'
+      e_2 = f3HeSteel->GetE0(e_2,thickness);
+                     ^
+TELossCint dictionary forward declarations' payload:5:68: note: forward declaration of 'TELoss'
+class __attribute__((annotate("$clingAutoload$TELoss/TELoss.h")))  TELoss;
+                                                                   ^
+In file included from input_line_11:1:
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:389:23: error: member access into incomplete type 'TELoss'
+      e_2 = f3HeTarget->GetE0(e_2,thickness);
+                      ^
+TELossCint dictionary forward declarations' payload:5:68: note: forward declaration of 'TELoss'
+class __attribute__((annotate("$clingAutoload$TELoss/TELoss.h")))  TELoss;
+                                                                   ^
+In file included from input_line_11:1:
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:400:19: error: member access into incomplete type 'TELoss'
+      e_3 = f3HeSi->GetE0(e_3,thickness);    
+                  ^
+TELossCint dictionary forward declarations' payload:5:68: note: forward declaration of 'TELoss'
+class __attribute__((annotate("$clingAutoload$TELoss/TELoss.h")))  TELoss;
+                                                                   ^
+In file included from input_line_11:1:
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:404:22: error: member access into incomplete type 'TELoss'
+      e_3 = f3HeMylar->GetE0(e_3,thickness);
+                     ^
+TELossCint dictionary forward declarations' payload:5:68: note: forward declaration of 'TELoss'
+class __attribute__((annotate("$clingAutoload$TELoss/TELoss.h")))  TELoss;
+                                                                   ^
+In file included from input_line_11:1:
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:408:22: error: member access into incomplete type 'TELoss'
+      e_3 = f3HeSteel->GetE0(e_3,thickness);
+                     ^
+TELossCint dictionary forward declarations' payload:5:68: note: forward declaration of 'TELoss'
+class __attribute__((annotate("$clingAutoload$TELoss/TELoss.h")))  TELoss;
+                                                                   ^
+In file included from input_line_11:1:
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:412:23: error: member access into incomplete type 'TELoss'
+      e_3 = f3HeTarget->GetE0(e_3,thickness);
+                      ^
+TELossCint dictionary forward declarations' payload:5:68: note: forward declaration of 'TELoss'
+class __attribute__((annotate("$clingAutoload$TELoss/TELoss.h")))  TELoss;
+                                                                   ^
+In file included from input_line_11:1:
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:423:19: error: member access into incomplete type 'TELoss'
+      e_4 = f3HeSi->GetE0(e_4,thickness);   
+                  ^
+TELossCint dictionary forward declarations' payload:5:68: note: forward declaration of 'TELoss'
+class __attribute__((annotate("$clingAutoload$TELoss/TELoss.h")))  TELoss;
+                                                                   ^
+In file included from input_line_11:1:
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:427:22: error: member access into incomplete type 'TELoss'
+      e_4 = f3HeMylar->GetE0(e_4,thickness);
+                     ^
+TELossCint dictionary forward declarations' payload:5:68: note: forward declaration of 'TELoss'
+class __attribute__((annotate("$clingAutoload$TELoss/TELoss.h")))  TELoss;
+                                                                   ^
+In file included from input_line_11:1:
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:431:22: error: member access into incomplete type 'TELoss'
+      e_4 = f3HeSteel->GetE0(e_4,thickness);
+                     ^
+TELossCint dictionary forward declarations' payload:5:68: note: forward declaration of 'TELoss'
+class __attribute__((annotate("$clingAutoload$TELoss/TELoss.h")))  TELoss;
+                                                                   ^
+In file included from input_line_11:1:
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:435:23: error: member access into incomplete type 'TELoss'
+      e_4 = f3HeTarget->GetE0(e_4,thickness);
+                      ^
+TELossCint dictionary forward declarations' payload:5:68: note: forward declaration of 'TELoss'
+class __attribute__((annotate("$clingAutoload$TELoss/TELoss.h")))  TELoss;
+                                                                   ^
+In file included from input_line_11:1:
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:559:16: error: allocation of incomplete type 'TELoss'
+  f3HeSi = new TELoss();
+               ^~~~~~
+TELossCint dictionary forward declarations' payload:5:68: note: forward declaration of 'TELoss'
+class __attribute__((annotate("$clingAutoload$TELoss/TELoss.h")))  TELoss;
+                                                                   ^
+In file included from input_line_11:1:
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:560:9: error: member access into incomplete type 'TELoss'
+  f3HeSi->SetEL(1, 2.321); // density in g/cm3
+        ^
+TELossCint dictionary forward declarations' payload:5:68: note: forward declaration of 'TELoss'
+class __attribute__((annotate("$clingAutoload$TELoss/TELoss.h")))  TELoss;
+                                                                   ^
+In file included from input_line_11:1:
+/home/ivan/work/macro/be10_Nov/parallel/calcEnergies/calcEnergies.C:561:9: error: member access into incomplete type 'TELoss'
+  f3HeSi->AddEL(14., 28.086, 1);  //Z, mass
+        ^
+TELossCint dictionary forward declarations' payload:5:68: note: forward declaration of 'TELoss'
+class __attribute__((annotate("$clingAutoload$TELoss/TELoss.h")))  TELoss;
+                                                                   ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]

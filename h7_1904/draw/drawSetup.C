@@ -24,11 +24,12 @@ void drawSetup() {
 
   ch1->SetMarkerStyle(20);
   ch1->SetMarkerColor(kBlack);
-  hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
+  hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) ) && ");
+  hCut += cutTriangle;
   ch1->Draw("y1c:x1c >> mwpc1Profile(32,-20,20,32,-20,20)",hCut.Data(),"");
   c_Profile->Update();
 
-  hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) ) && ");
+  hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_2 && flag2)  ) && ");
   hCut += cutTriangle;
   ch1->SetMarkerColor(kRed);
   ch1->Draw("y1c:x1c",hCut.Data(),"same");
@@ -37,11 +38,12 @@ void drawSetup() {
   c_Profile->cd(2);
 
   ch1->SetMarkerColor(kBlack);
-  hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
+  hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) ) && ");
+  hCut += cutTriangle;
   ch1->Draw("y2c:x2c >> mwpc2Profile(32,-20,20,32,-20,20)",hCut.Data(),"");
   c_Profile->Update();
 
-  hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) ) && ");
+  hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_2 && flag2)  ) && ");
   hCut += cutTriangle;
   ch1->SetMarkerColor(kRed);
   ch1->Draw("y2c:x2c",hCut.Data(),"same");
@@ -50,11 +52,12 @@ void drawSetup() {
   c_Profile->cd(3);
 
   ch1->SetMarkerColor(kBlack);
-  hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
+  hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) ) && ");
+  hCut += cutTriangle;
   ch1->Draw("fYt:fXt >> targetProfile(64,-20,20,64,-20,20)",hCut.Data(),"");
   c_Profile->Update();
 
-  hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) ) && ");
+  hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_2 && flag2)  ) && ");
   hCut += cutTriangle;
   ch1->SetMarkerColor(kRed);
   ch1->Draw("fYt:fXt",hCut.Data(),"same");
@@ -62,16 +65,17 @@ void drawSetup() {
 
   c_Profile->cd(4);
   ch1->SetMarkerColor(kBlack);
-  hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
+  hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) ) && ");
+  hCut += cutTriangle;
   ch1->Draw("yCt:xCt >> detProfile(32,-32,32,32,-32,32)",hCut.Data(),"");
   c_Profile->Update();
 
-  hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) ) && ");
+  hCut.Form("nh3 && flagCent && nh3 && ( (nhe3_2 && flag2)  ) && ");
   hCut += cutTriangle;
   ch1->SetMarkerColor(kRed);
   ch1->Draw("yCt:xCt",hCut.Data(),"same");
   c_Profile->Update();
-
+return; 
 //   TCanvas *c_Frames = new TCanvas("c_Frames","title",1800,600);
 //   c_Frames->Divide(3,1);
 

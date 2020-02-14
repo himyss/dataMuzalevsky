@@ -19,6 +19,7 @@ Int_t GetClusterMult(TClonesArray *data);
 ERQTelescopeCsIDigi* processCsI(TClonesArray *data);
 
 void fillCsI(ERQTelescopeCsIDigi *data);
+void fillND(TClonesArray *data,Float_t* amp,Float_t* time,Float_t* tac,Float_t *par);
 //outtree vars
 Int_t trigger; 
 
@@ -51,6 +52,8 @@ Float_t tSQ20_3[16],tSSD3[16],tSSD_V3[16];
 Float_t SQ20_4[16],SSD4[16],SSD_V4[16];
 Float_t tSQ20_4[16],tSSD4[16],tSSD_V4[16];
 
+Float_t ND_time[32],ND_amp[32],ND_tac[32];
+
 // Sipars
 Float_t pSQ201_1[16],pSQ201_2[16];
 Float_t pSQ202_1[16],pSQ202_2[16];
@@ -72,6 +75,9 @@ Float_t pDSD_X1[32],pDSD_X2[32];
 Float_t pDSD_Y1[32],pDSD_Y2[32];
 
 Float_t pCsI_1[16],pCsI_2[16];
+  
+Float_t pND_1[32],pND_2[32];
+
 
 Float_t *nullPtr = NULL;
 
@@ -83,11 +89,12 @@ Int_t mult20_4,mult1_4,multv_4;
 
 Int_t multc_x,multc_y,multCsI;
 
-void convert(Int_t nFile = 5) {
+void convert(Int_t nFile = 0) {
 
   TChain *ch = new TChain("er");
   TString inPutFileName;
-  inPutFileName.Form("/media/ivan/data/exp1904/digi/h7/h7_ect_%d*.root",nFile);
+  inPutFileName.Form("/media/ivan/data/exp1904/digi/h7_final/h7_ct_%d*.root",nFile);
+  // inPutFileName.Form("/media/ivan/data/exp1904/digi/h7_final/h7_ct_%d*.root",nFile);
   ch->Add(inPutFileName.Data());
   cout << ch->GetEntries() << endl;
 
@@ -110,6 +117,8 @@ void convert(Int_t nFile = 5) {
   readPar("DSSD_Y",pDSD_Y1,pDSD_Y2,32);
 
   readPar("CsI_anh",pCsI_1,pCsI_2);
+
+  readPar("ND_tac",pND_1,pND_2,32);
 
 //--------------------------------------------------------------------------------
   ERBeamTimeEventHeader* header = new ERBeamTimeEventHeader();
@@ -142,6 +151,7 @@ void convert(Int_t nFile = 5) {
   TClonesArray *v_SSD20_4 = new TClonesArray("ERQTelescopeSiDigi");
   TClonesArray *v_SSD_4 = new TClonesArray("ERQTelescopeSiDigi");
 
+  TClonesArray *v_ND = new TClonesArray("ERNDDigi");
 
   // setbranchAdress
   ch->SetBranchAddress("BeamDetToFDigi2",&v_F5);
@@ -157,20 +167,22 @@ void convert(Int_t nFile = 5) {
   ch->SetBranchAddress("ERQTelescopeCsIDigi_Central_telescope_CsI_0",&v_CsI);
 
   ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_1_SingleSi_SSD20_1_X_0",&v_SSD20_1);
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_1_SingleSi_SSD_1_Y_0",&v_SSD_1);
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_1_SingleSi_SSD_V_1_Y_0",&v_SSD_V_1);  
+  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_1_SingleSi_SSD_1_Y_1",&v_SSD_1);
+  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_1_SingleSi_SSD_V_1_Y_2",&v_SSD_V_1);  
  
   ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_2_SingleSi_SSD20_2_Y_0",&v_SSD20_2);
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_2_SingleSi_SSD_2_X_0",&v_SSD_2);
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_2_SingleSi_SSD_V_2_X_0",&v_SSD_V_2);  
+  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_2_SingleSi_SSD_2_X_1",&v_SSD_2);
+  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_2_SingleSi_SSD_V_2_X_2",&v_SSD_V_2);  
 
   ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_3_SingleSi_SSD20_3_X_0",&v_SSD20_3);
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_3_SingleSi_SSD_3_Y_0",&v_SSD_3);
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_3_SingleSi_SSD_V_3_Y_0",&v_SSD_V_3);  
+  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_3_SingleSi_SSD_3_Y_1",&v_SSD_3);
+  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_3_SingleSi_SSD_V_3_Y_2",&v_SSD_V_3);  
 
   ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_4_SingleSi_SSD20_4_Y_0",&v_SSD20_4);
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_4_SingleSi_SSD_4_X_0",&v_SSD_4);
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_4_SingleSi_SSD_V_4_X_0",&v_SSD_V_4);  
+  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_4_SingleSi_SSD_4_X_1",&v_SSD_4);
+  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_4_SingleSi_SSD_V_4_X_2",&v_SSD_V_4);
+
+  ch->SetBranchAddress("NDDigi",&v_ND);
 
   ch->SetBranchAddress("EventHeader.",&header);
 
@@ -179,7 +191,7 @@ void convert(Int_t nFile = 5) {
 
   // Creating outfile,outtree
   TString outPutFileName;
-  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calibrated/newCal/eTarget/h7_ect_%d_cal.root",nFile);
+  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calibrated/finalCal/h7_ct_%d_cal.root",nFile);
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
   // TFile *fw = new TFile("test.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
@@ -222,6 +234,10 @@ void convert(Int_t nFile = 5) {
   tw->Branch("DSD_Y",&DSD_Y,"DSD_Y[32]/F");
   tw->Branch("tDSD_X",&tDSD_X,"tDSD_X[32]/F");
   tw->Branch("tDSD_Y",&tDSD_Y,"tDSD_Y[32]/F");
+
+  tw->Branch("ND_amp",&ND_amp,"ND_amp[32]/F");
+  tw->Branch("ND_time",&ND_time,"ND_time[32]/F");
+  tw->Branch("ND_tac",&ND_tac,"ND_tac[32]/F");
 
   tw->Branch("SQ20_1",&SQ20_1,"SQ20_1[16]/F");
   tw->Branch("tSQ20_1",&tSQ20_1,"tSQ20_1[16]/F");
@@ -344,26 +360,26 @@ void convert(Int_t nFile = 5) {
 
     // central telescope
     fillarrayCsI(v_CsI,arCsI,trCsI,pCsI_1,pCsI_2);
-
+    fillND(v_ND,ND_amp,ND_time,ND_tac,pND_1);
 
     fillSi(v_DSDX_C,DSD_X,tDSD_X,pDSD_X1,pDSD_X2,&multc_x,2.5);
     fillSi(v_DSDY_C,DSD_Y,tDSD_Y,pDSD_Y1,pDSD_Y2,&multc_y,2.5);
 
     // side telescopes
-    fillSi(v_SSD20_1,SQ20_1,tSQ20_1,pSQ201_1,pSQ201_2,&mult20_1,0.5);
-    fillSi(v_SSD_1,SSD1,tSSD1,pSSD1_1,pSSD1_2,&mult1_1,1);
+    fillSi(v_SSD20_1,SQ20_1,tSQ20_1,pSQ201_1,pSQ201_2,&mult20_1,0.3);
+    fillSi(v_SSD_1,SSD1,tSSD1,pSSD1_1,pSSD1_2,&mult1_1,0.5);
     fillSi(v_SSD_V_1,SSD_V1,tSSD_V1,pSSD_V1_1,pSSD_V1_2,&multv_1,0);
 
-    fillSi(v_SSD20_2,SQ20_2,tSQ20_2,pSQ202_1,pSQ202_2,&mult20_2,0.5);
-    fillSi(v_SSD_2,SSD2,tSSD2,pSSD2_1,pSSD2_2,&mult1_2,0);
+    fillSi(v_SSD20_2,SQ20_2,tSQ20_2,pSQ202_1,pSQ202_2,&mult20_2,0.3);
+    fillSi(v_SSD_2,SSD2,tSSD2,pSSD2_1,pSSD2_2,&mult1_2,0.5);
     fillSi(v_SSD_V_2,SSD_V2,tSSD_V2,pSSD_V2_1,pSSD_V2_2,&multv_2,0);
 
-    fillSi(v_SSD20_3,SQ20_3,tSQ20_3,pSQ203_1,pSQ203_2,&mult20_3,0.5);
-    fillSi(v_SSD_3,SSD3,tSSD3,pSSD3_1,pSSD3_2,&mult1_3,0);
+    fillSi(v_SSD20_3,SQ20_3,tSQ20_3,pSQ203_1,pSQ203_2,&mult20_3,0.3);
+    fillSi(v_SSD_3,SSD3,tSSD3,pSSD3_1,pSSD3_2,&mult1_3,0.5);
     fillSi(v_SSD_V_3,SSD_V3,tSSD_V3,pSSD_V3_1,pSSD_V3_2,&multv_3,0);
 
-    fillSi(v_SSD20_4,SQ20_4,tSQ20_4,pSQ204_1,pSQ204_2,&mult20_4,0.5);
-    fillSi(v_SSD_4,SSD4,tSSD4,pSSD4_1,pSSD4_2,&mult1_4,0);
+    fillSi(v_SSD20_4,SQ20_4,tSQ20_4,pSQ204_1,pSQ204_2,&mult20_4,0.3);
+    fillSi(v_SSD_4,SSD4,tSSD4,pSSD4_1,pSSD4_2,&mult1_4,0.5);
     fillSi(v_SSD_V_4,SSD_V4,tSSD_V4,pSSD_V4_1,pSSD_V4_2,&multv_4,0);
 
     tw->Fill();
@@ -469,6 +485,10 @@ void zeroVars() {
     DSD_Y[i] = 0;
     tDSD_X[i] = 0;
     tDSD_Y[i] = 0;
+
+    ND_tac[i] = 0;
+    ND_amp[i] = 0;
+    ND_time[i] = 0;
   }
 
 }
@@ -556,8 +576,8 @@ void fillSi(TClonesArray *data,Float_t* amp,Float_t* time,Float_t *par1,Float_t 
     if (!isCal) *(amp+nCh) = 1000*((ERQTelescopeSiDigi*)data->At(i))->GetEdep();
     *(time+nCh) = ((ERQTelescopeSiDigi*)data->At(i))->GetTime();
     if ( isCal && ( *(amp+nCh)<=ampThreshold || *(time+nCh)<=timeThreshold ) ) {
-      // *(amp+nCh) = -10;
-      // *(time+nCh) = -10;
+      *(amp+nCh) = 0;
+      *(time+nCh) = 0;
       *multiplicity = *multiplicity - 1;
     } 
   } 
@@ -572,6 +592,22 @@ void fillarrayCsI(TClonesArray *data,Float_t* amp,Float_t* time,Float_t *par1,Fl
     nCh = ((ERQTelescopeCsIDigi*)data->At(i))->GetBlockNb();
     *(amp+nCh) = 1000*((ERQTelescopeCsIDigi*)data->At(i))->GetEdep()*(*(par2+nCh)) + (*(par1+nCh));
     *(time+nCh) = ((ERQTelescopeCsIDigi*)data->At(i))->GetTime();
+  }
+  return;
+}
+
+void fillND(TClonesArray *data,Float_t* amp,Float_t* time,Float_t* tac,Float_t *par) {
+  if(!data) return;
+  if(data->GetEntriesFast()==0) return;
+
+  // cout << "fillND executed " << endl;
+
+  Int_t nCh;
+  for(Int_t i=0;i<data->GetEntriesFast();i++) {
+    nCh = ((ERNDDigi*)data->At(i))->StilbenNb();
+    *(amp+nCh) = 1000*((ERNDDigi*)data->At(i))->EnergyLoss();
+    *(time+nCh) = ((ERNDDigi*)data->At(i))->Time();
+    *(tac+nCh) = ((ERNDDigi*)data->At(i))->TAC()+ (*(par+nCh));
   }
   return;
 }
@@ -595,14 +631,14 @@ void processCsI_cal() {
 
 
   if (nMax!=1) {
-     cout << " ##ENTRY## " << endl;
-    for(Int_t i=0;i<16;i++) {
-      if (arCsI[i]>0 && trCsI[i]>0) cout << i << " " << arCsI[i] << " " << trCsI[i] << endl;
-    }
+    //  cout << " ##ENTRY## " << endl;
+    // for(Int_t i=0;i<16;i++) {
+    //   if (arCsI[i]>0 && trCsI[i]>0) cout << i << " " << arCsI[i] << " " << trCsI[i] << endl;
+    // }
 
-    cout << " maximum choice " << endl;
-    cout << nCsI << " " << aCsI << " " << tCsI << " " << endl;
-    cout << " nMAX= " << nMax << endl;
+    // // cout << " maximum choice " << endl;
+    // // cout << nCsI << " " << aCsI << " " << tCsI << " " << endl;
+    // // cout << " nMAX= " << nMax << endl;
 
     nCsI = -1;
     tCsI = 0;

@@ -30,6 +30,8 @@ void readThickness();
 void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16);
 
 void triton();
+void find8He();
+void find6He();
 void checkHe3();
 void timesSQ20();
 void timesSQ1();
@@ -106,13 +108,14 @@ Bool_t timesToF,timesMWPC;
 Double_t fThickness1[16][16],fThickness2[16][16],fThickness3[16][16],fThickness4[16][16];
 
 Int_t flag1,flag2,flag3,flag4,flagCent,flagtCsI;
-Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4;
+Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4,nhe8,nhe6;
 
-TCutG *cutCsI[16],*cut3h[16],*cutX_C[32];
+TCutG *cutCsI[16],*cut3h[16],*cutX_C[32],*cut8he[16],*cut6he[16];
 TCutG *cuthe3_1[16],*cutSQ20_1[16],*cutSQ1_1[16];
 TCutG *cuthe3_2[16],*cutSQ20_2[16],*cutSQ1_2[16];
 TCutG *cuthe3_3[16],*cutSQ20_3[16],*cutSQ1_3[16];
 TCutG *cuthe3_4[16],*cutSQ20_4[16],*cutSQ1_4[16];
+TCutG *cut6Li;
 
 Float_t th_he3_1,th_he3_2,th_he3_3,th_he3_4,th_h3;
 Float_t phi_he3_1,phi_he3_2,phi_he3_3,phi_he3_4,phi_h3;
@@ -332,6 +335,9 @@ void selection1(Int_t nFile=0) {
 
   // tw->Branch("flagtCsI.",&flagtCsI,"flagtCsI/I");
 
+  tw->Branch("nhe8.",&nhe8,"nhe8/I");
+  tw->Branch("nhe6.",&nhe6,"nhe6/I");
+
   tw->Branch("nh3.",&nh3,"nh3/I");
   tw->Branch("nhe3_1.",&nhe3_1,"nhe3_1/I");
   tw->Branch("nhe3_2.",&nhe3_2,"nhe3_2/I");
@@ -388,7 +394,7 @@ void selection1(Int_t nFile=0) {
     zeroVars();
 
     MWPCprojection();
-    // if ( ((fXt-xCent)*(fXt-xCent) + (fYt-yCent)*(fYt-yCent))>10*10 ) continue;
+    if ( ((fXt-xCent)*(fXt-xCent) + (fYt-yCent)*(fYt-yCent))>13*13 ) continue;
 
     fillSi();
 
@@ -430,7 +436,12 @@ void selection1(Int_t nFile=0) {
       trackCsI();
       CsItimes();
     }
-    if (flagCent) triton();
+
+    if (flagCent) {
+      triton();
+      find8He();
+      find6He();
+    }
 
     tw->Fill();
   }
@@ -499,6 +510,8 @@ void zeroVars() {
   flagCent = 1;
   flagtCsI = 1;
 
+  nhe8 = 0;
+  nhe6 = 0;
   nh3 = 0;
   nhe3_1 = 0;
   nhe3_2 = 0;
@@ -929,6 +942,29 @@ void triton() {
   }
 }
 
+void find8He() {
+  if(nCsI_track>-1 && nX_C>-1 && cut8he[nCsI_track]->IsInside(arCsI[nCsI_track], X_C)) {
+    nhe8 = 1;
+    return;
+  }
+  else {
+    nhe8 = 0;
+    return;
+  }
+}
+
+void find6He() {
+  if(nCsI_track>-1 && nX_C>-1 && cut6he[nCsI_track]->IsInside(arCsI[nCsI_track], X_C)) {
+    nhe6 = 1;
+    return;
+  }
+  else {
+    nhe6 = 0;
+    return;
+  }
+}
+
+
 void checkHe3() {
   if(flag1 && n1_1>-1 && n20_1>-1 && cuthe3_1[n20_1]->IsInside(a1_1+a20_1_un, a20_1)) {
     nhe3_1 = 1;
@@ -1021,6 +1057,28 @@ void readCuts() {
     f = new TFile(cutName.Data());
     cut3h[i] = (TCutG*)f->Get("CUTG");
     if (!cut3h[i]) {
+      cout << "no cut " << cutName.Data() << endl;
+      exit(-1);
+    }    
+    delete f;
+  }
+
+  for(Int_t i=0;i<16;i++) {
+    cutName.Form("/home/ivan/work/macro/be10_Nov/cut/CT/litium/he8/firstVol/he8_%d.root",i);
+    f = new TFile(cutName.Data());
+    cut8he[i] = (TCutG*)f->Get("CUTG");
+    if (!cut8he[i]) {
+      cout << "no cut " << cutName.Data() << endl;
+      exit(-1);
+    }    
+    delete f;
+  }
+
+  for(Int_t i=0;i<16;i++) {
+    cutName.Form("/home/ivan/work/macro/be10_Nov/cut/CT/litium/he6/firstVol/he6_%d.root",i);
+    f = new TFile(cutName.Data());
+    cut6he[i] = (TCutG*)f->Get("CUTG");
+    if (!cut6he[i]) {
       cout << "no cut " << cutName.Data() << endl;
       exit(-1);
     }    

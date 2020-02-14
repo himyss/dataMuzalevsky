@@ -85,9 +85,16 @@ Float_t th_he3_1,th_he3_2,th_he3_3,th_he3_4,th_h3;
 Float_t phi_he3_1,phi_he3_2,phi_he3_3,phi_he3_4,phi_h3;
 
 Float_t thickness;
+
+Float_t xOffset,yOffset,zOffset;
 //--------------------------------------------------------------------------------
 
 void calcEnergies_frame(Int_t nRun=0) {
+
+  xOffset = 0.55;
+  yOffset = 1.33;
+  zOffset = 2;
+
 
   TChain *ch = new TChain("tree");
 
@@ -429,7 +436,7 @@ void calcEnergies_frame(Int_t nRun=0) {
 
       e_4 = a1_4;
 
-      thickness = (fThickness4[n20_4][n1_4]*thCoeff3+2.27)/cos(th_he3_4); // 0.5 - DL of thick det
+      thickness = (fThickness4[n20_4][n1_4]*thCoeff4+2.27)/cos(th_he3_4); // 0.5 - DL of thick det
       e_4 = f3HeSi->GetE0(e_4,thickness);   
 
       // mylar
@@ -450,10 +457,10 @@ void calcEnergies_frame(Int_t nRun=0) {
       centE = arCsI[nCsI_track] + X_C; 
 
       // 3 plane
-      if (frame3X>12.5 || frame3X<-12.5 || frame3Y>12.5 || frame3Y<-12.5) {
+      if (frame3X>12.5+xOffset || frame3X<-12.5+xOffset || frame3Y>12.5+yOffset || frame3Y<-12.5+yOffset) {
 
-        if (frame3X<-12.5 && frame3Y>-12.5) { // 1 telescope
-          if (frame3X<-18.5 && frame3Y>-6.5) {  // Si sensitive area
+        if (frame3X<-12.5+xOffset && frame3Y>-12.5+yOffset) { // 1 telescope
+          if (frame3X<-18.5+xOffset && frame3Y>-6.5+yOffset) {  // Si sensitive area
             centE = f3HSi->GetE0(centE,1000./cos(th_h3));
           }
           else { // FR4 frame
@@ -461,8 +468,8 @@ void calcEnergies_frame(Int_t nRun=0) {
           }
         }
 
-        if (frame3X<12.5 && frame3Y<-12.5) { // 2 telescope
-          if (frame3X<6.5 && frame3Y<-18.5) { // Si sensitive area
+        if (frame3X<12.5+xOffset && frame3Y<-12.5+yOffset) { // 2 telescope
+          if (frame3X<6.5+xOffset && frame3Y<-18.5+yOffset) { // Si sensitive area
             centE = f3HSi->GetE0(centE,1000./cos(th_h3));
           }
           else { // FR4 frame
@@ -470,8 +477,8 @@ void calcEnergies_frame(Int_t nRun=0) {
           }
         }
 
-        if (frame3X>12.5 && frame3Y<12.5) { // 3 telescope
-          if (frame3X>18.5 && frame3Y<6.5) { // Si sensitive area
+        if (frame3X>12.5+xOffset && frame3Y<12.5+yOffset) { // 3 telescope
+          if (frame3X>18.5+xOffset && frame3Y<6.5+yOffset) { // Si sensitive area
             centE = f3HSi->GetE0(centE,1000./cos(th_h3));
           }
           else { // FR4 frame
@@ -479,8 +486,8 @@ void calcEnergies_frame(Int_t nRun=0) {
           }
         }
 
-        if (frame3X>-12.5 && frame3Y>12.5) { // 4 telescope
-          if (frame3X>-6.5 && frame3Y>18.5) { // Si sensitive area
+        if (frame3X>-12.5+xOffset && frame3Y>12.5+yOffset) { // 4 telescope
+          if (frame3X>-6.5+xOffset && frame3Y>18.5+yOffset) { // Si sensitive area
             centE = f3HSi->GetE0(centE,1000./cos(th_h3));
           }
           else { // FR4 frame
@@ -490,10 +497,10 @@ void calcEnergies_frame(Int_t nRun=0) {
       }
 
       // 2 plane
-      if (frame2X>12.5 || frame2X<-12.5 || frame2Y>12.5 || frame2Y<-12.5) {
+      if (frame2X>12.5+xOffset || frame2X<-12.5+xOffset || frame2Y>12.5+yOffset || frame2Y<-12.5+yOffset) {
 
-        if (frame2X<-12.5 && frame2Y>-12.5) { // 1 telescope
-          if (frame2X<-18.5 && frame2Y>-6.5) {  // Si sensitive area
+        if (frame2X<-12.5+xOffset && frame2Y>-12.5+yOffset) { // 1 telescope
+          if (frame2X<-18.5+xOffset && frame2Y>-6.5+yOffset) {  // Si sensitive area
             centE = f3HSi->GetE0(centE,1000./cos(th_h3));
           }
           else { // FR4 frame
@@ -501,8 +508,8 @@ void calcEnergies_frame(Int_t nRun=0) {
           }
         }
 
-        if (frame2X<12.5 && frame2Y<-12.5) { // 2 telescope
-          if (frame2X<6.5 && frame2Y<-18.5) { // Si sensitive area
+        if (frame2X<12.5+xOffset && frame2Y<-12.5+yOffset) { // 2 telescope
+          if (frame2X<6.5+xOffset && frame2Y<-18.5+yOffset) { // Si sensitive area
             centE = f3HSi->GetE0(centE,1000./cos(th_h3));
           }
           else { // FR4 frame
@@ -510,8 +517,8 @@ void calcEnergies_frame(Int_t nRun=0) {
           }
         }
 
-        if (frame2X>12.5 && frame2Y<12.5) { // 3 telescope
-          if (frame2X>18.5 && frame2Y<6.5) { // Si sensitive area
+        if (frame2X>12.5+xOffset && frame2Y<12.5+yOffset) { // 3 telescope
+          if (frame2X>18.5+xOffset && frame2Y<6.5+yOffset) { // Si sensitive area
             centE = f3HSi->GetE0(centE,1000./cos(th_h3));
           }
           else { // FR4 frame
@@ -519,8 +526,8 @@ void calcEnergies_frame(Int_t nRun=0) {
           }
         }
 
-        if (frame2X>-12.5 && frame2Y>12.5) { // 4 telescope
-          if (frame2X>-6.5 && frame2Y>18.5) { // Si sensitive area
+        if (frame2X>-12.5+xOffset && frame2Y>12.5+yOffset) { // 4 telescope
+          if (frame2X>-6.5+xOffset && frame2Y>18.5+yOffset) { // Si sensitive area
             centE = f3HSi->GetE0(centE,1000./cos(th_h3));
           }
           else { // FR4 frame
@@ -529,41 +536,41 @@ void calcEnergies_frame(Int_t nRun=0) {
         }
       }
 
-      if (frame1X>12.5 || frame1X<-12.5 || frame1Y>12.5 || frame1Y<-12.5) {
+      if (frame1X>12.5+xOffset || frame1X<-12.5+xOffset || frame1Y>12.5+yOffset || frame1Y<-12.5+yOffset) {
 
-        if (frame1X<-12.5 && frame1Y>-12.5) { // 1 telescope
-          if (frame1X<-21.2 && frame1Y>-3.8) {  // Si sensitive area
+        if (frame1X<-12.5+xOffset && frame1Y>-12.5+yOffset) { // 1 telescope
+          if (frame1X<-21.3+xOffset && frame1Y>-3.7+yOffset) {  // Si sensitive area
             centE = f3HSi->GetE0(centE,20./cos(th_h3));
           }
           else { // Keramik frame
-            centE = f3HKeramic->GetE0(centE,500./cos(th_h3));
+            centE = f3HKeramic->GetE0(centE,660./cos(th_h3));
           }
         }
 
-        if (frame1X<12.5 && frame1Y<-12.5) { // 2 telescope
-          if (frame1X<3.8 && frame1Y<-21.2) {  // Si sensitive area
+        if (frame1X<12.5+xOffset && frame1Y<-12.5+yOffset) { // 2 telescope
+          if (frame1X<3.7+xOffset && frame1Y<-21.3+yOffset) {  // Si sensitive area
             centE = f3HSi->GetE0(centE,20./cos(th_h3));
           }
           else { // Keramik frame
-            centE = f3HKeramic->GetE0(centE,500./cos(th_h3));
+            centE = f3HKeramic->GetE0(centE,660./cos(th_h3));
           }
         }
 
-        if (frame1X>12.5 && frame1Y<12.5) { // 3 telescope
-          if (frame1X>21.2 && frame1Y<3.8) {  // Si sensitive area
+        if (frame1X>12.5+xOffset && frame1Y<12.5+yOffset) { // 3 telescope
+          if (frame1X>21.3+xOffset && frame1Y<3.7+yOffset) {  // Si sensitive area
             centE = f3HSi->GetE0(centE,20./cos(th_h3));
           }
           else { // Keramik frame
-            centE = f3HKeramic->GetE0(centE,500./cos(th_h3));
+            centE = f3HKeramic->GetE0(centE,660./cos(th_h3));
           }
         }
 
-        if (frame1X>-12.5 && frame1Y>12.5) { // 3 telescope
-          if (frame1X>-3.8 && frame1Y>21.2) {  // Si sensitive area
+        if (frame1X>-12.5+xOffset && frame1Y>12.5+yOffset) { // 3 telescope
+          if (frame1X>-3.7+xOffset && frame1Y>21.3+yOffset) {  // Si sensitive area
             centE = f3HSi->GetE0(centE,20./cos(th_h3));
           }
           else { // Keramik frame
-            centE = f3HKeramic->GetE0(centE,500./cos(th_h3));
+            centE = f3HKeramic->GetE0(centE,660./cos(th_h3));
           }
         }
 

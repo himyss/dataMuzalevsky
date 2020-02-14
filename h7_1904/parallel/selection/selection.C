@@ -79,6 +79,12 @@ Int_t n20_4;
 Float_t a1_4,t1_4;
 Int_t n1_4;
 
+Float_t a1,t1;
+Int_t n1;
+
+Float_t a20,t20,a20_un;
+Int_t n20;
+
 Int_t multv_1,mult20_1,mult1_1;
 Int_t multv_2,mult20_2,mult1_2;
 Int_t multv_3,mult20_3,mult1_3;
@@ -113,6 +119,7 @@ TCutG *cuthe3_1[16],*cutSQ20_1[16],*cutSQ1_1[16];
 TCutG *cuthe3_2[16],*cutSQ20_2[16],*cutSQ1_2[16];
 TCutG *cuthe3_3[16],*cutSQ20_3[16],*cutSQ1_3[16];
 TCutG *cuthe3_4[16],*cutSQ20_4[16],*cutSQ1_4[16];
+TCutG *cut6Li;
 
 Float_t th_he3_1,th_he3_2,th_he3_3,th_he3_4,th_h3;
 Float_t phi_he3_1,phi_he3_2,phi_he3_3,phi_he3_4,phi_h3;
@@ -143,6 +150,7 @@ Float_t pDSD_Y1[32],pDSD_Y2[32];
 Float_t pCsI_1[16],pCsI_2[16];
 
 Float_t x1t,y1t,x2t,y2t,x3t,y3t,x4t,y4t,xCt,yCt;
+Float_t x1t_1,y1t_1,x2t_1,y2t_1,x3t_1,y3t_1,x4t_1,y4t_1;
 
 TELoss *f3HSi;
 
@@ -173,6 +181,7 @@ void selection(Int_t nFile=0) {
   TString inPutFileName;
   inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calibrated/newCal/h7_%d_cal.root",nFile);
   ch->Add(inPutFileName.Data());
+
 
   cout << ch->GetEntries() << endl;
   //--------------------------------------------------------------------------------
@@ -249,8 +258,8 @@ void selection(Int_t nFile=0) {
 
   TString outPutFileName;
   // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/beamDiagnostics/selected/h7_ct_%d_cut_newPars.root",nFile);
-  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/targetCut/13/h7_ct_%d_cut.root",nFile);
-  // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/targetCut/13/h7_ct_%d_cut.root",nFile);
+  // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/equalTriggers/h7_ct_%d_cut.root",nFile);
+  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/h7_ct_%d_cut.root",nFile);
   // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/test.root",nFile);
 
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
@@ -342,6 +351,11 @@ void selection(Int_t nFile=0) {
   tw->Branch("flag4.",&flag4,"flag4/I");
   tw->Branch("flagCent.",&flagCent,"flagCent/I");
 
+
+  tw->Branch("a1.",&a1,"a1/F");
+  tw->Branch("t1.",&t1,"t1/F");
+  tw->Branch("n1.",&n1,"n1/I");
+
   // tw->Branch("flagtCsI.",&flagtCsI,"flagtCsI/I");
 
   tw->Branch("nh3.",&nh3,"nh3/I");
@@ -370,6 +384,17 @@ void selection(Int_t nFile=0) {
   tw->Branch("y2t",&y2t,"y2t/F");
   tw->Branch("y3t",&y3t,"y3t/F");
   tw->Branch("y4t",&y4t,"y4t/F");
+
+  tw->Branch("x1t_1",&x1t_1,"x1t_1/F");
+  tw->Branch("x2t_1",&x2t_1,"x2t_1/F");
+  tw->Branch("x3t_1",&x3t_1,"x3t_1/F");
+  tw->Branch("x4t_1",&x4t_1,"x4t_1/F");
+  tw->Branch("y1t_1",&y1t_1,"y1t_1/F");
+  tw->Branch("y2t_1",&y2t_1,"y2t_1/F");
+  tw->Branch("y3t_1",&y3t_1,"y3t_1/F");
+  tw->Branch("y4t_1",&y4t_1,"y4t_1/F");
+
+
   tw->Branch("xCt",&xCt,"xCt/F");
   tw->Branch("yCt",&yCt,"yCt/F");
 
@@ -382,23 +407,19 @@ void selection(Int_t nFile=0) {
   xCent = 0;
   yCent = 0;
 
-  for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
-  // for(Int_t nentry=0;nentry<10000;nentry++) {     
+  // for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
+  for(Int_t nentry=0;nentry<10000;nentry++) {     
     if(nentry%1000000==0) cout << "#ENTRY " << nentry << "#" << endl;
 
     ch->GetEntry(nentry);
 
     if (trigger==1) continue;
 
-    // // tmp recalibration
-    // for(Int_t i=0;i<16;i++) {
-    //   SQ20_2[i] = ((SQ20_2[i] - pSQ202_1[i])/pSQ202_2[i])*pSQ202_2_new[i] + pSQ202_1_new[i];
-    // }
-
     zeroVars();
 
     MWPCprojection();
     if ( ((fXt-xCent)*(fXt-xCent) + (fYt-yCent)*(fYt-yCent))>13*13 ) continue;
+
 
     fillSi();
 
@@ -427,8 +448,13 @@ void selection(Int_t nFile=0) {
     if (multCsI>0){
       CsI_max();
       trackCsI();
-      CsItimes();
     }
+
+    if (nCsI!=nCsI_track){
+      if (nCsI-nCsI_track==4 || nCsI-nCsI_track==-4) nCsI_track = nCsI;
+      if (nCsI-nCsI_track==1 || nCsI-nCsI_track==-1) nCsI_track = nCsI;
+    }
+    CsItimes();
 
     DSD_Cselect();
 
@@ -442,10 +468,6 @@ void selection(Int_t nFile=0) {
 
     if (flagCent) triton();
 
-    // if (nCsI>-1) aCsI = aCsI*pCsI_2[nCsI] + pCsI_1[nCsI];
-    // for (Int_t i=0;i<16;i++) {
-    //   arCsI[i] = arCsI[i]*pCsI_2[i] + pCsI_1[i];
-    // }
 
     tw->Fill();
   }
@@ -1027,6 +1049,15 @@ void readCuts() {
   TFile *f;
   TString cutName;
 
+  cutName.Form("/home/ivan/work/macro/h7_1904/cuts/T1/li6_cut.root");
+  f = new TFile(cutName.Data());
+  cut6Li = (TCutG*)f->Get("CUTG");
+  if (!cut6Li) {
+    cout << "no cut " << cutName.Data() << endl;
+    exit(-1);
+  }    
+  delete f;
+
   for(Int_t i=0;i<16;i++) {
     cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/C_T/6He/he6_%d.root",i);
     f = new TFile(cutName.Data());
@@ -1072,7 +1103,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T1/he3/cut_he3_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/h7_1904/cuts/T1/he3/canvas/he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_1[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_1[i]) {
@@ -1083,7 +1114,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T2/he3/cut_he3_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/h7_1904/cuts/T2/he3/canvas/he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_2[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_2[i]) {
@@ -1094,7 +1125,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T3/he3/cut_he3_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/h7_1904/cuts/T3/he3/canvas/he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_3[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_3[i]) {
@@ -1105,7 +1136,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T4/he3/cut_he3_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/h7_1904/cuts/T4/he3/canvas/he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_4[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_4[i]) {
@@ -1192,6 +1223,8 @@ void calcVectorTel4(Int_t n20, Int_t n1) {
   x4t = (x1 - fXt)*(173-zOffset)/(188-zOffset) + fXt;
   y4t = y20;
 
+  x4t_1 = x1;
+
   th_he3_4 = tel1V.Theta();
   phi_he3_4 = tel1V.Phi();
 
@@ -1242,32 +1275,32 @@ void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16){
 void trackCsI() {
   Float_t step = 0.;
 
-  if ( xCt<(33.-step) && xCt>(16.5+step) ) {
-    if ( yCt<(33.-step) && yCt>(16.5+step) ) nCsI_track = 0;
-    if ( yCt<(16.5-step) && yCt>step ) nCsI_track = 4;
-    if ( yCt<(-step) && yCt>-(16.5-step) ) nCsI_track = 8;
-    if ( yCt<-(16.5+step) && yCt>-(33-step) ) nCsI_track = 12;
+  if ( xCt<(33.-step+xOffset) && xCt>(16.5+step+xOffset) ) {
+    if ( yCt<(33.-step+yOffset) && yCt>(16.5+step+yOffset) ) nCsI_track = 0;
+    if ( yCt<(16.5-step+yOffset) && yCt>step+yOffset ) nCsI_track = 4;
+    if ( yCt<(-step+yOffset) && yCt>-(16.5-step+yOffset) ) nCsI_track = 8;
+    if ( yCt<-(16.5+step+yOffset) && yCt>-(33-step+yOffset) ) nCsI_track = 12;
   }
 
-  if ( xCt<(16.5-step) && xCt>(step) ) {
-    if ( yCt<(33.-step) && yCt>(16.5+step) ) nCsI_track = 1;
-    if ( yCt<(16.5-step) && yCt>step ) nCsI_track = 5;
-    if ( yCt<(-step) && yCt>-(16.5-step) ) nCsI_track = 9;
-    if ( yCt<-(16.5+step) && yCt>-(33-step) ) nCsI_track = 13;
+  if ( xCt<(16.5-step+xOffset) && xCt>(step+xOffset) ) {
+    if ( yCt<(33.-step+yOffset) && yCt>(16.5+step+yOffset) ) nCsI_track = 1;
+    if ( yCt<(16.5-step+yOffset) && yCt>step+yOffset ) nCsI_track = 5;
+    if ( yCt<(-step+yOffset) && yCt>-(16.5-step+yOffset) ) nCsI_track = 9;
+    if ( yCt<-(16.5+step+yOffset) && yCt>-(33-step+yOffset) ) nCsI_track = 13;
   }
 
-  if ( xCt<(-step) && xCt>-(16.5-step) ) {
-    if ( yCt<(33.-step) && yCt>(16.5+step) ) nCsI_track = 2;
-    if ( yCt<(16.5-step) && yCt>step ) nCsI_track = 6;
-    if ( yCt<(-step) && yCt>-(16.5-step) ) nCsI_track = 10;
-    if ( yCt<-(16.5+step) && yCt>-(33-step) ) nCsI_track = 14;
+  if ( xCt<(-step+xOffset) && xCt>-(16.5-step+xOffset) ) {
+    if ( yCt<(33.-step+yOffset) && yCt>(16.5+step+yOffset) ) nCsI_track = 2;
+    if ( yCt<(16.5-step+yOffset) && yCt>step+yOffset ) nCsI_track = 6;
+    if ( yCt<(-step+yOffset) && yCt>-(16.5-step+yOffset) ) nCsI_track = 10;
+    if ( yCt<-(16.5+step+yOffset) && yCt>-(33-step+yOffset) ) nCsI_track = 14;
   }
 
-  if ( xCt<-(16.5+step) && xCt>-(33-step) ) {
-    if ( yCt<(33.-step) && yCt>(16.5+step) ) nCsI_track = 3;
-    if ( yCt<(16.5-step) && yCt>step ) nCsI_track = 7;
-    if ( yCt<(-step) && yCt>-(16.5-step) ) nCsI_track = 11;
-    if ( yCt<-(16.5+step) && yCt>-(33-step) ) nCsI_track = 15;
+  if ( xCt<-(16.5+step+xOffset) && xCt>-(33-step+xOffset) ) {
+    if ( yCt<(33.-step+yOffset) && yCt>(16.5+step+yOffset) ) nCsI_track = 3;
+    if ( yCt<(16.5-step+yOffset) && yCt>step+yOffset ) nCsI_track = 7;
+    if ( yCt<(-step+yOffset) && yCt>-(16.5-step+yOffset) ) nCsI_track = 11;
+    if ( yCt<-(16.5+step+yOffset) && yCt>-(33-step+yOffset) ) nCsI_track = 15;
   }
 }
 

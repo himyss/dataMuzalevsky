@@ -61,7 +61,7 @@ Bool_t timesToF,timesMWPC;
 Double_t fThickness1[16][16],fThickness2[16][16],fThickness3[16][16],fThickness4[16][16];
 
 Int_t flag1,flag2,flag3,flag4,flagCent;
-Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4;
+Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4,nhe8,nhe6;
 
 Float_t e_1,e_2,e_3,e_4;
 Float_t centE;
@@ -170,6 +170,8 @@ void calcEnergies1() {
   ch->SetBranchAddress("flag4.",&flag4);
   ch->SetBranchAddress("flagCent.",&flagCent);
 
+  ch->SetBranchAddress("nhe6.",&nhe6);
+  ch->SetBranchAddress("nhe8.",&nhe8);
   ch->SetBranchAddress("nh3.",&nh3);
   ch->SetBranchAddress("nhe3_1.",&nhe3_1);
   ch->SetBranchAddress("nhe3_2.",&nhe3_2);
@@ -283,6 +285,8 @@ void calcEnergies1() {
   tw->Branch("flag4.",&flag4,"flag4/I");
   tw->Branch("flagCent.",&flagCent,"flagCent/I");
 
+  tw->Branch("nhe6.",&nhe6,"nhe6/I");
+  tw->Branch("nhe8.",&nhe8,"nhe8/I");
   tw->Branch("nh3.",&nh3,"nh3/I");
   tw->Branch("nhe3_1.",&nhe3_1,"nhe3_1/I");
   tw->Branch("nhe3_2.",&nhe3_2,"nhe3_2/I");
@@ -327,6 +331,7 @@ void calcEnergies1() {
     // cout << nentry << endl;
     ch->GetEntry(nentry);
     // if (trigger!=1) continue;
+    if ( ((fXt)*(fXt) + (fYt)*(fYt))>13*13 ) continue;
 
     zeroVars(); 
 

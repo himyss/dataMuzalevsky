@@ -8,7 +8,7 @@ xtab[i0+1] 	0.0375979	ytab[i0+1] 	0.00250001
 xtab[i0+1] 	0.0375979	ytab[i0+1] 	0.00250001
 xtab[i0+1] 	0.0375979	ytab[i0+1] 	0.00250001
 xtab[i0+1] 	0.0375979	ytab[i0+1] 	0.00250001
-22282134 total number of Entries
+20028437 total number of Entries
 #ENTRY 0#
 #ENTRY 1000000#
 #ENTRY 2000000#
@@ -30,5 +30,3 @@ xtab[i0+1] 	0.0375979	ytab[i0+1] 	0.00250001
 #ENTRY 18000000#
 #ENTRY 19000000#
 #ENTRY 20000000#
-#ENTRY 21000000#
-#ENTRY 22000000#

@@ -32,7 +32,11 @@ void drawAngles(){
   TChain *ch1 = new TChain("tree"); //e4
   // ch1->Add("/media/ivan/data/exp1904/analysed/novPars/reco/eTarget/h7_ect_*_mm_frame.root");
   ch1->Add("/media/ivan/data/exp1904/analysed/novPars/reco/track0/targetCut/13/h7_ct_*_mm_frame_newPars.root");
-  // ch1->Add("/media/ivan/data/exp1904/analysed/novPars/reco/track0/h7_ct_*_mm_frame_newPars.root");
+  // ch1->Add("/media/ivan/data/exp1904/analysed/novPars/reco/h7_ct_6Li_*_mm_frame_newPars.root");
+
+
+  TChain *ch4 = new TChain("tree");
+  ch4->Add("/media/ivan/data/exp1904/analysed/novPars/reco/h7_ct_6Li_*_mm_frame_newPars.root");
 
 
   cout << ch1->GetEntries() << endl;
@@ -823,241 +827,117 @@ return;
     
     if (tetraN) {
 
-        TCanvas *n4_tria = new TCanvas("n4_tria");
-        n4_tria->cd();
+        ch4->SetMarkerStyle(7);
 
-        ch1->SetLineColor(kBlack);
-        cut.Form("nh3 && flagCent &&  ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        // cout << ch1->Draw("eh3_CM/(e4n_CM+eh3_CM+(m4n-4*0.939565)) >> n4_triangle",cut.Data(),"") << endl;
-        cout << ch1->Draw("1000*eh3_CM/(1000*(e4n_CM+eh3_CM+(m4n-4*0.939565)))  >> n4_triangle(50,0,1)",cut.Data(),"") << endl;
+        TCanvas *kinN4 = new TCanvas("kinN4","title",1800,1000);
+        kinN4->Divide(2,2);
+
+        kinN4->cd(1);
+        cut.Form("nhe3_1 && flag1");
+        cout << ch4->Draw("1000*eh7:angle_h7_he8",cut.Data(),"") << endl;
+        kinN4->Update();        
+
+        kinN4->cd(2);
+        cut.Form("nhe3_1 && flag1");
+        cout << ch4->Draw("1000*ehe3:angle_he3_he8 >> (60,0,30,40,0,80)",cut.Data(),"col") << endl;
+        kinN4->Update();  
+
+        kinN4->cd(3);
+        cut.Form("nhe3_1 && flag1");
+        cout << ch4->Draw("1000*ehe3:1000*(mh7-4*0.939565)",cut.Data(),"") << endl;
+        kinN4->Update();  
+
+        kinN4->cd(4);
+        ch4->SetLineColor(kBlack);
+        cut.Form("( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
+        cout << ch4->Draw("1000*(5.601518524+mh7-7.482538-1.875612)",cut.Data(),"") << endl;
+
+        ch4->SetLineColor(kRed);
+        cut.Form("( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
+        cut += " && 1000*ehe3>30 && 1000*ehe3<60";
+        cout << ch4->Draw("1000*(5.601518524+mh7-7.482538-1.875612)",cut.Data(),"same") << endl;
+        kinN4->Update();  
+
+        TCanvas *n4_tria = new TCanvas("n4_tria","title",1800,1000);
+        n4_tria->Divide(2,1);
+
+        n4_tria->cd(1);
+        ch4->SetLineColor(kBlack);
+        cut.Form("( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
+        cout << ch4->Draw("1000*(mh7-4*0.939565) >> mm_n4_total",cut.Data(),"") << endl;
         n4_tria->Update();
 
-        ch1->SetLineColor(kMagenta);
-        cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        cut += " && thetah7CM<17";
-        cut += " && thetah3CM<70";
-        cut += " && 1000*(m4n-4*0.939565)<5";
-        cout << ch1->Draw("1000*eh3_CM/(1000*(e4n_CM+eh3_CM+(m4n-4*0.939565)))",cut.Data(),"same") << endl;
+        ch4->SetLineColor(kRed);
+        cut.Form("( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
+        cut += " && 1000*ehe3>30 && 1000*ehe3<60";
+        cout << ch4->Draw("1000*(mh7-4*0.939565)",cut.Data(),"same") << endl;
         n4_tria->Update();
 
+        n4_tria->cd(2);
+        ch4->SetMarkerColor(kBlack);
+        cut.Form("( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
+        cout << ch4->Draw("thetah7CM:1000*(mh7-4*0.939565)",cut.Data(),"") << endl;
+        n4_tria->Update();
 
-return;
-        // ch1->SetLineColor(kRed);
-        // cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        // cut += " && " + cutTriangle;
-        // cout << ch1->Draw("thetah3CM",cut.Data(),"same") << endl;
-        // n4_tria->Update();
-
-        // ch1->SetLineColor(kGreen);
-        // cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        // // cut += " && " + cutTriangle;
-        // cut += " && thetah7CM<17";
-        // cout << ch1->Draw("thetah3CM",cut.Data(),"same") << endl;
-        // n4_tria->Update();
-
-        // ch1->SetLineColor(kMagenta);
-        // cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        // // cut += " && " + cutTriangle;
-        // cut += " && thetah7CM>17";
-        // cout << ch1->Draw("e4n_CM*1000:1000*(mh7-4*0.939565-2.808920)",cut.Data(),"same") << endl;
-        // n4_tria->Update();
-
+        ch4->SetMarkerColor(kRed);
+        cut.Form("( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
+        cut += " && 1000*ehe3>30 && 1000*ehe3<60";
+        cout << ch4->Draw("thetah7CM:1000*(mh7-4*0.939565)",cut.Data(),"same") << endl;
+        n4_tria->Update();
 
 
         TCanvas *cTetra = new TCanvas("cTetra","",1000,1000); 
         cTetra->Divide(2,2);
 
         cTetra->cd(1);
-        ch1->SetLineColor(kBlack);
-        cut.Form("nh3 && flagCent &&  ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        cout << ch1->Draw("1000*(m4n-4*0.939565) >> mm_4n(20,-5,20)",cut.Data(),"") << endl;
+        ch4->SetLineColor(kBlack);
+        cut.Form("nhe3_1 && flag1");
+        cout << ch4->Draw("1000*(mh7-4*0.939565)",cut.Data(),"") << endl;
         cTetra->Update();
 
-        ch1->SetLineColor(kRed);
-        cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        cut += " && " + cutTriangle;
-        cout << ch1->Draw("1000*(m4n-4*0.939565)",cut.Data(),"same") << endl;
-        cTetra->Update();
-
-        ch1->SetLineColor(kGreen);
-        cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        // cut += " && " + cutTriangle;
-        cut += " && thetah7CM<17";
-        cout << ch1->Draw("1000*(m4n-4*0.939565)",cut.Data(),"same") << endl;
-        cTetra->Update();
-
-        ch1->SetLineColor(kMagenta);
-        cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        cut += " && thetah7CM<17";
-        cut += " && thetah3CM<70";
-        cout << ch1->Draw("1000*(m4n-4*0.939565)",cut.Data(),"same") << endl;
+        ch4->SetLineColor(kRed);
+        cut.Form("nhe3_1 && flag1");
+        cut += " && 1000*ehe3>30 && 1000*ehe3<60";
+        cout << ch4->Draw("1000*(mh7-4*0.939565)",cut.Data(),"same") << endl;
         cTetra->Update();
 
 
         cTetra->cd(2);
-        ch1->SetLineColor(kBlack);
-        cut.Form("nh3 && flagCent &&  ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        cout << ch1->Draw("1000*(m4n-4*0.939565) >> mm_4n_1(20,-5,20)",cut.Data(),"") << endl;
+        ch4->SetLineColor(kBlack);
+        cut.Form("nhe3_2 && flag2");
+        cout << ch4->Draw("1000*(mh7-4*0.939565)",cut.Data(),"") << endl;
         cTetra->Update();
 
-        ch1->SetLineColor(kRed);
-        cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        cut += " && " + cutTriangle;
-        cout << ch1->Draw("1000*(m4n-4*0.939565)",cut.Data(),"same") << endl;
-        cTetra->Update();
-
-        ch1->SetLineColor(kGreen);
-        cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        // cut += " && " + cutTriangle;
-        cut += " && thetah7CM>17";
-        cout << ch1->Draw("1000*(m4n-4*0.939565)",cut.Data(),"same") << endl;
-        cTetra->Update();
-
-        ch1->SetLineColor(kMagenta);
-        cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        cut += " && thetah7CM>17";
-        cut += " && thetah3CM<70";
-        cout << ch1->Draw("1000*(m4n-4*0.939565)",cut.Data(),"same") << endl;
+        ch4->SetLineColor(kRed);
+        cut.Form("nhe3_2 && flag2");
+        cut += " && 1000*ehe3>30 && 1000*ehe3<60";
+        cout << ch4->Draw("1000*(mh7-4*0.939565)",cut.Data(),"same") << endl;
         cTetra->Update();
 
 
         cTetra->cd(3);
-        ch1->SetLineColor(kBlack);
-        cut.Form("nh3 && flagCent &&  ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        cout << ch1->Draw("1000*(m4n-4*0.939565) >> mm_4n_2(20,-5,20)",cut.Data(),"") << endl;
+        ch4->SetLineColor(kBlack);
+        cut.Form("nhe3_3 && flag3");
+        cout << ch4->Draw("1000*(mh7-4*0.939565)",cut.Data(),"") << endl;
         cTetra->Update();
 
-        ch1->SetLineColor(kRed);
-        cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        cut += " && " + cutTriangle;
-        cout << ch1->Draw("1000*(m4n-4*0.939565)",cut.Data(),"same") << endl;
-        cTetra->Update();
-
-        ch1->SetLineColor(kGreen);
-        cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        // cut += " && " + cutTriangle;
-        cut += " && thetah7CM<17";
-        cout << ch1->Draw("1000*(m4n-4*0.939565)",cut.Data(),"same") << endl;
-        cTetra->Update();
-
-        ch1->SetLineColor(kMagenta);
-        cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        cut += " && thetah7CM<17";
-        cut += " && thetah3CM>90";
-        cout << ch1->Draw("1000*(m4n-4*0.939565)",cut.Data(),"same") << endl;
-        cTetra->Update();
+        ch4->SetLineColor(kRed);
+        cut.Form("nhe3_3 && flag3");
+        cut += " && 1000*ehe3>30 && 1000*ehe3<60";
+        cout << ch4->Draw("1000*(mh7-4*0.939565)",cut.Data(),"same") << endl;
+        cTetra->Update();        
 
         cTetra->cd(4);
-        ch1->SetLineColor(kBlack);
-        cut.Form("nh3 && flagCent &&  ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        cout << ch1->Draw("1000*(m4n-4*0.939565) >> mm_4n_2(20,-5,20)",cut.Data(),"") << endl;
+        ch4->SetLineColor(kBlack);
+        cut.Form("nhe3_4 && flag4");
+        cout << ch4->Draw("1000*(mh7-4*0.939565)",cut.Data(),"") << endl;
         cTetra->Update();
 
-        ch1->SetLineColor(kRed);
-        cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        cut += " && " + cutTriangle;
-        cout << ch1->Draw("1000*(m4n-4*0.939565)",cut.Data(),"same") << endl;
+        ch4->SetLineColor(kRed);
+        cut.Form("nhe3_4 && flag4");
+        cut += " && 1000*ehe3>30 && 1000*ehe3<60";
+        cout << ch4->Draw("1000*(mh7-4*0.939565)",cut.Data(),"same") << endl;
         cTetra->Update();
-
-        ch1->SetLineColor(kGreen);
-        cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        // cut += " && " + cutTriangle;
-        cut += " && thetah7CM>17";
-        cout << ch1->Draw("1000*(m4n-4*0.939565)",cut.Data(),"same") << endl;
-        cTetra->Update();
-
-        ch1->SetLineColor(kMagenta);
-        cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        cut += " && thetah7CM>17";
-        cut += " && thetah3CM>90";
-        cout << ch1->Draw("1000*(m4n-4*0.939565)",cut.Data(),"same") << endl;
-        cTetra->Update();
-
-
-        TCanvas *reaA = new TCanvas("reaA");
-        reaA->cd();
-
-        ch1->SetLineColor(kBlack);
-        cut.Form("nh3 && flagCent &&  ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        cout << ch1->Draw("thetah3CM >> tAngle",cut.Data(),"") << endl;
-        reaA->Update();
-
-        ch1->SetLineColor(kRed);
-        cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        cut += " && " + cutTriangle;
-        cout << ch1->Draw("thetah3CM",cut.Data(),"same") << endl;
-        reaA->Update();
-
-        ch1->SetLineColor(kGreen);
-        cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        // cut += " && " + cutTriangle;
-        cut += " && thetah7CM<17";
-        cout << ch1->Draw("thetah3CM",cut.Data(),"same") << endl;
-        reaA->Update();
-
-        ch1->SetLineColor(kMagenta);
-        cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        // cut += " && " + cutTriangle;
-        cut += " && thetah7CM>17";
-        cout << ch1->Draw("thetah3CM",cut.Data(),"same") << endl;
-        reaA->Update();
-
-
-        
-
-
-return;
-
-        // cTetra->cd(4);
-
-        // cTetra->Divide(2,2);
-
-        // cTetra->cd(1);
-        // ch1->SetMarkerColor(kBlack);
-        // cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        // // cut += " && " + cutTriangle;
-        // cout << ch1->Draw("eh3_CM*1000:1000*(mh7-4*0.939565-2.808920)",cut.Data(),"") << endl;
-        // cTetra->Update();
-
-        // ch1->SetMarkerColor(kGreen);
-        // cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        // cut += " && thetah7CM>19";
-        // // cut += " && 1000*(m4n-4*0.939565)<5";
-        // cout << ch1->Draw("eh3_CM*1000:1000*(mh7-4*0.939565-2.808920)",cut.Data(),"same") << endl;
-        // cTetra->Update();
-
-        // fa->Draw("same");
-
-        // cTetra->cd(2);
-        // ch1->SetMarkerColor(kBlack);
-        // cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        // // cut += " && " + cutTriangle;
-        // cout << ch1->Draw("eh3_CM*1000:1000*(m4n-4*0.939565)",cut.Data(),"") << endl;
-        // cTetra->Update();
-
-        // ch1->SetMarkerColor(kGreen);
-        // cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        // cut += " && thetah7CM>19";
-        // // cut += " && 1000*(m4n-4*0.939565)<5";
-        // cout << ch1->Draw("eh3_CM*1000:1000*(m4n-4*0.939565)",cut.Data(),"same") << endl;
-        // cTetra->Update();
-
-        // cTetra->cd(4);
-        // ch1->SetMarkerColor(kBlack);
-        // cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        // // cut += " && " + cutTriangle;
-        // cout << ch1->Draw("eh3_CM*1000:1000*e4n_CM",cut.Data(),"") << endl;
-        // cTetra->Update();
-
-        // ch1->SetMarkerColor(kGreen);
-        // cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
-        // cut += " && thetah7CM>19";
-        // // cut += " && 1000*(m4n-4*0.939565)<5";
-        // cout << ch1->Draw("eh3_CM*1000:1000*e4n_CM",cut.Data(),"same") << endl;
-        // cTetra->Update();
-
-
-        // fa->Draw("same");
 
     }
 

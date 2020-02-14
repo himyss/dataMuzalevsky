@@ -11,8 +11,11 @@ Float_t tF5,F5,tF3,F3;
 Float_t tMWPC;
 Float_t wirex1,wirex2,wirey1,wirey2;
 
-Int_t nCsI;
+Int_t nCsI,nCsI_track;
 Float_t aCsI,tCsI;
+Float_t aCsI_reco;
+
+Float_t arCsI[16],trCsI[16];
 
 Float_t a20_1,t20_1,a20_1_un;
 Int_t n20_1;
@@ -48,7 +51,7 @@ Float_t frame1X,frame1Y,frame2X,frame2Y,frame3X,frame3Y;
 Float_t x1t,y1t,x2t,y2t,x3t,y3t,x4t,y4t,xCt,yCt;
 
 Int_t flag1,flag2,flag3,flag4,flagCent;
-Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4;
+Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4,nhe8,nhe6;
 
 Float_t e_1,e_2,e_3,e_4;
 Float_t centE;
@@ -95,6 +98,10 @@ void reco() {
   ch->SetBranchAddress("aCsI.",&aCsI);
   ch->SetBranchAddress("tCsI.",&tCsI);
   ch->SetBranchAddress("nCsI.",&nCsI);
+
+  ch->SetBranchAddress("nCsI_track.",&nCsI_track);
+  ch->SetBranchAddress("arCsI",&arCsI);
+  ch->SetBranchAddress("trCsI",&trCsI);
 
   ch->SetBranchAddress("F5.",&F5);
   ch->SetBranchAddress("tF5.",&tF5);
@@ -181,6 +188,8 @@ void reco() {
   ch->SetBranchAddress("flag4.",&flag4);
   ch->SetBranchAddress("flagCent.",&flagCent);
 
+  ch->SetBranchAddress("nhe6.",&nhe6);
+  ch->SetBranchAddress("nhe8.",&nhe8);
   ch->SetBranchAddress("nh3.",&nh3);
   ch->SetBranchAddress("nhe3_1.",&nhe3_1);
   ch->SetBranchAddress("nhe3_2.",&nhe3_2);
@@ -226,6 +235,10 @@ void reco() {
   tw->Branch("aCsI.",&aCsI,"aCsI/F");
   tw->Branch("tCsI.",&tCsI,"tCsI/F");
   tw->Branch("nCsI.",&nCsI,"nCsI/I");
+
+  tw->Branch("nCsI_track.",&nCsI_track,"nCsI_track/I");
+  tw->Branch("arCsI",&arCsI,"arCsI[16]/F");
+  tw->Branch("trCsI",&trCsI,"trCsI[16]/F");
 
   tw->Branch("X_C.",&X_C,"X_C/F");
   tw->Branch("nX_C.",&nX_C,"nX_C/I");
@@ -301,6 +314,8 @@ void reco() {
   tw->Branch("flag4.",&flag4,"flag4/I");
   tw->Branch("flagCent.",&flagCent,"flagCent/I");
 
+  tw->Branch("nhe6.",&nhe6,"nhe6/I");
+  tw->Branch("nhe8.",&nhe8,"nhe8/I");
   tw->Branch("nh3.",&nh3,"nh3/I");
   tw->Branch("nhe3_1.",&nhe3_1,"nhe3_1/I");
   tw->Branch("nhe3_2.",&nhe3_2,"nhe3_2/I");

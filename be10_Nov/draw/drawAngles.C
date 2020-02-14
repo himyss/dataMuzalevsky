@@ -16,13 +16,14 @@ void drawAngles(){
   // ch2->Add("/media/ivan/data/exp1906/be10/analysed/novPars/reco/be10_ct_firstVol_mm.root");  
   ch2->Add("/media/ivan/data/exp1906/be10/analysed/novPars/reco/parVariation/sideTel/be10_ct_mm_secondVol.root");
   ch2->Add("/media/ivan/data/exp1906/be10/analysed/novPars/reco/parVariation/sideTel/be10_ct_firstVol_mm.root");
+  ch2->Add("/media/ivan/data/exp1906/be10/analysed/novPars/reco/parVariation/sideTel/be10_ct_mm_thin.root");
 
   cout << ch2->GetEntries() << endl;
   // ch2->Add("/media/ivan/data/exp1906/be10/analysed/novPars/reco/reserved/be10_ct_mm_initial.root");
 
   ch2->AddFriend("intree","/media/ivan/data/exp1906/be10/analysed/novPars/reco/reserved/be10_ct_mm_initial.root");
 // return;
-// return;
+
 
   TChain *ch3 = new TChain("tree"); //e4
   // ch1->Add("/media/ivan/data/exp1906/be10/analysed/be10_2_mm.root");
@@ -40,9 +41,9 @@ void drawAngles(){
 
     TString cut, triangleCut;
 
-    Bool_t he3_vs_mm = 1;
-    Bool_t summMM = 0;
-    Bool_t mm = 1; 
+    Bool_t he3_vs_mm = 0;
+    Bool_t summMM = 1;
+    Bool_t mm = 0; 
     Bool_t testPars = 0;
     Bool_t testPars1 = 0;
     Bool_t reactionAngle = 0;
@@ -71,7 +72,7 @@ void drawAngles(){
         c2->cd(1);
         ch2->SetMarkerColor(kBlack);
         cut.Form("flagCent && flag1 && trigger==2 && nhe3_1");
-        cut += " &&  (fXt*fXt + fYt*fYt)<10*10";
+        
         // cut.Form("(nhe3_2 && e_2<25)  && nh3");
         ch2->Draw("e_1:1000*(mh7-8.406868788) >> h12D(70,-5,5,100,5,14)",cut.Data(),"");
         c2->Update();
@@ -80,7 +81,7 @@ void drawAngles(){
         // cut.Form("(1000*(mh7-8.406868788)>-0.6 || e_1>8.54) && flagCent && flag1 && trigger==2 && nhe3_1 && e_1<25 && 1000*(mh7-8.406868788)<%f && 1000*(mh7-8.406868788)>%f",b2_1,b1_1);
         cut.Form("flagCent && flag1 && trigger==2 && nhe3_1 && ");
         cut += cutg1->GetName();
-        cut += " &&  (fXt*fXt + fYt*fYt)<10*10";
+        
 
         ch2->Draw("e_1:1000*(mh7-8.406868788) >> h12DCUT(70,-5,5,100,5,14)",cut.Data(),"same");
         c2->Update();
@@ -90,14 +91,14 @@ void drawAngles(){
         c2->cd(2);
         ch2->SetMarkerColor(kBlack);
         cut.Form("flagCent && flag2 && trigger==3 && nhe3_2");
-        cut += " &&  (fXt*fXt + fYt*fYt)<10*10";
+        
         ch2->Draw("e_2:1000*(mh7-8.406868788) >> h22D(70,-5,5,100,5,14)",cut.Data(),"");
         c2->Update();
 
         ch2->SetMarkerColor(kRed);
         cut.Form("flagCent && flag2 && trigger==3 && nhe3_2 && ");
         cut += cutg2->GetName();
-        cut += " &&  (fXt*fXt + fYt*fYt)<10*10";
+        
         ch2->Draw("e_2:1000*(mh7-8.406868788) >> h22DCUT(70,-5,5,100,5,14)",cut.Data(),"same");
         c2->Update();
         cutg2->Draw("same");
@@ -106,14 +107,14 @@ void drawAngles(){
         c2->cd(3);
         ch2->SetMarkerColor(kBlack);
         cut.Form("flagCent && flag3 && trigger==4 && nhe3_3");
-        cut += " &&  (fXt*fXt + fYt*fYt)<10*10";
+        
         ch2->Draw("e_3:1000*(mh7-8.406868788) >> h32D(70,-5,5,100,5,14)",cut.Data(),"");
         c2->Update();
 
         ch2->SetMarkerColor(kRed);
         cut.Form("flagCent && flag3 && trigger==4 && nhe3_3 && ");
         cut += cutg3->GetName();
-        cut += " &&  (fXt*fXt + fYt*fYt)<10*10";
+        
         ch2->Draw("e_3:1000*(mh7-8.406868788) >> h32DCUT(70,-5,5,100,5,14)",cut.Data(),"same");
         cutg3->Draw("same");
         c2->Update();
@@ -122,7 +123,7 @@ void drawAngles(){
         c2->cd(4);
         ch2->SetMarkerColor(kBlack);
         cut.Form("flagCent && flag4 && trigger==5 && nhe3_4");
-        cut += " &&  (fXt*fXt + fYt*fYt)<10*10";
+        
         // cut.Form("(nhe3_2 && e_2<25)  && nh3");
         ch2->Draw("e_4:1000*(mh7-8.406868788) >> h42D(70,-5,5,100,5,14)",cut.Data(),"");
         c2->Update();
@@ -130,7 +131,7 @@ void drawAngles(){
         ch2->SetMarkerColor(kRed);
         cut.Form("flagCent && flag4 && trigger==5 && nhe3_4 && ");
         cut += cutg4->GetName();
-        cut += " &&  (fXt*fXt + fYt*fYt)<10*10";
+        
         ch2->Draw("e_4:1000*(mh7-8.406868788) >> h42DCUT(70,-5,5,100,5,14)",cut.Data(),"same");
         cutg4->Draw("same");
         c2->Update();
@@ -151,16 +152,16 @@ void drawAngles(){
 
         ch2->SetLineColor(kBlack);
         cut.Form("flagCent && flag1 && trigger==2 && nhe3_1");
-        cut += " &&  (fXt*fXt + fYt*fYt)<10*10";
+        // 
         // cut.Form("(nhe3_2 && e_2<25)  && nh3");
         ch2->Draw("1000*(mh7-8.406868788) >> mm1",cut.Data(),"");
         cMM->Update();
 
         ch2->SetLineColor(kRed);
-        cut.Form("flagCent && flag1 && trigger==2 && nhe3_1 && ");
+        cut.Form("nhe8 && flagCent && flag1 && trigger==2 && nhe3_1");
         // cut += " && 1000*(9.325505+1.875612-2.808391-mh7_in)<100 && ";       
-        cut += cutg1->GetName();
-        cut += " &&  (fXt*fXt + fYt*fYt)<10*10";
+        // cut += cutg1->GetName();
+        // 
         ch2->Draw("1000*(mh7-8.406868788) >> mm1_coin",cut.Data(),"same");
         cMM->Update();
 
@@ -173,14 +174,14 @@ void drawAngles(){
 
         ch2->SetLineColor(kBlack);
         cut.Form("flagCent && flag2 && trigger==3 && nhe3_2");
-        cut += " &&  (fXt*fXt + fYt*fYt)<10*10";
+        
         ch2->Draw("1000*(mh7-8.406868788) >> mm2",cut.Data(),"");
         cMM->Update();
 
         ch2->SetLineColor(kRed);
-        cut.Form("flagCent && flag2 && trigger==3 && nhe3_2 && ");
-        cut += cutg2->GetName();    
-        cut += " &&  (fXt*fXt + fYt*fYt)<10*10";
+        cut.Form("flagCent && flag2 && trigger==3 && nhe3_2 && nhe8");
+        // cut += cutg2->GetName();    
+        
         ch2->Draw("1000*(mh7-8.406868788) >> mm2_coin",cut.Data(),"same");
         cMM->Update();
 
@@ -194,15 +195,14 @@ void drawAngles(){
 
         ch2->SetLineColor(kBlack);
         cut.Form("flagCent && flag3 && trigger==4 && nhe3_3 ");
-        cut += " &&  (fXt*fXt + fYt*fYt)<10*10";
+        
         ch2->Draw("1000*(mh7-8.406868788) >> mm3",cut.Data(),"");
         cMM->Update();
 
         ch2->SetLineColor(kRed);
-        cut.Form("flagCent && flag3 && trigger==4 && nhe3_3 && ");
+        cut.Form("flagCent && flag3 && trigger==4 && nhe3_3 && nhe8");
         // cut += "1000*(9.325505+1.875612-2.808391-mh7_in)<100 && ";
-        cut += cutg3->GetName();
-        cut += " &&  (fXt*fXt + fYt*fYt)<10*10";        
+        // cut += cutg3->GetName();
         ch2->Draw("1000*(mh7-8.406868788) >> mm3_coin",cut.Data(),"same");
         cMM->Update();
 
@@ -216,15 +216,14 @@ void drawAngles(){
 
         ch2->SetLineColor(kBlack);
         cut.Form("flagCent && flag4 && trigger==5 && nhe3_4");
-        cut += " &&  (fXt*fXt + fYt*fYt)<10*10";
         ch2->Draw("1000*(mh7-8.406868788) >> mm4",cut.Data(),"");
         cMM->Update();
 
         ch2->SetLineColor(kRed);
-        cut.Form("flagCent && flag4 && trigger==5 && nhe3_4 && ");
+        cut.Form("flagCent && flag4 && trigger==5 && nhe3_4 && nhe8");
         // cut += "1000*(9.325505+1.875612-2.808391-mh7_in)<100 && ";
-        cut += cutg4->GetName();
-        cut += " &&  (fXt*fXt + fYt*fYt)<10*10";
+        // cut += cutg4->GetName();
+        
         ch2->Draw("1000*(mh7-8.406868788) >> mm4_coin",cut.Data(),"same");
         cMM->Update();
 
@@ -242,71 +241,60 @@ void drawAngles(){
    
     if (summMM) {
 
-        // canvasMM = new TCanvas("canvasMM","title",1800,1000);
-        // // canvasMM->Divide(2,1);
-
-        // canvasMM->cd();
-
-        // ch1->SetLineColor(kBlack);
-        // // cut.Form("flagCent && 1000*(mh7-8.406868788)<1.9 && 1000*(mh7-8.406868788)>-1.9 &&");
-        // cut.Form("flagCent &&");
-        // cut += (" ( (flag1 && trigger==2 && nhe3_1 && e_1<25)");
-        // cut += (" || (flag2 && trigger==3 && nhe3_2 && e_2<25)");
-        // cut += (" || (flag3 && trigger==4 && nhe3_3 && e_3<25)");
-        // cut += (" || (flag4 && trigger==5 && nhe3_4 && e_4<25) )");
-        // ch1->Draw("1000*(mh7-8.406868788) >> MMSumm_thin",cut.Data(),"");
-
-        // ch1->SetLineColor(kGreen);
-        // cut.Form("flagCent && nh3 &&");
-        // cut += (" ( (flag1 && trigger==2 && nhe3_1 && e_1<25)");
-        // cut += (" || (flag2 && trigger==3 && nhe3_2 && e_2<25)");
-        // cut += (" || (flag3 && trigger==4 && nhe3_3 && e_3<25)");
-        // cut += (" || (flag4 && trigger==5 && nhe3_4 && e_4<25) )");
-        // ch1->Draw("1000*(mh7-8.406868788) >> MMSumm_cut_thin",cut.Data(),"same");
-        // canvasMM->Update();
-
-        // canvasMM->cd(2);
-
-        Long64_t numEntries = 3000000;
-
-        Long64_t startEntry = 14464279 - numEntries;
-        // startEntry = 0;
-
-        TCanvas *thickSumm = new TCanvas("thickSumm","title",1800,1000);
-
-        thickSumm->cd();
+        canvasMM = new TCanvas("canvasMM","",1800,1000);
+        canvasMM->Divide(2,2);
+        canvasMM->cd(1);
 
         ch2->SetLineColor(kBlack);
-        cut.Form("flagCent &&");
-        cut += (" ( (flag1 && trigger==2 && nhe3_1 && e_1<25)");
-        cut += (" || (flag2 && trigger==3 && nhe3_2 && e_2<25)");
-        cut += (" || (flag3 && trigger==4 && nhe3_3 && e_3<25)");
-        cut += (" || (flag4 && trigger==5 && nhe3_4 && e_4<25) )");
-        cut += (" && 1000*(mh7-8.406868788)>-5 && 1000*(mh7-8.406868788)<30");
+        cut.Form("flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
+        
+        // cut.Form("(nhe3_2 && e_2<25)  && nh3");
+        ch2->Draw("1000*(mh7-8.406868788) >> mm_summ(40,-10,30)",cut.Data(),"");
+        canvasMM->Update();        
 
-        ch2->Draw("1000*(mh7-8.406868788) >> MMSumm_thick(100,-7,30)",cut.Data(),"");
+
+        ch2->SetLineColor(kRed);
+        cut.Form("nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
+        
+        // cut.Form("(nhe3_2 && e_2<25)  && nh3");
+        ch2->Draw("1000*(mh7-8.406868788)",cut.Data(),"same");
+        canvasMM->Update();  
+
 
         ch2->SetLineColor(kGreen);
-        cut.Form("flagCent && nh3 &&");
-        cut += (" ( (flag1 && trigger==2 && nhe3_1 && e_1<25)");
-        cut += (" || (flag2 && trigger==3 && nhe3_2 && e_2<25)");
-        cut += (" || (flag3 && trigger==4 && nhe3_3 && e_3<25)");
-        cut += (" || (flag4 && trigger==5 && nhe3_4 && e_4<25) )");
-        cut += (" && 1000*(mh7-8.406868788)>-5 && 1000*(mh7-8.406868788)<30");
-        ch2->Draw("1000*(mh7-8.406868788) >> MMSumm_cut_thick",cut.Data(),"same");
-        thickSumm->Update();
+        cut.Form("(nhe8 || nhe6) && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
+        
+        // cut.Form("(nhe3_2 && e_2<25)  && nh3");
+        ch2->Draw("1000*(mh7-8.406868788)",cut.Data(),"same");
+        canvasMM->Update(); 
 
-        // ch2->SetLineColor(kRed);
-        // cut.Form("flagCent && nh3 &&");
-        // cut += (" ( (flag1 && trigger==2 && nhe3_1 && e_1<25)");
-        // cut += (" || (flag2 && trigger==3 && nhe3_2 && e_2<25)");
-        // cut += (" || (flag3 && trigger==4 && nhe3_3 && e_3<25)");
-        // cut += (" || (flag4 && trigger==5 && nhe3_4 && e_4<25) )");
-        // ch2->Draw("1000*(mh7-8.406868788) >> MMSumm_thick_gs_3",cut.Data(),"same");
-        // thickSumm->Update();
 
-        htemp = (TH1F*)gPad->GetPrimitive("MMSumm_thick_gs_3");
-        cout << htemp->GetMean() << " " << htemp->GetEntries() << endl;
+        canvasMM->cd(2);
+        ch2->SetLineColor(kGreen);
+        cut.Form("(nhe8 || nhe6) && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
+        
+        // cut.Form("(nhe3_2 && e_2<25)  && nh3");
+        ch2->Draw("1000*(mh7-8.406868788) >> mm_summ_coin_nhe_s(40,-10,30)",cut.Data(),"");
+        canvasMM->Update(); 
+
+        canvasMM->cd(3);
+        ch2->SetLineColor(kBlue);
+        cut.Form("nhe8 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
+        
+        // cut.Form("(nhe3_2 && e_2<25)  && nh3");
+        ch2->Draw("1000*(mh7-8.406868788) >> mm_summ_coin_nhe8_s(40,-10,30)",cut.Data(),"");
+        canvasMM->Update(); 
+
+        canvasMM->cd(4);
+        ch2->SetLineColor(kMagenta);
+        cut.Form("nhe6 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )");
+        
+        // cut.Form("(nhe3_2 && e_2<25)  && nh3");
+        ch2->Draw("1000*(mh7-8.406868788) >> mm_summ_coin_nhe6_s(40,-10,30)",cut.Data(),"");
+        canvasMM->Update(); 
+
+        canvasMM->Print("/home/ivan/Desktop/ex9Li.png");
+
 
     }
    

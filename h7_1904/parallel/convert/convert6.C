@@ -176,7 +176,7 @@ void convert() {
   TString cutName;
 
   // Creating outfile,outtree
-  TFile *fw = new TFile("/media/ivan/data/exp1904/analysed/novPars/calibrated/h7_5_cal.root", "RECREATE");
+  TFile *fw = new TFile("/media/ivan/data/exp1904/analysed/novPars/calibrated/finalCal/h7_5_cal.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("trigger",&trigger,"trigger/I");

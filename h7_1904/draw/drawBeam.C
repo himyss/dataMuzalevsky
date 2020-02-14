@@ -6,7 +6,6 @@ void drawBeam() {
   ch->Add("/media/ivan/data/exp1904/analysed/novPars/beamDiagnostics/beamHe8_*");
 
 
-
   TCanvas *c1 = new TCanvas("c1","",1800,1000); 
   c1->Divide(2,3);
 
@@ -19,7 +18,7 @@ void drawBeam() {
   c1->Update();
 
   c1->cd(3);
-  ch->Draw("py/pBeam:px/pBeam >>(43,-0.05,0.05,43,-0.05,0.05) momentumAngles","","col");
+  ch->Draw("py/pBeam:px/pBeam >>(43,-0.05,0.05,43,-0.05,0.05) ","","col");
   c1->Update();
 
   c1->cd(4);

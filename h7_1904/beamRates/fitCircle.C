@@ -22,17 +22,30 @@ void fitCircle() {
 
   Double_t x[4],y[4];
 
-  x[0] = -12.21;
-  y[0] = 1.9;
+  // x[0] = -1.56848e+01;
+  // y[0] = 1.43256e+00;
 
-  x[1] = -0.78;
-  y[1] = -9.85;
+  // x[1] = -7.74041e-01;
+  // y[1] = -1.52511e+01;
 
-  x[2] = 10.35;
-  y[2] = 1.31;
+  // x[2] = 1.74403e+01;
+  // y[2] = 4.98713e-01;
 
-  x[3] = 0.115;
-  y[3] = 12.84;
+  // x[3] = 1.44788e+00;
+  // y[3] = 1.71034e+01;
+
+  x[0] = -1.11135e+01;
+  y[0] = 3.55168e-01;
+
+  x[1] = 4.57829e-02;
+  y[1] = -1.12650e+01;
+
+  x[2] = 1.15393e+01;
+  y[2] = -9.41574e-01;
+
+  x[3] = 1.99187e+00;
+  y[3] = 1.12189e+01;
+
 
   TGraph *g = new TGraph(4,x,y);
   g->SetMarkerStyle(20);
@@ -60,7 +73,7 @@ void fitCircle() {
     ROOT::Fit::Fitter  fitter;
  
  
-    double pStart[3] = {0,0,10};
+    double pStart[3] = {0,0,12};
     fitter.SetFCN(fcn, pStart);
     fitter.Config().ParSettings(0).SetName("x0");
     fitter.Config().ParSettings(0).SetLimits(-5,5);
