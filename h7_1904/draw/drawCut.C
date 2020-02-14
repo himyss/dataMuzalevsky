@@ -19,7 +19,7 @@ void drawCut(){
   readCuts();
   // return;
   gStyle->SetOptStat(0);
-  Bool_t tritium = 1;
+  Bool_t tritium = 0;
   Bool_t he3_1 = 0;
   Bool_t he3_2 = 0;
   Bool_t he3_3 = 0;
@@ -30,6 +30,7 @@ void drawCut(){
   Bool_t CsI_tracking = 0;
   Bool_t tSQ20 = 0;
   Bool_t tSQThick = 0;
+  Bool_t neutronID = 1;
 
 
   TChain *ch = new TChain("tree");
@@ -38,7 +39,28 @@ void drawCut(){
   cout << ch->GetEntries() << endl;
 
 
+  TChain *ch1 = new TChain("tree");
+  ch1->Add("/media/ivan/data/exp1904/analysed/novPars/calibrated/finalCal/h7_ct_*_cal.root");
+  cout << ch1->GetEntries() << endl;
+
+
   TString cut,hdraw;
+
+  if (neutronID) {
+    TCanvas *cNeutron = new TCanvas("cNeutron","",1000,1000);  
+    cNeutron->cd();
+
+    ch->SetMarkerColor(kBlack);      
+    hdraw.Form("ND_tac:ND_amp >> (200,0,4000,200,-500,1500)");
+    // hdraw.Form("X_C.:aCsI>>h%d",i);
+    // gPad->SetLogz();/
+    ch1->Draw(hdraw.Data(),"","col",10000000,0);
+    // gPad->SetLogz();
+    cNeutron->Update();
+
+
+  }
+
 
   if (tCsI_s) {
     TCanvas *c1 = new TCanvas("c1","",1800,1000);  
@@ -177,8 +199,8 @@ void drawCut(){
       ch->SetMarkerStyle(1);
       ch->SetMarkerColor(kBlack);      
       // cut.Form("n20_1==%d && flag1",i);
-      cut.Form("flag4 && a1_4+a20_4_un<65 && a20_4<8",i);
-      hdraw.Form("a20_4:a1_4+a20_4_un>>h%d1",i);
+      cut.Form("flag1 && a1_1+a20_1_un<65 && a20_1<8",i);
+      hdraw.Form("a20_1:a1_1+a20_1_un>>h%d1",i);
       // hdraw.Form("X_C.:aCsI>>h%d",i);
       ch->Draw(hdraw.Data(),cut.Data(),"");
       // c_arr[i]->Update();

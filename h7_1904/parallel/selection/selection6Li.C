@@ -25,10 +25,12 @@ void X_Lselect();
 void Y_Lselect();
 
 void fillSi();
+void fillND();
 
 void readThickness();
 void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16);
 
+void neutronID();
 void triton();
 void checkHe3();
 void timesSQ20();
@@ -106,14 +108,14 @@ Bool_t timesToF,timesMWPC;
 Double_t fThickness1[16][16],fThickness2[16][16],fThickness3[16][16],fThickness4[16][16];
 
 Int_t flag1,flag2,flag3,flag4,flagCent,flagtCsI;
-Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4;
+Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4,neutron;
 
 TCutG *cutCsI[16],*cut3h[16],*cutX_C[32],*cut6he[16];
 TCutG *cuthe3_1[16],*cutSQ20_1[16],*cutSQ1_1[16];
 TCutG *cuthe3_2[16],*cutSQ20_2[16],*cutSQ1_2[16];
 TCutG *cuthe3_3[16],*cutSQ20_3[16],*cutSQ1_3[16];
 TCutG *cuthe3_4[16],*cutSQ20_4[16],*cutSQ1_4[16];
-TCutG *cut6Li;
+TCutG *cut6Li,*cutNeutron;
 
 Float_t th_he3_1,th_he3_2,th_he3_3,th_he3_4,th_h3;
 Float_t phi_he3_1,phi_he3_2,phi_he3_3,phi_he3_4,phi_h3;
@@ -148,6 +150,9 @@ Float_t x1t,y1t,x2t,y2t,x3t,y3t,x4t,y4t,xCt,yCt;
 TELoss *f3HSi;
 
 Float_t xOffset,yOffset,zOffset;
+
+Float_t ND_time[32],ND_amp[32],ND_tac[32];
+Float_t tND,aND,tacND,numND;
 
 void selection6Li(Int_t nFile=0) {
 
@@ -245,6 +250,10 @@ void selection6Li(Int_t nFile=0) {
   ch->SetBranchAddress("multc_x",&multc_x);
   ch->SetBranchAddress("multc_y",&multc_y);
   ch->SetBranchAddress("multCsI",&multCsI);
+
+  ch->SetBranchAddress("ND_amp",&ND_amp);
+  ch->SetBranchAddress("ND_time",&ND_time);
+  ch->SetBranchAddress("ND_tac",&ND_tac);
 
   readThickness();
 
@@ -345,6 +354,7 @@ void selection6Li(Int_t nFile=0) {
 
   // tw->Branch("flagtCsI.",&flagtCsI,"flagtCsI/I");
 
+  tw->Branch("neutron.",&neutron,"neutron/I");
   tw->Branch("nh3.",&nh3,"nh3/I");
   tw->Branch("nhe3_1.",&nhe3_1,"nhe3_1/I");
   tw->Branch("nhe3_2.",&nhe3_2,"nhe3_2/I");
@@ -379,6 +389,11 @@ void selection6Li(Int_t nFile=0) {
   tw->Branch("multv_3",&multv_3,"multv_3/I");
   tw->Branch("multv_4",&multv_4,"multv_4/I");
 
+  tw->Branch("aND",&aND,"aND/F");
+  tw->Branch("tND",&tND,"tND/F");
+  tw->Branch("tacND",&tacND,"tacND/F");
+  tw->Branch("numND",&numND,"numND/F");
+
   Float_t xCent,yCent;
   xCent = 0;
   yCent = 0;
@@ -401,6 +416,7 @@ void selection6Li(Int_t nFile=0) {
     MWPCprojection();
     if ( ((fXt-xCent)*(fXt-xCent) + (fYt-yCent)*(fYt-yCent))>13*13 ) continue;
 
+    fillND();
     fillSi();
 
     if (nX_C>-1 && nY_C>-1) {
@@ -428,8 +444,13 @@ void selection6Li(Int_t nFile=0) {
     if (multCsI>0){
       CsI_max();
       trackCsI();
-      CsItimes();
     }
+
+    if (nCsI!=nCsI_track){
+      if (nCsI-nCsI_track==4 || nCsI-nCsI_track==-4) nCsI_track = nCsI;
+      if (nCsI-nCsI_track==1 || nCsI-nCsI_track==-1) nCsI_track = nCsI;
+    }
+    CsItimes();
 
     DSD_Cselect();
 
@@ -458,6 +479,11 @@ void selection6Li(Int_t nFile=0) {
 }
 
 void zeroVars() {
+
+  tND = -100;
+  aND = -100;
+  tacND = -100;
+  numND = -100;
 
   frame1X = -1000.;
   frame2X = -1000.;
@@ -515,6 +541,7 @@ void zeroVars() {
   flagCent = 1;
   flagtCsI = 1;
 
+  neutron = 0;
   nh3 = 0;
   nhe3_1 = 0;
   nhe3_2 = 0;
@@ -701,6 +728,31 @@ void readThickness() {
   }
   delete f4;
 
+}
+
+void fillND() {
+
+  Int_t multy = 0;
+  Float_t amp = -1;
+  Float_t time = -1;
+  Float_t tac = -1;
+  Int_t channel = -1;
+
+  for(Int_t i=0;i<32;i++) {
+    if (ND_tac[i]>0 && ND_tac[i]>0 && ND_time[i]>0){ 
+      amp = ND_amp[i];
+      time = ND_time[i];
+      tac = ND_tac[i];
+      channel = i;
+      multy++;
+    } 
+  }
+  if (multy==1) {
+    aND = amp;
+    tND = time;
+    tacND = tac;
+    numND = channel;
+  }
 }
 
 void fillSi() {
@@ -945,6 +997,12 @@ void triton() {
   }
 }
 
+void neutronID() {
+  if (cutNeutron->IsInside(aND , tacND) ) {
+    neutron = 1;
+  }
+}
+
 void checkHe3() {
   if(n1_1>-1 && n20_1>-1 && cut6Li->IsInside(a1_1+a20_1_un, a20_1)) {
     nhe3_1 = 1;
@@ -1028,6 +1086,15 @@ void readCuts() {
   TFile *f;
   TString cutName;
 
+  cutName.Form("/home/ivan/work/macro/h7_1904/cuts/ND/Neutron.root");
+  f = new TFile(cutName.Data());
+  cutNeutron = (TCutG*)f->Get("CUTG");
+  if (!cutNeutron) {
+    cout << "no cut " << cutName.Data() << endl;
+    exit(-1);
+  }    
+  delete f;
+
   cutName.Form("/home/ivan/work/macro/h7_1904/cuts/T1/li6_cut.root");
   f = new TFile(cutName.Data());
   cut6Li = (TCutG*)f->Get("CUTG");
@@ -1082,7 +1149,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T1/he3/cut_he3_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/h7_1904/cuts/T1/he3/canvas/he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_1[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_1[i]) {
@@ -1093,7 +1160,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T2/he3/cut_he3_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/h7_1904/cuts/T2/he3/canvas/he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_2[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_2[i]) {
@@ -1104,7 +1171,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T3/he3/cut_he3_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/h7_1904/cuts/T3/he3/canvas/he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_3[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_3[i]) {
@@ -1115,7 +1182,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T4/he3/cut_he3_%d.root",i);
+    cutName.Form("/home/ivan/work/macro/h7_1904/cuts/T4/he3/canvas/he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_4[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_4[i]) {
