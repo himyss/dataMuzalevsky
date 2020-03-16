@@ -33,8 +33,11 @@ void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16);
 void neutronID();
 void triton();
 void checkHe3();
+void checkLi6();
 void timesSQ20();
 void timesSQ1();
+
+void timesVeto();
 
 // reconstruction
 void GetXYLeft();
@@ -63,11 +66,17 @@ Int_t n20_1;
 Float_t a1_1,t1_1;
 Int_t n1_1;
 
+Float_t av_1,tv_1;
+Int_t nv_1;
+
 Float_t a20_2,t20_2,a20_2_un;
 Int_t n20_2;
 
 Float_t a1_2,t1_2;
 Int_t n1_2;
+
+Float_t av_2,tv_2;
+Int_t nv_2;
 
 Float_t a20_3,t20_3,a20_3_un;
 Int_t n20_3;
@@ -75,11 +84,17 @@ Int_t n20_3;
 Float_t a1_3,t1_3;
 Int_t n1_3;
 
+Float_t av_3,tv_3;
+Int_t nv_3;
+
 Float_t a20_4,t20_4,a20_4_un;
 Int_t n20_4;
 
 Float_t a1_4,t1_4;
 Int_t n1_4;
+
+Float_t av_4,tv_4;
+Int_t nv_4;
 
 Float_t a1,t1;
 Int_t n1;
@@ -114,7 +129,8 @@ Bool_t timesToF,timesMWPC;
 Double_t fThickness1[16][16],fThickness2[16][16],fThickness3[16][16],fThickness4[16][16];
 
 Int_t flag1,flag2,flag3,flag4,flagCent,flagtCsI;
-Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4,neutron;
+Int_t flagVeto1, flagVeto2, flagVeto3, flagVeto4;
+Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4,neutron,n6li;
 
 TCutG *cutCsI[16],*cut3h[16],*cutX_C[32],*cut6he[16];
 TCutG *cuthe3_1[16],*cutSQ20_1[16],*cutSQ1_1[16];
@@ -157,6 +173,7 @@ Float_t x1t_1,y1t_1,x2t_1,y2t_1,x3t_1,y3t_1,x4t_1,y4t_1;
 TELoss *f3HSi;
 
 Float_t xOffset,yOffset,zOffset;
+Float_t centOffset;
 
 Float_t ND_time[32],ND_amp[32],ND_tac[32];
 Float_t tND,aND,tacND,numND;
@@ -166,9 +183,11 @@ void selection(Int_t nFile=0) {
   // xOffset = -0.12;
   // yOffset = 3.63;
   
-  xOffset = 0.55;
-  yOffset = 1.33;
-  zOffset = 2;
+  xOffset = 0.75;
+  yOffset = 0.5;
+  zOffset = 2.;
+  
+  centOffset = 1.18;
 
 
   f3HSi = new TELoss();
@@ -328,6 +347,10 @@ void selection(Int_t nFile=0) {
   tw->Branch("t1_1.",&t1_1,"t1_1/F");
   tw->Branch("n1_1.",&n1_1,"n1_1/I");
 
+  tw->Branch("av_1.",&av_1,"av_1/F");
+  tw->Branch("tv_1.",&tv_1,"tv_1/F");
+  tw->Branch("nv_1.",&nv_1,"nv_1/I");
+
   tw->Branch("a20_2.",&a20_2,"a20_2/F");
   tw->Branch("a20_2_un.",&a20_2_un,"a20_2_un/F");
   tw->Branch("t20_2.",&t20_2,"t20_2/F");
@@ -336,6 +359,10 @@ void selection(Int_t nFile=0) {
   tw->Branch("a1_2.",&a1_2,"a1_2/F");
   tw->Branch("t1_2.",&t1_2,"t1_2/F");
   tw->Branch("n1_2.",&n1_2,"n1_2/I");
+
+  tw->Branch("av_2.",&av_2,"av_2/F");
+  tw->Branch("tv_2.",&tv_2,"tv_2/F");
+  tw->Branch("nv_2.",&nv_2,"nv_2/I");
 
   tw->Branch("a20_3.",&a20_3,"a20_3/F");
   tw->Branch("a20_3_un.",&a20_3_un,"a20_3_un/F");
@@ -346,6 +373,10 @@ void selection(Int_t nFile=0) {
   tw->Branch("t1_3.",&t1_3,"t1_3/F");
   tw->Branch("n1_3.",&n1_3,"n1_3/I");
 
+  tw->Branch("av_3.",&av_3,"av_3/F");
+  tw->Branch("tv_3.",&tv_3,"tv_3/F");
+  tw->Branch("nv_3.",&nv_3,"nv_3/I");
+
   tw->Branch("a20_4.",&a20_4,"a20_4/F");
   tw->Branch("a20_4_un.",&a20_4_un,"a20_4_un/F");
   tw->Branch("t20_4.",&t20_4,"t20_4/F");
@@ -354,12 +385,22 @@ void selection(Int_t nFile=0) {
   tw->Branch("a1_4.",&a1_4,"a1_4/F");
   tw->Branch("t1_4.",&t1_4,"t1_4/F");
   tw->Branch("n1_4.",&n1_4,"n1_4/I");
+
+  tw->Branch("av_4.",&av_4,"av_4/F");
+  tw->Branch("tv_4.",&tv_4,"tv_4/F");
+  tw->Branch("nv_4.",&nv_4,"nv_4/I");
+
   tw->Branch("flag1.",&flag1,"flag1/I");
   tw->Branch("flag2.",&flag2,"flag2/I");
   tw->Branch("flag3.",&flag3,"flag3/I");
   tw->Branch("flag4.",&flag4,"flag4/I");
-  tw->Branch("flagCent.",&flagCent,"flagCent/I");
 
+  tw->Branch("flagVeto1.",&flagVeto1,"flagVeto1/I");
+  tw->Branch("flagVeto2.",&flagVeto2,"flagVeto2/I");
+  tw->Branch("flagVeto3.",&flagVeto3,"flagVeto3/I");
+  tw->Branch("flagVeto4.",&flagVeto4,"flagVeto4/I");
+
+  tw->Branch("flagCent.",&flagCent,"flagCent/I");
 
   tw->Branch("a1.",&a1,"a1/F");
   tw->Branch("t1.",&t1,"t1/F");
@@ -373,6 +414,7 @@ void selection(Int_t nFile=0) {
   tw->Branch("nhe3_2.",&nhe3_2,"nhe3_2/I");
   tw->Branch("nhe3_3.",&nhe3_3,"nhe3_3/I");
   tw->Branch("nhe3_4.",&nhe3_4,"nhe3_4/I");
+  tw->Branch("n6li.",&n6li,"n6li/I");
 
   tw->Branch("th_he3_1.",&th_he3_1,"th_he3_1/F");
   tw->Branch("th_he3_2.",&th_he3_2,"th_he3_2/F");
@@ -422,7 +464,7 @@ void selection(Int_t nFile=0) {
   yCent = 0;
 
   for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
-  // for(Int_t nentry=0;nentry<1000000;nentry++) {     
+  // for(Int_t nentry=0;nentry<10000;nentry++) {     
     if(nentry%1000000==0) cout << "#ENTRY " << nentry << "#" << endl;
 
     ch->GetEntry(nentry);
@@ -458,8 +500,10 @@ void selection(Int_t nFile=0) {
     
     timesSQ20();
     timesSQ1();
+    timesVeto();
+    DSD_Cselect();
 
-    if (multCsI>0){
+    if (flagCent && multCsI>0){
       CsI_max();
       trackCsI();
     }
@@ -470,8 +514,6 @@ void selection(Int_t nFile=0) {
     }
     CsItimes();
 
-    DSD_Cselect();
-
     if (flag1) calcVectorTel1(n20_1, n1_1);
     if (flag2) calcVectorTel2(n20_2, n1_2);
     if (flag3) calcVectorTel3(n20_3, n1_3);
@@ -479,8 +521,12 @@ void selection(Int_t nFile=0) {
 
     correct();
     checkHe3();
+    // checkLi6();
 
-    if (flagCent) triton();
+    if (flagCent) {
+      triton();
+      neutronID();
+    }
 
     tw->Fill();
   }
@@ -547,6 +593,11 @@ void zeroVars() {
   n20_4 = -1;
   a20_4_un = 0;
 
+  flagVeto1 = 1;
+  flagVeto2 = 1;
+  flagVeto3 = 1;
+  flagVeto4 = 1;
+
   flag1 = 1;
   flag2 = 1;
   flag3 = 1;
@@ -556,6 +607,7 @@ void zeroVars() {
 
   neutron = 0;
   nh3 = 0;
+  n6li = 0;
   nhe3_1 = 0;
   nhe3_2 = 0;
   nhe3_3 = 0;
@@ -576,6 +628,23 @@ void zeroVars() {
   a1_4 = 0;
   n1_4 = -1;
   t1_4 = 0;
+
+  av_4 = 0;
+  nv_4 = -1;
+  tv_4 = 0;
+
+  av_3 = 0;
+  nv_3 = -1;
+  tv_3 = 0;  
+
+  av_2 = 0;
+  nv_2 = -1;
+  tv_2 = 0;  
+
+  av_1 = 0;
+  nv_1 = -1;
+  tv_1 = 0;  
+
 
   th_he3_1 = -100;
   th_he3_2 = -100;
@@ -844,6 +913,24 @@ void fillSi() {
     n1_1 = channel;
   }  
 
+  multy = 0;
+  amp = -1;
+  time = -1;
+  channel = -1;
+  for(Int_t i=0;i<16;i++) {
+    if (SSD_V1[i]>2 && tSSD_V1[i]>0){ // 0.2 MeV  offline-threshold
+      amp = SSD_V1[i];
+      time = tSSD_V1[i];
+      channel = i;
+      multy++;
+    } 
+  }
+  if (multy==1) {
+    av_1 = amp;
+    tv_1 = time;
+    nv_1 = channel;
+  } 
+
   // T2
   multy = 0;
   amp = -1;
@@ -879,6 +966,24 @@ void fillSi() {
     a1_2 = amp;
     t1_2 = time;
     n1_2 = channel;
+  }   
+
+  multy = 0;
+  amp = -1;
+  time = -1;
+  channel = -1; 
+  for(Int_t i=0;i<16;i++) {
+    if (SSD_V2[i]>2 && tSSD_V2[i]>0){ // 0.2 MeV  offline-threshold
+      amp     = SSD_V2[i];
+      time    = tSSD_V2[i];
+      channel = i;
+      multy++;
+    } 
+  }
+  if (multy==1) {
+    av_2 = amp;
+    tv_2 = time;
+    nv_2 = channel;
   }   
 
   // T3
@@ -918,6 +1023,23 @@ void fillSi() {
     n1_3 = channel;
   }         
 
+  multy = 0;
+  amp = -1;
+  time = -1;
+  channel = -1;  
+  for(Int_t i=0;i<16;i++) {
+    if (SSD_V3[i]>2 && tSSD_V3[i]>0){ // 0.2 MeV  offline-threshold
+      amp     = SSD_V3[i];
+      time    = tSSD_V3[i];
+      channel = i;
+      multy++;
+    } 
+  }
+  if (multy==1) {
+    av_3 = amp;
+    tv_3 = time;
+    nv_3 = channel;
+  }  
 
   // T4
   multy = 0;
@@ -954,6 +1076,24 @@ void fillSi() {
     a1_4 = amp;
     t1_4 = time;
     n1_4 = channel;
+  }
+
+  multy = 0;
+  amp = -1;
+  time = -1;
+  channel = -1;  
+  for(Int_t i=0;i<16;i++) {
+    if (SSD_V4[i]>2 && tSSD_V4[i]>0){ // 0.2 MeV  offline-threshold
+      amp     = SSD_V4[i];
+      time    = tSSD_V4[i];
+      channel = i;
+      multy++;
+    } 
+  }
+  if (multy==1) {
+    av_4 = amp;
+    tv_4 = time;
+    nv_4 = channel;
   }
 
 }
@@ -1017,35 +1157,75 @@ void neutronID() {
 }
 
 void checkHe3() {
-  if(n1_1>-1 && n20_1>-1 && cuthe3_1[n20_1]->IsInside(a1_1+a20_1_un, a20_1)) {
+  if(flag1 && n1_1>-1 && n20_1>-1 && cuthe3_1[n20_1]->IsInside(a1_1+a20_1_un, a20_1)) {
     nhe3_1 = 1;
+    return;
   }
   else {
     nhe3_1 = 0;
   }
 
-  if(n1_2>-1 && n20_2>-1 && cuthe3_2[n20_2]->IsInside(a1_2+a20_2_un, a20_2)) {
+  if(flag2 && n1_2>-1 && n20_2>-1 && cuthe3_2[n20_2]->IsInside(a1_2+a20_2_un, a20_2)) {
     nhe3_2 = 1;
+    return;
   }
   else {
     nhe3_2 = 0;
   }
 
-  if(n1_3>-1 && n20_3>-1 && cuthe3_3[n20_3]->IsInside(a1_3+a20_3_un, a20_3)) {
+  if(flag3 && n1_3>-1 && n20_3>-1 && cuthe3_3[n20_3]->IsInside(a1_3+a20_3_un, a20_3)) {
     nhe3_3 = 1;
+    return;
   }
   else {
     nhe3_3 = 0;
   }
 
-  if(n1_4>-1 && n20_4>-1 && cuthe3_4[n20_4]->IsInside(a1_4+a20_4_un, a20_4)) {
+  if(flag4 && n1_4>-1 && n20_4>-1 && cuthe3_4[n20_4]->IsInside(a1_4+a20_4_un, a20_4)) {
     nhe3_4 = 1;
+    return;
   }
   else {
     nhe3_4 = 0;
   }
-
+  return;
 }
+
+void checkLi6() {
+  if(flag1 && n1_1>-1 && n20_1>-1 && cut6Li->IsInside(a1_1+a20_1_un, a20_1)) {
+    n6li = 1;
+    return;
+  }
+  else {
+    n6li = 0;
+  }
+
+  if(flag2 && n1_2>-1 && n20_2>-1 && cut6Li->IsInside(a1_2+a20_2_un, a20_2)) {
+    n6li = 1;
+    return;
+  }
+  else {
+    n6li = 0;
+  }
+
+  if(flag3 && n1_3>-1 && n20_3>-1 && cut6Li->IsInside(a1_3+a20_3_un, a20_3)) {
+    n6li = 1;
+    return;
+  }
+  else {
+    n6li = 0;
+  }
+
+  if(flag4 && n1_4>-1 && n20_4>-1 && cut6Li->IsInside(a1_4+a20_4_un, a20_4)) {
+    n6li = 1;
+    return;
+  }
+  else {
+    n6li = 0;
+  }
+  return;
+}
+
 
 void CsItimes() {
   if(nCsI_track>-1 && cutCsI[nCsI_track]->IsInside(trCsI[nCsI_track]-tF5, (arCsI[nCsI_track]-pCsI_1[nCsI_track])/pCsI_2[nCsI_track] )) { 
@@ -1090,6 +1270,18 @@ void timesSQ1() {
   if (t1_3-tF5 < 0 || t1_3-tF5>60) flag3=0;
 
   if (t1_4-tF5 < -100 || t1_4-tF5>200) flag4=0;
+
+}  
+
+void timesVeto() {
+
+  if (t1_1-tF5 < 0 || t1_1-tF5>60 || tv_1-tF5>-40 || tv_1-tF5<-120) flagVeto1=0;
+
+  if (t1_2-tF5 < 0 || t1_2-tF5>60 || tv_2-tF5>0 || tv_2-tF5<-120) flagVeto2=0;
+
+  if (t1_3-tF5 < 0 || t1_3-tF5>60 || tv_3-tF5<-120) flagVeto3=0;
+
+  if (t1_4-tF5 < -100 || t1_4-tF5>200 || tv_4-tF5>-40 || tv_4-tF5<-120) flagVeto4=0;
 
 }  
 
@@ -1293,7 +1485,7 @@ void calcVectorTel4(Int_t n20, Int_t n1) {
 void calcVectorCent(Int_t nX,Int_t nY) {
 
   Double_t xC = 31. - nX*64./32;
-  Double_t yC = 31. - nY*64./32 + 1.18;
+  Double_t yC = 31. - nY*64./32 + centOffset;
   Double_t zC = 323.;
 
   TVector3 tel1V;

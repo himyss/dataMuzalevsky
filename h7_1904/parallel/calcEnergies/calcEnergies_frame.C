@@ -75,7 +75,7 @@ Bool_t timesToF,timesMWPC;
 Double_t fThickness1[16][16],fThickness2[16][16],fThickness3[16][16],fThickness4[16][16];
 
 Int_t flag1,flag2,flag3,flag4,flagCent;
-Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4;
+Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4,neutron;
 Int_t frame;
 
 Float_t e_1,e_2,e_3,e_4;
@@ -87,6 +87,7 @@ Float_t phi_he3_1,phi_he3_2,phi_he3_3,phi_he3_4,phi_h3;
 Float_t thickness;
 
 Float_t xOffset,yOffset,zOffset;
+Float_t tND,aND,tacND,numND;
 //--------------------------------------------------------------------------------
 
 void calcEnergies_frame(Int_t nRun=0) {
@@ -99,7 +100,7 @@ void calcEnergies_frame(Int_t nRun=0) {
   TChain *ch = new TChain("tree");
 
   TString inPutFileName;
-  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/newCal/targetCut/13/h7_ct_%d_cut.root",nRun);
+  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/h7_ct_%d_cut.root",nRun);
   ch->Add(inPutFileName.Data());
   cout << ch->GetEntries() << " total number of Entries" << endl;
   //--------------------------------------------------------------------------------
@@ -216,9 +217,15 @@ void calcEnergies_frame(Int_t nRun=0) {
   ch->SetBranchAddress("phi_he3_4.",&phi_he3_4);
   ch->SetBranchAddress("phi_h3.",&phi_h3);
 
+  ch->SetBranchAddress("neutron.",&neutron);
+
+  ch->SetBranchAddress("aND",&aND);
+  ch->SetBranchAddress("tND",&tND);
+  ch->SetBranchAddress("tacND",&tacND);
+  ch->SetBranchAddress("numND",&numND);
 
   TString outPutFileName;
-  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calcEnergies/track0/targetCut/13/h7_ct_%d_reco_newPars.root",nRun);
+  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calcEnergies/h7_ct_%d_reco_newPars.root",nRun);
 
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
   TTree *tw = new TTree("tree", "data");
@@ -317,6 +324,12 @@ void calcEnergies_frame(Int_t nRun=0) {
   tw->Branch("flag3.",&flag3,"flag3/I");
   tw->Branch("flag4.",&flag4,"flag4/I");
   tw->Branch("flagCent.",&flagCent,"flagCent/I");
+  tw->Branch("neutron.",&neutron,"neutron/I");
+
+  tw->Branch("aND",&aND,"aND/F");
+  tw->Branch("tND",&tND,"tND/F");
+  tw->Branch("tacND",&tacND,"tacND/F");
+  tw->Branch("numND",&numND,"numND/F");
 
   tw->Branch("nh3.",&nh3,"nh3/I");
   tw->Branch("nhe3_1.",&nhe3_1,"nhe3_1/I");

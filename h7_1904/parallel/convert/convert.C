@@ -576,8 +576,8 @@ void fillSi(TClonesArray *data,Float_t* amp,Float_t* time,Float_t *par1,Float_t 
     if (!isCal) *(amp+nCh) = 1000*((ERQTelescopeSiDigi*)data->At(i))->GetEdep();
     *(time+nCh) = ((ERQTelescopeSiDigi*)data->At(i))->GetTime();
     if ( isCal && ( *(amp+nCh)<=ampThreshold || *(time+nCh)<=timeThreshold ) ) {
-      *(amp+nCh) = 0;
-      *(time+nCh) = 0;
+      // *(amp+nCh) = 0;
+      // *(time+nCh) = 0;
       *multiplicity = *multiplicity - 1;
     } 
   } 

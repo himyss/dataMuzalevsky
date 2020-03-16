@@ -52,7 +52,7 @@ Float_t sideX,sideY;
 Float_t frame1X,frame1Y,frame2X,frame2Y,frame3X,frame3Y;
 
 Int_t flag1,flag2,flag3,flag4,flagCent;
-Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4;
+Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4,neutron;
 
 Float_t e_1,e_2,e_3,e_4;
 Float_t centE;
@@ -62,16 +62,17 @@ Float_t th_he3_1,th_he3_2,th_he3_3,th_he3_4,th_h3,th_4n;
 Float_t phi_he3_1,phi_he3_2,phi_he3_3,phi_he3_4,phi_h3;
 
 
-TLorentzVector h3,he8,d2,he3,h7,h3CM,h4n,hBinary;
+TLorentzVector h3,he8,d2,he3,h7,h3CM,h4n,hBinary,n4;
 TLorentzVector he3CM,h7CM; // reaction CMS
 TLorentzVector he3CM_H7,h3CM_H7,h7CM_H7,h4nCM_H7,hBinary_CM; // reaction CMS
+TLorentzVector h_n4h3,h_n4h3_CM,h_n4_he3,h_n4_he3_CM;
 
 Double_t phi,theta;
 Double_t momentum,energy,mass;
 
 Float_t thetah7,phih7,phih3,thetah3,phihe3,thetahe3,thetahe8;
 Float_t thetah7CM,phih7CM,phih3CM,thetah3CM,phihe3CM,thetahe3CM,theta4nCM;
-Float_t mh7,eh7,eh3,ehe3,ehe8,eh3_CM,m4n,e4n,e4n_CM;
+Float_t mh7,eh7,eh3,ehe3,ehe8,eh3_CM,m4n,e4n,e4n_CM,mn4,en4;
 Float_t v_he3,tof_he3;
 
 
@@ -80,8 +81,12 @@ Float_t angle_n4_h3,angle_n4_h7,angle_bin_h3_CM,angle_bin_h3;
 Float_t qReaction;
 
 Int_t coincidence;
-
+Float_t tND,aND,tacND,numND;
 TVector3 bVect,bVect_H7;
+
+Float_t targetTime;
+
+Float_t e_4n_3He,e_4n_3H,e_4n_3He_CM,e_4n_3H_CM;
 
 void reco(Int_t nRun=0) {
   f8HeSi.SetEL(1, 2.321); // density in g/cm3
@@ -92,7 +97,7 @@ void reco(Int_t nRun=0) {
 
   TChain *ch = new TChain("tree");
   TString inPutFileName;
-  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calcEnergies/track0/targetCut/13/h7_ct_%d_reco_newPars.root",nRun);
+  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calcEnergies/h7_ct_%d_reco_newPars.root",nRun);
   // inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calcEnergies/track0/eTarget/h7_ct_%d_reco_newPars.root",nRun);
   ch->Add(inPutFileName.Data());;
 
@@ -212,13 +217,18 @@ void reco(Int_t nRun=0) {
   ch->SetBranchAddress("phi_he3_4.",&phi_he3_4);
   ch->SetBranchAddress("phi_h3.",&phi_h3);
 
-
   ch->SetBranchAddress("e_1.",&e_1);
   ch->SetBranchAddress("e_2.",&e_2);
   ch->SetBranchAddress("e_3.",&e_3);
   ch->SetBranchAddress("e_4.",&e_4);
   ch->SetBranchAddress("centE.",&centE);
 
+  ch->SetBranchAddress("neutron.",&neutron);
+
+  ch->SetBranchAddress("aND",&aND);
+  ch->SetBranchAddress("tND",&tND);
+  ch->SetBranchAddress("tacND",&tacND);
+  ch->SetBranchAddress("numND",&numND);
 
   TString outPutFileName;
   // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/reco/eTarget/h7_ect_%d_mm_frame.root",nRun);
@@ -263,6 +273,11 @@ void reco(Int_t nRun=0) {
   tw->Branch("y2c.",&y2c,"y2c/F"); 
   tw->Branch("fXt.",&fXt,"fXt/F");
   tw->Branch("fYt.",&fYt,"fYt/F"); 
+
+  tw->Branch("aND",&aND,"aND/F");
+  tw->Branch("tND",&tND,"tND/F");
+  tw->Branch("tacND",&tacND,"tacND/F");
+  tw->Branch("numND",&numND,"numND/F");
 
   tw->Branch("x1t",&x1t,"x1t/F");
   tw->Branch("x2t",&x2t,"x2t/F");
@@ -331,6 +346,7 @@ void reco(Int_t nRun=0) {
   tw->Branch("nhe3_2.",&nhe3_2,"nhe3_2/I");
   tw->Branch("nhe3_3.",&nhe3_3,"nhe3_3/I");
   tw->Branch("nhe3_4.",&nhe3_4,"nhe3_4/I");
+  tw->Branch("neutron.",&neutron,"neutron/I");
 
   tw->Branch("th_he3_1.",&th_he3_1,"th_he3_1/F");
   tw->Branch("th_he3_2.",&th_he3_2,"th_he3_2/F");
@@ -368,6 +384,7 @@ void reco(Int_t nRun=0) {
 
   tw->Branch("mh7.",&mh7,"mh7/F");
   tw->Branch("eh7.",&eh7,"eh7/F");
+  tw->Branch("en4.",&en4,"en4/F");
   tw->Branch("eh3.",&eh3,"eh3/F");
   tw->Branch("eh3_CM.",&eh3_CM,"eh3_CM/F");
   tw->Branch("ehe3.",&ehe3,"ehe3/F");
@@ -402,11 +419,18 @@ void reco(Int_t nRun=0) {
   tw->Branch("angle_n4_h7.",&angle_n4_h7,"angle_n4_h7/F");
   tw->Branch("angle_n4_h3.",&angle_n4_h3,"angle_n4_h3/F");
 
+  tw->Branch("e_4n_3H.",&e_4n_3H,"e_4n_3H/F");
+  tw->Branch("e_4n_3H_CM.",&e_4n_3H_CM,"e_4n_3H_CM/F");
+  tw->Branch("e_4n_3He.",&e_4n_3He,"e_4n_3He/F");
+  tw->Branch("e_4n_3He_CM.",&e_4n_3He_CM,"e_4n_3He_CM/F");
+
+  tw->Branch("targetTime.",&targetTime,"targetTime/F");
+
   // input options
   d2.SetPxPyPzE(0.,0.,0.,1.875612);
 
   for(Int_t nentry = 0; nentry<ch->GetEntries();nentry++) {
-  // for(Int_t nentry = 0; nentry<2000000;nentry++) {
+  // for(Int_t nentry = 0; nentry<2000;nentry++) {
     if(nentry%1000000==0) cout << "#ENTRY " << nentry << "#" << endl;
     // cout << nentry << endl;
     ch->GetEntry(nentry);
@@ -476,8 +500,8 @@ void reco(Int_t nRun=0) {
       phi = phi_he3_4;
       coincidence++;
     } 
-
-    if(coincidence!=1) continue;
+    if (nh3==0) continue;
+    // if(coincidence!=1) continue;
     // energy = leftE4/1000.;
     mass = 2.808391;  //MeV
 
@@ -544,6 +568,8 @@ void reco(Int_t nRun=0) {
       thetah3 = h3.Theta()*TMath::RadToDeg();
       phih3 = h3.Phi()*TMath::RadToDeg();
       eh3 = h3.T() - mass;
+
+
       // if (h3.T() == h3.Mag()) { 
       //   cout << xCent << " " << yCent << " " << zCent << endl;
       //   // cout << h3.T() << " " << h3.Mag() << " " << mass << endl;
@@ -572,6 +598,29 @@ void reco(Int_t nRun=0) {
         h4nCM_H7.Boost(-bVect_H7);
         e4n_CM = h4nCM_H7.T() - m4n;
         theta4nCM = h4nCM_H7.Theta()*TMath::RadToDeg();
+
+        h_n4h3 = h4n - h3;
+        h_n4h3_CM = h_n4h3;
+        h_n4h3_CM.Boost(-bVect_H7);
+
+        e_4n_3H = sqrt(h_n4h3.Px()*h_n4h3.Px() + h_n4h3.Py()*h_n4h3.Py() + h_n4h3.Pz()*h_n4h3.Pz());
+        e_4n_3H = e_4n_3H/((2*2.80892*m4n)/(2.80892+m4n));
+        e_4n_3H_CM = h_n4h3_CM.Px()*h_n4h3_CM.Px() + h_n4h3_CM.Py()*h_n4h3_CM.Py() + h_n4h3_CM.Pz()*h_n4h3_CM.Pz();
+        e_4n_3H_CM = e_4n_3H_CM/((2*2.80892*m4n)/(2.80892+m4n));
+
+        h_n4_he3 = h4n - he3;
+        h_n4_he3_CM = h_n4_he3;
+        h_n4_he3_CM.Boost(-bVect_H7);
+        // cout << h_n4_he3_CM.Mag() << endl;
+
+        // cout << h_n4_he3_CM.Px() << " " << h_n4_he3_CM.Py() << " " << h_n4_he3_CM.Pz() << endl;
+        // continue;
+
+        e_4n_3He = sqrt(h_n4_he3.Px()*h_n4_he3.Px() + h_n4_he3.Py()*h_n4_he3.Py() + h_n4_he3.Pz()*h_n4_he3.Pz());
+        e_4n_3He = e_4n_3He/((2*2.808391*m4n)/(2.808391+m4n));
+        e_4n_3He_CM = h_n4_he3_CM.Px()*h_n4_he3_CM.Px() + h_n4_he3_CM.Py()*h_n4_he3_CM.Py() + h_n4_he3_CM.Pz()*h_n4_he3_CM.Pz();
+        e_4n_3He_CM = e_4n_3He_CM/((2*2.808391*m4n)/(2.808391+m4n));
+
       }
       
     } 
@@ -595,10 +644,10 @@ void reco(Int_t nRun=0) {
   fw->cd();
   tw->Write();
   fw->Close();
+
 return;
+
 }
-
-
 
 void calculateBeam() {
 
@@ -620,9 +669,9 @@ void calculateBeam() {
   // kinEnergy = kinEnergy*0.95;
   ehe8 = kinEnergy;
 
-  // cout << ehe8 << endl;
-  // kinEnergy = 0.1979;
-  // ehe8 = kinEnergy;
+  targetTime = tF5 + 393./velocity;
+  Float_t velocityCorr = 299.792458*sqrt( (1-1/((kinEnergy/mass+1)*(kinEnergy/mass+1))) );
+  targetTime += 545./velocityCorr;
 
   pBeam = sqrt(kinEnergy*kinEnergy + 2*kinEnergy*mass);
   pBeam = TMath::Abs(pBeam);
@@ -638,6 +687,13 @@ void calculateBeam() {
 }
 
 void zerovars() {
+
+  targetTime = 0;
+
+  e_4n_3H = -10;
+  e_4n_3H_CM = -10;
+  e_4n_3He = -10;
+  e_4n_3He_CM = -10;
 
   px = -1000;
   py = -1000;
@@ -679,6 +735,7 @@ void zerovars() {
   e4n_CM = -1.;
   mh7 = -1.;
   eh7 = -1.;
+  en4 = -1.;
   eh3 = -1.;
   eh3_CM = -1.;
   ehe3 = -1.;
