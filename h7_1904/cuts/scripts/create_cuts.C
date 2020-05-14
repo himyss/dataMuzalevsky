@@ -20,106 +20,106 @@ TCutG *CsI_cut[16];
 // 20um amp-time cuts
 void create_ssd20_1(){
    ssd20_1_0_cut = new TCutG("ssd20_1_0_cut",5);
-   ssd20_1_0_cut->SetPoint(0,0,0.25);
-   ssd20_1_0_cut->SetPoint(1,60,0.25);
+   ssd20_1_0_cut->SetPoint(0,0,0);
+   ssd20_1_0_cut->SetPoint(1,60,0);
    ssd20_1_0_cut->SetPoint(2,60,100);
    ssd20_1_0_cut->SetPoint(3,60,0);
-   ssd20_1_0_cut->SetPoint(4,0,0.25);
+   ssd20_1_0_cut->SetPoint(4,0,0);
 }
 
 void create_ssd20_2(){
    ssd20_2_0_cut = new TCutG("ssd20_2_0_cut",5);
-   ssd20_2_0_cut->SetPoint(0,0,0.25);
-   ssd20_2_0_cut->SetPoint(1,60,0.25);
+   ssd20_2_0_cut->SetPoint(0,0,0);
+   ssd20_2_0_cut->SetPoint(1,60,0);
    ssd20_2_0_cut->SetPoint(2,60,100);
    ssd20_2_0_cut->SetPoint(3,60,0);
-   ssd20_2_0_cut->SetPoint(4,0,0.25);
+   ssd20_2_0_cut->SetPoint(4,0,0);
 }
 
 void create_ssd20_3(){
    ssd20_3_0_cut = new TCutG("ssd20_3_0_cut",5);
-   ssd20_3_0_cut->SetPoint(0,0,0.25);
-   ssd20_3_0_cut->SetPoint(1,60,0.25);
+   ssd20_3_0_cut->SetPoint(0,0,0);
+   ssd20_3_0_cut->SetPoint(1,60,0);
    ssd20_3_0_cut->SetPoint(2,60,100);
    ssd20_3_0_cut->SetPoint(3,60,0);
-   ssd20_3_0_cut->SetPoint(4,0,0.25);
+   ssd20_3_0_cut->SetPoint(4,0,0);
 }
 
 void create_ssd20_4(){
    ssd20_4_0_cut = new TCutG("ssd20_4_0_cut",5);
-   ssd20_4_0_cut->SetPoint(0,0,0.25);
-   ssd20_4_0_cut->SetPoint(1,60,0.25);
+   ssd20_4_0_cut->SetPoint(0,0,0);
+   ssd20_4_0_cut->SetPoint(1,60,0);
    ssd20_4_0_cut->SetPoint(2,60,100);
    ssd20_4_0_cut->SetPoint(3,60,0);
-   ssd20_4_0_cut->SetPoint(4,0,0.25);
+   ssd20_4_0_cut->SetPoint(4,0,0);
 }
 
 // 1-mm amp-time cuts
 void create_ssd1_1(){
    ssd1_1_0_cut = new TCutG("ssd1_1_0_cut",5);
-   ssd1_1_0_cut->SetPoint(0,0,0.25);
-   ssd1_1_0_cut->SetPoint(1,60,0.25);
+   ssd1_1_0_cut->SetPoint(0,0,0);
+   ssd1_1_0_cut->SetPoint(1,60,0);
    ssd1_1_0_cut->SetPoint(2,60,100);
    ssd1_1_0_cut->SetPoint(3,60,0);
-   ssd1_1_0_cut->SetPoint(4,0,0.25);
+   ssd1_1_0_cut->SetPoint(4,0,0);
 }
 void create_ssd1_2(){
    ssd1_2_0_cut = new TCutG("ssd1_2_0_cut",5);
-   ssd1_2_0_cut->SetPoint(0,0,0.25);
-   ssd1_2_0_cut->SetPoint(1,60,0.25);
+   ssd1_2_0_cut->SetPoint(0,0,0);
+   ssd1_2_0_cut->SetPoint(1,60,0);
    ssd1_2_0_cut->SetPoint(2,60,100);
    ssd1_2_0_cut->SetPoint(3,60,0);
-   ssd1_2_0_cut->SetPoint(4,0,0.25);
+   ssd1_2_0_cut->SetPoint(4,0,0);
 }
 void create_ssd1_3(){
    ssd1_3_0_cut = new TCutG("ssd1_3_0_cut",5);
-   ssd1_3_0_cut->SetPoint(0,0,0.25);
-   ssd1_3_0_cut->SetPoint(1,60,0.25);
+   ssd1_3_0_cut->SetPoint(0,0,0);
+   ssd1_3_0_cut->SetPoint(1,60,0);
    ssd1_3_0_cut->SetPoint(2,60,100);
    ssd1_3_0_cut->SetPoint(3,60,0);
-   ssd1_3_0_cut->SetPoint(4,0,0.25);
+   ssd1_3_0_cut->SetPoint(4,0,0);
 }
 void create_ssd1_4(){
    ssd1_4_0_cut = new TCutG("ssd1_4_0_cut",5);
-   ssd1_4_0_cut->SetPoint(0,0,0.25);
-   ssd1_4_0_cut->SetPoint(1,60,0.25);
+   ssd1_4_0_cut->SetPoint(0,0,0);
+   ssd1_4_0_cut->SetPoint(1,60,0);
    ssd1_4_0_cut->SetPoint(2,60,100);
    ssd1_4_0_cut->SetPoint(3,60,0);
-   ssd1_4_0_cut->SetPoint(4,0,0.25);
+   ssd1_4_0_cut->SetPoint(4,0,0);
 }
 
 // veto amp-time cuts
 void create_ssdv_1(){
    ssdv_1_0_cut = new TCutG("ssdv_1_0_cut",5);
-   ssdv_1_0_cut->SetPoint(0,0,0.25);
-   ssdv_1_0_cut->SetPoint(1,60,0.25);
+   ssdv_1_0_cut->SetPoint(0,0,0);
+   ssdv_1_0_cut->SetPoint(1,60,0);
    ssdv_1_0_cut->SetPoint(2,60,100);
    ssdv_1_0_cut->SetPoint(3,60,0);
-   ssdv_1_0_cut->SetPoint(4,0,0.25);
+   ssdv_1_0_cut->SetPoint(4,0,0);
 }
 void create_ssdv_2(){
    ssdv_2_0_cut = new TCutG("ssdv_2_0_cut",5);
-   ssdv_2_0_cut->SetPoint(0,0,0.25);
-   ssdv_2_0_cut->SetPoint(1,60,0.25);
+   ssdv_2_0_cut->SetPoint(0,0,0);
+   ssdv_2_0_cut->SetPoint(1,60,0);
    ssdv_2_0_cut->SetPoint(2,60,100);
    ssdv_2_0_cut->SetPoint(3,60,0);
-   ssdv_2_0_cut->SetPoint(4,0,0.25);
+   ssdv_2_0_cut->SetPoint(4,0,0);
 }
 void create_ssdv_3(){
    ssdv_3_0_cut = new TCutG("ssdv_3_0_cut",5);
-   ssdv_3_0_cut->SetPoint(0,0,0.25);
-   ssdv_3_0_cut->SetPoint(1,60,0.25);
+   ssdv_3_0_cut->SetPoint(0,0,0);
+   ssdv_3_0_cut->SetPoint(1,60,0);
    ssdv_3_0_cut->SetPoint(2,60,100);
    ssdv_3_0_cut->SetPoint(3,60,0);
-   ssdv_3_0_cut->SetPoint(4,0,0.25);
+   ssdv_3_0_cut->SetPoint(4,0,0);
 }
 void create_ssdv_4(){
    ssdv_4_0_cut = new TCutG("ssdv_4_0_cut",5);
-   ssdv_4_0_cut->SetPoint(0,0,0.25);
-   ssdv_4_0_cut->SetPoint(1,60,0.25);
+   ssdv_4_0_cut->SetPoint(0,0,0);
+   ssdv_4_0_cut->SetPoint(1,60,0);
    ssdv_4_0_cut->SetPoint(2,60,100);
    ssdv_4_0_cut->SetPoint(3,60,0);
-   ssdv_4_0_cut->SetPoint(4,0,0.25);
+   ssdv_4_0_cut->SetPoint(4,0,0);
 }
 
 // DSSD_X 
@@ -1023,7 +1023,7 @@ void create_CsI(){
    CsI_cut[10]->SetPoint(29,316.286,212.964);
    CsI_cut[10]->SetPoint(30,315.111,217.158);
    CsI_cut[10]->SetPoint(31,309.97,219.446);
-   cutg->SetPoint(32,310.264,213.345);
+   CsI_cut[10]->SetPoint(32,310.264,213.345);
 
    CsI_cut[11] = new TCutG("csi_11_cut",24);
    CsI_cut[11]->SetPoint(0,318.146,161.163);
