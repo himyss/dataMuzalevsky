@@ -93,32 +93,11 @@ void convert(Int_t nFile = 0) {
 
   TChain *ch = new TChain("er");
   TString inPutFileName;
-  inPutFileName.Form("/media/ivan/data/exp1904/digi/h7_final/h7_ct_%d*.root",nFile);
+  inPutFileName.Form("/mnt/data/exp1904/digi/test/h7_ct_%d*.root",nFile);
   // inPutFileName.Form("/media/ivan/data/exp1904/digi/h7_final/h7_ct_%d*.root",nFile);
   ch->Add(inPutFileName.Data());
   cout << ch->GetEntries() << endl;
 
-  readPar("SSD_20u_1_cal",pSQ201_1,pSQ201_2);
-  readPar("SSD_20u_2_cal",pSQ202_1,pSQ202_2);
-  readPar("SSD_20u_3_cal",pSQ203_1,pSQ203_2);
-  readPar("SSD_20u_4_cal",pSQ204_1,pSQ204_2);
-
-  readPar("SSD_1m_1_cal",pSSD1_1,pSSD1_2);
-  readPar("SSD_1m_2_cal",pSSD2_1,pSSD2_2);
-  readPar("SSD_1m_3_cal",pSSD3_1,pSSD3_2);
-  readPar("SSD_1m_4_cal",pSSD4_1,pSSD4_2);
-
-  readPar("SSD_1m_1_v_cal",pSSD_V1_1,pSSD_V1_2);
-  readPar("SSD_1m_2_v_cal",pSSD_V2_1,pSSD_V2_2);  
-  readPar("SSD_1m_3_v_cal",pSSD_V3_1,pSSD_V3_2);
-  readPar("SSD_1m_4_v_cal",pSSD_V4_1,pSSD_V4_2);
-
-  readPar("DSSD_X",pDSD_X1,pDSD_X2,32);
-  readPar("DSSD_Y",pDSD_Y1,pDSD_Y2,32);
-
-  readPar("CsI_anh",pCsI_1,pCsI_2);
-
-  readPar("ND_tac",pND_1,pND_2,32);
 
 //--------------------------------------------------------------------------------
   ERBeamTimeEventHeader* header = new ERBeamTimeEventHeader();
@@ -170,17 +149,17 @@ void convert(Int_t nFile = 0) {
   ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_1_SingleSi_SSD_1_Y_1",&v_SSD_1);
   ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_1_SingleSi_SSD_V_1_Y_2",&v_SSD_V_1);  
  
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_2_SingleSi_SSD20_2_Y_0",&v_SSD20_2);
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_2_SingleSi_SSD_2_X_1",&v_SSD_2);
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_2_SingleSi_SSD_V_2_X_2",&v_SSD_V_2);  
+  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_2_SingleSi_SSD20_2_Y_3",&v_SSD20_2);
+  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_2_SingleSi_SSD_2_X_4",&v_SSD_2);
+  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_2_SingleSi_SSD_V_2_X_5",&v_SSD_V_2);  
 
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_3_SingleSi_SSD20_3_X_0",&v_SSD20_3);
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_3_SingleSi_SSD_3_Y_1",&v_SSD_3);
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_3_SingleSi_SSD_V_3_Y_2",&v_SSD_V_3);  
+  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_3_SingleSi_SSD20_3_X_6",&v_SSD20_3);
+  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_3_SingleSi_SSD_3_Y_7",&v_SSD_3);
+  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_3_SingleSi_SSD_V_3_Y_8",&v_SSD_V_3);  
 
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_4_SingleSi_SSD20_4_Y_0",&v_SSD20_4);
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_4_SingleSi_SSD_4_X_1",&v_SSD_4);
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_4_SingleSi_SSD_V_4_X_2",&v_SSD_V_4);
+  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_4_SingleSi_SSD20_4_Y_9",&v_SSD20_4);
+  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_4_SingleSi_SSD_4_X_10",&v_SSD_4);
+  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_4_SingleSi_SSD_V_4_X_11",&v_SSD_V_4);
 
   ch->SetBranchAddress("NDDigi",&v_ND);
 
@@ -191,7 +170,7 @@ void convert(Int_t nFile = 0) {
 
   // Creating outfile,outtree
   TString outPutFileName;
-  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calibrated/finalCal/h7_ct_%d_cal.root",nFile);
+  outPutFileName.Form("/mnt/data/exp1904/analysed/cal/test/h7_ct_%d_cal.root",nFile);
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
   // TFile *fw = new TFile("test.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
@@ -339,12 +318,11 @@ void convert(Int_t nFile = 0) {
   // beamdet
     fillF5(v_F5);
     fillF3(v_F3);
-  
-    tMWPC[0] = ((ERBeamDetMWPCDigi*)v_MWPCx1->At(0))->GetTime();
-    tMWPC[1] = ((ERBeamDetMWPCDigi*)v_MWPCy1->At(0))->GetTime();
-    tMWPC[2] = ((ERBeamDetMWPCDigi*)v_MWPCx2->At(0))->GetTime();
-    tMWPC[3] = ((ERBeamDetMWPCDigi*)v_MWPCy2->At(0))->GetTime();
-    
+
+    tMWPC[0] = ((ERBeamDetMWPCDigi*)v_MWPCx1->At(0))->Time();
+    tMWPC[1] = ((ERBeamDetMWPCDigi*)v_MWPCy1->At(0))->Time();
+    tMWPC[2] = ((ERBeamDetMWPCDigi*)v_MWPCx2->At(0))->Time();
+    tMWPC[3] = ((ERBeamDetMWPCDigi*)v_MWPCy2->At(0))->Time();
 
     if (tMWPC[0] - tF5 > 98 || tMWPC[0] - tF5 < 77) continue;
     if (tMWPC[1] - tF5 > 101 || tMWPC[1] - tF5 < 80) continue;
@@ -405,8 +383,8 @@ Int_t GetClusterMWPC(TClonesArray *data) {
 
   for (Int_t i = 1; i < entries; i++) {
     //check if entries are in specific order
-    wire1 = ((ERBeamDetMWPCDigi*)data->At(i))->GetWireNb();
-    wire2 = ((ERBeamDetMWPCDigi*)data->At(i-1))->GetWireNb();
+    wire1 = ((ERBeamDetMWPCDigi*)data->At(i))->Channel();
+    wire2 = ((ERBeamDetMWPCDigi*)data->At(i-1))->Channel();
 
     //todo number 32 is related to number of wires
     // and should be taken from Parameters
@@ -432,7 +410,7 @@ void zeroVars() {
   wirey2 = -1;
   
   for(Int_t i = 0;i<4;i++) {
-    tMWPC[i] = 0;
+    tMWPC[i] = -1000;
   }
 
   x1c = -50;
@@ -498,8 +476,8 @@ void fillF5(TClonesArray *data){
   ERBeamDetTOFDigi *temp_F5 = ((ERBeamDetTOFDigi*)data->At(0));
   if(!temp_F5) return;
 
-  F5 = temp_F5->GetEdep();
-  tF5 = temp_F5->GetTime();
+  F5 = temp_F5->Edep();
+  tF5 = temp_F5->Time();
 
   return; 
 }
@@ -509,8 +487,8 @@ void fillF3(TClonesArray *data){
   ERBeamDetTOFDigi *temp_F3 = ((ERBeamDetTOFDigi*)data->At(0));
   if(!temp_F3) return;
 
-  F3 = temp_F3->GetEdep();
-  tF3 = temp_F3->GetTime();
+  F3 = temp_F3->Edep();
+  tF3 = temp_F3->Time();
 
   return; 
 }
@@ -518,7 +496,7 @@ void fillF3(TClonesArray *data){
 void fillMWPC(TClonesArray *data,Int_t *wire) {
   if (!data) return;
 
-  *(wire) = ((ERBeamDetMWPCDigi*)data->At(0))->GetWireNb() + ((ERBeamDetMWPCDigi*)data->At(data->GetEntriesFast()-1))->GetWireNb();
+  *(wire) = ((ERBeamDetMWPCDigi*)data->At(0))->Channel() + ((ERBeamDetMWPCDigi*)data->At(data->GetEntriesFast()-1))->Channel();
   *(wire) = *(wire)/2; 
 
   return;
@@ -570,11 +548,12 @@ void fillSi(TClonesArray *data,Float_t* amp,Float_t* time,Float_t *par1,Float_t 
 
   Int_t nCh;
   for(Int_t i=0;i<data->GetEntriesFast();i++) { 
-    nCh = ((ERQTelescopeSiDigi*)data->At(i))->GetStripNb();
-    // cout << 1000*((ERQTelescopeSiDigi*)data->At(i))->GetEdep()*(*(par2+nCh)) + (*(par1+nCh)) << " " << nCh << " " << *(par2+nCh) << " " << *(par1+nCh) << endl;
-    if (isCal) *(amp+nCh) = 1000*((ERQTelescopeSiDigi*)data->At(i))->GetEdep()*(*(par2+nCh)) + (*(par1+nCh));
-    if (!isCal) *(amp+nCh) = 1000*((ERQTelescopeSiDigi*)data->At(i))->GetEdep();
-    *(time+nCh) = ((ERQTelescopeSiDigi*)data->At(i))->GetTime();
+    nCh = ((ERQTelescopeSiDigi*)data->At(i))->Channel();
+    // cout << 1000*((ERQTelescopeSiDigi*)data->At(i))->Edep()*(*(par2+nCh)) + (*(par1+nCh)) << " " << nCh << " " << *(par2+nCh) << " " << *(par1+nCh) << endl;
+    // if (isCal) *(amp+nCh) = ((ERQTelescopeSiDigi*)data->At(i))->Edep()*(*(par2+nCh)) + (*(par1+nCh));
+    if (isCal) *(amp+nCh) = ((ERQTelescopeSiDigi*)data->At(i))->Edep();
+    if (!isCal) *(amp+nCh) = ((ERQTelescopeSiDigi*)data->At(i))->Edep();
+    *(time+nCh) = ((ERQTelescopeSiDigi*)data->At(i))->Time();
     if ( isCal && ( *(amp+nCh)<=ampThreshold || *(time+nCh)<=timeThreshold ) ) {
       // *(amp+nCh) = 0;
       // *(time+nCh) = 0;
@@ -589,9 +568,10 @@ void fillarrayCsI(TClonesArray *data,Float_t* amp,Float_t* time,Float_t *par1,Fl
 
   Int_t nCh;
   for(Int_t i=0;i<data->GetEntriesFast();i++) {
-    nCh = ((ERQTelescopeCsIDigi*)data->At(i))->GetBlockNb();
-    *(amp+nCh) = 1000*((ERQTelescopeCsIDigi*)data->At(i))->GetEdep()*(*(par2+nCh)) + (*(par1+nCh));
-    *(time+nCh) = ((ERQTelescopeCsIDigi*)data->At(i))->GetTime();
+    nCh = ((ERQTelescopeCsIDigi*)data->At(i))->Channel();
+    // *(amp+nCh) = 1000*((ERQTelescopeCsIDigi*)data->At(i))->Edep()*(*(par2+nCh)) + (*(par1+nCh));
+    *(amp+nCh) = ((ERQTelescopeCsIDigi*)data->At(i))->Edep();
+    *(time+nCh) = ((ERQTelescopeCsIDigi*)data->At(i))->Time();
   }
   return;
 }
@@ -604,10 +584,10 @@ void fillND(TClonesArray *data,Float_t* amp,Float_t* time,Float_t* tac,Float_t *
 
   Int_t nCh;
   for(Int_t i=0;i<data->GetEntriesFast();i++) {
-    nCh = ((ERNDDigi*)data->At(i))->StilbenNb();
-    *(amp+nCh) = 1000*((ERNDDigi*)data->At(i))->EnergyLoss();
+    nCh = ((ERNDDigi*)data->At(i))->Channel();
+    *(amp+nCh) = ((ERNDDigi*)data->At(i))->Edep();
     *(time+nCh) = ((ERNDDigi*)data->At(i))->Time();
-    *(tac+nCh) = ((ERNDDigi*)data->At(i))->TAC()+ (*(par+nCh));
+    *(tac+nCh) = ((ERNDDigi*)data->At(i))->TAC();
   }
   return;
 }

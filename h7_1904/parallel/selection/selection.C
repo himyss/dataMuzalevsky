@@ -1,3 +1,6 @@
+#include "/home/muzalevskii/work/macro/h7_1904/cuts/scripts/create_cuts.C"
+#include "/home/muzalevskii/work/macro/h7_1904/cuts/scripts/create_IDs.C"
+
 void calcVectorTel1(Int_t n20, Int_t n1);
 void calcVectorTel2(Int_t n20, Int_t n1);
 void calcVectorTel3(Int_t n20, Int_t n1);
@@ -32,7 +35,10 @@ void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16);
 
 void neutronID();
 void triton();
+void proton();
+void deuterium();
 void checkHe3();
+void checkHe4();
 void checkLi6();
 void timesSQ20();
 void timesSQ1();
@@ -130,14 +136,16 @@ Double_t fThickness1[16][16],fThickness2[16][16],fThickness3[16][16],fThickness4
 
 Int_t flag1,flag2,flag3,flag4,flagCent,flagtCsI;
 Int_t flagVeto1, flagVeto2, flagVeto3, flagVeto4;
-Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4,neutron,n6li;
+Int_t nh3,nh2,nh1,nhe3_1,nhe3_2,nhe3_3,nhe3_4,neutron,n6li;
+Int_t nhe4_1,nhe4_2,nhe4_3,nhe4_4;
 
-TCutG *cutCsI[16],*cut3h[16],*cutX_C[32],*cut6he[16];
-TCutG *cuthe3_1[16],*cutSQ20_1[16],*cutSQ1_1[16];
-TCutG *cuthe3_2[16],*cutSQ20_2[16],*cutSQ1_2[16];
-TCutG *cuthe3_3[16],*cutSQ20_3[16],*cutSQ1_3[16];
-TCutG *cuthe3_4[16],*cutSQ20_4[16],*cutSQ1_4[16];
-TCutG *cut6Li,*cutNeutron;
+// TCutG *CsI_cut[16],*cut3h[16],*dssd_x_cut[32],*cut6he[16];
+// TCutG *cuthe3_1[16],*cutSQ20_1[16],*cutSQ1_1[16];
+// TCutG *cuthe3_2[16],*cutSQ20_2[16],*cutSQ1_2[16];
+// TCutG *cuthe3_3[16],*cutSQ20_3[16],*cutSQ1_3[16];
+// TCutG *cuthe3_4[16],*cutSQ20_4[16],*cutSQ1_4[16];
+// TCutG *cut6Li,*cutNeutron;
+
 
 Float_t th_he3_1,th_he3_2,th_he3_3,th_he3_4,th_h3;
 Float_t phi_he3_1,phi_he3_2,phi_he3_3,phi_he3_4,phi_h3;
@@ -180,12 +188,15 @@ Float_t tND,aND,tacND,numND;
 
 void selection(Int_t nFile=0) {
 
+  create_IDs();
+  create_cuts();
+
   // xOffset = -0.12;
   // yOffset = 3.63;
   
-  xOffset = 0.75;
-  yOffset = 0.5;
-  zOffset = 2.;
+  xOffset = 0.6;
+  yOffset = 0.74;
+  zOffset = 1.;
   
   centOffset = 1.18;
 
@@ -197,13 +208,12 @@ void selection(Int_t nFile=0) {
   f3HSi->SetEtab(100000, 200.); // ?, MeV calculate ranges
   f3HSi->SetDeltaEtab(300);
 
-  readPar("CsI_anh",pCsI_1,pCsI_2);
-
-  readCuts();
+  // readPar("CsI_anh",pCsI_1,pCsI_2);
+  // readCuts();
 
   TChain *ch = new TChain("tree");
   TString inPutFileName;
-  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calibrated/finalCal/h7_ct_%d_cal.root",nFile);
+  inPutFileName.Form("/mnt/data/exp1904/analysed/cal/allTriggers/h7_ct_%d_cal.root",nFile);
   ch->Add(inPutFileName.Data());
 
 
@@ -287,7 +297,7 @@ void selection(Int_t nFile=0) {
   TString outPutFileName;
   // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/beamDiagnostics/selected/h7_ct_%d_cut_newPars.root",nFile);
   // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/equalTriggers/h7_ct_%d_cut.root",nFile);
-  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/h7_ct_%d_cut.root",nFile);
+  outPutFileName.Form("/mnt/data/exp1904/analysed/selected/allTriggers/h7_ct_%d_cut.root",nFile);
   // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/test.root",nFile);
 
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
@@ -410,10 +420,16 @@ void selection(Int_t nFile=0) {
 
   tw->Branch("neutron.",&neutron,"neutron/I");
   tw->Branch("nh3.",&nh3,"nh3/I");
+  tw->Branch("nh2.",&nh2,"nh2/I");
+  tw->Branch("nh1.",&nh1,"nh1/I");
   tw->Branch("nhe3_1.",&nhe3_1,"nhe3_1/I");
   tw->Branch("nhe3_2.",&nhe3_2,"nhe3_2/I");
   tw->Branch("nhe3_3.",&nhe3_3,"nhe3_3/I");
   tw->Branch("nhe3_4.",&nhe3_4,"nhe3_4/I");
+  tw->Branch("nhe4_1.",&nhe4_1,"nhe4_1/I");
+  tw->Branch("nhe4_2.",&nhe4_2,"nhe4_2/I");
+  tw->Branch("nhe4_3.",&nhe4_3,"nhe4_3/I");
+  tw->Branch("nhe4_4.",&nhe4_4,"nhe4_4/I");  
   tw->Branch("n6li.",&n6li,"n6li/I");
 
   tw->Branch("th_he3_1.",&th_he3_1,"th_he3_1/F");
@@ -464,17 +480,17 @@ void selection(Int_t nFile=0) {
   yCent = 0;
 
   for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
-  // for(Int_t nentry=0;nentry<10000;nentry++) {     
+  // for(Int_t nentry=0;nentry<100000;nentry++) {     
     if(nentry%1000000==0) cout << "#ENTRY " << nentry << "#" << endl;
 
     ch->GetEntry(nentry);
 
-    if (trigger==1) continue;
+    // if (trigger==1) continue;
 
     zeroVars();
 
     MWPCprojection();
-    if ( ((fXt-xCent)*(fXt-xCent) + (fYt-yCent)*(fYt-yCent))>13*13 ) continue;
+    // if ( ((fXt-xCent)*(fXt-xCent) + (fYt-yCent)*(fYt-yCent))>9*9 ) continue;
 
     fillND();
     fillSi();
@@ -521,12 +537,15 @@ void selection(Int_t nFile=0) {
 
     correct();
     checkHe3();
+    checkHe4();
     // checkLi6();
 
     if (flagCent) {
       triton();
-      neutronID();
+      deuterium();
+      proton();
     }
+    neutronID();
 
     tw->Fill();
   }
@@ -607,11 +626,18 @@ void zeroVars() {
 
   neutron = 0;
   nh3 = 0;
+  nh2 = 0;
+  nh1 = 0;
   n6li = 0;
   nhe3_1 = 0;
   nhe3_2 = 0;
   nhe3_3 = 0;
   nhe3_4 = 0;
+
+  nhe4_1 = 0;
+  nhe4_2 = 0;
+  nhe4_3 = 0;
+  nhe4_4 = 0;
 
   a1_1 = 0;
   n1_1 = -1;
@@ -713,7 +739,7 @@ Float_t GetPosition(Float_t wire, Float_t wireStep,
 
 void readThickness() {
   cout << "thickness of the first detector " << endl;
-  TFile *f1 = new TFile("/home/ivan/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_1_real.root","READ");
+  TFile *f1 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_1_real.root","READ");
   if (f1->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -737,7 +763,7 @@ void readThickness() {
   delete f1;
 
   cout  << endl << "thickness of the SECOND detector " << endl;
-  TFile *f2 = new TFile("/home/ivan/work/macro/h7_1904/parameters/thicknessMap_alltel_90_SSD_1m_2_real.root","READ");
+  TFile *f2 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/thicknessMap_alltel_90_SSD_1m_2_real.root","READ");
   if (f2->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -762,7 +788,7 @@ void readThickness() {
 
 
   cout  << endl << "thickness of the THIRD detector " << endl;
-  TFile *f3 = new TFile("/home/ivan/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_3_switch_new.root","READ");
+  TFile *f3 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_3_switch_new.root","READ");
   if (f3->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -787,7 +813,7 @@ void readThickness() {
 
 
   cout  << endl << "thickness of the FOURTH detector " << endl;
-  TFile *f4 = new TFile("/home/ivan/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_4_real.root","READ");
+  TFile *f4 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_4_real.root","READ");
   if (f4->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -889,6 +915,7 @@ void fillSi() {
       multy++;
     } 
   }
+
   if (multy==1) {
     a20_1 = amp;
     t20_1 = time;
@@ -1140,12 +1167,34 @@ void correct() {
 }
 
 void triton() {
-  if(nCsI_track>-1 && nX_C>-1 && cut3h[nCsI_track]->IsInside( (arCsI[nCsI_track]-pCsI_1[nCsI_track])/pCsI_2[nCsI_track] , X_C)) {
+  if(nCsI_track>-1 && nX_C>-1 && cut3h[nCsI_track]->IsInside(arCsI[nCsI_track], X_C)) {
     nh3 = 1;
     return;
   }
   else {
     nh3 = 0;
+    return;
+  }
+}
+
+void deuterium() {
+  if(nCsI_track>-1 && nX_C>-1 && cut2h[nCsI_track]->IsInside(arCsI[nCsI_track], X_C)) {
+    nh2 = 1;
+    return;
+  }
+  else {
+    nh2 = 0;
+    return;
+  }
+}
+
+void proton() {
+  if(nCsI_track>-1 && nX_C>-1 && cut1h[nCsI_track]->IsInside(arCsI[nCsI_track], X_C)) {
+    nh1 = 1;
+    return;
+  }
+  else {
+    nh1 = 0;
     return;
   }
 }
@@ -1191,6 +1240,37 @@ void checkHe3() {
   return;
 }
 
+void checkHe4() {
+  if(flag1 && n1_1>-1 && n20_1>-1 && cuthe4_1->IsInside(a1_1+a20_1_un, a20_1)) {
+    nhe4_1 = 1;
+  }
+  else {
+    nhe4_1 = 0;
+  }
+
+  if(flag2 && n1_2>-1 && n20_2>-1 && cuthe4_2->IsInside(a1_2+a20_2_un, a20_2)) {
+    nhe4_2 = 1;
+  }
+  else {
+    nhe4_2 = 0;
+  }
+
+  if(flag3 && n1_3>-1 && n20_3>-1 && cuthe4_3->IsInside(a1_3+a20_3_un, a20_3)) {
+    nhe4_3 = 1;
+  }
+  else {
+    nhe4_3 = 0;
+  }
+
+  if(flag4 && n1_4>-1 && n20_4>-1 && cuthe4_4->IsInside(a1_4+a20_4_un, a20_4)) {
+    nhe4_4 = 1;
+  }
+  else {
+    nhe4_4 = 0;
+  }
+  return;
+}
+
 void checkLi6() {
   if(flag1 && n1_1>-1 && n20_1>-1 && cut6Li->IsInside(a1_1+a20_1_un, a20_1)) {
     n6li = 1;
@@ -1228,7 +1308,7 @@ void checkLi6() {
 
 
 void CsItimes() {
-  if(nCsI_track>-1 && cutCsI[nCsI_track]->IsInside(trCsI[nCsI_track]-tF5, (arCsI[nCsI_track]-pCsI_1[nCsI_track])/pCsI_2[nCsI_track] )) { 
+  if(nCsI_track>-1 && CsI_cut[nCsI_track]->IsInside(trCsI[nCsI_track]-tF5, arCsI[nCsI_track] )) { 
     return;
   }
   else {
@@ -1238,7 +1318,7 @@ void CsItimes() {
 }  
 
 void DSD_Cselect() {
-  if(nX_C>-1 && cutX_C[nX_C]->IsInside(tX_C-tF5, X_C)) { 
+  if(nX_C>-1 && dssd_x_cut[nX_C]->IsInside(tX_C-tF5, X_C)) { 
     return;
   }
   else {
@@ -1291,7 +1371,7 @@ void readCuts() {
   TFile *f;
   TString cutName;
 
-  cutName.Form("/home/ivan/work/macro/h7_1904/cuts/ND/Neutron.root");
+  cutName.Form("/home/muzalevskii/work/macro/h7_1904/cuts/ND/Neutron.root");
   f = new TFile(cutName.Data());
   cutNeutron = (TCutG*)f->Get("CUTG");
   if (!cutNeutron) {
@@ -1300,7 +1380,7 @@ void readCuts() {
   }    
   delete f;
 
-  cutName.Form("/home/ivan/work/macro/h7_1904/cuts/T1/li6_cut.root");
+  cutName.Form("/home/muzalevskii/work/macro/h7_1904/cuts/T1/li6_cut.root");
   f = new TFile(cutName.Data());
   cut6Li = (TCutG*)f->Get("CUTG");
   if (!cut6Li) {
@@ -1310,7 +1390,7 @@ void readCuts() {
   delete f;
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/C_T/6He/he6_%d.root",i);
+    cutName.Form("/home/muzalevskii/work/macro/h7_1904/cuts/C_T/6He/he6_%d.root",i);
     f = new TFile(cutName.Data());
     cut6he[i] = (TCutG*)f->Get("CUTG");
     if (!cut6he[i]) {
@@ -1321,7 +1401,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/C_T/triton/h3_%d.root",i);
+    cutName.Form("/home/muzalevskii/work/macro/h7_1904/cuts/C_T/triton/h3_%d.root",i);
     f = new TFile(cutName.Data());
     cut3h[i] = (TCutG*)f->Get("CUTG");
     if (!cut3h[i]) {
@@ -1332,10 +1412,10 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/C_T/tCsI/tCsI_full_%d.root",i);
+    cutName.Form("/home/muzalevskii/work/macro/h7_1904/cuts/C_T/tCsI/tCsI_full_%d.root",i);
     f = new TFile(cutName.Data());
-    cutCsI[i] = (TCutG*)f->Get("CUTG");
-    if (!cutCsI[i]) {
+    CsI_cut[i] = (TCutG*)f->Get("CUTG");
+    if (!CsI_cut[i]) {
       cout << "no cut " << cutName.Data() << endl;
       exit(-1);
     }
@@ -1343,10 +1423,10 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<32;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/C_T/tX_C/tX_C_%d.root",i);
+    cutName.Form("/home/muzalevskii/work/macro/h7_1904/cuts/C_T/tX_C/tX_C_%d.root",i);
     f = new TFile(cutName.Data());
-    cutX_C[i] = (TCutG*)f->Get("CUTG");
-    if (!cutX_C[i]) {
+    dssd_x_cut[i] = (TCutG*)f->Get("CUTG");
+    if (!dssd_x_cut[i]) {
       cout << i  << " no cut"<< endl;
       exit(-1);
     }
@@ -1354,7 +1434,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cuts/T1/he3/canvas/he3_%d.root",i);
+    cutName.Form("/home/muzalevskii/work/macro/h7_1904/cuts/T1/he3/canvas/he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_1[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_1[i]) {
@@ -1365,7 +1445,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cuts/T2/he3/canvas/he3_%d.root",i);
+    cutName.Form("/home/muzalevskii/work/macro/h7_1904/cuts/T2/he3/canvas/he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_2[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_2[i]) {
@@ -1376,7 +1456,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cuts/T3/he3/canvas/he3_%d.root",i);
+    cutName.Form("/home/muzalevskii/work/macro/h7_1904/cuts/T3/he3/canvas/he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_3[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_3[i]) {
@@ -1387,7 +1467,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cuts/T4/he3/canvas/he3_%d.root",i);
+    cutName.Form("/home/muzalevskii/work/macro/h7_1904/cuts/T4/he3/canvas/he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_4[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_4[i]) {
@@ -1505,7 +1585,7 @@ void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16){
   TString line;
   ifstream myfile;
   Int_t count=0;
-  TString file = "/home/ivan/work/macro/h7_1904/parameters/" + fileName + ".cal";
+  TString file = "/home/muzalevskii/work/macro/h7_1904/parameters/" + fileName + ".cal";
   myfile.open(file.Data());
   while (! myfile.eof() ){
     line.ReadLine(myfile);

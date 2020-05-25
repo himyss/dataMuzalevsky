@@ -52,7 +52,8 @@ Float_t sideX,sideY;
 Float_t frame1X,frame1Y,frame2X,frame2Y,frame3X,frame3Y;
 
 Int_t flag1,flag2,flag3,flag4,flagCent;
-Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4,neutron;
+Int_t nh3,nh2,nh1,nhe3_1,nhe3_2,nhe3_3,nhe3_4,neutron;
+Int_t nhe4_1,nhe4_2,nhe4_3,nhe4_4;
 
 Float_t e_1,e_2,e_3,e_4;
 Float_t centE;
@@ -97,7 +98,7 @@ void reco(Int_t nRun=0) {
 
   TChain *ch = new TChain("tree");
   TString inPutFileName;
-  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calcEnergies/h7_ct_%d_reco_newPars.root",nRun);
+  inPutFileName.Form("/mnt/data/exp1904/analysed/calcEnergies/allTriggers/h7_ct_%d_reco.root",nRun);
   // inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calcEnergies/track0/eTarget/h7_ct_%d_reco_newPars.root",nRun);
   ch->Add(inPutFileName.Data());;
 
@@ -200,10 +201,17 @@ void reco(Int_t nRun=0) {
   ch->SetBranchAddress("flagCent.",&flagCent);
 
   ch->SetBranchAddress("nh3.",&nh3);
+  ch->SetBranchAddress("nh2.",&nh2);
+  ch->SetBranchAddress("nh1.",&nh1);
   ch->SetBranchAddress("nhe3_1.",&nhe3_1);
   ch->SetBranchAddress("nhe3_2.",&nhe3_2);
   ch->SetBranchAddress("nhe3_3.",&nhe3_3);
   ch->SetBranchAddress("nhe3_4.",&nhe3_4);
+
+  ch->SetBranchAddress("nhe4_1.",&nhe4_1);
+  ch->SetBranchAddress("nhe4_2.",&nhe4_2);
+  ch->SetBranchAddress("nhe4_3.",&nhe4_3);
+  ch->SetBranchAddress("nhe4_4.",&nhe4_4);
 
   ch->SetBranchAddress("th_he3_1.",&th_he3_1);
   ch->SetBranchAddress("th_he3_2.",&th_he3_2);
@@ -232,7 +240,7 @@ void reco(Int_t nRun=0) {
 
   TString outPutFileName;
   // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/reco/eTarget/h7_ect_%d_mm_frame.root",nRun);
-  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/reco/h7_ct_%d_mm_frame.root",nRun);
+  outPutFileName.Form("/mnt/data/exp1904/analysed/reco/allTriggers/h7_ct_%d_mm_frame.root",nRun);
   // outPutFileName.Form("test.root",nRun);
 
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
@@ -342,11 +350,18 @@ void reco(Int_t nRun=0) {
   tw->Branch("flagCent.",&flagCent,"flagCent/I");
 
   tw->Branch("nh3.",&nh3,"nh3/I");
+  tw->Branch("nh2.",&nh2,"nh2/I");
+  tw->Branch("nh1.",&nh1,"nh1/I");
   tw->Branch("nhe3_1.",&nhe3_1,"nhe3_1/I");
   tw->Branch("nhe3_2.",&nhe3_2,"nhe3_2/I");
   tw->Branch("nhe3_3.",&nhe3_3,"nhe3_3/I");
   tw->Branch("nhe3_4.",&nhe3_4,"nhe3_4/I");
   tw->Branch("neutron.",&neutron,"neutron/I");
+
+  tw->Branch("nhe4_1.",&nhe4_1,"nhe4_1/I");
+  tw->Branch("nhe4_2.",&nhe4_2,"nhe4_2/I");
+  tw->Branch("nhe4_3.",&nhe4_3,"nhe4_3/I");
+  tw->Branch("nhe4_4.",&nhe4_4,"nhe4_4/I"); 
 
   tw->Branch("th_he3_1.",&th_he3_1,"th_he3_1/F");
   tw->Branch("th_he3_2.",&th_he3_2,"th_he3_2/F");
@@ -468,7 +483,7 @@ void reco(Int_t nRun=0) {
 
     
     coincidence = 0;
-    if (nh3 && flagCent && nh3 && nhe3_1 && flag1 && !nhe3_2 && !nhe3_3 && !nhe3_4) {
+    if (flag1 && ( (nhe3_1 && !nhe3_2 && !nhe3_3 && !nhe3_4) || (nhe4_1 && !nhe4_2 && !nhe4_3 && !nhe4_4) ) ) {
       // if (e_1>20 || centE<40) continue;
       energy = e_1/1000.;
       theta = th_he3_1;
@@ -476,7 +491,7 @@ void reco(Int_t nRun=0) {
       coincidence++;
     } 
 
-    if (nh3 && flagCent && nh3 && nhe3_2 && flag2 && !nhe3_1 && !nhe3_3 && !nhe3_4) {
+    if (flag2 && ( (nhe3_2 && !nhe3_1 && !nhe3_3 && !nhe3_4) || (nhe4_2 && !nhe4_1 && !nhe4_3 && !nhe4_4) ) ) {
       // if (n20_2==0 || n20_2==1) continue;
       // if (e_2>20 || centE<40) continue;
       energy = e_2/1000.;
@@ -485,7 +500,7 @@ void reco(Int_t nRun=0) {
       coincidence++;
     } 
 
-    if (nh3 && flagCent && nh3 && nhe3_3 && flag3 && !nhe3_1 && !nhe3_2 && !nhe3_4 ) {
+    if (flag3 && ( (nhe3_3 && !nhe3_1 && !nhe3_2 && !nhe3_4) || (nhe4_3 && !nhe4_1 && !nhe4_2 && !nhe4_4) ) ) {
       // if (e_3>20 || centE<40) continue;
       energy = e_3/1000.;
       theta = th_he3_3;
@@ -493,14 +508,14 @@ void reco(Int_t nRun=0) {
       coincidence++;
     } 
 
-    if (nh3 && flagCent && nh3 && nhe3_4 && flag4 && !nhe3_2 && !nhe3_3 && !nhe3_1) {
+    if (flag4 && ( (nhe3_4 && !nhe3_2 && !nhe3_3 && !nhe3_1) || (nhe4_4 && !nhe4_2 && !nhe4_3 && !nhe4_1) ) ) {
       // if (e_4>20 || centE<40) continue;
       energy = e_4/1000.;
       theta = th_he3_4;
       phi = phi_he3_4;
       coincidence++;
     } 
-    if (nh3==0) continue;
+    // if (nh3==0) continue;
     // if(coincidence!=1) continue;
     // energy = leftE4/1000.;
     mass = 2.808391;  //MeV
@@ -580,7 +595,7 @@ void reco(Int_t nRun=0) {
       // thetah3CM = h3CM.Theta()*TMath::RadToDeg();
       // phih3CM = h3CM.Phi()*TMath::RadToDeg();
 
-      if (nh3 && (nhe3_1 || nhe3_2 || nhe3_3 || nhe3_4)) {
+      if (nh3 && ( (nhe3_1 || nhe3_2 || nhe3_3 || nhe3_4) || (nhe4_1 || nhe4_2 || nhe4_3 || nhe4_4) ) ) {
         h3CM_H7 = h3;
         h3CM_H7.Boost(-bVect_H7);
         eh3_CM = h3CM_H7.T() - mass;
@@ -625,7 +640,7 @@ void reco(Int_t nRun=0) {
       
     } 
     
-    if (nh3 && (nhe3_1 || nhe3_2 || nhe3_3 || nhe3_4)) {
+    if (nh3 && ( (nhe3_1 || nhe3_2 || nhe3_3 || nhe3_4) || (nhe4_1 || nhe4_2 || nhe4_3 || nhe4_4) ) ) {
       angle_h3_h7CM = h7CM_H7.Angle(h3CM_H7.Vect())*TMath::RadToDeg();
       angle_h3_h7 = h7.Angle(h3.Vect())*TMath::RadToDeg(); 
       angle_h3_h7CMreaction = h7CM.Angle(h3CM.Vect())*TMath::RadToDeg(); 
@@ -665,7 +680,7 @@ void calculateBeam() {
   Double_t beta = sqrt(1 - (velocity*velocity/(299.792458*299.792458) ) );
   Double_t kinEnergy = mass*((1/beta) - 1);
 
-  kinEnergy =  f8HeSi.GetE(1000*kinEnergy, 565.5)/1000.;
+  kinEnergy =  f8HeSi.GetE(1000*kinEnergy, 630.)/1000.;
   // kinEnergy = kinEnergy*0.95;
   ehe8 = kinEnergy;
 
