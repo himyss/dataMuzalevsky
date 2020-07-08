@@ -11,7 +11,7 @@ void zeroVars();
 
 void fillF5(TClonesArray *data);
 void fillF3(TClonesArray *data);
-void fillMWPC(TClonesArray *data,Int_t *wire);
+void fillMWPC(TClonesArray *data,Float_t *wire);
 void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16);
 
 Int_t GetClusterSi(TClonesArray *data);
@@ -24,7 +24,7 @@ Int_t trigger;
 
 Float_t F5,tF5,F3,tF3;
 
-Int_t wirex1,wirex2,wirey1,wirey2;
+Float_t wirex1,wirex2,wirey1,wirey2;
 Float_t tMWPC[4];
 
 Float_t fXt,fYt;
@@ -177,7 +177,7 @@ void convert1() {
   TString cutName;
 
   // Creating outfile,outtree
-  TFile *fw = new TFile("/media/ivan/data/exp1906/be10/analysed/novPars/calibrated/test/be10_firstVol.root", "RECREATE");
+  TFile *fw = new TFile("/media/ivan/data/exp1906/be10/analysed/cal/be10_firstVol.root", "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
   tw->Branch("trigger",&trigger,"trigger/I");
@@ -192,13 +192,6 @@ void convert1() {
   tw->Branch("wirex2.",&wirex2,"wirex2/I");
   tw->Branch("wirey1.",&wirey1,"wirey1/I");
   tw->Branch("wirey2.",&wirey2,"wirey2/I");
-
-  tw->Branch("x1c.",&x1c,"x1c/F"); // position in MWPC in mm
-  tw->Branch("y1c.",&y1c,"y1c/F");
-  tw->Branch("x2c.",&x2c,"x2c/F");
-  tw->Branch("y2c.",&y2c,"y2c/F"); 
-  tw->Branch("fXt.",&fXt,"fXt/F"); // beam profile at the target plane
-  tw->Branch("fYt.",&fYt,"fYt/F"); 
 
   tw->Branch("x1c.",&x1c,"x1c/F"); // position in MWPC in mm
   tw->Branch("y1c.",&y1c,"y1c/F");
@@ -320,10 +313,10 @@ void convert1() {
     fillF5(v_F5);
     fillF3(v_F3);
   
-    tMWPC[0] = ((ERBeamDetMWPCDigi*)v_MWPCx1->At(0))->GetTime();
-    tMWPC[1] = ((ERBeamDetMWPCDigi*)v_MWPCy1->At(0))->GetTime();
-    tMWPC[2] = ((ERBeamDetMWPCDigi*)v_MWPCx2->At(0))->GetTime();
-    tMWPC[3] = ((ERBeamDetMWPCDigi*)v_MWPCy2->At(0))->GetTime();
+    tMWPC[0] = ((ERBeamDetMWPCDigi*)v_MWPCx1->At(0))->Time();
+    tMWPC[1] = ((ERBeamDetMWPCDigi*)v_MWPCy1->At(0))->Time();
+    tMWPC[2] = ((ERBeamDetMWPCDigi*)v_MWPCx2->At(0))->Time();
+    tMWPC[3] = ((ERBeamDetMWPCDigi*)v_MWPCy2->At(0))->Time();
     
     if (tMWPC[0] - tF5 > 82 || tMWPC[0] - tF5 < 62) continue;
     if (tMWPC[1] - tF5 > 86 || tMWPC[1] - tF5 < 64) continue;
@@ -384,8 +377,8 @@ Int_t GetClusterMWPC(TClonesArray *data) {
 
   for (Int_t i = 1; i < entries; i++) {
     //check if entries are in specific order
-    wire1 = ((ERBeamDetMWPCDigi*)data->At(i))->GetWireNb();
-    wire2 = ((ERBeamDetMWPCDigi*)data->At(i-1))->GetWireNb();
+    wire1 = ((ERBeamDetMWPCDigi*)data->At(i))->Channel();
+    wire2 = ((ERBeamDetMWPCDigi*)data->At(i-1))->Channel();
 
     //todo number 32 is related to number of wires
     // and should be taken from Parameters
@@ -473,8 +466,8 @@ void fillF5(TClonesArray *data){
   ERBeamDetTOFDigi *temp_F5 = ((ERBeamDetTOFDigi*)data->At(0));
   if(!temp_F5) return;
 
-  F5 = temp_F5->GetEdep();
-  tF5 = temp_F5->GetTime();
+  F5 = temp_F5->Edep();
+  tF5 = temp_F5->Time();
 
   return; 
 }
@@ -484,16 +477,16 @@ void fillF3(TClonesArray *data){
   ERBeamDetTOFDigi *temp_F3 = ((ERBeamDetTOFDigi*)data->At(0));
   if(!temp_F3) return;
 
-  F3 = temp_F3->GetEdep();
-  tF3 = temp_F3->GetTime();
+  F3 = temp_F3->Edep();
+  tF3 = temp_F3->Time();
 
   return; 
 }
 
-void fillMWPC(TClonesArray *data,Int_t *wire) {
+void fillMWPC(TClonesArray *data,Float_t *wire) {
   if (!data) return;
 
-  *(wire) = ((ERBeamDetMWPCDigi*)data->At(0))->GetWireNb() + ((ERBeamDetMWPCDigi*)data->At(data->GetEntriesFast()-1))->GetWireNb();
+  *(wire) = ((ERBeamDetMWPCDigi*)data->At(0))->Channel() + ((ERBeamDetMWPCDigi*)data->At(data->GetEntriesFast()-1))->Channel();
   *(wire) = *(wire)/2; 
 
   return;
@@ -545,11 +538,11 @@ void fillSi(TClonesArray *data,Float_t* amp,Float_t* time,Float_t *par1,Float_t 
 
   Int_t nCh;
   for(Int_t i=0;i<data->GetEntriesFast();i++) { 
-    nCh = ((ERQTelescopeSiDigi*)data->At(i))->GetStripNb();
-    // cout << 1000*((ERQTelescopeSiDigi*)data->At(i))->GetEdep()*(*(par2+nCh)) + (*(par1+nCh)) << " " << nCh << " " << *(par2+nCh) << " " << *(par1+nCh) << endl;
-    if (isCal) *(amp+nCh) = 1000*((ERQTelescopeSiDigi*)data->At(i))->GetEdep()*(*(par2+nCh)) + (*(par1+nCh));
-    if (!isCal) *(amp+nCh) = 1000*((ERQTelescopeSiDigi*)data->At(i))->GetEdep();
-    *(time+nCh) = ((ERQTelescopeSiDigi*)data->At(i))->GetTime();
+    nCh = ((ERQTelescopeSiDigi*)data->At(i))->Channel();
+    // cout << 1000*((ERQTelescopeSiDigi*)data->At(i))->Edep()*(*(par2+nCh)) + (*(par1+nCh)) << " " << nCh << " " << *(par2+nCh) << " " << *(par1+nCh) << endl;
+    if (isCal) *(amp+nCh) = 1000*((ERQTelescopeSiDigi*)data->At(i))->Edep()*(*(par2+nCh)) + (*(par1+nCh));
+    if (!isCal) *(amp+nCh) = 1000*((ERQTelescopeSiDigi*)data->At(i))->Edep();
+    *(time+nCh) = ((ERQTelescopeSiDigi*)data->At(i))->Time();
     if ( isCal && ( *(amp+nCh)<=ampThreshold || *(time+nCh)<=timeThreshold ) ) {
       *(amp+nCh) = 0;
       *(time+nCh) = 0;
@@ -564,9 +557,9 @@ void fillarrayCsI(TClonesArray *data,Float_t* amp,Float_t* time,Float_t *par1,Fl
 
   Int_t nCh;
   for(Int_t i=0;i<data->GetEntriesFast();i++) {
-    nCh = ((ERQTelescopeCsIDigi*)data->At(i))->GetBlockNb();
-    *(amp+nCh) = 1000*((ERQTelescopeCsIDigi*)data->At(i))->GetEdep()*(*(par2+nCh)) + (*(par1+nCh));
-    *(time+nCh) = ((ERQTelescopeCsIDigi*)data->At(i))->GetTime();
+    nCh = ((ERQTelescopeCsIDigi*)data->At(i))->Channel();
+    *(amp+nCh) = 1000*((ERQTelescopeCsIDigi*)data->At(i))->Edep()*(*(par2+nCh)) + (*(par1+nCh));
+    *(time+nCh) = ((ERQTelescopeCsIDigi*)data->At(i))->Time();
   }
   return;
 }
@@ -613,7 +606,7 @@ void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16){
   TString line;
   ifstream myfile;
   Int_t count=0;
-  TString file = "/home/ivan/work/soft/er/input/novPars/" + fileName + ".cal";
+  TString file = "/home/ivan/work/macro/h7_1904/parameters/" + fileName + ".cal";
   myfile.open(file.Data());
   while (! myfile.eof() ){
     line.ReadLine(myfile);
@@ -625,8 +618,8 @@ void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16){
     sscanf(line.Data(),"%g %g", par1+count,par2+count);
     count++;
   }
-  // cout << endl << fileName.Data() << endl;
-  // for(Int_t i=0;i<size;i++) cout << par1[i] << " " << par2[i] << endl;
+  cout << endl << fileName.Data() << endl;
+  for(Int_t i=0;i<size;i++) cout << par1[i] << " " << par2[i] << endl;
 
   return;
 }
