@@ -1,5 +1,9 @@
 void create_passive_component() {
 
+   Double_t xOffset = 0.6;
+   Double_t yOffset = 0.74;
+   Double_t zOffset = -1.;
+
     TString erPath = gSystem->Getenv("VMCWORKDIR");
     TString geoFileName = erPath + "/geometry/housingFrames.root";    
     TString medFile = erPath + "/geometry/media.geo";
@@ -88,20 +92,20 @@ void create_passive_component() {
     fZeroRotation->RotateZ(0.);
 
     // --------------------------------------------------------------------------
-    frames->AddNode(thinFrame, 0, new TGeoCombiTrans(trans_1_X,trans_1_Y, trans_1_Z, fZeroRotation));
-    frames->AddNode(thinFrame, 0, new TGeoCombiTrans(trans_1_Y,-trans_1_X, trans_1_Z, fZeroRotation));
-    frames->AddNode(thinFrame, 0, new TGeoCombiTrans(-trans_1_X,-trans_1_Y, trans_1_Z, fZeroRotation));
-    frames->AddNode(thinFrame, 0, new TGeoCombiTrans(-trans_1_Y,trans_1_X, trans_1_Z, fZeroRotation));
+    frames->AddNode(thinFrame, 0, new TGeoCombiTrans(trans_1_X + xOffset,trans_1_Y + yOffset, trans_1_Z + zOffset, fZeroRotation));
+    frames->AddNode(thinFrame, 0, new TGeoCombiTrans(trans_1_Y + xOffset,-trans_1_X + yOffset, trans_1_Z + zOffset, fZeroRotation));
+    frames->AddNode(thinFrame, 0, new TGeoCombiTrans(-trans_1_X + xOffset,-trans_1_Y + yOffset, trans_1_Z + zOffset, fZeroRotation));
+    frames->AddNode(thinFrame, 0, new TGeoCombiTrans(-trans_1_Y + xOffset,trans_1_X + yOffset, trans_1_Z + zOffset, fZeroRotation));
 
-    frames->AddNode(thickFrame, 0, new TGeoCombiTrans(trans_2_X,trans_2_Y, trans_2_Z, fZeroRotation));
-    frames->AddNode(thickFrame, 0, new TGeoCombiTrans(trans_2_Y,-trans_2_X, trans_2_Z, fZeroRotation));
-    frames->AddNode(thickFrame, 0, new TGeoCombiTrans(-trans_2_X,-trans_2_Y, trans_2_Z, fZeroRotation));
-    frames->AddNode(thickFrame, 0, new TGeoCombiTrans(-trans_2_Y,trans_2_X, trans_2_Z, fZeroRotation));
+    frames->AddNode(thickFrame, 0, new TGeoCombiTrans(trans_2_X + xOffset,trans_2_Y + yOffset, trans_2_Z + zOffset, fZeroRotation));
+    frames->AddNode(thickFrame, 0, new TGeoCombiTrans(trans_2_Y + xOffset,-trans_2_X + yOffset, trans_2_Z + zOffset, fZeroRotation));
+    frames->AddNode(thickFrame, 0, new TGeoCombiTrans(-trans_2_X + xOffset,-trans_2_Y + yOffset, trans_2_Z + zOffset, fZeroRotation));
+    frames->AddNode(thickFrame, 0, new TGeoCombiTrans(-trans_2_Y + xOffset,trans_2_X + yOffset, trans_2_Z + zOffset, fZeroRotation));
 
-    frames->AddNode(thinFrame, 0, new TGeoCombiTrans(trans_2_X,trans_2_Y, trans_2_Z+1., fZeroRotation));
-    frames->AddNode(thinFrame, 0, new TGeoCombiTrans(trans_2_Y,-trans_2_X, trans_2_Z+1., fZeroRotation));
-    frames->AddNode(thinFrame, 0, new TGeoCombiTrans(-trans_2_X,-trans_2_Y, trans_2_Z+1., fZeroRotation));
-    frames->AddNode(thinFrame, 0, new TGeoCombiTrans(-trans_2_Y,trans_2_X, trans_2_Z+1., fZeroRotation));
+    frames->AddNode(thinFrame, 0, new TGeoCombiTrans(trans_2_X + xOffset,trans_2_Y + yOffset, trans_2_Z+1. + zOffset, fZeroRotation));
+    frames->AddNode(thinFrame, 0, new TGeoCombiTrans(trans_2_Y + xOffset,-trans_2_X + yOffset, trans_2_Z+1. + zOffset, fZeroRotation));
+    frames->AddNode(thinFrame, 0, new TGeoCombiTrans(-trans_2_X + xOffset,-trans_2_Y + yOffset, trans_2_Z+1. + zOffset, fZeroRotation));
+    frames->AddNode(thinFrame, 0, new TGeoCombiTrans(-trans_2_Y + xOffset,trans_2_X + yOffset, trans_2_Z+1. + zOffset, fZeroRotation));
 
     top->AddNode(frames,0,new TGeoCombiTrans(.0,.0,.0, fZeroRotation));
     // --------------------------------------------------------------------------
