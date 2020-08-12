@@ -1,0 +1,66 @@
+<!--
+
+	//TODO write this up!!!
+
+	This XML config has to conform some very strict structure due to the fact
+	that it is expected to be read by some very primitive software, possibly
+	running on a very limited hardware.
+
+	NO SPACES ARE ALLOWED INSIDE ATTRIBUTE VALUES !!!
+	sorry for that
+
+	NO SPACES ARE ALLOWED BETWEEN THE ATTRIBUTE NAME, '=' SIGN AND THE ATTRIBUTE VALUE !!!
+	sorry for that
+
+	Thus it has to be strictly: name="value"
+
+
+	Raw message received from the electronics block CAEN V775 (elblock="V775")
+	is parsed: electronics channel 'ch' and TDC value are extracted.
+	Output ??? (how do we call this entity) is formed as if this message comes
+	from the left square telescope and contains time information.
+	This ??? is pushed into the "tSQX_L" branch of the output tree(station="tSQX_L")
+	which will be located in the detector "Left_telescope" (detector="Left_telescope").
+
+	????????
+
+	Additional check can be implemented with the aid of a FIXED electronics description file
+	electronics.xml
+
+	module=geo
+	Module term is used by MESYTEC and geo is used by CAEN.
+
+	If there is data coming from some channel which you want to ignore, use "Ignore" station name.
+	If you don't - the 'Learn' step of the analysis will warn you that there is data from unmapped channels.
+
+-->
+
+<setup name="exp2001" period="2020" run="1" comment="ACCULINNA-2_2020_run">
+
+<crate name="VME0" procid="100">
+
+	<mapping addr="30"	elblock="RIO3"	startelectrch="0"	nelectrch="32"	station="rio3"	startstatch="0"	detector="DAQ_status"/>
+
+ 	<!-- <mapping addr="0"	elblock="mTDC"	startelectrch="0"	nelectrch="4"	station="tF3"	startstatch="0"	detector="DAQ_status"/> -->
+
+	<mapping addr="0"	elblock="mTDC"	startelectrch="0"	nelectrch="4"	station="tF3"	startstatch="0"	detector="Beam_detector"	digicomp="time"/>
+	<mapping addr="0"	elblock="mTDC"	startelectrch="4"	nelectrch="4"	station="tF5"	startstatch="0"	detector="Beam_detector"	digicomp="time"/>
+	<mapping addr="0"	elblock="mTDC"	startelectrch="8"	nelectrch="4"	station="Ignore"	startstatch="0"	detector="Ignore"/>
+	<mapping addr="0"	elblock="mTDC"	startelectrch="12"	nelectrch="4"	station="tMWPC"	startstatch="0"	detector="Beam_detector"	digicomp="time"/>
+
+	<mapping addr="1"	elblock="mQDC"	startelectrch="0"	nelectrch="4"	station="F3"	startstatch="0"	detector="Beam_detector"	digicomp="amp"/>
+	<mapping addr="1"	elblock="mQDC"	startelectrch="4"	nelectrch="4"	station="F5"	startstatch="0"	detector="Beam_detector"	digicomp="amp"/>
+	<mapping addr="1"	elblock="mQDC"	startelectrch="8"	nelectrch="4"	station="Ignore"	startstatch="0"	detector="Ignore"/>
+
+	</crate>
+
+
+<crate name="CAMAC" procid="101">
+	<mapping addr="0"	elblock="other"	startelectrch="0"	nelectrch="32"	station="MWPC1"	startstatch="0"	detector="Beam_detector"	digicomp="amp"/>
+	<mapping addr="1"	elblock="other"	startelectrch="0"	nelectrch="32"	station="MWPC2"	startstatch="0"	detector="Beam_detector"	digicomp="amp"/>
+	<mapping addr="2"	elblock="other"	startelectrch="0"	nelectrch="32"	station="MWPC3"	startstatch="0"	detector="Beam_detector"	digicomp="amp"/>
+	<mapping addr="3"	elblock="other"	startelectrch="0"	nelectrch="32"	station="MWPC4"	startstatch="0"	detector="Beam_detector"	digicomp="amp"/>
+
+</crate>
+
+</setup>
