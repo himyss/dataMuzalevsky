@@ -145,16 +145,12 @@ Float_t thCoeff2 = 1.;
 Float_t thCoeff3 = 1.;
 Float_t thCoeff4 = 1.;
 
-void calcEnergies_frame(Int_t nRun=0) {
+void calcEnergies_ect(Int_t nRun=0) {
 
   xOffset = 0;
   yOffset = -2.4;
   zOffset = 0.;
 
-
-  // xOffset = 0.5;
-  // yOffset = -1.3;
-  // zOffset = -3.;
 
   // xOffset = 0.5;
   // yOffset = -1.3;
@@ -164,8 +160,8 @@ void calcEnergies_frame(Int_t nRun=0) {
   TChain *ch = new TChain("tree");
 
   TString inPutFileName;
-  // inPutFileName.Form("/mnt/data/exp1904/analysed/selected/beamDiagnostics/h7_ct_%d_cut.root",nRun);
-  inPutFileName.Form("/mnt/data/exp1904/analysed/selected/h7_veto/h7_ct_%d_cut.root",nRun);
+  inPutFileName.Form("/mnt/data/exp1904/analysed/selected/emptyTarget/h7_ct_%d_cut.root",nRun);
+  // inPutFileName.Form("/mnt/data/exp1904/analysed/selected/emptyTarget/h7_ct_%d_cut.root",nRun);
   ch->Add(inPutFileName.Data());
   cout << ch->GetEntries() << " total number of Entries" << endl;
   //--------------------------------------------------------------------------------
@@ -355,11 +351,8 @@ void calcEnergies_frame(Int_t nRun=0) {
   ch->SetBranchAddress("tSSD_V4",&tSSD_V4);
 
   TString outPutFileName;
-  // outPutFileName.Form("/mnt/data/exp1904/analysed/calcEnergies/h7_newBeamDet/h7_ct_%d_reco.root",nRun);
-  outPutFileName.Form("/mnt/data/exp1904/analysed/calcEnergies/siTriggers/h7_ct_%d_reco.root",nRun);
+  outPutFileName.Form("/mnt/data/exp1904/analysed/calcEnergies/emptyTarget/h7_ct_%d_reco.root",nRun);
   // outPutFileName.Form("/mnt/data/exp1904/analysed/calcEnergies/emptyTarget/h7_ct_%d_reco.root",nRun);
-
-  // outPutFileName.Form("/mnt/data/exp1904/analysed/calcEnergies/allTriggers/h7_ct_%d_reco.root",nRun);
 
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
   TTree *tw = new TTree("tree", "data");
@@ -998,8 +991,8 @@ void reconstruct3He() {
       e_1 = f3HeSteel->GetE0(e_1,thickness);
 
       // deuterium target
-      thickness = 3000./cos(th_he3_1);
-      e_1 = f3HeTarget->GetE0(e_1,thickness);
+      // thickness = 3000./cos(th_he3_1);
+      // e_1 = f3HeTarget->GetE0(e_1,thickness);
     }
 
     if(nhe3_2) {
@@ -1022,8 +1015,8 @@ void reconstruct3He() {
       e_2 = f3HeSteel->GetE0(e_2,thickness);
 
       // deuterium target
-      thickness = 3000./cos(th_he3_2);
-      e_2 = f3HeTarget->GetE0(e_2,thickness);
+      // thickness = 3000./cos(th_he3_2);
+      // e_2 = f3HeTarget->GetE0(e_2,thickness);
     }
 
     if(nhe3_3) {
@@ -1045,8 +1038,8 @@ void reconstruct3He() {
       e_3 = f3HeSteel->GetE0(e_3,thickness);
 
       // deuterium target
-      thickness = 3000./cos(th_he3_3);
-      e_3 = f3HeTarget->GetE0(e_3,thickness);
+      // thickness = 3000./cos(th_he3_3);
+      // e_3 = f3HeTarget->GetE0(e_3,thickness);
     }
 
     if(nhe3_4) {
@@ -1068,8 +1061,8 @@ void reconstruct3He() {
       e_4 = f3HeSteel->GetE0(e_4,thickness);
 
       // deuterium target
-      thickness = 3000./cos(th_he3_4);
-      e_4 = f3HeTarget->GetE0(e_4,thickness);
+      // thickness = 3000./cos(th_he3_4);
+      // e_4 = f3HeTarget->GetE0(e_4,thickness);
     }
 }
 
@@ -1207,8 +1200,8 @@ void reconstruct3H() {
     centE = f3HSteel->GetE0(centE,thickness);
 
     // deuterium target
-    thickness = 3000./cos(th_h3);
-    centE = f3HTarget->GetE0(centE,thickness);
+    // thickness = 3000./cos(th_h3);
+    // centE = f3HTarget->GetE0(centE,thickness);
     
 }
 
@@ -1347,8 +1340,8 @@ void reconstruct2H() {
     centE = f2HSteel->GetE0(centE,thickness);
 
     // deuterium target
-    thickness = 3000./cos(th_h3);
-    centE = f2HTarget->GetE0(centE,thickness);
+    // thickness = 3000./cos(th_h3);
+    // centE = f2HTarget->GetE0(centE,thickness);
     
 
 }
@@ -1377,8 +1370,8 @@ void reconstruct4He() {
       e_1 = f4HeSteel->GetE0(e_1,thickness);
 
       // deuterium target
-      thickness = 3000./cos(th_he3_1);
-      e_1 = f4HeTarget->GetE0(e_1,thickness);
+      // thickness = 3000./cos(th_he3_1);
+      // e_1 = f4HeTarget->GetE0(e_1,thickness);
     }
 
     if(nhe4_2) {
@@ -1400,8 +1393,8 @@ void reconstruct4He() {
       e_2 = f4HeSteel->GetE0(e_2,thickness);
 
       // deuterium target
-      thickness = 3000./cos(th_he3_2);
-      e_2 = f4HeTarget->GetE0(e_2,thickness);
+      // thickness = 3000./cos(th_he3_2);
+      // e_2 = f4HeTarget->GetE0(e_2,thickness);
     }
 
     if(nhe4_3) {
@@ -1423,8 +1416,8 @@ void reconstruct4He() {
       e_3 = f4HeSteel->GetE0(e_3,thickness);
 
       // deuterium target
-      thickness = 3000./cos(th_he3_3);
-      e_3 = f4HeTarget->GetE0(e_3,thickness);
+      // thickness = 3000./cos(th_he3_3);
+      // e_3 = f4HeTarget->GetE0(e_3,thickness);
     }
 
     if(nhe4_4) {
@@ -1446,8 +1439,8 @@ void reconstruct4He() {
       e_4 = f4HeSteel->GetE0(e_4,thickness);
 
       // deuterium target
-      thickness = 3000./cos(th_he3_4);
-      e_4 = f4HeTarget->GetE0(e_4,thickness);
+      // thickness = 3000./cos(th_he3_4);
+      // e_4 = f4HeTarget->GetE0(e_4,thickness);
     }
 }
 
@@ -1473,8 +1466,8 @@ void reconstruct_side_3H() {
       e_1 = f3HSteel->GetE0(e_1,thickness);
 
       // deuterium target
-      thickness = 3000./cos(th_he3_1);
-      e_1 = f3HTarget->GetE0(e_1,thickness);
+      // thickness = 3000./cos(th_he3_1);
+      // e_1 = f3HTarget->GetE0(e_1,thickness);
     }
 
     if(nh3_2) {
@@ -1497,8 +1490,8 @@ void reconstruct_side_3H() {
       e_2 = f3HSteel->GetE0(e_2,thickness);
 
       // deuterium target
-      thickness = 3000./cos(th_he3_2);
-      e_2 = f3HTarget->GetE0(e_2,thickness);
+      // thickness = 3000./cos(th_he3_2);
+      // e_2 = f3HTarget->GetE0(e_2,thickness);
     }
 
     if(nh3_3) {
@@ -1520,8 +1513,8 @@ void reconstruct_side_3H() {
       e_3 = f3HSteel->GetE0(e_3,thickness);
 
       // deuterium target
-      thickness = 3000./cos(th_he3_3);
-      e_3 = f3HTarget->GetE0(e_3,thickness);
+      // thickness = 3000./cos(th_he3_3);
+      // e_3 = f3HTarget->GetE0(e_3,thickness);
     }
 
     if(nh3_4) {
@@ -1543,8 +1536,8 @@ void reconstruct_side_3H() {
       e_4 = f3HSteel->GetE0(e_4,thickness);
 
       // deuterium target
-      thickness = 3000./cos(th_he3_4);
-      e_4 = f3HTarget->GetE0(e_4,thickness);
+      // thickness = 3000./cos(th_he3_4);
+      // e_4 = f3HTarget->GetE0(e_4,thickness);
     }
 }
 
@@ -1683,8 +1676,8 @@ void reconstructAlha() {
     centE = f4HeSteel->GetE0(centE,thickness);
 
     // deuterium target
-    thickness = 3000./cos(th_h3);
-    centE = f4HeTarget->GetE0(centE,thickness);
+    // thickness = 3000./cos(th_h3);
+    // centE = f4HeTarget->GetE0(centE,thickness);
     
 
 }
@@ -1824,8 +1817,8 @@ void reconstruct6He() {
     centE = f6HeSteel->GetE0(centE,thickness);
 
     // deuterium target
-    thickness = 3000./cos(th_h3);
-    centE = f6HeTarget->GetE0(centE,thickness);
+    // thickness = 3000./cos(th_h3);
+    // centE = f6HeTarget->GetE0(centE,thickness);
     
 
 }

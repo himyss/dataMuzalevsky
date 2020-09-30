@@ -46,7 +46,6 @@ Int_t nX_C,nY_C;
 //
 
 Float_t fXt,fYt;
-Float_t fXf,fYf;
 Float_t x1c, y1c, x2c, y2c;
 Float_t x1t,y1t,x2t,y2t,x3t,y3t,x4t,y4t,xCt,yCt;
 Float_t sideX,sideY;
@@ -97,34 +96,13 @@ Float_t qReaction;
 
 Int_t coincidence;
 Float_t tND,aND,tacND,numND;
-Float_t ND_time[32],ND_amp[32],ND_tac[32];
 TVector3 bVect,bVect_H7,bVect_He7,bVect_H6,bVect_beam,bVect_treiman;
-
-TLorentzVector lv_qMomenta,lv_dAlab,lv_h7aLab,lv_h3aLab,lv_h3qFrame,lv_h7qFrame,lv_h3Frame7h;
-TVector3 v_xMomenta,v_yMomenta,v_zMomenta;
 
 Float_t targetTime;
 
 Float_t e_4n_3He,e_4n_3H,e_4n_3He_CM,e_4n_3H_CM;
 
-Float_t SSD1[16],SQ20_1[16],tSSD1[16],tSQ20_1[16],SSD_V1[16],tSSD_V1[16];
-Float_t SSD2[16],SQ20_2[16],tSSD2[16],tSQ20_2[16],SSD_V2[16],tSSD_V2[16];
-Float_t SSD3[16],SQ20_3[16],tSSD3[16],tSQ20_3[16],SSD_V3[16],tSSD_V3[16];
-Float_t SSD4[16],SQ20_4[16],tSSD4[16],tSQ20_4[16],SSD_V4[16],tSSD_V4[16];
-
-Float_t av_1,tv_1;
-Int_t nv_1;
-
-Float_t av_2,tv_2;
-Int_t nv_2;
-
-Float_t av_3,tv_3;
-Int_t nv_3;
-
-Float_t av_4,tv_4;
-Int_t nv_4;
-
-void reco(Int_t nRun=0) {
+void reco_ect(Int_t nRun=0) {
   f8HeSi.SetEL(1, 2.321); // density in g/cm3
   f8HeSi.AddEL(14., 28.086, 1);  //Z, mass
   f8HeSi.SetZP(2., 8.);   //alphas, Z, A
@@ -133,13 +111,8 @@ void reco(Int_t nRun=0) {
 
   TChain *ch = new TChain("tree");
   TString inPutFileName;
-  inPutFileName.Form("/mnt/data/exp1904/analysed/calcEnergies/siTriggers/h7_ct_%d_reco.root",nRun);
-  // inPutFileName.Form("/mnt/data/exp1904/analysed/calcEnergies/h7_newBeamDet/h7_ct_%d_reco.root",nRun);
-
-  // inPutFileName.Form("/mnt/data/exp1904/analysed/calcEnergies/emptyTarget/h7_ct_%d_reco.root",nRun);
-
-  // inPutFileName.Form("/mnt/data/exp1904/analysed/calcEnergies/allTriggers/h7_ct_%d_reco.root",nRun);
-
+  inPutFileName.Form("/mnt/data/exp1904/analysed/calcEnergies/emptyTarget/h7_ct_%d_reco.root",nRun);
+  // inPutFileName.Form("/mnt/data/exp1904/ERanalysis/tests/reco/test_calcenergy.root",nRun);
   ch->Add(inPutFileName.Data());;
 
   cout << ch->GetEntries() << " total number of Entries" << endl;
@@ -175,8 +148,6 @@ void reco(Int_t nRun=0) {
 
   ch->SetBranchAddress("fXt.",&fXt);
   ch->SetBranchAddress("fYt.",&fYt); 
-  ch->SetBranchAddress("fXf.",&fXf);
-  ch->SetBranchAddress("fYf.",&fYf);
   ch->SetBranchAddress("x1c.",&x1c);
   ch->SetBranchAddress("y1c.",&y1c);
   ch->SetBranchAddress("x2c.",&x2c);
@@ -282,65 +253,16 @@ void reco(Int_t nRun=0) {
   ch->SetBranchAddress("centE.",&centE);
 
   ch->SetBranchAddress("neutron.",&neutron);
-  // ch->SetBranchAddress("aND",&aND);
-  // ch->SetBranchAddress("tND",&tND);
-  // ch->SetBranchAddress("tacND",&tacND);
-  // ch->SetBranchAddress("numND",&numND);
 
-  ch->SetBranchAddress("ND_amp",&ND_amp);
-  ch->SetBranchAddress("ND_time",&ND_time);
-  ch->SetBranchAddress("ND_tac",&ND_tac);
-
-  ch->SetBranchAddress("SSD1",&SSD1);
-  ch->SetBranchAddress("SQ20_1",&SQ20_1);
-  ch->SetBranchAddress("tSSD1",&tSSD1);
-  ch->SetBranchAddress("tSQ20_1",&tSQ20_1);
-  ch->SetBranchAddress("SSD_V1",&SSD_V1);
-  ch->SetBranchAddress("tSSD_V1",&tSSD_V1);
-
-  ch->SetBranchAddress("SSD2",&SSD2);
-  ch->SetBranchAddress("SQ20_2",&SQ20_2);
-  ch->SetBranchAddress("tSSD2",&tSSD2);
-  ch->SetBranchAddress("tSQ20_2",&tSQ20_2);
-  ch->SetBranchAddress("SSD_V2",&SSD_V2);
-  ch->SetBranchAddress("tSSD_V2",&tSSD_V2);
-
-  ch->SetBranchAddress("SSD3",&SSD3);
-  ch->SetBranchAddress("SQ20_3",&SQ20_3);
-  ch->SetBranchAddress("tSSD3",&tSSD3);
-  ch->SetBranchAddress("tSQ20_3",&tSQ20_3);
-  ch->SetBranchAddress("SSD_V3",&SSD_V3);
-  ch->SetBranchAddress("tSSD_V3",&tSSD_V3);
-
-  ch->SetBranchAddress("SSD4",&SSD4);
-  ch->SetBranchAddress("SQ20_4",&SQ20_4);
-  ch->SetBranchAddress("tSSD4",&tSSD4);
-  ch->SetBranchAddress("tSQ20_4",&tSQ20_4);
-  ch->SetBranchAddress("SSD_V4",&SSD_V4);
-  ch->SetBranchAddress("tSSD_V4",&tSSD_V4);
-
-  ch->SetBranchAddress("av_1.",&av_1);
-  ch->SetBranchAddress("tv_1.",&tv_1);
-  ch->SetBranchAddress("nv_1.",&nv_1);
-
-  ch->SetBranchAddress("av_2.",&av_2);
-  ch->SetBranchAddress("tv_2.",&tv_2);
-  ch->SetBranchAddress("nv_2.",&nv_2);
-
-  ch->SetBranchAddress("av_3.",&av_3);
-  ch->SetBranchAddress("tv_3.",&tv_3);
-  ch->SetBranchAddress("nv_3.",&nv_3);
-
-  ch->SetBranchAddress("av_4.",&av_4);
-  ch->SetBranchAddress("tv_4.",&tv_4);
-  ch->SetBranchAddress("nv_4.",&nv_4);
+  ch->SetBranchAddress("aND",&aND);
+  ch->SetBranchAddress("tND",&tND);
+  ch->SetBranchAddress("tacND",&tacND);
+  ch->SetBranchAddress("numND",&numND);
 
   TString outPutFileName;
-  outPutFileName.Form("/mnt/data/exp1904/analysed/reco/siTriggers/h7_ct_%d_mm_cut.root",nRun);
-  // outPutFileName.Form("/mnt/data/exp1904/analysed/reco/h7_newBeamDet/h7_ct_%d_mm_cut.root",nRun);
-  // outPutFileName.Form("/mnt/data/exp1904/analysed/reco/emptyTarget/h7_ct_%d_mm_cut.root",nRun);
-  // outPutFileName.Form("test%d.root",nRun);
-  // outPutFileName.Form("/mnt/data/exp1904/analysed/reco/allTriggers/h7_ct_%d_mm_cut.root",nRun);
+  // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/reco/eTarget/h7_ect_%d_mm_frame.root",nRun);
+  outPutFileName.Form("/mnt/data/exp1904/analysed/reco/emptyTarget/h7_ct_%d_mm_cut.root",nRun);
+  // outPutFileName.Form("/mnt/data/exp1904/ERanalysis/tests/reco/test_reco.root",nRun);
 
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
   TTree *tw = new TTree("tree", "data");
@@ -379,17 +301,11 @@ void reco(Int_t nRun=0) {
   tw->Branch("y2c.",&y2c,"y2c/F"); 
   tw->Branch("fXt.",&fXt,"fXt/F");
   tw->Branch("fYt.",&fYt,"fYt/F"); 
-  tw->Branch("fXf.",&fXf,"fXf/F");
-  tw->Branch("fYf.",&fYf,"fYf/F"); 
 
-  // tw->Branch("aND",&aND,"aND/F");
-  // tw->Branch("tND",&tND,"tND/F");
-  // tw->Branch("tacND",&tacND,"tacND/F");
-  // tw->Branch("numND",&numND,"numND/F");
-
-  tw->Branch("ND_amp",&ND_amp,"ND_amp[32]/F");
-  tw->Branch("ND_time",&ND_time,"ND_time[32]/F");
-  tw->Branch("ND_tac",&ND_tac,"ND_tac[32]/F");
+  tw->Branch("aND",&aND,"aND/F");
+  tw->Branch("tND",&tND,"tND/F");
+  tw->Branch("tacND",&tacND,"tacND/F");
+  tw->Branch("numND",&numND,"numND/F");
 
   tw->Branch("x1t",&x1t,"x1t/F");
   tw->Branch("x2t",&x2t,"x2t/F");
@@ -578,56 +494,12 @@ void reco(Int_t nRun=0) {
   tw->Branch("hBinary_CM","TLorentzVector",&hBinary_CM);
   tw->Branch("hBinary_aLab","TLorentzVector",&hBinary_aLab);
 
-  tw->Branch("lv_h3qFrame","TLorentzVector",&lv_h3qFrame);
-  tw->Branch("lv_h3Frame7h","TLorentzVector",&lv_h3Frame7h);
+  tw->Branch("h3_binary_theta.",&h3_binary_theta,"h3_binary_theta/F");
+  tw->Branch("h3_binary_phi.",&h3_binary_phi,"h3_binary_phi/F");
 
   // tw->Branch("h3_CM_treiman","TLorentzVector",&h3_CM_treiman);
   // tw->Branch("h3_CMbeam","TLorentzVector",&h3_CMbeam);
   // tw->Branch("h7_CMbeam","TLorentzVector",&h7_CMbeam);
-
-  tw->Branch("SQ20_1",&SQ20_1,"SQ20_1[16]/F");
-  tw->Branch("tSQ20_1",&tSQ20_1,"tSQ20_1[16]/F");
-  tw->Branch("SSD1",&SSD1,"SSD1[16]/F");
-  tw->Branch("tSSD1",&tSSD1,"tSSD1[16]/F");
-  tw->Branch("SSD_V1",&SSD_V1,"SSD_V1[16]/F");
-  tw->Branch("tSSD_V1",&tSSD_V1,"tSSD_V1[16]/F");
-
-  tw->Branch("SQ20_2",&SQ20_2,"SQ20_2[16]/F");
-  tw->Branch("tSQ20_2",&tSQ20_2,"tSQ20_2[16]/F");
-  tw->Branch("SSD2",&SSD2,"SSD2[16]/F");
-  tw->Branch("tSSD2",&tSSD2,"tSSD2[16]/F");
-  tw->Branch("SSD_V2",&SSD_V2,"SSD_V2[16]/F");
-  tw->Branch("tSSD_V2",&tSSD_V2,"tSSD_V2[16]/F");
-
-  tw->Branch("SQ20_3",&SQ20_3,"SQ20_3[16]/F");
-  tw->Branch("tSQ20_3",&tSQ20_3,"tSQ20_3[16]/F");
-  tw->Branch("SSD3",&SSD3,"SSD3[16]/F");
-  tw->Branch("tSSD3",&tSSD3,"tSSD3[16]/F");
-  tw->Branch("SSD_V3",&SSD_V3,"SSD_V3[16]/F");
-  tw->Branch("tSSD_V3",&tSSD_V3,"tSSD_V3[16]/F");
-
-  tw->Branch("SQ20_4",&SQ20_4,"SQ20_4[16]/F");
-  tw->Branch("tSQ20_4",&tSQ20_4,"tSQ20_4[16]/F");
-  tw->Branch("SSD4",&SSD4,"SSD4[16]/F");
-  tw->Branch("tSSD4",&tSSD4,"tSSD4[16]/F");
-  tw->Branch("SSD_V4",&SSD_V4,"SSD_V4[16]/F");
-  tw->Branch("tSSD_V4",&tSSD_V4,"tSSD_V4[16]/F");
-
-  tw->Branch("av_1.",&av_1,"av_1/F");
-  tw->Branch("tv_1.",&tv_1,"tv_1/F");
-  tw->Branch("nv_1.",&nv_1,"nv_1/I");
-
-  tw->Branch("av_2.",&av_2,"av_2/F");
-  tw->Branch("tv_2.",&tv_2,"tv_2/F");
-  tw->Branch("nv_2.",&nv_2,"nv_2/I");
-
-  tw->Branch("av_3.",&av_3,"av_3/F");
-  tw->Branch("tv_3.",&tv_3,"tv_3/F");
-  tw->Branch("nv_3.",&nv_3,"nv_3/I");
-
-  tw->Branch("av_4.",&av_4,"av_4/F");
-  tw->Branch("tv_4.",&tv_4,"tv_4/F");
-  tw->Branch("nv_4.",&nv_4,"nv_4/I");
 
   // input options
   d2.SetPxPyPzE(0.,0.,0.,1.875612);
@@ -638,7 +510,7 @@ void reco(Int_t nRun=0) {
 
 
   for(Int_t nentry = 0; nentry<ch->GetEntries();nentry++) {
-  // for(Int_t nentry = 0; nentry<300000;nentry++) {
+  // for(Int_t nentry = 0; nentry<1000000;nentry++) {
     if(nentry%1000000==0) cout << "#ENTRY " << nentry << "#" << endl;
     // cout << nentry << endl;
     ch->GetEntry(nentry);
@@ -880,6 +752,27 @@ void reco(Int_t nRun=0) {
       e_4n_3He = e_4n_3He/((2*2.808391*m4n)/(2.808391+m4n));
       e_4n_3He_CM = h_n4_he3_CM.Px()*h_n4_he3_CM.Px() + h_n4_he3_CM.Py()*h_n4_he3_CM.Py() + h_n4_he3_CM.Pz()*h_n4_he3_CM.Pz();
       e_4n_3He_CM = e_4n_3He_CM/((2*2.808391*m4n)/(2.808391+m4n));
+
+
+      // qMomenta
+
+      hBinary = he3;
+
+      hBinary_CM = he3;
+      hBinary_CM.Boost(-bVect);
+
+      TVector3 bVect_treiman = he8.BoostVector();
+      hBinary_aLab = he3;
+      hBinary_aLab.Boost(-bVect_treiman);
+
+      hBinary_7H = he3;
+      hBinary_7H.Boost(-bVect_H7);
+
+      h3_binary = h3CM_H7;
+      static TVector3 rotVect3 = hBinary_7H.Vect();
+      h3_binary.RotateUz(rotVect3);
+      h3_binary_phi = h3_binary.Phi();
+      h3_binary_theta = h3_binary.Theta();
   
     }
     
@@ -940,48 +833,6 @@ void reco(Int_t nRun=0) {
 
     }
 
-    if (nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )) { // treiman jang
-      lv_h3aLab = h3;
-      lv_h7aLab = h7;
-      lv_dAlab = d2;
-
-      bVect_beam = he8.BoostVector();
-
-      lv_h3aLab.Boost(-bVect_beam);
-      lv_h7aLab.Boost(-bVect_beam);
-      lv_dAlab.Boost(-bVect_beam);
-
-      TVector3 v_h7aLab = lv_h7aLab.Vect();
-      TVector3 v_dAlab = lv_dAlab.Vect();
-
-      TVector3 v_yMomenta(0,0,0);
-
-      v_zMomenta = v_h7aLab;
-      v_zMomenta = v_h7aLab.Unit();
-
-      v_xMomenta = v_dAlab;
-      v_xMomenta = v_zMomenta.Cross(v_xMomenta);
-      v_xMomenta = v_xMomenta.Unit();
-
-      v_yMomenta = v_zMomenta.Cross(v_xMomenta);
-      v_yMomenta = v_yMomenta.Unit();
-      
-      TRotation rot_aLab;
-      rot_aLab.RotateAxes(v_xMomenta,v_yMomenta,v_zMomenta);
-      TLorentzRotation lrot_aLab(rot_aLab);
-
-      lv_h3qFrame = lv_h3aLab;
-      lv_h3qFrame.Transform(lrot_aLab.Inverse());
-
-      lv_h7qFrame = lv_h7aLab;
-      lv_h7qFrame.Transform(lrot_aLab.Inverse());
-
-      TVector3 bVect_frame7H = lv_h7qFrame.BoostVector();
-      lv_h3Frame7h = lv_h3qFrame;
-      lv_h3Frame7h.Boost(-bVect_frame7H);
-
-    }
-
     tw->Fill();
   }
   fw->cd();
@@ -1011,7 +862,7 @@ void calculateBeam() {
   // cout << "F1 and F2 " << tF5 << " " << tF3 << endl;
   // cout << " TOF " << tF5-tF3 + 68.475 << " beta " << beta << " energy " << kinEnergy << endl;
 
-  kinEnergy =  f8HeSi.GetE(1000*kinEnergy, 540.)/1000.;
+  kinEnergy =  f8HeSi.GetE(1000*kinEnergy, 630.)/1000.;
   // kinEnergy = kinEnergy*0.95;
   ehe8 = kinEnergy;
 
@@ -1130,7 +981,9 @@ void zerovars() {
   hBinary_CM.SetXYZT(0,0,0,0);
   hBinary_7H.SetXYZT(0,0,0,0);
   hBinary_aLab.SetXYZT(0,0,0,0);
-  lv_h3qFrame.SetXYZT(0,0,0,0);
-  lv_h7qFrame.SetXYZT(0,0,0,0);
-  lv_h3Frame7h.SetXYZT(0,0,0,0);
+  h3_binary.SetXYZT(0,0,0,0);
+
+  h3_binary_theta = -1000;
+  h3_binary_phi = -1000;
+
 }
