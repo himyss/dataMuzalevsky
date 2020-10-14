@@ -93,7 +93,10 @@ void convertBeam(Int_t nFile = 0) {
 
   TChain *ch = new TChain("er");
   TString inPutFileName;
-  inPutFileName.Form("/mnt/data/exp1904/digi/beamTrigger/h7_ect_%d*.root",nFile);
+  inPutFileName.Form("/mnt/data/exp1904/digi/fullData/h7_ct_%d*.root",nFile);
+  // inPutFileName.Form("/mnt/data/exp1904/digi/h7/h7_ct_00*.root",nFile);
+
+  // inPutFileName.Form("/mnt/data/exp1904/digi/h7/h7_ect_%d*.root",nFile);
   // inPutFileName.Form("/mnt/data/exp1904/ERanalysis/cleaned/h7_ct_00_0001.cleaned.root",nFile);
   ch->Add(inPutFileName.Data());
   cout << ch->GetEntries() << endl;
@@ -145,21 +148,21 @@ void convertBeam(Int_t nFile = 0) {
   ch->SetBranchAddress("ERQTelescopeSiDigi_Central_telescope_DoubleSi_DSD_XY_0_Y",&v_DSDY_C);
   ch->SetBranchAddress("ERQTelescopeCsIDigi_Central_telescope_CsI_0",&v_CsI);
 
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_1_SingleSi_SSD20_1_X_0",&v_SSD20_1);
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_1_SingleSi_SSD_1_Y_1",&v_SSD_1);
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_1_SingleSi_SSD_V_1_Y_2",&v_SSD_V_1);  
+  // ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_1_SingleSi_SSD20_1_X_0",&v_SSD20_1);
+  // ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_1_SingleSi_SSD_1_Y_1",&v_SSD_1);
+  // ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_1_SingleSi_SSD_V_1_Y_2",&v_SSD_V_1);  
  
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_2_SingleSi_SSD20_2_Y_3",&v_SSD20_2);
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_2_SingleSi_SSD_2_X_4",&v_SSD_2);
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_2_SingleSi_SSD_V_2_X_5",&v_SSD_V_2);  
+  // ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_2_SingleSi_SSD20_2_Y_3",&v_SSD20_2);
+  // ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_2_SingleSi_SSD_2_X_4",&v_SSD_2);
+  // ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_2_SingleSi_SSD_V_2_X_5",&v_SSD_V_2);  
 
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_3_SingleSi_SSD20_3_X_6",&v_SSD20_3);
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_3_SingleSi_SSD_3_Y_7",&v_SSD_3);
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_3_SingleSi_SSD_V_3_Y_8",&v_SSD_V_3);  
+  // ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_3_SingleSi_SSD20_3_X_6",&v_SSD20_3);
+  // ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_3_SingleSi_SSD_3_Y_7",&v_SSD_3);
+  // ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_3_SingleSi_SSD_V_3_Y_8",&v_SSD_V_3);  
 
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_4_SingleSi_SSD20_4_Y_9",&v_SSD20_4);
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_4_SingleSi_SSD_4_X_10",&v_SSD_4);
-  ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_4_SingleSi_SSD_V_4_X_11",&v_SSD_V_4);
+  // ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_4_SingleSi_SSD20_4_Y_9",&v_SSD20_4);
+  // ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_4_SingleSi_SSD_4_X_10",&v_SSD_4);
+  // ch->SetBranchAddress("ERQTelescopeSiDigi_Telescope_4_SingleSi_SSD_V_4_X_11",&v_SSD_V_4);
 
   ch->SetBranchAddress("NDDigi",&v_ND);
 
@@ -170,8 +173,9 @@ void convertBeam(Int_t nFile = 0) {
 
   // Creating outfile,outtree
   TString outPutFileName;
-  outPutFileName.Form("/mnt/data/exp1904/analysed/cal/allTriggers/h7_ect_%d_cal.root",nFile);
-  // outPutFileName.Form("/mnt/data/exp1904/ERanalysis/tests/reco/test_convert.root",nFile);
+  outPutFileName.Form("/mnt/data/exp1904/analysed/cal/fullData/h7_ct_0%d_cal.root",nFile);
+  // outPutFileName.Form("/mnt/data/exp1904/analysed/cal/emptyTarget/h7_ect_%d_cal.root",nFile);
+  // outPutFileName.Form("test_convert.root",nFile);
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
   TTree *tw = new TTree("tree", "data");
 
@@ -207,59 +211,59 @@ void convertBeam(Int_t nFile = 0) {
   tw->Branch("tDSD_X",&tDSD_X,"tDSD_X[32]/F");
   tw->Branch("tDSD_Y",&tDSD_Y,"tDSD_Y[32]/F");
 
-  tw->Branch("ND_amp",&ND_amp,"ND_amp[32]/F");
-  tw->Branch("ND_time",&ND_time,"ND_time[32]/F");
-  tw->Branch("ND_tac",&ND_tac,"ND_tac[32]/F");
+  // tw->Branch("ND_amp",&ND_amp,"ND_amp[32]/F");
+  // tw->Branch("ND_time",&ND_time,"ND_time[32]/F");
+  // tw->Branch("ND_tac",&ND_tac,"ND_tac[32]/F");
 
-  tw->Branch("SQ20_1",&SQ20_1,"SQ20_1[16]/F");
-  tw->Branch("tSQ20_1",&tSQ20_1,"tSQ20_1[16]/F");
-  tw->Branch("SSD1",&SSD1,"SSD1[16]/F");
-  tw->Branch("tSSD1",&tSSD1,"tSSD1[16]/F");
-  tw->Branch("SSD_V1",&SSD_V1,"SSD_V1[16]/F");
-  tw->Branch("tSSD_V1",&tSSD_V1,"tSSD_V1[16]/F");
+  // tw->Branch("SQ20_1",&SQ20_1,"SQ20_1[16]/F");
+  // tw->Branch("tSQ20_1",&tSQ20_1,"tSQ20_1[16]/F");
+  // tw->Branch("SSD1",&SSD1,"SSD1[16]/F");
+  // tw->Branch("tSSD1",&tSSD1,"tSSD1[16]/F");
+  // tw->Branch("SSD_V1",&SSD_V1,"SSD_V1[16]/F");
+  // tw->Branch("tSSD_V1",&tSSD_V1,"tSSD_V1[16]/F");
 
-  tw->Branch("SQ20_2",&SQ20_2,"SQ20_2[16]/F");
-  tw->Branch("tSQ20_2",&tSQ20_2,"tSQ20_2[16]/F");
-  tw->Branch("SSD2",&SSD2,"SSD2[16]/F");
-  tw->Branch("tSSD2",&tSSD2,"tSSD2[16]/F");
-  tw->Branch("SSD_V2",&SSD_V2,"SSD_V2[16]/F");
-  tw->Branch("tSSD_V2",&tSSD_V2,"tSSD_V2[16]/F");
+  // tw->Branch("SQ20_2",&SQ20_2,"SQ20_2[16]/F");
+  // tw->Branch("tSQ20_2",&tSQ20_2,"tSQ20_2[16]/F");
+  // tw->Branch("SSD2",&SSD2,"SSD2[16]/F");
+  // tw->Branch("tSSD2",&tSSD2,"tSSD2[16]/F");
+  // tw->Branch("SSD_V2",&SSD_V2,"SSD_V2[16]/F");
+  // tw->Branch("tSSD_V2",&tSSD_V2,"tSSD_V2[16]/F");
 
-  tw->Branch("SQ20_3",&SQ20_3,"SQ20_3[16]/F");
-  tw->Branch("tSQ20_3",&tSQ20_3,"tSQ20_3[16]/F");
-  tw->Branch("SSD3",&SSD3,"SSD3[16]/F");
-  tw->Branch("tSSD3",&tSSD3,"tSSD3[16]/F");
-  tw->Branch("SSD_V3",&SSD_V3,"SSD_V3[16]/F");
-  tw->Branch("tSSD_V3",&tSSD_V3,"tSSD_V3[16]/F");
+  // tw->Branch("SQ20_3",&SQ20_3,"SQ20_3[16]/F");
+  // tw->Branch("tSQ20_3",&tSQ20_3,"tSQ20_3[16]/F");
+  // tw->Branch("SSD3",&SSD3,"SSD3[16]/F");
+  // tw->Branch("tSSD3",&tSSD3,"tSSD3[16]/F");
+  // tw->Branch("SSD_V3",&SSD_V3,"SSD_V3[16]/F");
+  // tw->Branch("tSSD_V3",&tSSD_V3,"tSSD_V3[16]/F");
 
-  tw->Branch("SQ20_4",&SQ20_4,"SQ20_4[16]/F");
-  tw->Branch("tSQ20_4",&tSQ20_4,"tSQ20_4[16]/F");
-  tw->Branch("SSD4",&SSD4,"SSD4[16]/F");
-  tw->Branch("tSSD4",&tSSD4,"tSSD4[16]/F");
-  tw->Branch("SSD_V4",&SSD_V4,"SSD_V4[16]/F");
-  tw->Branch("tSSD_V4",&tSSD_V4,"tSSD_V4[16]/F");
+  // tw->Branch("SQ20_4",&SQ20_4,"SQ20_4[16]/F");
+  // tw->Branch("tSQ20_4",&tSQ20_4,"tSQ20_4[16]/F");
+  // tw->Branch("SSD4",&SSD4,"SSD4[16]/F");
+  // tw->Branch("tSSD4",&tSSD4,"tSSD4[16]/F");
+  // tw->Branch("SSD_V4",&SSD_V4,"SSD_V4[16]/F");
+  // tw->Branch("tSSD_V4",&tSSD_V4,"tSSD_V4[16]/F");
 
-  tw->Branch("mult20_1",&mult20_1,"mult20_1/I");
-  tw->Branch("mult1_1",&mult1_1,"mult1_1/I");
-  tw->Branch("multv_1",&multv_1,"multv_1/I");
+  // tw->Branch("mult20_1",&mult20_1,"mult20_1/I");
+  // tw->Branch("mult1_1",&mult1_1,"mult1_1/I");
+  // tw->Branch("multv_1",&multv_1,"multv_1/I");
 
-  tw->Branch("mult20_2",&mult20_2,"mult20_2/I");
-  tw->Branch("mult1_2",&mult1_2,"mult1_2/I");
-  tw->Branch("multv_2",&multv_2,"multv_2/I");
+  // tw->Branch("mult20_2",&mult20_2,"mult20_2/I");
+  // tw->Branch("mult1_2",&mult1_2,"mult1_2/I");
+  // tw->Branch("multv_2",&multv_2,"multv_2/I");
 
-  tw->Branch("mult20_3",&mult20_3,"mult20_3/I");
-  tw->Branch("mult1_3",&mult1_3,"mult1_3/I");
-  tw->Branch("multv_3",&multv_3,"multv_3/I");
+  // tw->Branch("mult20_3",&mult20_3,"mult20_3/I");
+  // tw->Branch("mult1_3",&mult1_3,"mult1_3/I");
+  // tw->Branch("multv_3",&multv_3,"multv_3/I");
 
-  tw->Branch("mult20_4",&mult20_4,"mult20_4/I");
-  tw->Branch("mult1_4",&mult1_4,"mult1_4/I");
-  tw->Branch("multv_4",&multv_4,"multv_4/I");
+  // tw->Branch("mult20_4",&mult20_4,"mult20_4/I");
+  // tw->Branch("mult1_4",&mult1_4,"mult1_4/I");
+  // tw->Branch("multv_4",&multv_4,"multv_4/I");
 
   tw->Branch("multc_x",&multc_x,"multc_x/I");
   tw->Branch("multc_y",&multc_y,"multc_y/I");  
   tw->Branch("multCsI",&multCsI,"multCsI/I");  
 
-
+  Int_t counter = 0;
   for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) {
   // for(Int_t nentry=0;nentry<1000;nentry++) {    
     if(nentry%1000000==0) cout << "#Event " << nentry << "#" << endl;
@@ -275,31 +279,31 @@ void convertBeam(Int_t nFile = 0) {
     if (GetClusterMWPC(v_MWPCy2)!=1) continue;  
     // cout << trigger << endl;
     trigger = header->GetTrigger();
-    // if (trigger!=1) continue;
+    // if (trigger==1) continue;
+ 
+    // mult20_1 = v_SSD20_1->GetEntries();
+    // // if (mult20_1>1) continue;
+    // mult1_1 = v_SSD_1->GetEntries();
+    // // if (mult1_1>1) continue;    
+    // multv_1 = v_SSD_V_1->GetEntries();
 
-    mult20_1 = v_SSD20_1->GetEntries();
-    // if (mult20_1>1) continue;
-    mult1_1 = v_SSD_1->GetEntries();
-    // if (mult1_1>1) continue;    
-    multv_1 = v_SSD_V_1->GetEntries();
+    // mult20_2 = v_SSD20_2->GetEntries();
+    // // if (mult20_2>1) continue;      
+    // mult1_2 = v_SSD_2->GetEntries();
+    // // if (mult1_2>1) continue;    
+    // multv_2 = v_SSD_V_2->GetEntries();    
 
-    mult20_2 = v_SSD20_2->GetEntries();
-    // if (mult20_2>1) continue;      
-    mult1_2 = v_SSD_2->GetEntries();
-    // if (mult1_2>1) continue;    
-    multv_2 = v_SSD_V_2->GetEntries();    
+    // mult20_3 = v_SSD20_3->GetEntries();
+    // // if (mult20_3>1) continue;    
+    // mult1_3 = v_SSD_3->GetEntries();
+    // // if (mult1_3>1) continue;
+    // multv_3 = v_SSD_V_3->GetEntries();
 
-    mult20_3 = v_SSD20_3->GetEntries();
-    // if (mult20_3>1) continue;    
-    mult1_3 = v_SSD_3->GetEntries();
-    // if (mult1_3>1) continue;
-    multv_3 = v_SSD_V_3->GetEntries();
-
-    mult20_4 = v_SSD20_4->GetEntries();
-    // if (mult20_4>1) continue;
-    mult1_4 = v_SSD_4->GetEntries();
-    // if (mult1_4>1) continue;
-    multv_4 = v_SSD_V_4->GetEntries();
+    // mult20_4 = v_SSD20_4->GetEntries();
+    // // if (mult20_4>1) continue;
+    // mult1_4 = v_SSD_4->GetEntries();
+    // // if (mult1_4>1) continue;
+    // multv_4 = v_SSD_V_4->GetEntries();
 
     multc_x = v_DSDX_C->GetEntries();
     multc_y = v_DSDY_C->GetEntries();
@@ -331,31 +335,34 @@ void convertBeam(Int_t nFile = 0) {
 
     // central telescope
     fillarrayCsI(v_CsI,arCsI,trCsI,pCsI_1,pCsI_2);
-    fillND(v_ND,ND_amp,ND_time,ND_tac,pND_1);
+    // fillND(v_ND,ND_amp,ND_time,ND_tac,pND_1);
 
     fillSi(v_DSDX_C,DSD_X,tDSD_X,pDSD_X1,pDSD_X2,&multc_x,2.5);
     fillSi(v_DSDY_C,DSD_Y,tDSD_Y,pDSD_Y1,pDSD_Y2,&multc_y,2.5);
 
     // side telescopes
-    fillSi(v_SSD20_1,SQ20_1,tSQ20_1,pSQ201_1,pSQ201_2,&mult20_1,0.3);
-    fillSi(v_SSD_1,SSD1,tSSD1,pSSD1_1,pSSD1_2,&mult1_1,0.5);
-    fillSi(v_SSD_V_1,SSD_V1,tSSD_V1,pSSD_V1_1,pSSD_V1_2,&multv_1,0);
+    // fillSi(v_SSD20_1,SQ20_1,tSQ20_1,pSQ201_1,pSQ201_2,&mult20_1,0.);
+    // fillSi(v_SSD_1,SSD1,tSSD1,pSSD1_1,pSSD1_2,&mult1_1,0.);
+    // fillSi(v_SSD_V_1,SSD_V1,tSSD_V1,pSSD_V1_1,pSSD_V1_2,&multv_1,0);
+    // multv_1 = v_SSD_V_1->GetEntries();
 
-    fillSi(v_SSD20_2,SQ20_2,tSQ20_2,pSQ202_1,pSQ202_2,&mult20_2,0.3);
-    fillSi(v_SSD_2,SSD2,tSSD2,pSSD2_1,pSSD2_2,&mult1_2,0.5);
-    fillSi(v_SSD_V_2,SSD_V2,tSSD_V2,pSSD_V2_1,pSSD_V2_2,&multv_2,0);
+    // fillSi(v_SSD20_2,SQ20_2,tSQ20_2,pSQ202_1,pSQ202_2,&mult20_2,0.);
+    // fillSi(v_SSD_2,SSD2,tSSD2,pSSD2_1,pSSD2_2,&mult1_2,0.);
+    // fillSi(v_SSD_V_2,SSD_V2,tSSD_V2,pSSD_V2_1,pSSD_V2_2,&multv_2,0);
+    // multv_2 = v_SSD_V_2->GetEntries();  
 
-    fillSi(v_SSD20_3,SQ20_3,tSQ20_3,pSQ203_1,pSQ203_2,&mult20_3,0.3);
-    fillSi(v_SSD_3,SSD3,tSSD3,pSSD3_1,pSSD3_2,&mult1_3,0.5);
-    fillSi(v_SSD_V_3,SSD_V3,tSSD_V3,pSSD_V3_1,pSSD_V3_2,&multv_3,0);
+    // fillSi(v_SSD20_3,SQ20_3,tSQ20_3,pSQ203_1,pSQ203_2,&mult20_3,0.);
+    // fillSi(v_SSD_3,SSD3,tSSD3,pSSD3_1,pSSD3_2,&mult1_3,0.);
+    // fillSi(v_SSD_V_3,SSD_V3,tSSD_V3,pSSD_V3_1,pSSD_V3_2,&multv_3,0);
+    // multv_3 = v_SSD_V_3->GetEntries();
 
-    fillSi(v_SSD20_4,SQ20_4,tSQ20_4,pSQ204_1,pSQ204_2,&mult20_4,0.3);
-    fillSi(v_SSD_4,SSD4,tSSD4,pSSD4_1,pSSD4_2,&mult1_4,0.5);
-    fillSi(v_SSD_V_4,SSD_V4,tSSD_V4,pSSD_V4_1,pSSD_V4_2,&multv_4,0);
+    // fillSi(v_SSD20_4,SQ20_4,tSQ20_4,pSQ204_1,pSQ204_2,&mult20_4,0.);
+    // fillSi(v_SSD_4,SSD4,tSSD4,pSSD4_1,pSSD4_2,&mult1_4,0.);
+    // fillSi(v_SSD_V_4,SSD_V4,tSSD_V4,pSSD_V4_1,pSSD_V4_2,&multv_4,0);
+    // multv_4 = v_SSD_V_4->GetEntries();
 
     tw->Fill();
   }
-
   fw->cd();
   tw->Write();
   fw->Close();

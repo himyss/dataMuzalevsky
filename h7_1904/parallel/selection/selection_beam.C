@@ -9,6 +9,7 @@ void calcVectorCent(Int_t nX,Int_t nY);
 void calcFrameCoordinates(Float_t* x, Float_t* y,Float_t distanance);
 
 void readCuts();
+void recalibrateCsI(Float_t *oldpar1,Float_t *oldpar2,Float_t *newpar1,Float_t *newpar2);
 
 void zeroVars();
 void checkToF();
@@ -174,11 +175,18 @@ Float_t pSSD_V2_1[16],pSSD_V2_2[16];
 Float_t pSSD_V3_1[16],pSSD_V3_2[16];
 Float_t pSSD_V4_1[16],pSSD_V4_2[16];
 
-
 Float_t pDSD_X1[32],pDSD_X2[32];
 Float_t pDSD_Y1[32],pDSD_Y2[32];
 
 Float_t pCsI_1[16],pCsI_2[16];
+
+Float_t pCsI_0_1[16],pCsI_0_2[16];
+Float_t pCsI_1_1[16],pCsI_1_2[16];
+Float_t pCsI_2_1[16],pCsI_2_2[16];
+Float_t pCsI_3_1[16],pCsI_3_2[16];
+Float_t pCsI_4_1[16],pCsI_4_2[16];
+Float_t pCsI_5_1[16],pCsI_5_2[16];
+Float_t pCsI_new_1[16],pCsI_new_2[16];
 
 Float_t NDpar[32],zeropar[32];
 
@@ -193,7 +201,7 @@ Float_t centOffset;
 Float_t ND_time[32],ND_amp[32],ND_tac[32];
 Float_t tND,aND,tacND,numND;
 
-void selection(Int_t nFile=0) {
+void selection_beam(Int_t nFile=0) {
 
   create_IDs();
   create_cuts();
@@ -204,7 +212,6 @@ void selection(Int_t nFile=0) {
   // xOffset = 0.5;
   // yOffset = -1.3;
   // zOffset = -3.;
-
 
   xOffset = 0;
   yOffset = -2.4;
@@ -222,6 +229,67 @@ void selection(Int_t nFile=0) {
   f3HSi->SetDeltaEtab(300);
 
   readPar("ND_tac",NDpar,zeropar,32);
+  readPar("CsI_anh",pCsI_1,pCsI_2);
+
+  readPar("CsI_0",pCsI_0_1,pCsI_0_2);
+  readPar("CsI_1",pCsI_1_1,pCsI_1_2);
+  readPar("CsI_2",pCsI_2_1,pCsI_2_2);
+  readPar("CsI_3",pCsI_3_1,pCsI_3_2);
+  readPar("CsI_4",pCsI_4_1,pCsI_4_2);
+  readPar("CsI_5",pCsI_5_1,pCsI_5_2);
+
+switch (nFile)
+  {
+  case 0:
+    for (Int_t i=0;i<16;i++) {
+      pCsI_new_1[i] = pCsI_0_1[i];
+      pCsI_new_2[i] = pCsI_0_2[i];
+    }
+    break;
+  case 1:
+    for (Int_t i=0;i<16;i++) {
+      pCsI_new_1[i] = pCsI_1_1[i];
+      pCsI_new_2[i] = pCsI_1_2[i];
+    }
+    break;
+  case 2:
+    for (Int_t i=0;i<16;i++) {
+      pCsI_new_1[i] = pCsI_2_1[i];
+      pCsI_new_2[i] = pCsI_2_2[i];
+    }
+    break;
+  case 3:
+    for (Int_t i=0;i<16;i++) {
+      pCsI_new_1[i] = pCsI_3_1[i];
+      pCsI_new_2[i] = pCsI_3_2[i];
+    }
+    break;
+  case 4:
+    for (Int_t i=0;i<16;i++) {
+      pCsI_new_1[i] = pCsI_4_1[i];
+      pCsI_new_2[i] = pCsI_4_2[i];
+    }
+    break;
+  case 5:
+    for (Int_t i=0;i<16;i++) {
+      pCsI_new_1[i] = pCsI_5_1[i];
+      pCsI_new_2[i] = pCsI_5_2[i];
+    }
+    break;
+  case 6:
+    for (Int_t i=0;i<16;i++) {
+      pCsI_new_1[i] = pCsI_5_1[i];
+      pCsI_new_2[i] = pCsI_5_2[i];
+    }
+    break;
+  default:
+    break;
+  }
+  // cout << endl << endl;
+  // for (Int_t i=0;i<16;i++) {
+  //   cout << pCsI_new_1[i] << " " << pCsI_new_2[i] << endl;
+  // }
+
   // readCuts();
 
   TChain *ch = new TChain("tree");
@@ -317,13 +385,6 @@ void selection(Int_t nFile=0) {
   // outPutFileName.Form("/mnt/data/exp1904/analysed/selected/beamDiagnostics/h7_ct_%d_cut.root",nFile);
   // outPutFileName.Form("/mnt/data/exp1904/analysed/selected/siTriggers/h7_ct_%d_cut.root",nFile);
   outPutFileName.Form("/mnt/data/exp1904/analysed/selected/h7_csIanalysis/h7_ct_%d_cut.root",nFile);
-
-  // outPutFileName.Form("/mnt/data/exp1904/analysed/selected/h7/h7_ct_%d_cut.root",nFile);
-  // outPutFileName.Form("/mnt/data/exp1904/analysed/selected/beamDiagnostics/h7_ct_%d_cut.root",nFile);
-  // outPutFileName.Form("temp1.root");
-  // outPutFileName.Form("/mnt/data/exp1904/ERanalysis/tests/selected/selected.root",nFile);
-  // outPutFileName.Form("/mnt/data/exp1904/analysed/selected/h7_noThresh/h7_ct_%d_cut.root",nFile);
-  
 
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
   // TFile *fw = new TFile("test.root", "RECREATE");
@@ -568,6 +629,7 @@ void selection(Int_t nFile=0) {
     // if ( ((fXt-xCent)*(fXt-xCent) + (fYt-yCent)*(fYt-yCent))>9*9 ) continue;
     if ( ((fXt-xCent)*(fXt-xCent) + (fYt-yCent)*(fYt-yCent))>10*10 ) continue;
 
+    recalibrateCsI(pCsI_1,pCsI_2,pCsI_new_1,pCsI_new_2);
 
     fillND();
     fillSi();
@@ -1319,9 +1381,9 @@ void helium6() {
 
 void neutronID() {
 
-  for(Int_t i=0;i<32;i++) {
-    ND_tac[i] = ND_tac[i] + NDpar[i];
-  }
+  // for(Int_t i=0;i<32;i++) {
+  //   ND_tac[i] = ND_tac[i] + NDpar[i];
+  // }
 
   for (Int_t i=0;i<32;i++) {
     if (cutNeutron->IsInside(ND_amp[i] , ND_tac[i]) ) {
@@ -1626,7 +1688,7 @@ void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16){
 
   TString line;
   ifstream myfile;
-  Int_t count=0;
+  Int_t count=-2;
   TString file = "/home/muzalevskii/work/macro/h7_1904/parameters/" + fileName + ".cal";
   myfile.open(file.Data());
   while (! myfile.eof() ){
@@ -1648,32 +1710,32 @@ void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16){
 void trackCsI() {
   Float_t step = 0.;
 
-  if ( xCt<(33.-step+xOffset) && xCt>(16.5+step+xOffset) ) {
-    if ( yCt<(33.-step+yOffset) && yCt>(16.5+step+yOffset) ) nCsI_track = 0;
-    if ( yCt<(16.5-step+yOffset) && yCt>step+yOffset ) nCsI_track = 4;
-    if ( yCt<(-step+yOffset) && yCt>-(16.5-step+yOffset) ) nCsI_track = 8;
-    if ( yCt<-(16.5+step+yOffset) && yCt>-(33-step+yOffset) ) nCsI_track = 12;
+  if ( xCt<(33.-step) && xCt>(16.5+step) ) {
+    if ( yCt<(33.-step) && yCt>(16.5+step) ) nCsI_track = 0;
+    if ( yCt<(16.5-step) && yCt>step ) nCsI_track = 4;
+    if ( yCt<(-step) && yCt>-(16.5-step) ) nCsI_track = 8;
+    if ( yCt<-(16.5+step) && yCt>-(33-step) ) nCsI_track = 12;
   }
 
-  if ( xCt<(16.5-step+xOffset) && xCt>(step+xOffset) ) {
-    if ( yCt<(33.-step+yOffset) && yCt>(16.5+step+yOffset) ) nCsI_track = 1;
-    if ( yCt<(16.5-step+yOffset) && yCt>step+yOffset ) nCsI_track = 5;
-    if ( yCt<(-step+yOffset) && yCt>-(16.5-step+yOffset) ) nCsI_track = 9;
-    if ( yCt<-(16.5+step+yOffset) && yCt>-(33-step+yOffset) ) nCsI_track = 13;
+  if ( xCt<(16.5-step) && xCt>(step) ) {
+    if ( yCt<(33.-step) && yCt>(16.5+step) ) nCsI_track = 1;
+    if ( yCt<(16.5-step) && yCt>step ) nCsI_track = 5;
+    if ( yCt<(-step) && yCt>-(16.5-step) ) nCsI_track = 9;
+    if ( yCt<-(16.5+step) && yCt>-(33-step) ) nCsI_track = 13;
   }
 
-  if ( xCt<(-step+xOffset) && xCt>-(16.5-step+xOffset) ) {
-    if ( yCt<(33.-step+yOffset) && yCt>(16.5+step+yOffset) ) nCsI_track = 2;
-    if ( yCt<(16.5-step+yOffset) && yCt>step+yOffset ) nCsI_track = 6;
-    if ( yCt<(-step+yOffset) && yCt>-(16.5-step+yOffset) ) nCsI_track = 10;
-    if ( yCt<-(16.5+step+yOffset) && yCt>-(33-step+yOffset) ) nCsI_track = 14;
+  if ( xCt<(-step) && xCt>-(16.5-step) ) {
+    if ( yCt<(33.-step) && yCt>(16.5+step) ) nCsI_track = 2;
+    if ( yCt<(16.5-step) && yCt>step ) nCsI_track = 6;
+    if ( yCt<(-step) && yCt>-(16.5-step) ) nCsI_track = 10;
+    if ( yCt<-(16.5+step) && yCt>-(33-step) ) nCsI_track = 14;
   }
 
-  if ( xCt<-(16.5+step+xOffset) && xCt>-(33-step+xOffset) ) {
-    if ( yCt<(33.-step+yOffset) && yCt>(16.5+step+yOffset) ) nCsI_track = 3;
-    if ( yCt<(16.5-step+yOffset) && yCt>step+yOffset ) nCsI_track = 7;
-    if ( yCt<(-step+yOffset) && yCt>-(16.5-step+yOffset) ) nCsI_track = 11;
-    if ( yCt<-(16.5+step+yOffset) && yCt>-(33-step+yOffset) ) nCsI_track = 15;
+  if ( xCt<-(16.5+step) && xCt>-(33-step) ) {
+    if ( yCt<(33.-step) && yCt>(16.5+step) ) nCsI_track = 3;
+    if ( yCt<(16.5-step) && yCt>step ) nCsI_track = 7;
+    if ( yCt<(-step) && yCt>-(16.5-step) ) nCsI_track = 11;
+    if ( yCt<-(16.5+step) && yCt>-(33-step) ) nCsI_track = 15;
   }
 }
 
@@ -1705,4 +1767,12 @@ void CsI_max() {
 void calcFrameCoordinates(Float_t* x, Float_t* y,Float_t distanance) {
   *x = fXt + (xCt-fXt)*distanance/323.;
   *y = fYt + (yCt-fYt)*distanance/323.;
+}
+
+void recalibrateCsI(Float_t *oldpar1,Float_t *oldpar2,Float_t *newpar1,Float_t *newpar2) {
+  for (Int_t i=0;i<16;i++) {
+    arCsI[i] = (arCsI[i]-*(oldpar1+i))/(*(oldpar2+i)); // into channels
+    arCsI[i] = arCsI[i]*(*(newpar2+i)) + (*(newpar1+i)); // into MeVs
+  }
+  return;
 }
