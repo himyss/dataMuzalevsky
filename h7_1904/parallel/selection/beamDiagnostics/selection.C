@@ -151,7 +151,7 @@ Float_t xOffset,yOffset;
 Long64_t maxTrigger;
 Long64_t nTrigger[4];
 
-void selection(Int_t nFile=0,Int_t numTrigg=0) {
+void selection(Int_t nFile=0) {
 
   // maxTrigger =10000;
 
@@ -172,22 +172,23 @@ void selection(Int_t nFile=0,Int_t numTrigg=0) {
 
   TChain *ch = new TChain("tree");
   TString inPutFileName;
-  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calibrated/newCal/h7_%d_cal.root",nFile);
+  inPutFileName.Form("/mnt/data/exp1904/analysed/cal/h7/h7_ct_%d_cal.root",nFile);
   ch->Add(inPutFileName.Data());
 
-  // nTrigger[0] = ch->Draw("trigger","trigger==2","goff");
-  // nTrigger[1] = ch->Draw("trigger","trigger==3","goff");
-  // nTrigger[2] = ch->Draw("trigger","trigger==4","goff");
-  // nTrigger[3] = ch->Draw("trigger","trigger==5","goff");
+  nTrigger[0] = ch->GetEntries("trigger==2");
+  nTrigger[1] = ch->GetEntries("trigger==3");
+  nTrigger[2] = ch->GetEntries("trigger==4");
+  nTrigger[3] = ch->GetEntries("trigger==5");
 
-  // maxTrigger = nTrigger[0];
-  // for (Int_t i=1;i<4;i++){
-  //   if (maxTrigger>nTrigger[i]) maxTrigger = nTrigger[i];
-  // }
-  // nTrigger[0] = 0;
-  // nTrigger[1] = 0;
-  // nTrigger[2] = 0;
-  // nTrigger[3] = 0;
+  Long64_t numTrigg = nTrigger[0];
+  for (Int_t i=1;i<4;i++){
+    if (numTrigg>nTrigger[i]) numTrigg = nTrigger[i];
+  }
+  nTrigger[0] = 0;
+  nTrigger[1] = 0;
+  nTrigger[2] = 0;
+  nTrigger[3] = 0;
+
 
   //--------------------------------------------------------------------------------
   ch->SetBranchAddress("trigger",&trigger);
@@ -262,7 +263,7 @@ void selection(Int_t nFile=0,Int_t numTrigg=0) {
   readThickness();
 
   TString outPutFileName;
-  outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/beamDiagnostics/selected/h7_ct_%d_cut_newPars.root",nFile);
+  outPutFileName.Form("/mnt/data/exp1904/analysed/selected/beamDiagnostics/h7_ct_%d_cut.root",nFile);
   // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/selected/test.root",nFile);
 
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
@@ -407,22 +408,22 @@ void selection(Int_t nFile=0,Int_t numTrigg=0) {
 
     fillSi();
 
-    if (trigger==2 && nX_C>0 && nY_C>0) {
+    if (trigger==2) {
       if (nTrigger[0]==numTrigg) continue;
       if (nTrigger[0]<numTrigg) nTrigger[0]++;
     }
 
-    if (trigger==3 && nX_C>0 && nY_C>0) {
+    if (trigger==3) {
       if (nTrigger[1]==numTrigg) continue;
       if (nTrigger[1]<numTrigg) nTrigger[1]++;
     }
 
-    if (trigger==4 && nX_C>0 && nY_C>0) {
+    if (trigger==4) {
       if (nTrigger[2]==numTrigg) continue;
       if (nTrigger[2]<numTrigg) nTrigger[2]++;
     }
 
-    if (trigger==5 && nX_C>0 && nY_C>0) {
+    if (trigger==5) {
       if (nTrigger[3]==numTrigg) continue;
       if (nTrigger[3]<numTrigg) nTrigger[3]++;
     }
@@ -630,7 +631,7 @@ Float_t GetPosition(Float_t wire, Float_t wireStep,
 
 void readThickness() {
   cout << "thickness of the first detector " << endl;
-  TFile *f1 = new TFile("/home/ivan/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_1_real.root","READ");
+  TFile *f1 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_1_real.root","READ");
   if (f1->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -654,7 +655,7 @@ void readThickness() {
   delete f1;
 
   cout  << endl << "thickness of the SECOND detector " << endl;
-  TFile *f2 = new TFile("/home/ivan/work/macro/h7_1904/parameters/thicknessMap_alltel_90_SSD_1m_2_real.root","READ");
+  TFile *f2 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/thicknessMap_alltel_90_SSD_1m_2_real.root","READ");
   if (f2->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -679,7 +680,7 @@ void readThickness() {
 
 
   cout  << endl << "thickness of the THIRD detector " << endl;
-  TFile *f3 = new TFile("/home/ivan/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_3_switch_new.root","READ");
+  TFile *f3 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_3_switch_new.root","READ");
   if (f3->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -704,7 +705,7 @@ void readThickness() {
 
 
   cout  << endl << "thickness of the FOURTH detector " << endl;
-  TFile *f4 = new TFile("/home/ivan/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_4_real.root","READ");
+  TFile *f4 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_4_real.root","READ");
   if (f4->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -1055,7 +1056,7 @@ void readCuts() {
   TString cutName;
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/C_T/6He/he6_%d.root",i);
+    cutName.Form("/home/muzalevskii/work/macro/h7_1904/cutsNovPars/C_T/6He/he6_%d.root",i);
     f = new TFile(cutName.Data());
     cut6he[i] = (TCutG*)f->Get("CUTG");
     if (!cut6he[i]) {
@@ -1066,7 +1067,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/C_T/triton/h3_%d.root",i);
+    cutName.Form("/home/muzalevskii/work/macro/h7_1904/cutsNovPars/C_T/triton/h3_%d.root",i);
     f = new TFile(cutName.Data());
     cut3h[i] = (TCutG*)f->Get("CUTG");
     if (!cut3h[i]) {
@@ -1077,7 +1078,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/C_T/tCsI/tCsI_full_%d.root",i);
+    cutName.Form("/home/muzalevskii/work/macro/h7_1904/cutsNovPars/C_T/tCsI/tCsI_full_%d.root",i);
     f = new TFile(cutName.Data());
     cutCsI[i] = (TCutG*)f->Get("CUTG");
     if (!cutCsI[i]) {
@@ -1088,7 +1089,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<32;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/C_T/tX_C/tX_C_%d.root",i);
+    cutName.Form("/home/muzalevskii/work/macro/h7_1904/cutsNovPars/C_T/tX_C/tX_C_%d.root",i);
     f = new TFile(cutName.Data());
     cutX_C[i] = (TCutG*)f->Get("CUTG");
     if (!cutX_C[i]) {
@@ -1099,7 +1100,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T1/he3/cut_he3_%d.root",i);
+    cutName.Form("/home/muzalevskii/work/macro/h7_1904/cutsNovPars/T1/he3/cut_he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_1[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_1[i]) {
@@ -1110,7 +1111,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T2/he3/cut_he3_%d.root",i);
+    cutName.Form("/home/muzalevskii/work/macro/h7_1904/cutsNovPars/T2/he3/cut_he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_2[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_2[i]) {
@@ -1121,7 +1122,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T3/he3/cut_he3_%d.root",i);
+    cutName.Form("/home/muzalevskii/work/macro/h7_1904/cutsNovPars/T3/he3/cut_he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_3[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_3[i]) {
@@ -1132,7 +1133,7 @@ void readCuts() {
   }
 
   for(Int_t i=0;i<16;i++) {
-    cutName.Form("/home/ivan/work/macro/h7_1904/cutsNovPars/T4/he3/cut_he3_%d.root",i);
+    cutName.Form("/home/muzalevskii/work/macro/h7_1904/cutsNovPars/T4/he3/cut_he3_%d.root",i);
     f = new TFile(cutName.Data());
     cuthe3_4[i] = (TCutG*)f->Get("CUTG");
     if (!cuthe3_4[i]) {
@@ -1248,7 +1249,7 @@ void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16){
   TString line;
   ifstream myfile;
   Int_t count=0;
-  TString file = "/home/ivan/work/macro/h7_1904/parameters/" + fileName + ".cal";
+  TString file = "/home/muzalevskii/work/macro/h7_1904/parameters/" + fileName + ".cal";
   myfile.open(file.Data());
   while (! myfile.eof() ){
     line.ReadLine(myfile);

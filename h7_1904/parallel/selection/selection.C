@@ -1,5 +1,5 @@
-#include "/home/muzalevskii/work/macro/h7_1904/cuts/scripts/create_cuts.C"
-#include "/home/muzalevskii/work/macro/h7_1904/cuts/scripts/create_IDs.C"
+#include "/home/ivan/work/macro/h7_1904/cuts/scripts/create_cuts.C"
+#include "/home/ivan/work/macro/h7_1904/cuts/scripts/create_IDs.C"
 
 void calcVectorTel1(Int_t n20, Int_t n1);
 void calcVectorTel2(Int_t n20, Int_t n1);
@@ -192,6 +192,7 @@ Float_t centOffset;
 
 Float_t ND_time[32],ND_amp[32],ND_tac[32];
 Float_t tND,aND,tacND,numND;
+Float_t energyND[32];
 
 void selection(Int_t nFile=0) {
 
@@ -226,11 +227,11 @@ void selection(Int_t nFile=0) {
 
   TChain *ch = new TChain("tree");
   TString inPutFileName;
-  inPutFileName.Form("/mnt/data/exp1904/analysed/cal/h7/h7_ct_%d_cal.root",nFile);
+  // inPutFileName.Form("/media/ivan/data/exp1904/analysed/cal/h7_ct_%d_cal.root",nFile);
   // inPutFileName.Form("/mnt/data/exp1904/analysed/cal/fullData/h7_ct_0%d_cal.root",nFile);
   // inPutFileName.Form("/mnt/data/exp1904/analysed/cal/allTriggers/h7_ct_%d_cal.root",nFile);
   // inPutFileName.Form("/mnt/data/exp1904/analysed/cal/h7_noThresh/h7_ct_%d_cal.root",nFile); 
-  // inPutFileName.Form("/mnt/data/exp1904/analysed/cal/emptyTarget/h7_ect_%d_cal.root",nFile);
+  inPutFileName.Form("/media/ivan/data/exp1904/tmp/cal/h7_ct_%d_cal.root",nFile);
   ch->Add(inPutFileName.Data());
 
 
@@ -316,9 +317,9 @@ void selection(Int_t nFile=0) {
   // outPutFileName.Form("/mnt/data/exp1904/analysed/selected/emptyTarget/h7_ect_%d_cut.root",nFile);
   // outPutFileName.Form("/mnt/data/exp1904/analysed/selected/beamDiagnostics/h7_ct_%d_cut.root",nFile);
   // outPutFileName.Form("/mnt/data/exp1904/analysed/selected/siTriggers/h7_ct_%d_cut.root",nFile);
-  outPutFileName.Form("/mnt/data/exp1904/analysed/selected/h7_csIanalysis/h7_ct_%d_cut.root",nFile);
+  // outPutFileName.Form("/mnt/data/exp1904/analysed/selected/h7_csIanalysis/h7_ct_%d_cut.root",nFile);
 
-  // outPutFileName.Form("/mnt/data/exp1904/analysed/selected/h7/h7_ct_%d_cut.root",nFile);
+  outPutFileName.Form("/media/ivan/data/exp1904/analysed/selected/noTargetSelection/h7_ct_%d_cut.root",nFile);
   // outPutFileName.Form("/mnt/data/exp1904/analysed/selected/beamDiagnostics/h7_ct_%d_cut.root",nFile);
   // outPutFileName.Form("temp1.root");
   // outPutFileName.Form("/mnt/data/exp1904/ERanalysis/tests/selected/selected.root",nFile);
@@ -504,6 +505,7 @@ void selection(Int_t nFile=0) {
   tw->Branch("ND_amp",&ND_amp,"ND_amp[32]/F");
   tw->Branch("ND_time",&ND_time,"ND_time[32]/F");
   tw->Branch("ND_tac",&ND_tac,"ND_tac[32]/F");
+  tw->Branch("energyND",&energyND,"energyND[32]/F");
 
   tw->Branch("xCt",&xCt,"xCt/F");
   tw->Branch("yCt",&yCt,"yCt/F");
@@ -555,7 +557,7 @@ void selection(Int_t nFile=0) {
   yCent = 0.026;
 
   for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
-  // for(Int_t nentry=0;nentry<20;nentry++) {     
+     
     if(nentry%1000000==0) cout << "#ENTRY " << nentry << "#" << endl;
 
     ch->GetEntry(nentry);
@@ -786,6 +788,10 @@ void zeroVars() {
   xCt = -1000;
   yCt = -1000;
 
+  for (Int_t i=0;i<32;i++) {
+    energyND[i] = -1;
+  }
+
 }
 
 void MWPCprojection() {
@@ -836,7 +842,7 @@ Float_t GetPosition(Float_t wire, Float_t wireStep,
 
 void readThickness() {
   cout << "thickness of the first detector " << endl;
-  TFile *f1 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_1_real.root","READ");
+  TFile *f1 = new TFile("/home/ivan/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_1_real.root","READ");
   if (f1->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -860,7 +866,7 @@ void readThickness() {
   delete f1;
 
   cout  << endl << "thickness of the SECOND detector " << endl;
-  TFile *f2 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/thicknessMap_alltel_90_SSD_1m_2_real.root","READ");
+  TFile *f2 = new TFile("/home/ivan/work/macro/h7_1904/parameters/thicknessMap_alltel_90_SSD_1m_2_real.root","READ");
   if (f2->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -885,7 +891,7 @@ void readThickness() {
 
 
   cout  << endl << "thickness of the THIRD detector " << endl;
-  TFile *f3 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_3_switch_new.root","READ");
+  TFile *f3 = new TFile("/home/ivan/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_3_switch_new.root","READ");
   if (f3->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -910,7 +916,7 @@ void readThickness() {
 
 
   cout  << endl << "thickness of the FOURTH detector " << endl;
-  TFile *f4 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_4_real.root","READ");
+  TFile *f4 = new TFile("/home/ivan/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_4_real.root","READ");
   if (f4->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -1367,28 +1373,29 @@ void checkHe3() {
 }
 
 void checkHe4() {
-  if(flag1 && n1_1>-1 && n20_1>-1 && cuthe4_1->IsInside(a1_1+a20_1_un, a20_1)) {
+
+  if(flag1 && n1_1>-1 && n20_1>-1 && cuthe4_1[n1_1]->IsInside(a1_1+a20_1_un, a20_1)) {
     nhe4_1 = 1;
   }
   else {
     nhe4_1 = 0;
   }
 
-  if(flag2 && n1_2>-1 && n20_2>-1 && cuthe4_2->IsInside(a1_2+a20_2_un, a20_2)) {
+  if(flag2 && n1_2>-1 && n20_2>-1 && cuthe4_2[n1_2]->IsInside(a1_2+a20_2_un, a20_2)) {
     nhe4_2 = 1;
   }
   else {
     nhe4_2 = 0;
   }
 
-  if(flag3 && n1_3>-1 && n20_3>-1 && cuthe4_3->IsInside(a1_3+a20_3_un, a20_3)) {
+  if(flag3 && n1_3>-1 && n20_3>-1 && cuthe4_3[n1_3]->IsInside(a1_3+a20_3_un, a20_3)) {
     nhe4_3 = 1;
   }
   else {
     nhe4_3 = 0;
   }
 
-  if(flag4 && n1_4>-1 && n20_4>-1 && cuthe4_4->IsInside(a1_4+a20_4_un, a20_4)) {
+  if(flag4 && n1_4>-1 && n20_4>-1 && cuthe4_4[n1_4]->IsInside(a1_4+a20_4_un, a20_4)) {
     nhe4_4 = 1;
   }
   else {
@@ -1626,8 +1633,8 @@ void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16){
 
   TString line;
   ifstream myfile;
-  Int_t count=0;
-  TString file = "/home/muzalevskii/work/macro/h7_1904/parameters/" + fileName + ".cal";
+  Int_t count=-2;
+  TString file = "/home/ivan/work/macro/h7_1904/parameters/" + fileName + ".cal";
   myfile.open(file.Data());
   while (! myfile.eof() ){
     line.ReadLine(myfile);

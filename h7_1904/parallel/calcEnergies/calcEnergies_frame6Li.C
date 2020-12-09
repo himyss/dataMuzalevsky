@@ -75,7 +75,7 @@ Bool_t timesToF,timesMWPC;
 Double_t fThickness1[16][16],fThickness2[16][16],fThickness3[16][16],fThickness4[16][16];
 
 Int_t flag1,flag2,flag3,flag4,flagCent;
-Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4;
+Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4,neutron;
 Int_t frame;
 
 Float_t e_1,e_2,e_3,e_4;
@@ -87,6 +87,7 @@ Float_t phi_he3_1,phi_he3_2,phi_he3_3,phi_he3_4,phi_h3;
 Float_t thickness;
 
 Float_t xOffset,yOffset,zOffset;
+Float_t tND,aND,tacND,numND;
 //--------------------------------------------------------------------------------
 
 void calcEnergies_frame6Li(Int_t nRun=0) {
@@ -216,6 +217,12 @@ void calcEnergies_frame6Li(Int_t nRun=0) {
   ch->SetBranchAddress("phi_he3_4.",&phi_he3_4);
   ch->SetBranchAddress("phi_h3.",&phi_h3);
 
+  ch->SetBranchAddress("aND",&aND);
+  ch->SetBranchAddress("tND",&tND);
+  ch->SetBranchAddress("tacND",&tacND);
+  ch->SetBranchAddress("numND",&numND);
+
+  ch->SetBranchAddress("neutron.",&neutron);
 
   TString outPutFileName;
   outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calcEnergies/h7_ct_6li_%d_reco_newPars.root",nRun);
@@ -341,6 +348,12 @@ void calcEnergies_frame6Li(Int_t nRun=0) {
   tw->Branch("e_3.",&e_3,"e_3/F");
   tw->Branch("e_4.",&e_4,"e_4/F");
 
+  tw->Branch("aND",&aND,"aND/F");
+  tw->Branch("tND",&tND,"tND/F");
+  tw->Branch("tacND",&tacND,"tacND/F");
+  tw->Branch("numND",&numND,"numND/F");
+
+  tw->Branch("neutron.",&neutron,"neutron/I");
   tw->Branch("centE.",&centE,"centE/F");
 
   readThickness();

@@ -160,7 +160,7 @@ void calcEnergies_ect(Int_t nRun=0) {
   TChain *ch = new TChain("tree");
 
   TString inPutFileName;
-  inPutFileName.Form("/mnt/data/exp1904/analysed/selected/emptyTarget/h7_ct_%d_cut.root",nRun);
+  inPutFileName.Form("/mnt/data/exp1904/analysed/selected/emptyTarget/h7_ect_%d_cut.root",nRun);
   // inPutFileName.Form("/mnt/data/exp1904/analysed/selected/emptyTarget/h7_ct_%d_cut.root",nRun);
   ch->Add(inPutFileName.Data());
   cout << ch->GetEntries() << " total number of Entries" << endl;

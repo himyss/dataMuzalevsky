@@ -52,7 +52,7 @@ Float_t sideX,sideY;
 Float_t frame1X,frame1Y,frame2X,frame2Y,frame3X,frame3Y;
 
 Int_t flag1,flag2,flag3,flag4,flagCent;
-Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4;
+Int_t nh3,nhe3_1,nhe3_2,nhe3_3,nhe3_4,neutron;
 
 Float_t e_1,e_2,e_3,e_4;
 Float_t centE;
@@ -81,6 +81,7 @@ Float_t qReaction;
 Int_t coincidence;
 
 TVector3 bVect,bVect_H7;
+Float_t tND,aND,tacND,numND;
 
 void reco6Li(Int_t nRun=0) {
   f8HeSi.SetEL(1, 2.321); // density in g/cm3
@@ -218,6 +219,12 @@ void reco6Li(Int_t nRun=0) {
   ch->SetBranchAddress("e_4.",&e_4);
   ch->SetBranchAddress("centE.",&centE);
 
+  ch->SetBranchAddress("neutron.",&neutron);
+
+  ch->SetBranchAddress("aND",&aND);
+  ch->SetBranchAddress("tND",&tND);
+  ch->SetBranchAddress("tacND",&tacND);
+  ch->SetBranchAddress("numND",&numND);
 
   TString outPutFileName;
   // outPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/reco/eTarget/h7_ect_%d_mm_frame.root",nRun);
@@ -396,6 +403,12 @@ void reco6Li(Int_t nRun=0) {
   tw->Branch("angle_bin_h3.",&angle_bin_h3,"angle_bin_h3/F");
   tw->Branch("angle_n4_h7.",&angle_n4_h7,"angle_n4_h7/F");
   tw->Branch("angle_n4_h3.",&angle_n4_h3,"angle_n4_h3/F");
+
+  tw->Branch("aND",&aND,"aND/F");
+  tw->Branch("tND",&tND,"tND/F");
+  tw->Branch("tacND",&tacND,"tacND/F");
+  tw->Branch("numND",&numND,"numND/F");
+  tw->Branch("neutron.",&neutron,"neutron/I");
 
   // input options
   d2.SetPxPyPzE(0.,0.,0.,1.875612);

@@ -1,0 +1,6 @@
+Warning in <TInterpreter::ReadRootmapFile>: class  TGo4LockGuard found in libGo4Base.so  is already in libAccDaqGo4pieces.so 
+Warning in <TInterpreter::ReadRootmapFile>: class  TGo4Log found in libGo4Base.so  is already in libAccDaqGo4pieces.so 
+Warning in <TInterpreter::ReadRootmapFile>: class  TGo4CompositeEvent found in libGo4Analysis.so  is already in libAccDaqGo4pieces.so 
+Warning in <TInterpreter::ReadRootmapFile>: class  TGo4EventElement found in libGo4Analysis.so  is already in libAccDaqGo4pieces.so 
+Error in <TCling::RegisterModule>: cannot find dictionary module AculDataCint_rdict.pcm
+Error in <TCling::RegisterModule>: cannot find dictionary module TELossCint_rdict.pcm

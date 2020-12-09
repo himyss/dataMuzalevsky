@@ -76,25 +76,44 @@ void createcut(){
   ch->Add("/media/ivan/data/exp1904/analysed/novPars/selected/temp/trigger3/h7_ct_*");
   cout << ch->GetEntries() << endl;
 
+  TChain *ch1 = new TChain("tree");
+  ch1->Add("/media/ivan/data/exp1906/be10/analysed/novPars/selection/parVariation/sideTel/be10_ct_firstVol_cut.root");
+  ch1->Add("/media/ivan/data/exp1906/be10/analysed/novPars/selection/parVariation/sideTel/be10_ct_secondVol_cut.root");
+  ch1->Add("/media/ivan/data/exp1906/be10/analysed/novPars/selection/parVariation/sideTel/be10_ct_thinTarget_cut.root");
+
   TString cut,hdraw;
 
   TString canName;
-  TCanvas *c_arr[16];
-  for(Int_t i=0;i<16;i++){
-    canName.Form("c%d",i+1);
-    c_arr[i] = new TCanvas(canName.Data(),"title",1800,1000);
-  }
+  // TCanvas *c_arr[16];
+  // for(Int_t i=0;i<16;i++){
+  //   canName.Form("c%d",i+1);
+  //   c_arr[i] = new TCanvas(canName.Data(),"title",1800,1000);
+  // }
   
   for(Int_t i=0;i<16;i++) {
     // c_arr->cd(i+1);
-    c_arr[i]->cd();
+    // c_arr[i]->cd();
     ch->SetMarkerStyle(1);
     ch->SetMarkerColor(kBlack);      
     cut.Form("flag2 && trigger==3 && a20_2<4 && a1_2+a20_2_un<30 && n20_2==%d",i);
     // cut += cutg1->GetName();
     hdraw.Form("a20_2:a1_2+a20_2_un>>h%d1",i);
-    ch->Draw(hdraw.Data(),cut.Data(),"");
-    c_arr[i]->Update();
+    ch->Draw(hdraw.Data(),cut.Data(),"",1000000,0);
+    // c_arr[i]->Update();
+
+    ch1->SetMarkerStyle(1);
+    ch1->SetMarkerColor(kRed);      
+    cut.Form("flag2 && trigger==3 && a20_2<4 && a1_2+a20_2_un<30 && n20_2==%d",i);
+    // cut += cutg1->GetName();
+    hdraw.Form("a20_2:a1_2+a20_2_un",i);
+    ch1->Draw(hdraw.Data(),cut.Data(),"same",1000000,0);
+    // c_arr[i]->Update();
+
+    cuthe3_2[i]->SetLineColor(kRed);
+    cuthe3_2[i]->Draw("same");
+
+return;
+
 
     ch->SetMarkerStyle(20);
     ch->SetMarkerSize(0.7);   
@@ -103,14 +122,14 @@ void createcut(){
     cut += " && nh3 && flagCent";
     hdraw.Form("a20_2:a1_2+a20_2_un>>h%d_triton1",i);
     ch->Draw(hdraw.Data(),cut.Data(),"same");
-    c_arr[i]->Update();
+    // c_arr[i]->Update();
 
     cuthe3_2[i]->SetLineColor(kRed);
     cuthe3_2[i]->Draw("same");
-    c_arr[i]->Update();
+    // c_arr[i]->Update();
 
     canName.Form("pdf/canvas_%d.png",i+1);
-    c_arr[i]->SaveAs(canName.Data());
+    // c_arr[i]->SaveAs(canName.Data());
   }
 
 

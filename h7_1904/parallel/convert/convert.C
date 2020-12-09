@@ -173,7 +173,7 @@ void convert(Int_t nFile = 0) {
 
   // Creating outfile,outtree
   TString outPutFileName;
-  outPutFileName.Form("/mnt/data/exp1904/analysed/cal/h7_veto/h7_ct_%d_cal.root",nFile);
+  outPutFileName.Form("/mnt/data/exp1904/analysed/cal/h7_noThresh/h7_ct_%d_cal.root",nFile);
   // outPutFileName.Form("/mnt/data/exp1904/analysed/cal/emptyTarget/h7_ect_%d_cal.root",nFile);
   // outPutFileName.Form("test_convert.root",nFile);
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
@@ -341,23 +341,23 @@ void convert(Int_t nFile = 0) {
     fillSi(v_DSDY_C,DSD_Y,tDSD_Y,pDSD_Y1,pDSD_Y2,&multc_y,2.5);
 
     // side telescopes
-    fillSi(v_SSD20_1,SQ20_1,tSQ20_1,pSQ201_1,pSQ201_2,&mult20_1,0.3);
-    fillSi(v_SSD_1,SSD1,tSSD1,pSSD1_1,pSSD1_2,&mult1_1,0.5);
+    fillSi(v_SSD20_1,SQ20_1,tSQ20_1,pSQ201_1,pSQ201_2,&mult20_1,0.);
+    fillSi(v_SSD_1,SSD1,tSSD1,pSSD1_1,pSSD1_2,&mult1_1,0.);
     fillSi(v_SSD_V_1,SSD_V1,tSSD_V1,pSSD_V1_1,pSSD_V1_2,&multv_1,0);
     multv_1 = v_SSD_V_1->GetEntries();
 
-    fillSi(v_SSD20_2,SQ20_2,tSQ20_2,pSQ202_1,pSQ202_2,&mult20_2,0.3);
-    fillSi(v_SSD_2,SSD2,tSSD2,pSSD2_1,pSSD2_2,&mult1_2,0.5);
+    fillSi(v_SSD20_2,SQ20_2,tSQ20_2,pSQ202_1,pSQ202_2,&mult20_2,0.);
+    fillSi(v_SSD_2,SSD2,tSSD2,pSSD2_1,pSSD2_2,&mult1_2,0.);
     fillSi(v_SSD_V_2,SSD_V2,tSSD_V2,pSSD_V2_1,pSSD_V2_2,&multv_2,0);
     multv_2 = v_SSD_V_2->GetEntries();  
 
-    fillSi(v_SSD20_3,SQ20_3,tSQ20_3,pSQ203_1,pSQ203_2,&mult20_3,0.3);
-    fillSi(v_SSD_3,SSD3,tSSD3,pSSD3_1,pSSD3_2,&mult1_3,0.5);
+    fillSi(v_SSD20_3,SQ20_3,tSQ20_3,pSQ203_1,pSQ203_2,&mult20_3,0.);
+    fillSi(v_SSD_3,SSD3,tSSD3,pSSD3_1,pSSD3_2,&mult1_3,0.);
     fillSi(v_SSD_V_3,SSD_V3,tSSD_V3,pSSD_V3_1,pSSD_V3_2,&multv_3,0);
     multv_3 = v_SSD_V_3->GetEntries();
 
-    fillSi(v_SSD20_4,SQ20_4,tSQ20_4,pSQ204_1,pSQ204_2,&mult20_4,0.3);
-    fillSi(v_SSD_4,SSD4,tSSD4,pSSD4_1,pSSD4_2,&mult1_4,0.5);
+    fillSi(v_SSD20_4,SQ20_4,tSQ20_4,pSQ204_1,pSQ204_2,&mult20_4,0.);
+    fillSi(v_SSD_4,SSD4,tSSD4,pSSD4_1,pSSD4_2,&mult1_4,0.);
     fillSi(v_SSD_V_4,SSD_V4,tSSD_V4,pSSD_V4_1,pSSD_V4_2,&multv_4,0);
     multv_4 = v_SSD_V_4->GetEntries();
 

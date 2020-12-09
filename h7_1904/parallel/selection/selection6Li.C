@@ -177,7 +177,7 @@ void selection6Li(Int_t nFile=0) {
 
   TChain *ch = new TChain("tree");
   TString inPutFileName;
-  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calibrated/newCal/h7_%d_cal.root",nFile);
+  inPutFileName.Form("/media/ivan/data/exp1904/analysed/novPars/calibrated/finalCal/h7_ct_%d_cal.root",nFile);
   ch->Add(inPutFileName.Data());
 
   cout << ch->GetEntries() << endl;
@@ -462,7 +462,11 @@ void selection6Li(Int_t nFile=0) {
     correct();
     checkHe3();
 
-    if (flagCent) triton();
+    neutronID();
+
+    if (flagCent){
+      triton();
+    } 
 
     // if (nCsI>-1) aCsI = aCsI*pCsI_2[nCsI] + pCsI_1[nCsI];
     // for (Int_t i=0;i<16;i++) {
