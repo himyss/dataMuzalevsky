@@ -1,7 +1,7 @@
 #!/bin/bash
 rm textout/*.txt
 
-root -l -q 'selection_beam.C(0)' >> textout/out1.txt 2> textout/err0.txt &
+root -l -q 'selection_beam.C(0)' >> textout/out0.txt 2> textout/err0.txt &  
 root -l -q 'selection_beam.C(1)' >> textout/out1.txt 2> textout/err1.txt &
 root -l -q 'selection_beam.C(2)' >> textout/out2.txt 2> textout/err2.txt &
 echo "Waiting for all threads to be finished"

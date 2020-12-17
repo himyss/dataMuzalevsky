@@ -608,7 +608,7 @@ switch (nFile)
   yCent = 0.026;
 
   for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
-  // for(Int_t nentry=0;nentry<20;nentry++) {     
+  // for(Int_t nentry=0;nentry<20000;nentry++) {     
     if(nentry%1000000==0) cout << "#ENTRY " << nentry << "#" << endl;
 
     ch->GetEntry(nentry);
@@ -1421,37 +1421,33 @@ void checkHe3() {
 }
 
 void checkHe4() {
-  if (cuthe4_1[n1_1]==NULL) cout  << " FIRST " << n1_1 << endl;
-  if(multv_1==0 && flag1 && n1_1>-1 && n20_1>-1 && cuthe4_1[n1_1]->IsInside(a1_1+a20_1_un, a20_1)) {
+  if(multv_1==0 && flag1 && n1_1>-1 && n20_1>-1 && cuthe4_1[n20_1]->IsInside(a1_1+a20_1_un, a20_1)) {
     nhe4_1 = 1;
+    return;
   }
   else {
     nhe4_1 = 0;
   }
 
-  if (cuthe4_2[n1_2]==NULL) cout  << " SECOND " << n1_2 << endl;
-  if(multv_2==0 && flag2 && n1_2>-1 && n20_2>-1 && cuthe4_2[n1_2]->IsInside(a1_2+a20_2_un, a20_2)) {
+  if(multv_2==0 && flag2 && n1_2>-1 && n20_2>-1 && cuthe4_2[n20_2]->IsInside(a1_2+a20_2_un, a20_2)) {
     nhe4_2 = 1;
+    return;
   }
   else {
     nhe4_2 = 0;
   }
 
-  if (cuthe4_3[n1_3]==NULL) cout  << " THIRD " << n1_3 << endl;
-  if(multv_3==0 && flag3 && n1_3>-1 && n20_3>-1 && cuthe4_3[n1_3]->IsInside(a1_3+a20_3_un, a20_3)) {
+  if(multv_3==0 && flag3 && n1_3>-1 && n20_3>-1 && cuthe4_3[n20_3]->IsInside(a1_3+a20_3_un, a20_3)) {
     nhe4_3 = 1;
+    return;
   }
   else {
     nhe4_3 = 0;
   }
 
-  // for (Int_t i=0;i<16;i++) {
-  //   if (cuthe4_4[i]==NULL) cout << cuthe4_4 << endl;
-  // }
-  if (cuthe4_4[n1_4]==NULL) cout  << " FOURTH " << n1_4 << endl;
-
-  if(multv_4==0 && flag4 && n1_4>-1 && n20_4>-1 && cuthe4_4[n1_4]->IsInside(a1_4+a20_4_un, a20_4)) {
+  if(multv_4==0 && flag4 && n1_4>-1 && n20_4>-1 && cuthe4_4[n20_4]->IsInside(a1_4+a20_4_un, a20_4)) {
     nhe4_4 = 1;
+    return;
   }
   else {
     nhe4_4 = 0;
@@ -1460,28 +1456,28 @@ void checkHe4() {
 }
 
 void check_side_h3() {
-  if(flag1 && n1_1>-1 && n20_1>-1 && cut3h_1->IsInside(a1_1+a20_1_un, a20_1)) {
+  if(flag1 && n1_1>-1 && n20_1>-1 && cut3h_side_1[n20_1]->IsInside(a1_1+a20_1_un, a20_1)) {
     nh3_1 = 1;
   }
   else {
     nh3_1 = 0;
   }
 
-  if(flag2 && n1_2>-1 && n20_2>-1 && cut3h_2->IsInside(a1_2+a20_2_un, a20_2)) {
+  if(flag2 && n1_2>-1 && n20_2>-1 && cut3h_side_2[n20_2]->IsInside(a1_2+a20_2_un, a20_2)) {
     nh3_2 = 1;
   }
   else {
     nh3_2 = 0;
   }
 
-  if(flag3 && n1_3>-1 && n20_3>-1 && cut3h_3->IsInside(a1_3+a20_3_un, a20_3)) {
+  if(flag3 && n1_3>-1 && n20_3>-1 && cut3h_side_3[n20_3]->IsInside(a1_3+a20_3_un, a20_3)) {
     nh3_3 = 1;
   }
   else {
     nh3_3 = 0;
   }
 
-  if(flag4 && n1_4>-1 && n20_4>-1 && cut3h_4->IsInside(a1_4+a20_4_un, a20_4)) {
+  if(flag4 && n1_4>-1 && n20_4>-1 && cut3h_side_4[n20_4]->IsInside(a1_4+a20_4_un, a20_4)) {
     nh3_4 = 1;
   }
   else {

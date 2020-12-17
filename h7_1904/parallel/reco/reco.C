@@ -79,7 +79,7 @@ TLorentzVector h3,he8,d2,he3,h7,h3CM,h4n,hBinary,n4,h3_side,h3_side_CMS,he7;
 TLorentzVector he3CM,h7CM; // reaction CMS
 TLorentzVector he3CM_H7,h3CM_H7,h7CM_H7,h4nCM_H7,hBinary_CM,hBinary_7H; // reaction CMS
 TLorentzVector h_n4h3,h_n4h3_CM,h_n4_he3,h_n4_he3_CM;
-TLorentzVector h6,he4,h6CM,h3CM_H6;
+TLorentzVector h6,he4,h6CM,h3CM_H6,he4CM_H6,he4_aLab,he4CM_He7;
 TLorentzVector hBinary_aLab;
 
 TLorentzVector he4_c,he6_c,he4_c_cms,he6_c_cms;
@@ -95,7 +95,7 @@ Double_t momentum,energy,mass;
 Float_t thetah7,phih7,phih3,thetah3,phihe3,thetahe3,thetahe8,thetaNeutronCM;
 Float_t thetah7CM,phih7CM,phih3CM,thetah3CM,phihe3CM,thetahe3CM,theta4nCM,thetah6CM;
 Float_t mh7,eh7,eh3,ehe3,ehe8,eh3_CM,m4n,e4n,e4n_CM,mn4,en4,eNeutron,eNeutronCM;
-Float_t mh6;
+Float_t mh6,theta_h3_CM6H,phi_h3_CM6H;
 Float_t v_he3,tof_he3;
 Float_t mhe7;
 
@@ -103,12 +103,14 @@ Float_t angle_h3_h7,angle_h3_h7CM,angle_h3_h7CMreaction,angle_he3_h7,angle_he3_h
 Float_t angle_n4_h3,angle_n4_h7,angle_bin_h3_CM,angle_bin_h3,angle_h7_he8;
 Float_t angle_h3Side_he8,angle_he7_he8;
 Float_t qReaction;
+Float_t angle_h3_h6CM_alphaLab,angle_h3_h6CM_alphaCM,angle_h3_h6CM_alphaAntiLab,angle_h3_h6CM_6H;
 
 Int_t coincidence;
 Float_t tND,aND,tacND,tND_cal;
 Int_t numND;
 Float_t ND_time[32],ND_amp[32],ND_tac[32],ND_energy[32],ND_tof[32],ND_energyCM[32],ND_time_cal[32];
 TVector3 bVect,bVect_H7,bVect_He7,bVect_H6,bVect_beam,bVect_treiman;
+TLorentzVector he4_CMhe7;
 
 TLorentzVector lv_qMomenta,lv_dAlab,lv_h7aLab,lv_h3aLab,lv_h3qFrame,lv_h7qFrame,lv_h3Frame7h;
 TVector3 v_xMomenta,v_yMomenta,v_zMomenta;
@@ -116,6 +118,7 @@ TVector3 v_xMomenta,v_yMomenta,v_zMomenta;
 Float_t targetTime,diafTime;
 
 Float_t e_4n_3He,e_4n_3H,e_4n_3He_CM,e_4n_3H_CM;
+Float_t ehe4_CMhe7;
 
 Float_t SSD1[16],SQ20_1[16],tSSD1[16],tSQ20_1[16],SSD_V1[16],tSSD_V1[16];
 Float_t SSD2[16],SQ20_2[16],tSSD2[16],tSQ20_2[16],SSD_V2[16],tSSD_V2[16];
@@ -135,12 +138,13 @@ Float_t av_4,tv_4;
 Int_t nv_4;
 
 Float_t timeNDpar1[32],timeNDpar2[32];
-Float_t ND_time_position[45],ND_position[45];
+Float_t ND_time_position[45],ND_position[45],ND_posTarget[45];
 Float_t NDpar[32],zeropar[32];
 
 Float_t x_ND_p,y_ND_p;
 
 TVector3 pos_ND[45];    // in mm
+TVector3 pos_ND_target[45];    // in mm
 
 void reco(Int_t nRun=0) {
 
@@ -162,12 +166,7 @@ void reco(Int_t nRun=0) {
   TChain *ch = new TChain("tree");
   TString inPutFileName;
   inPutFileName.Form("/media/ivan/data/exp1904/analysed/calcEnergies/h7_nov2020/h7_ct_%d_reco.root",nRun);
-  //inPutFileName.Form("/mnt/data/exp1904/analysed/calcEnergies/h7_csianalysis/h7_ct_%d_reco.root",nRun);
-
-  //inPutFileName.Form("/mnt/data/exp1904/analysed/calcEnergies/emptyTarget/h7_ct_%d_reco.root",nRun);
-
-  //inPutFileName.Form("/mnt/data/exp1904/analysed/calcEnergies/allTriggers/h7_ct_%d_reco.root",nRun);
-  //inPutFileName.Form("/mnt/data/exp1904/analysed/calcEnergies/thinDets/h7_ct_%d_reco.root",nRun);
+  // inPutFileName.Form("/media/ivan/data/exp1904/analysed/calcEnergies/noTargetSelection/h7_ct_%d_reco.root",nRun);
 
   ch->Add(inPutFileName.Data());;
 
@@ -366,13 +365,9 @@ void reco(Int_t nRun=0) {
   ch->SetBranchAddress("nv_4.",&nv_4);
 
   TString outPutFileName;
-  // outPutFileName.Form("/mnt/data/exp1904/analysed/reco/siTriggers/h7_ct_%d_mm_cut.root",nRun);
-  // outPutFileName.Form("/mnt/data/exp1904/analysed/reco/h7_csianalysis/h7_ct_%d_mm.root",nRun);
   outPutFileName.Form("/media/ivan/data/exp1904/analysed/reco/h7_nov2020/h7_ct_%d_mm.root",nRun);
-  // outPutFileName.Form("test%d.root",nRun);
-  //outPutFileName.Form("/mnt/data/exp1904/analysed/reco/allTriggers/h7_ct_%d_mm_cut.root",nRun);
-  // outPutFileName.Form("/mnt/data/exp1904/analysed/reco/neutronData/h7_ct_%d_mm.root",nRun);
-  //outPutFileName.Form("/mnt/data/exp1904/analysed/reco/noTargetSelection/h7_ct_%d_mm_cut.root",nRun);
+  // outPutFileName.Form("test_%d_mm.root",nRun);
+  // outPutFileName.Form("/media/ivan/data/exp1904/analysed/reco/noTargetSelection/h7_ct_%d_mm_cut.root",nRun);
 
 
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
@@ -540,6 +535,9 @@ void reco(Int_t nRun=0) {
   tw->Branch("thetah7.",&thetah7,"thetah7/F");
   tw->Branch("phih7.",&phih7,"phih7/F");
 
+  
+  tw->Branch("theta_h3_CM6H.",&theta_h3_CM6H,"theta_h3_CM6H/F");
+  tw->Branch("phi_h3_CM6H.",&phi_h3_CM6H,"phi_h3_CM6H/F");
   tw->Branch("thetah6CM.",&thetah6CM,"thetah6CM/F");
   tw->Branch("thetah7CM.",&thetah7CM,"thetah7CM/F");
   tw->Branch("phih7CM.",&phih7CM,"phih7CM/F");
@@ -567,6 +565,8 @@ void reco(Int_t nRun=0) {
   tw->Branch("ehe8.",&ehe8,"ehe8/F");
   tw->Branch("mhe7.",&mhe7,"mhe7/F");
 
+  tw->Branch("ehe4_CMhe7.",&ehe4_CMhe7,"ehe4_CMhe7/F");
+
   tw->Branch("px",&px,"px/F");
   tw->Branch("py",&py,"py/F");
   tw->Branch("pz",&pz,"pz/F");
@@ -576,6 +576,11 @@ void reco(Int_t nRun=0) {
   tw->Branch("tof_he3.",&tof_he3,"tof_he3/F");
 
   // tw->Branch("qReaction.",&qReaction,"qReaction/F");
+
+  tw->Branch("angle_h3_h6CM_alphaCM",&angle_h3_h6CM_alphaCM,"angle_h3_h6CM_alphaCM/F");
+  tw->Branch("angle_h3_h6CM_alphaLab.",&angle_h3_h6CM_alphaLab,"angle_h3_h6CM_alphaLab/F");
+  tw->Branch("angle_h3_h6CM_alphaAntiLab.",&angle_h3_h6CM_alphaAntiLab,"angle_h3_h6CM_alphaAntiLab/F");
+  tw->Branch("angle_h3_h6CM_6H.",&angle_h3_h6CM_6H,"angle_h3_h6CM_6H/F");
 
   tw->Branch("angle_h7_he8.",&angle_h7_he8,"angle_h7_he8/F");
 
@@ -721,7 +726,8 @@ void reco(Int_t nRun=0) {
     TLorentzVector summVect = he8 + d2;
     bVect = summVect.BoostVector();
 
-    if (nh3_1 || nh3_2 || nh3_3 || nh3_4) { // reco He7
+
+    if (nAlpha && (nh3_1 || nh3_2 || nh3_3 || nh3_4)) { // reco He7
 
       if (nh3_1) {
         energy = e_1/1000.;
@@ -798,8 +804,17 @@ void reco(Int_t nRun=0) {
       h6 = he8 + d2 + (-he4);
       mh6 = sqrt(h6.E()*h6.E() - h6.Px()*h6.Px() - h6.Py()*h6.Py() - h6.Pz()*h6.Pz());
 
+
+
       h6CM = h6;
       bVect_H6 = h6.BoostVector();
+
+      he4CM_H6 = he4;
+      he4CM_H6.Boost(-bVect_H6); 
+
+      bVect_beam = he8.BoostVector();
+      he4_aLab = he4;
+      he4_aLab.Boost(-bVect_beam);
 
       h6CM.Boost(-bVect); 
       thetah6CM = h6CM.Theta()*TMath::RadToDeg();
@@ -822,6 +837,15 @@ void reco(Int_t nRun=0) {
       thetah3 = h3.Theta()*TMath::RadToDeg();
       phih3 = h3.Phi()*TMath::RadToDeg();
       eh3 = h3.T() - mass;
+
+      he7 = he8 + d2 + (-h3);
+      mhe7 = sqrt(he7.E()*he7.E() - he7.Px()*he7.Px() - he7.Py()*he7.Py() - he7.Pz()*he7.Pz());
+
+      bVect_He7 = he7.BoostVector();
+      he4_CMhe7 = he4;
+      he4_CMhe7.Boost(-bVect_He7);
+      ehe4_CMhe7 = he4_CMhe7.T() - 3.727379;
+
 
     }
 
@@ -1007,6 +1031,14 @@ void reco(Int_t nRun=0) {
       h3CM_H6.Boost(-bVect_H6);
       eh3_CM = h3CM_H6.T() - mass;
 
+      theta_h3_CM6H = h3CM_H6.Theta()*TMath::RadToDeg();
+      phi_h3_CM6H = h3CM_H6.Phi()*TMath::RadToDeg();
+
+      angle_h3_h6CM_6H = h3CM_H6.Angle(h6.Vect())*TMath::RadToDeg();
+      angle_h3_h6CM_alphaAntiLab = h3CM_H6.Angle(he4_aLab.Vect())*TMath::RadToDeg();
+      angle_h3_h6CM_alphaLab = h3CM_H6.Angle(he4.Vect())*TMath::RadToDeg();
+      angle_h3_h6CM_alphaCM = h3CM_H6.Angle(he4CM_H6.Vect())*TMath::RadToDeg();      
+
     }
 
     if (nh3 && flagCent && ( (nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )) { // treiman jang
@@ -1108,6 +1140,13 @@ void calculateBeam() {
 
 void zerovars() {
 
+  ehe4_CMhe7 = -1;
+
+  angle_h3_h6CM_alphaAntiLab = -100;
+  angle_h3_h6CM_alphaCM = -100;
+  angle_h3_h6CM_alphaLab = -100;
+  angle_h3_h6CM_6H = -100;
+
   aND = -1;
   tND = -100000;
   tND_cal = -100000;
@@ -1162,6 +1201,8 @@ void zerovars() {
   angle_he3_he8 = -100;
   th_4n = -100;
 
+  theta_h3_CM6H = -100.;
+  phi_h3_CM6H = -100.;
 
   mhe7 = -100;
   m4n = -1.;
@@ -1175,6 +1216,7 @@ void zerovars() {
   eh3_CM = -1.;
   ehe3 = -1.;
 
+  he4_CMhe7.SetXYZT(0,0,0,0);
   he7.SetXYZT(0,0,0,0);
   h7.SetXYZT(0,0,0,0);
   h6.SetXYZT(0,0,0,0);
@@ -1195,6 +1237,8 @@ void zerovars() {
 
   he4_c.SetXYZT(0,0,0,0);
   he4_c_cms.SetXYZT(0,0,0,0);
+
+  he4CM_H6.SetXYZT(0,0,0,0);
 
   he6_c.SetXYZT(0,0,0,0);
   he6_c_cms.SetXYZT(0,0,0,0);
@@ -1245,6 +1289,7 @@ void neutronID() {
 
     // ND_tac[i] = ND_tac[i]+NDpar[i];
     ND_time_cal[i] = ND_time[i]*0.125 - timeNDpar1[i] + ND_time_position[i];
+    // ND_time_cal[i] = ND_time[i]*0.125 - timeNDpar1[i] + (targetTime-diafTime) + ND_time_position[i];
     if (ND_time[i]>0 && ND_amp[i]>0) {
       multiplicity++;
       numND = i;
@@ -1272,7 +1317,8 @@ void neutronID() {
       neutron++;
       numND = i;
       
-      Double_t velocity = ND_position[i]/(ND_time_cal[i]-targetTime);
+      Double_t velocity = ND_posTarget[i]/(ND_time_cal[i]-targetTime);
+      // Double_t velocity = ND_posTarget[i]/(ND_time_cal[i]);
       // Double_t velocity = 2700./(40.);
       Double_t beta = sqrt(1 - (velocity*velocity/(299.792458*299.792458) ) );
       ND_energy[i] = mass*((1/beta) - 1);
@@ -1384,12 +1430,14 @@ void fillND_positions() {
   //
   for (int i=0; i<45;i++){
         
-      pos_ND[i].SetXYZ(NeutXYZ[i][0],NeutXYZ[i][1],NeutXYZ[i][2]);    // in mm
+      pos_ND[i].SetXYZ(NeutXYZ[i][0]-fXf,NeutXYZ[i][1]-fYf,NeutXYZ[i][2]+205.);    // in mm
+      pos_ND_target[i].SetXYZ(NeutXYZ[i][0]-fXt,NeutXYZ[i][1]-fYt,NeutXYZ[i][2]);    // in mm
   //    printf("det %d:  position(x,y,z), mm = %f,%f,%f\n",i, pos_ND[i].X(),pos_ND[i].Y(), pos_ND[i].Z());      
   //    printf("det %d:  distance = %f  mm\n",i, pos_ND[i].Mag());
   //    printf("det %d:  tof = %f  ns\n",i, pos_ND[i].Mag()/299.729);
       // printf("%f\n",pos_ND[i].Mag()/299.729);
       ND_time_position[i] = pos_ND[i].Mag()/299.729;
+      ND_posTarget[i] = pos_ND_target[i].Mag();
       ND_position[i] = pos_ND[i].Mag();
       // cout << ND_time_position[i] << " " << ND_position[i] << endl;
   }

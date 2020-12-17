@@ -556,7 +556,8 @@ void selection(Int_t nFile=0) {
   xCent = 0.467;
   yCent = 0.026;
 
-  for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
+  // for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
+  for(Int_t nentry=0;nentry<10000;nentry++) { 
      
     if(nentry%1000000==0) cout << "#ENTRY " << nentry << "#" << endl;
 
