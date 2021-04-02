@@ -1,5 +1,5 @@
-#include "/home/ivan/work/macro/h7_1904/cuts/scripts/create_cuts.C"
-#include "/home/ivan/work/macro/h7_1904/cuts/scripts/create_IDs.C"
+#include "/home/muzalevskii/work/macro/h7_1904/cuts/scripts/create_cuts.C"
+#include "/home/muzalevskii/work/macro/h7_1904/cuts/scripts/create_IDs.C"
 
 void calcVectorTel1(Int_t n20, Int_t n1);
 void calcVectorTel2(Int_t n20, Int_t n1);
@@ -9,7 +9,8 @@ void calcVectorCent(Int_t nX,Int_t nY);
 void calcFrameCoordinates(Float_t* x, Float_t* y,Float_t distanance);
 
 void readCuts();
-void recalibrateCsI(Float_t *oldpar1,Float_t *oldpar2,Float_t *newpar1,Float_t *newpar2);
+// void recalibrateCsI(Float_t *oldpar1,Float_t *oldpar2,Float_t *newpar1,Float_t *newpar2);
+void recalibrateCsI(Float_t *newpar1,Float_t *newpar2);
 
 void zeroVars();
 void checkToF();
@@ -206,18 +207,9 @@ void selection_beam(Int_t nFile=0) {
   create_IDs();
   create_cuts();
 
-  // xOffset = -0.12;
-  // yOffset = 3.63;
-  
-  // xOffset = 0.5;
-  // yOffset = -1.3;
-  // zOffset = -3.;
-
   xOffset = 0;
   yOffset = -2.4;
   zOffset = 0.;
-  
-  // centOffset = 1.18;
 
   centOffset = 0;
 
@@ -229,7 +221,7 @@ void selection_beam(Int_t nFile=0) {
   f3HSi->SetDeltaEtab(300);
 
   readPar("ND_tac",NDpar,zeropar,32);
-  readPar("CsI_anh",pCsI_1,pCsI_2);
+  // readPar("empty16",pCsI_1,pCsI_2);
 
   readPar("CsI_0",pCsI_0_1,pCsI_0_2);
   readPar("CsI_1",pCsI_1_1,pCsI_1_2);
@@ -294,7 +286,7 @@ switch (nFile)
 
   TChain *ch = new TChain("tree");
   TString inPutFileName;
-  inPutFileName.Form("/media/ivan/data/exp1904/analysed/cal/h7_ct_%d_cal.root",nFile);
+  inPutFileName.Form("/mnt/data/exp1904/analysed/cal/siTriggers/h7_ect_%d_cal.root",nFile);
   ch->Add(inPutFileName.Data());
 
 
@@ -376,7 +368,7 @@ switch (nFile)
   readThickness();
 
   TString outPutFileName;
-  outPutFileName.Form("/media/ivan/data/exp1904/analysed/selected/noTargetSelection/h7_ct_%d_cut.root",nFile);
+  outPutFileName.Form("/mnt/data/exp1904/analysed/selected/siTriggers/h7_ect_%d_cut.root",nFile);
 
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
   // TFile *fw = new TFile("test.root", "RECREATE");
@@ -608,7 +600,7 @@ switch (nFile)
   yCent = 0.026;
 
   for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
-  // for(Int_t nentry=0;nentry<20000;nentry++) {     
+  // for(Int_t nentry=0;nentry<200000;nentry++) {     
     if(nentry%1000000==0) cout << "#ENTRY " << nentry << "#" << endl;
 
     ch->GetEntry(nentry);
@@ -621,7 +613,7 @@ switch (nFile)
     // if ( ((fXt-xCent)*(fXt-xCent) + (fYt-yCent)*(fYt-yCent))>9*9 ) continue;
     if ( ((fXt-xCent)*(fXt-xCent) + (fYt-yCent)*(fYt-yCent))>10*10 ) continue;
 
-    recalibrateCsI(pCsI_1,pCsI_2,pCsI_new_1,pCsI_new_2);
+    recalibrateCsI(pCsI_new_1,pCsI_new_2);
 
     fillND();
     fillSi();
@@ -646,8 +638,11 @@ switch (nFile)
     }
     
     timesSQ20();
+    // if (flag1==1) cout << "fine1" << endl;
     timesSQ1();
+    //if (flag1==1) cout << "fine2" << endl;
     timesVeto();
+    //if (flag1==1) cout << "fine3" << endl;
     DSD_Cselect();
 
     if (flagCent && multCsI>0){
@@ -890,7 +885,7 @@ Float_t GetPosition(Float_t wire, Float_t wireStep,
 
 void readThickness() {
   cout << "thickness of the first detector " << endl;
-  TFile *f1 = new TFile("/home/ivan/work/macro/h7_1904/parameters/maps/thicknessMap_calib_90_all_SSD_1m_1_large.root","READ");
+  TFile *f1 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/maps/thicknessMap_calib_90_all_SSD_1m_1_large.root","READ");
   if (f1->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -914,7 +909,7 @@ void readThickness() {
   delete f1;
 
   cout  << endl << "thickness of the SECOND detector " << endl;
-  TFile *f2 = new TFile("/home/ivan/work/macro/h7_1904/parameters/maps/thicknessMap_alltel_90_SSD_1m_2_large.root","READ");
+  TFile *f2 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/maps/thicknessMap_alltel_90_SSD_1m_2_large.root","READ");
   if (f2->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -939,7 +934,7 @@ void readThickness() {
 
 
   cout  << endl << "thickness of the THIRD detector " << endl;
-  TFile *f3 = new TFile("/home/ivan/work/macro/h7_1904/parameters/maps/thicknessMap_calib_90_all_SSD_1m_3_switch_large.root","READ");
+  TFile *f3 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/maps/thicknessMap_calib_90_all_SSD_1m_3_switch_large.root","READ");
   if (f3->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -964,7 +959,7 @@ void readThickness() {
 
 
   cout  << endl << "thickness of the FOURTH detector " << endl;
-  TFile *f4 = new TFile("/home/ivan/work/macro/h7_1904/parameters/maps/thicknessMap_calib_90_all_SSD_1m_4_large.root","READ");
+  TFile *f4 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/maps/thicknessMap_calib_90_all_SSD_1m_4_large.root","READ");
   if (f4->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -1373,10 +1368,6 @@ void helium6() {
 
 void neutronID() {
 
-  // for(Int_t i=0;i<32;i++) {
-  //   ND_tac[i] = ND_tac[i] + NDpar[i];
-  // }
-
   for (Int_t i=0;i<32;i++) {
     if (cutNeutron->IsInside(ND_amp[i] , ND_tac[i]) ) {
       neutron++;
@@ -1685,7 +1676,7 @@ void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16){
   TString line;
   ifstream myfile;
   Int_t count=-2;
-  TString file = "/home/ivan/work/macro/h7_1904/parameters/" + fileName + ".cal";
+  TString file = "/home/muzalevskii/work/macro/h7_1904/parameters/" + fileName + ".cal";
   myfile.open(file.Data());
   while (! myfile.eof() ){
     line.ReadLine(myfile);
@@ -1765,9 +1756,10 @@ void calcFrameCoordinates(Float_t* x, Float_t* y,Float_t distanance) {
   *y = fYt + (yCt-fYt)*distanance/323.;
 }
 
-void recalibrateCsI(Float_t *oldpar1,Float_t *oldpar2,Float_t *newpar1,Float_t *newpar2) {
+// void recalibrateCsI(Float_t *oldpar1,Float_t *oldpar2,Float_t *newpar1,Float_t *newpar2) {
+void recalibrateCsI(Float_t *newpar1,Float_t *newpar2) {
   for (Int_t i=0;i<16;i++) {
-    arCsI[i] = (arCsI[i]-*(oldpar1+i))/(*(oldpar2+i)); // into channels
+    // arCsI[i] = (arCsI[i]-*(oldpar1+i))/(*(oldpar2+i)); // into channels
     arCsI[i] = arCsI[i]*(*(newpar2+i)) + (*(newpar1+i)); // into MeVs
   }
   return;

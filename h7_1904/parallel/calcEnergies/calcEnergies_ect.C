@@ -123,6 +123,7 @@ Int_t nh3_1,nh3_2,nh3_3,nh3_4;
 Int_t nAlpha,nhe6;
 
 Float_t e_1,e_2,e_3,e_4;
+Float_t e_1_thin,e_2_thin,e_3_thin,e_4_thin;
 Float_t centE;
 
 Float_t th_he3_1,th_he3_2,th_he3_3,th_he3_4,th_h3;
@@ -151,17 +152,11 @@ void calcEnergies_ect(Int_t nRun=0) {
   yOffset = -2.4;
   zOffset = 0.;
 
-
-  // xOffset = 0.5;
-  // yOffset = -1.3;
-  // zOffset = 3.;
-
-
   TChain *ch = new TChain("tree");
 
   TString inPutFileName;
-  inPutFileName.Form("/mnt/data/exp1904/analysed/selected/emptyTarget/h7_ect_%d_cut.root",nRun);
-  // inPutFileName.Form("/mnt/data/exp1904/analysed/selected/emptyTarget/h7_ct_%d_cut.root",nRun);
+  inPutFileName.Form("/mnt/data/exp1904/analysed/selected/siTriggers/h7_ect_%d_cut.root",nRun);
+
   ch->Add(inPutFileName.Data());
   cout << ch->GetEntries() << " total number of Entries" << endl;
   //--------------------------------------------------------------------------------
@@ -351,8 +346,7 @@ void calcEnergies_ect(Int_t nRun=0) {
   ch->SetBranchAddress("tSSD_V4",&tSSD_V4);
 
   TString outPutFileName;
-  outPutFileName.Form("/mnt/data/exp1904/analysed/calcEnergies/emptyTarget/h7_ct_%d_reco.root",nRun);
-  // outPutFileName.Form("/mnt/data/exp1904/analysed/calcEnergies/emptyTarget/h7_ct_%d_reco.root",nRun);
+  outPutFileName.Form("/mnt/data/exp1904/analysed/calcEnergies/h7/h7_ect_%d_reco.root",nRun);
 
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
   TTree *tw = new TTree("tree", "data");
@@ -393,7 +387,6 @@ void calcEnergies_ect(Int_t nRun=0) {
   tw->Branch("fYt.",&fYt,"fYt/F"); 
   tw->Branch("fXf.",&fXf,"fXf/F");
   tw->Branch("fYf.",&fYf,"fYf/F");
-
 
   tw->Branch("frame1X",&frame1X,"frame1X/F");
   tw->Branch("frame2X",&frame2X,"frame2X/F");
@@ -519,6 +512,11 @@ void calcEnergies_ect(Int_t nRun=0) {
   tw->Branch("e_3.",&e_3,"e_3/F");
   tw->Branch("e_4.",&e_4,"e_4/F");
 
+  tw->Branch("e_1_thin.",&e_1_thin,"e_1_thin/F");
+  tw->Branch("e_2_thin.",&e_2_thin,"e_2_thin/F");
+  tw->Branch("e_3_thin.",&e_3_thin,"e_3_thin/F");
+  tw->Branch("e_4_thin.",&e_4_thin,"e_4_thin/F");
+
   tw->Branch("centE.",&centE,"centE/F");
 
   tw->Branch("SQ20_1",&SQ20_1,"SQ20_1[16]/F");
@@ -552,10 +550,8 @@ void calcEnergies_ect(Int_t nRun=0) {
   readThickness();
   setTables();
 
-  // for(Int_t nentry = 0; nentry<1000;nentry++) {
   for(Int_t nentry = 0; nentry<ch->GetEntries();nentry++) {
     if(nentry%100000==0) cout << "#ENTRY " << nentry << "#" << endl;
-    // cout << nentry << endl;
     ch->GetEntry(nentry);
 
     zeroVars(); 
@@ -579,8 +575,9 @@ void calcEnergies_ect(Int_t nRun=0) {
 }
 
 void readThickness() {
+
   cout << "thickness of the first detector " << endl;
-  TFile *f1 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_1_real.root","READ");
+  TFile *f1 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/maps/thicknessMap_calib_90_all_SSD_1m_1_large.root","READ");
   if (f1->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -604,7 +601,7 @@ void readThickness() {
   delete f1;
 
   cout  << endl << "thickness of the SECOND detector " << endl;
-  TFile *f2 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/thicknessMap_alltel_90_SSD_1m_2_real.root","READ");
+  TFile *f2 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/maps/thicknessMap_alltel_90_SSD_1m_2_large.root","READ");
   if (f2->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -629,7 +626,7 @@ void readThickness() {
 
 
   cout  << endl << "thickness of the THIRD detector " << endl;
-  TFile *f3 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_3_switch_new.root","READ");
+  TFile *f3 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/maps/thicknessMap_calib_90_all_SSD_1m_3_switch_large.root","READ");
   if (f3->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -654,7 +651,7 @@ void readThickness() {
 
 
   cout  << endl << "thickness of the FOURTH detector " << endl;
-  TFile *f4 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/thicknessMap_calib_90_all_SSD_1m_4_real.root","READ");
+  TFile *f4 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/maps/thicknessMap_calib_90_all_SSD_1m_4_large.root","READ");
   if (f4->IsZombie()) {
     for(Int_t i = 0; i<16; i++) {
       for(Int_t j = 0; j<16; j++) {
@@ -958,6 +955,12 @@ void zeroVars() {
   e_3 = 0;
   e_4 = 0;
 
+  e_1_thin = 0;
+  e_2_thin = 0;
+  e_3_thin = 0;
+  e_4_thin = 0;
+
+
   tritonX1 = -100;
   tritonY1 = -100;
   tritonX2 = -100;
@@ -978,21 +981,28 @@ void reconstruct3He() {
       // e_1 = f3HeSi->GetE0(a20_1_un,4./cos(th_he3_1)) + a1_1; // 1.5 micron - DL between thin and thick sensitive areas (DL thin about 1 mik)
       // e_1 = f3HeSi->GetE0(e_1,0.5/cos(th_he3_1)); //dl of thin det
       e_1 = a1_1;
+      // e_1_thin = a1_1;
 
       thickness = (fThickness1[n20_1][n1_1]*thCoeff1+1.87)/cos(th_he3_1); // 0.5 - DL of thick det
+      // thickness = (3.3)/cos(th_he3_1); // 0.5 - DL of thick det
       e_1 = f3HeSi->GetE0(e_1,thickness);
+
+      // e_1_thin = f3HeSi->GetE0(e_1_thin,(3.3)/cos(th_he3_1));
+      // e_1 += a20_1_un;
 
       // mylar
       thickness = 3.5/cos(th_he3_1);
       e_1 = f3HeMylar->GetE0(e_1,thickness);
-
+      // e_1_thin = f3HeMylar->GetE0(e_1_thin,thickness);
       // steel
       thickness = 6./cos(th_he3_1);
       e_1 = f3HeSteel->GetE0(e_1,thickness);
+      // e_1_thin = f3HeSteel->GetE0(e_1_thin,thickness);
 
       // deuterium target
       // thickness = 3000./cos(th_he3_1);
       // e_1 = f3HeTarget->GetE0(e_1,thickness);
+      // e_1_thin = f3HeTarget->GetE0(e_1_thin,thickness);
     }
 
     if(nhe3_2) {
@@ -1004,7 +1014,10 @@ void reconstruct3He() {
       e_2 = a1_2;
 
       thickness = (fThickness2[n20_2][n1_2]*thCoeff2+1.87)/cos(th_he3_2); // 0.5 - DL of thick det
+      // thickness = (3.5)/cos(th_he3_2); // 0.5 - DL of thick det
       e_2 = f3HeSi->GetE0(e_2,thickness);
+
+      e_2 += a20_2_un;
 
       // mylar
       thickness = 3.5/cos(th_he3_2);
@@ -1027,7 +1040,10 @@ void reconstruct3He() {
       e_3 = a1_3;
 
       thickness = (fThickness3[n20_3][n1_3]*thCoeff3+2.53)/cos(th_he3_3); // 0.5 - DL of thick det
+      // thickness = (4)/cos(th_he3_3); // 0.5 - DL of thick det
       e_3 = f3HeSi->GetE0(e_3,thickness);    
+
+      e_3 += a20_3_un;
 
       // mylar
       thickness = 3.5/cos(th_he3_3);
@@ -1050,7 +1066,10 @@ void reconstruct3He() {
       e_4 = a1_4;
 
       thickness = (fThickness4[n20_4][n1_4]*thCoeff4+2.27)/cos(th_he3_4); // 0.5 - DL of thick det
+      // thickness = (3.7)/cos(th_he3_4); // 0.5 - DL of thick det
       e_4 = f3HeSi->GetE0(e_4,thickness);   
+
+      e_4 += a20_4_un;
 
       // mylar
       thickness = 3.5/cos(th_he3_4);

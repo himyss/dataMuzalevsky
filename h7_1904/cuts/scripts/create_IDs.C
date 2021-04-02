@@ -19,7 +19,7 @@ TCutG *cut3h_side_2[16];
 TCutG *cut3h_side_3[16];
 TCutG *cut3h_side_4[16];
 
-TCutG *cutNeutron;
+TCutG *cutNeutron,*cutGamma;
 TCutG *cut6Li;
 
 TCutG *cut6he[16];
@@ -2874,6 +2874,27 @@ void create_neutron_cut() {
    cutNeutron->SetPoint(7,61.1222,1142.45);
    cutNeutron->SetPoint(8,66.1322,933.04);
    cutNeutron->SetPoint(9,61.1222,364.271);
+
+   cutGamma = new TCutG("cutGamma",14);
+   cutGamma->SetVarX("ND_amp");
+   cutGamma->SetVarY("ND_tac");
+   cutGamma->SetTitle("Graph");
+   cutGamma->SetFillColor(1);
+   cutGamma->SetPoint(0,279.747,142.558);
+   cutGamma->SetPoint(1,587.554,98.1113);
+   cutGamma->SetPoint(2,1124.76,38.8489);
+   cutGamma->SetPoint(3,2085.93,14.1563);
+   cutGamma->SetPoint(4,3032.58,-15.4748);
+   cutGamma->SetPoint(5,3865.98,9.21779);
+   cutGamma->SetPoint(6,4057.64,4.27926);
+   cutGamma->SetPoint(7,4066.35,-104.368);
+   cutGamma->SetPoint(8,2001.72,-94.4913);
+   cutGamma->SetPoint(9,831.476,-89.5528);
+   cutGamma->SetPoint(10,392.997,-148.815);
+   cutGamma->SetPoint(11,114.229,-168.569);
+   cutGamma->SetPoint(12,111.325,157.374);
+   cutGamma->SetPoint(13,279.747,142.558);
+
 }
 
 void create_6li_cut() {
@@ -8469,3 +8490,4 @@ void create_IDs(){
    create_6he_cut();
    create_6li_cut();
 }
+

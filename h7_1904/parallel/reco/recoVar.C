@@ -1,5 +1,5 @@
-#include "/home/ivan/work/macro/h7_1904/cuts/scripts/create_cuts.C"
-#include "/home/ivan/work/macro/h7_1904/cuts/scripts/create_IDs.C"
+#include "/home/muzalevskii/work/macro/h7_1904/cuts/scripts/create_cuts.C"
+#include "/home/muzalevskii/work/macro/h7_1904/cuts/scripts/create_IDs.C"
 
 void calculateBeam();
 void zerovars();
@@ -15,8 +15,11 @@ void reco6H_cent();
 void reco7He_side();
 void reco7He_cent();
 
-#include "/home/ivan/work/macro/h7_1904/parallel/reco/recoInput.h"
-#include "/home/ivan/work/macro/h7_1904/parallel/reco/recoOutput.h"
+void rotate7H();
+void rotate6H();
+
+#include "/home/muzalevskii/work/macro/h7_1904/parallel/reco/recoInput.h"
+#include "/home/muzalevskii/work/macro/h7_1904/parallel/reco/recoOutput.h"
 
 TVector3 pos_ND[48],pos_ND_target[48];
 Float_t ND_time_position[48],ND_position[48];
@@ -34,6 +37,7 @@ TVector3 bVect_6H,bVect_7He;
 // Lorentz Vectors
 TLorentzVector lv_d2;
 TLorentzVector lv_R;
+TLorentzVector lv_tmp;
 //------------------------------------------------------------------------------------------------
 // Int
 Int_t numND;
@@ -61,7 +65,7 @@ void recoVar(Int_t nRun=0) {
 
   TChain *ch = new TChain("tree");
   TString inPutFileName;
-  inPutFileName.Form("/media/ivan/data/exp1904/analysed/calcEnergies/h7_nov2020/h7_ct_%d_reco.root",nRun);
+  inPutFileName.Form("/mnt/data/exp1904/analysed/calcEnergies/h7/h7_ct_%d_reco.root",nRun);
   ch->Add(inPutFileName.Data());;
   cout << ch->GetEntries() << " total number of Entries" << endl;
   //--------------------------------------------------------------------------------
@@ -251,7 +255,8 @@ void recoVar(Int_t nRun=0) {
   ch->SetBranchAddress("nv_4.",&nv_4);
 
   TString outPutFileName;
-  outPutFileName.Form("/media/ivan/data/exp1904/analysed/reco/h7/h7_ct_%d_mm.root",nRun);
+  outPutFileName.Form("/mnt/data/exp1904/analysed/reco/h7/h7_ct_%d_mm.root",nRun);
+  // outPutFileName.Form("test_%d_new.root",nRun);
 
   TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
   TTree *tw = new TTree("tree", "data");
@@ -455,10 +460,21 @@ void recoVar(Int_t nRun=0) {
   tw->Branch("lv_h3_CMH6","TLorentzVector",&lv_h3_CMH6);
   tw->Branch("lv_h6","TLorentzVector",&lv_h6);
   tw->Branch("lv_h6_CMR","TLorentzVector",&lv_h6_CMR);
+  tw->Branch("lv_he4_CMH6","TLorentzVector",&lv_he4_CMH6);
+  tw->Branch("lv_he8_CMH6","TLorentzVector",&lv_he8_CMH6);
 
   tw->Branch("lv_he7","TLorentzVector",&lv_he7);
   tw->Branch("lv_he7_CMR","TLorentzVector",&lv_he7_CMR);
-  tw->Branch("lv_h3_CMHe7","TLorentzVector",&lv_h3_CMHe7);
+  tw->Branch("lv_he4_CMHe7","TLorentzVector",&lv_he4_CMHe7);
+
+  tw->Branch("lv_neutron","TLorentzVector",&lv_neutron);
+  tw->Branch("lv_neutron_CMH6","TLorentzVector",&lv_neutron_CMH6);
+
+  tw->Branch("lv_h3_CMH6_rot","TLorentzVector",&lv_h3_CMH6_rot);
+  tw->Branch("lv_h3_CMH7_rot","TLorentzVector",&lv_h3_CMH7_rot);
+
+  tw->Branch("lv_h6qFrame","TLorentzVector",&lv_h6qFrame);
+  tw->Branch("lv_h3qFrame","TLorentzVector",&lv_h3qFrame);
 
 // arrays 
   tw->Branch("ND_time_cal",&ND_time_cal,"ND_time_cal[32]/F");
@@ -480,7 +496,11 @@ void recoVar(Int_t nRun=0) {
   tw->Branch("angle_h3_h6",&angle_h3_h6,"angle_h3_h6/F");
   tw->Branch("angle_he4_he8",&angle_he4_he8,"angle_he4_he8/F");
   tw->Branch("angle_h3_he8",&angle_h3_he8,"angle_h3_he8/F");
+  tw->Branch("angle_h3_he8_CMH6",&angle_h3_he8_CMH6,"angle_h3_he8_CMH6/F");
   
+// Floats
+  tw->Branch("diafTime",&diafTime,"diafTime/F");
+  tw->Branch("targetTime",&targetTime,"targetTime/F");
 
   // input options
   lv_d2.SetXYZT(0.,0.,0.,1.875612);
@@ -490,7 +510,7 @@ void recoVar(Int_t nRun=0) {
   yCent = 0.026;
 
   for(Int_t nentry = 0; nentry<ch->GetEntries();nentry++) {
-  // for(Int_t nentry = 0; nentry<10000;nentry++) {
+  // for(Int_t nentry = 0; nentry<50000;nentry++) {
     if(nentry%1000000==0) cout << "#ENTRY " << nentry << "#" << endl;
 
     ch->GetEntry(nentry);
@@ -505,18 +525,21 @@ void recoVar(Int_t nRun=0) {
 
     neutronID();
 
-    if (nh3 && flagCent && ( ( nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4)  )) { // reco 7H
+    if (nh3 && flagCent && ( ( nhe3_1 && flag1) || (nhe3_2 && flag2) || (nhe3_3 && flag3) || (nhe3_4 && flag4) )) { // reco 7H
       reco7H();
+      rotate7H();
     }
 
-    if (nh3 && flagCent && ( (nhe4_1 && flag1) || (nhe4_2 && flag2) || (nhe4_3 && flag3) || (nhe4_4 && flag4) )) { //  reco 6H
+    if (nh3 && flagCent && ( (nhe4_1 && flag1) || (nhe4_2 && flag2) || (nhe4_3 && flag3) || (nhe4_4 && flag4) )) { //  reco 6H     
       reco6H_side();
-      reco7He_cent();
+      rotate6H();
+      // reco7He_cent();
     }
-    if (nAlpha && flagCent && ( (nh3_1 && flag1) || (nh3_2 && flag2) || (nh3_3 && flag3) || (nh3_4 && flag4) )) { //  reco 6H
-      reco6H_cent();
-      reco7He_side();
-    }
+    // if (nAlpha && flagCent && ( (nh3_1 && flag1) || (nh3_2 && flag2) || (nh3_3 && flag3) || (nh3_4 && flag4) )) { //  reco 6H
+    //   reco6H_cent();
+    //   rotate6H();
+    //   reco7He_side();
+    // }
 
 
     tw->Fill();
@@ -561,6 +584,7 @@ void calculateBeam() {
 }
 
 void zerovars() {
+  lv_tmp.SetXYZT(0,0,0,0);
 
   bVect_R.SetXYZ(0,0,0);
   bVect_7H.SetXYZ(0,0,0);
@@ -579,13 +603,21 @@ void zerovars() {
 
   lv_h3_CMH7.SetXYZT(0,0,0,0);
   lv_h3_CMH6.SetXYZT(0,0,0,0);
-  lv_h3_CMHe7.SetXYZT(0,0,0,0);
+  lv_he4_CMHe7.SetXYZT(0,0,0,0);
+  lv_he4_CMH6.SetXYZT(0,0,0,0);
+  lv_he8_CMH6.SetXYZT(0,0,0,0);
 
   lv_h7_CMR.SetXYZT(0,0,0,0);
   lv_h6_CMR.SetXYZT(0,0,0,0);
 
   lv_he7.SetXYZT(0,0,0,0);
   lv_he7_CMR.SetXYZT(0,0,0,0);
+
+  lv_neutron.SetXYZT(0,0,0,0);
+  lv_neutron_CMH6.SetXYZT(0,0,0,0);
+
+  lv_h3_CMH7_rot.SetXYZT(0,0,0,0);
+  lv_h3_CMH6_rot.SetXYZT(0,0,0,0);
 
   for(Int_t i=0;i<32;i++) {
     ND_time_cal[i] = -1;
@@ -610,7 +642,10 @@ void zerovars() {
   angle_h7_he8 = -1000;
   angle_h3_he8 = -1000;
   angle_he4_he8 = -1000;
+  angle_h3_he8_CMH6 = -1000;
 
+  angle_h3_beam_CMH6 = -1000;
+  angle_h3_q_CMH6 = -1000;
 }
 
 void neutronID() {
@@ -651,6 +686,15 @@ void neutronID() {
     }
 
   }
+  if (neutron==1) {
+
+    TVector3 dir;
+    dir.SetXYZ(pos_ND_target[numND].Px()-fXt,pos_ND_target[numND].Py()-fYt,pos_ND_target[numND].Pz());
+
+    momentum = sqrt(eNeutron*eNeutron + 2*eNeutron*mass);
+
+    lv_neutron.SetXYZM(momentum*TMath::Sin(dir.Theta())*TMath::Cos(dir.Phi()), momentum*TMath::Sin(dir.Theta())*TMath::Sin(dir.Phi()), momentum*TMath::Cos(dir.Theta()) ,mass);
+  }
 
 }
 
@@ -659,7 +703,7 @@ void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16){
   TString line;
   ifstream myfile;
   Int_t count=-2;
-  TString file = "/home/ivan/work/macro/h7_1904/parameters/" + fileName + ".cal";
+  TString file = "/home/muzalevskii/work/macro/h7_1904/parameters/" + fileName + ".cal";
   myfile.open(file.Data());
   while (! myfile.eof() ){
     line.ReadLine(myfile);
@@ -671,8 +715,8 @@ void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16){
     sscanf(line.Data(),"%g %g", par1+count,par2+count);
     count++;
   }
-  cout << endl << fileName.Data() << endl;
-  for(Int_t i=0;i<size;i++) cout << par1[i] << " " << par2[i] << endl;
+  //cout << endl << fileName.Data() << endl;
+  //for(Int_t i=0;i<size;i++) cout << par1[i] << " " << par2[i] << endl;
 
   return;
 }
@@ -847,6 +891,7 @@ void reco6H_side() {
   momentum = sqrt(energy*energy + 2*energy*mass);
 
   lv_he4.SetXYZM(momentum*TMath::Sin(theta)*TMath::Cos(phi), momentum*TMath::Sin(theta)*TMath::Sin(phi), momentum*TMath::Cos(theta) ,mass);
+  // if (lv_he4.
 
   lv_h6 = lv_he8 + lv_d2 + (-lv_he4);
   lv_h6_CMR = lv_h6;
@@ -866,8 +911,31 @@ void reco6H_side() {
   lv_h3_CMH6 = lv_h3;
   lv_h3_CMH6.Boost(-bVect_6H);
 
+  lv_he4_CMH6 = lv_he4;
+  lv_he4_CMH6.Boost(-bVect_6H);
+
+  lv_he8_CMH6 = lv_he8;
+  lv_he8_CMH6.Boost(-bVect_6H);  
+
   angle_he4_he8 = lv_he8.Angle(lv_he4.Vect())*TMath::RadToDeg();
   angle_h3_he8 = lv_he8.Angle(lv_h3.Vect())*TMath::RadToDeg();
+  angle_h3_he8_CMH6 = lv_he8_CMH6.Angle(lv_h3_CMH6.Vect())*TMath::RadToDeg();
+
+  lv_neutron_CMH6 = lv_neutron;
+  lv_neutron_CMH6.Boost(-bVect_6H);
+
+
+  // if (1000*(lv_h6.Mag()-3*0.939565-2.808920)>3 && 1000*(lv_h6.Mag()-3*0.939565-2.808920)<5) {
+  //   cout << endl;
+  //   cout << 1000*(lv_he8.T()-lv_he8.Mag()) << " " << lv_he8.Theta()*TMath::RadToDeg() << " " << lv_he8.Phi()*TMath::RadToDeg() << endl;
+  //   cout << 1000*(lv_he4.T()-lv_he4.Mag()) << " " << lv_he4.Theta()*TMath::RadToDeg() << " " << lv_he4.Phi()*TMath::RadToDeg() << endl;
+  //   cout << lv_he4.Angle(lv_he8.Vect())*TMath::RadToDeg() << " " << lv_h6_CMR.Theta()*TMath::RadToDeg() << endl;
+  //   cout << 1000*lv_h6.Mag() << " " << 1000*(lv_h6.Mag()-3*0.939565-2.808920) << endl;
+  // }
+
+  // cout << endl << 1000*(lv_he8.T()-lv_he8.Mag()) << " " << lv_he8.Theta()*TMath::RadToDeg() << " " << lv_he8.Phi()*TMath::RadToDeg() << endl;
+  // cout << 1000*(lv_he4.T()-lv_he4.Mag()) << " " << lv_he4.Theta()*TMath::RadToDeg() << " " << lv_he4.Phi()*TMath::RadToDeg() << endl;
+  // cout << lv_h6_CMR.Theta()*TMath::RadToDeg() << " " << lv_h6.Mag() << endl;
 
 }
 
@@ -927,6 +995,9 @@ void reco6H_cent() {
   angle_he4_he8 = lv_he8.Angle(lv_he4.Vect())*TMath::RadToDeg();
   angle_h3_he8 = lv_he8.Angle(lv_h3.Vect())*TMath::RadToDeg();
 
+  lv_neutron_CMH6 = lv_neutron;
+  lv_neutron_CMH6.Boost(-bVect_6H);
+
 }
 
 void reco7He_cent() {
@@ -976,8 +1047,8 @@ void reco7He_cent() {
 
   bVect_7He = lv_he7.BoostVector();
 
-  lv_h3_CMHe7 = lv_h3;
-  lv_h3_CMHe7.Boost(-bVect_7He);
+  lv_he4_CMHe7 = lv_he4;
+  lv_he4_CMHe7.Boost(-bVect_7He);
 
 }
 
@@ -1028,8 +1099,145 @@ void reco7He_side() {
 
   bVect_7He = lv_he7.BoostVector();
 
-  lv_h3_CMHe7 = lv_h3;
-  lv_h3_CMHe7.Boost(-bVect_7He);
+  lv_he4_CMHe7 = lv_he4;
+  lv_he4_CMHe7.Boost(-bVect_7He);
+}
+
+void rotate7H() {
+
+  TLorentzVector lv_h3aLab = lv_h3;
+  TLorentzVector lv_h7aLab = lv_h7;
+  TLorentzVector lv_dAlab = lv_d2;
+
+  TVector3 bVect_beam = lv_he8.BoostVector();
+
+  lv_h3aLab.Boost(-bVect_beam);
+  lv_h7aLab.Boost(-bVect_beam);
+  lv_dAlab.Boost(-bVect_beam);
+
+  TVector3 v_h7aLab = lv_h7aLab.Vect();
+  TVector3 v_dAlab = lv_dAlab.Vect();
+
+  TVector3 v_yMomenta(0,0,0);
+
+  TVector3 v_zMomenta = v_h7aLab;
+  v_zMomenta = v_h7aLab.Unit();
+
+  TVector3 v_xMomenta = v_dAlab;
+  v_xMomenta = v_zMomenta.Cross(v_xMomenta);
+  v_xMomenta = v_xMomenta.Unit();
+
+  v_yMomenta = v_zMomenta.Cross(v_xMomenta);
+  v_yMomenta = v_yMomenta.Unit();
+
+  TRotation rot_aLab;
+  rot_aLab.RotateAxes(v_xMomenta,v_yMomenta,v_zMomenta);
+  TLorentzRotation lrot_aLab(rot_aLab);
+
+  TLorentzVector lv_h3qFrame = lv_h3aLab;
+  lv_h3qFrame.Transform(lrot_aLab.Inverse());
+
+  TLorentzVector lv_h7qFrame = lv_h7aLab;
+  lv_h7qFrame.Transform(lrot_aLab.Inverse());
+
+  TVector3 bVect_frame7H = lv_h7qFrame.BoostVector();
+  lv_h3_CMH7_rot = lv_h3qFrame;
+  lv_h3_CMH7_rot.Boost(-bVect_frame7H);
+}
+
+
+void rotate6H() {
+
+  TLorentzVector lv_h3aLab = lv_h3;
+  TLorentzVector lv_h6aLab = lv_h6;
+  TLorentzVector lv_dAlab = lv_d2;
+
+  TVector3 bVect_beam = lv_he8.BoostVector();
+
+  lv_h3aLab.Boost(-bVect_beam);
+  lv_h6aLab.Boost(-bVect_beam);
+  lv_dAlab.Boost(-bVect_beam);
+
+  TVector3 v_h6aLab = lv_h6aLab.Vect();
+  TVector3 v_dAlab = lv_dAlab.Vect();
+
+  TVector3 v_yMomenta(0,0,0);
+
+  TVector3 v_zMomenta = v_h6aLab;
+  v_zMomenta = v_h6aLab.Unit();
+
+  TVector3 v_xMomenta = v_dAlab;
+  v_xMomenta = v_zMomenta.Cross(v_xMomenta);
+  v_xMomenta = v_xMomenta.Unit();
+
+  v_yMomenta = v_zMomenta.Cross(v_xMomenta);
+  v_yMomenta = v_yMomenta.Unit();
+
+  TRotation rot_aLab;
+  rot_aLab.RotateAxes(v_xMomenta,v_yMomenta,v_zMomenta);
+  TLorentzRotation lrot_aLab(rot_aLab);
+
+  lv_h3qFrame = lv_h3aLab;
+  lv_h3qFrame.Transform(lrot_aLab.Inverse());
+
+  lv_h6qFrame = lv_h6aLab;
+  lv_h6qFrame.Transform(lrot_aLab.Inverse());
+  // cout << lv_h6qFrame.Theta() << "  " << lv_h6qFrame.Phi()*TMath::RadToDeg() << " " << lv_dAlab.T()-lv_dAlab.Mag() << endl;
+
+  TVector3 bVect_frame6H = lv_h6qFrame.BoostVector();
+  lv_h3_CMH6_rot = lv_h3qFrame;
+  lv_h3_CMH6_rot.Boost(-bVect_frame6H);
 
 }
+
+
+// void rotate6H() {
+
+//   TLorentzVector lv_h3aLab = lv_h3;
+//   TLorentzVector lv_he4aLab = lv_h6;
+//   TLorentzVector lv_dAlab = lv_d2;
+
+//   TVector3 bVect_beam = lv_he8.BoostVector();
+
+//   lv_h3aLab.Boost(-bVect_beam);
+//   lv_h6aLab.Boost(-bVect_beam);
+//   lv_dAlab.Boost(-bVect_beam);
+
+//   TVector3 v_he4 = lv_he4.Vect();
+//   TVector3 v_he8 = lv_he8.Vect();
+
+//   TVector3 v_yMomenta(0,0,0);
+
+//   TVector3 v_zMomenta = v_he4;
+//   v_zMomenta = v_he4.Unit();
+
+//   TVector3 v_xMomenta = v_he8;
+//   v_xMomenta = v_zMomenta.Cross(v_xMomenta);
+//   v_xMomenta = v_xMomenta.Unit();
+
+//   v_yMomenta = v_zMomenta.Cross(v_xMomenta);
+//   v_yMomenta = v_yMomenta.Unit();
+
+//   TRotation rot_aLab;
+//   rot_aLab.RotateAxes(v_xMomenta,v_yMomenta,v_zMomenta);
+//   TLorentzRotation lrot_aLab(rot_aLab);
+
+//   TLorentzVector lv_h3qFrame = lv_h3aLab;
+//   lv_h3qFrame.Transform(lrot_aLab.Inverse());
+
+//   TLorentzVector lv_h6qFrame = lv_h6aLab;
+//   lv_h6qFrame.Transform(lrot_aLab.Inverse());
+//   // cout << lv_h6qFrame.Theta() << "  " << lv_h6qFrame.Phi()*TMath::RadToDeg() << " " << lv_dAlab.T()-lv_dAlab.Mag() << endl;
+
+//   TVector3 bVect_frame6H = lv_h6qFrame.BoostVector();
+//   lv_h3_CMH6_rot = lv_h3qFrame;
+//   lv_h3_CMH6_rot.Boost(-bVect_frame6H);
+
+//   // if (nh3 ) {
+//   //   cout << "Theta from rotation " << lv_h3_CMH6_rot.Theta() << " " << lv_h3_CMH6.Angle(lv_he4_CMH6.Vect()) << endl;
+//   //   // cout << he4
+//   //   // cout << "Theta from two vec's " << lv_h3_CMH6.Angle(lv_he4_CMH6.Vect()) << " " << lv_h3_CMH6.T()-lv_h3_CMH6.Mag() << " "
+//   //   //  << lv_he4_CMH6.T()-lv_he4_CMH6.Mag()  << " " << lv_he4.T()-lv_he4.Mag() << endl;
+//   // }
+// }
 
