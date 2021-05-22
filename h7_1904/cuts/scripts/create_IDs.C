@@ -2,7 +2,7 @@ TCutG *cut3h[16];
 TCutG *cut2h[16];
 TCutG *cut1h[16];
 TCutG *cut4he[16];
-TCutG *cut4he_1[16];
+// TCutG *cut4he_1[16];
 
 TCutG *cuthe3_1[16];
 TCutG *cuthe3_2[16];
@@ -19,10 +19,15 @@ TCutG *cut3h_side_2[16];
 TCutG *cut3h_side_3[16];
 TCutG *cut3h_side_4[16];
 
-TCutG *cutNeutron;
+TCutG *cutNeutron,*cutGamma;
 TCutG *cut6Li;
 
 TCutG *cut6he[16];
+
+TCutG *li_9_1_fv_clb[16],*li_9_2_fv_clb[16];
+
+TCutG *li_9_1_sv_clb[16],*li_9_2_sv_clb[16];
+
 
 // CT triton cuts
 void create_triton_cuts(){
@@ -2874,6 +2879,27 @@ void create_neutron_cut() {
    cutNeutron->SetPoint(7,61.1222,1142.45);
    cutNeutron->SetPoint(8,66.1322,933.04);
    cutNeutron->SetPoint(9,61.1222,364.271);
+
+   cutGamma = new TCutG("cutGamma",14);
+   cutGamma->SetVarX("ND_amp");
+   cutGamma->SetVarY("ND_tac");
+   cutGamma->SetTitle("Graph");
+   cutGamma->SetFillColor(1);
+   cutGamma->SetPoint(0,279.747,142.558);
+   cutGamma->SetPoint(1,587.554,98.1113);
+   cutGamma->SetPoint(2,1124.76,38.8489);
+   cutGamma->SetPoint(3,2085.93,14.1563);
+   cutGamma->SetPoint(4,3032.58,-15.4748);
+   cutGamma->SetPoint(5,3865.98,9.21779);
+   cutGamma->SetPoint(6,4057.64,4.27926);
+   cutGamma->SetPoint(7,4066.35,-104.368);
+   cutGamma->SetPoint(8,2001.72,-94.4913);
+   cutGamma->SetPoint(9,831.476,-89.5528);
+   cutGamma->SetPoint(10,392.997,-148.815);
+   cutGamma->SetPoint(11,114.229,-168.569);
+   cutGamma->SetPoint(12,111.325,157.374);
+   cutGamma->SetPoint(13,279.747,142.558);
+
 }
 
 void create_6li_cut() {
@@ -8019,7 +8045,7 @@ void create_alpha_cuts() {
    cut4he[0]->SetPoint(17,6.82327,53.8418);
    cut4he[0]->SetPoint(18,6.30733,51.0264);
 
-   cut4he_1[0] = new TCutG(*cut4he[0]);
+   // cut4he_1[0] = new TCutG(*cut4he[0]);
 
    cut4he[1] = new TCutG("cut4he_1",22);
    cut4he[1]->SetVarX("arCsI[1] ");
@@ -8049,7 +8075,7 @@ void create_alpha_cuts() {
    cut4he[1]->SetPoint(20,5.46392,50.9208);
    cut4he[1]->SetPoint(21,5.58561,54.6541);
 
-   cut4he_1[1] = new TCutG(*cut4he[1]);
+   // cut4he_1[1] = new TCutG(*cut4he[1]);
 
    cut4he[2] = new TCutG("cut4he_2",19);
    cut4he[2]->SetVarX("arCsI[2] ");
@@ -8076,7 +8102,7 @@ void create_alpha_cuts() {
    cut4he[2]->SetPoint(17,13.2468,46.0561);
    cut4he[2]->SetPoint(18,12.7935,49.5632);
 
-   cut4he_1[2] = new TCutG(*cut4he[2]);
+   // cut4he_1[2] = new TCutG(*cut4he[2]);
 
    cut4he[3] = new TCutG("cut4he_3",23);
    cut4he[3]->SetVarX("arCsI[3] ");
@@ -8107,7 +8133,7 @@ void create_alpha_cuts() {
    cut4he[3]->SetPoint(21,5.28979,55.0309);
    cut4he[3]->SetPoint(22,4.24387,55.1436);
 
-   cut4he_1[3] = new TCutG(*cut4he[3]);
+   // cut4he_1[3] = new TCutG(*cut4he[3]);
 
    cut4he[4] = new TCutG("cut4he_4",21);
    cut4he[4]->SetVarX("arCsI[4] ");
@@ -8136,7 +8162,7 @@ void create_alpha_cuts() {
    cut4he[4]->SetPoint(19,13.6551,49.5632);
    cut4he[4]->SetPoint(20,12.9938,46.5086);
 
-   cut4he_1[4] = new TCutG(*cut4he[4]);
+   // cut4he_1[4] = new TCutG(*cut4he[4]);
 
    cut4he[5] = new TCutG("cut4he_5",11);
    cut4he[5]->SetVarX("arCsI[5] ");
@@ -8155,19 +8181,19 @@ void create_alpha_cuts() {
    cut4he[5]->SetPoint(9,6.80949,50.1049);
    cut4he[5]->SetPoint(10,6.80949,53.6923);
 
-   cut4he_1[5] = new TCutG("cut4he_5_1",8);
-   cut4he_1[5]->SetVarX("arCsI[5] ");
-   cut4he_1[5]->SetVarY("X_C");
-   cut4he_1[5]->SetTitle("Graph");
-   cut4he_1[5]->SetFillColor(1);
-   cut4he_1[5]->SetPoint(0,100.458,23.1325);
-   cut4he_1[5]->SetPoint(1,111.493,21.8038);
-   cut4he_1[5]->SetPoint(2,128.045,19.545);
-   cut4he_1[5]->SetPoint(3,142.854,18.2163);
-   cut4he_1[5]->SetPoint(4,142.854,15.0275);
-   cut4he_1[5]->SetPoint(5,117.3,18.0835);
-   cut4he_1[5]->SetPoint(6,99.8774,20.2094);
-   cut4he_1[5]->SetPoint(7,100.458,23.1325);
+   // cut4he_1[5] = new TCutG("cut4he_5_1",8);
+   // cut4he_1[5]->SetVarX("arCsI[5] ");
+   // cut4he_1[5]->SetVarY("X_C");
+   // cut4he_1[5]->SetTitle("Graph");
+   // cut4he_1[5]->SetFillColor(1);
+   // cut4he_1[5]->SetPoint(0,100.458,23.1325);
+   // cut4he_1[5]->SetPoint(1,111.493,21.8038);
+   // cut4he_1[5]->SetPoint(2,128.045,19.545);
+   // cut4he_1[5]->SetPoint(3,142.854,18.2163);
+   // cut4he_1[5]->SetPoint(4,142.854,15.0275);
+   // cut4he_1[5]->SetPoint(5,117.3,18.0835);
+   // cut4he_1[5]->SetPoint(6,99.8774,20.2094);
+   // cut4he_1[5]->SetPoint(7,100.458,23.1325);
 
    cut4he[6] = new TCutG("cut4he_6",11);
    cut4he[6]->SetVarX("arCsI[6] ");
@@ -8186,20 +8212,20 @@ void create_alpha_cuts() {
    cut4he[6]->SetPoint(9,11.2162,47.2316);
    cut4he[6]->SetPoint(10,12.3081,51.2332);
 
-   cut4he_1[6] = new TCutG("cut4he_6_1",9);
-   cut4he_1[6]->SetVarX("arCsI[6] ");
-   cut4he_1[6]->SetVarY("X_C");
-   cut4he_1[6]->SetTitle("Graph");
-   cut4he_1[6]->SetFillColor(1);
-   cut4he_1[6]->SetPoint(0,106.218,23.0889);
-   cut4he_1[6]->SetPoint(1,120.726,21.6217);
-   cut4he_1[6]->SetPoint(2,139.913,19.6209);
-   cut4he_1[6]->SetPoint(3,153.953,18.954);
-   cut4he_1[6]->SetPoint(4,152.705,16.1529);
-   cut4he_1[6]->SetPoint(5,126.186,17.8869);
-   cut4he_1[6]->SetPoint(6,99.8223,20.688);
-   cut4he_1[6]->SetPoint(7,99.8223,20.688);
-   cut4he_1[6]->SetPoint(8,106.218,23.0889);
+   // cut4he_1[6] = new TCutG("cut4he_6_1",9);
+   // cut4he_1[6]->SetVarX("arCsI[6] ");
+   // cut4he_1[6]->SetVarY("X_C");
+   // cut4he_1[6]->SetTitle("Graph");
+   // cut4he_1[6]->SetFillColor(1);
+   // cut4he_1[6]->SetPoint(0,106.218,23.0889);
+   // cut4he_1[6]->SetPoint(1,120.726,21.6217);
+   // cut4he_1[6]->SetPoint(2,139.913,19.6209);
+   // cut4he_1[6]->SetPoint(3,153.953,18.954);
+   // cut4he_1[6]->SetPoint(4,152.705,16.1529);
+   // cut4he_1[6]->SetPoint(5,126.186,17.8869);
+   // cut4he_1[6]->SetPoint(6,99.8223,20.688);
+   // cut4he_1[6]->SetPoint(7,99.8223,20.688);
+   // cut4he_1[6]->SetPoint(8,106.218,23.0889);
 
    cut4he[7] = new TCutG("cut4he_7",15);
    cut4he[7]->SetVarX("arCsI[7] ");
@@ -8222,7 +8248,7 @@ void create_alpha_cuts() {
    cut4he[7]->SetPoint(13,29.9217,41.3255);
    cut4he[7]->SetPoint(14,28.8569,40.8322);
 
-   cut4he_1[7] = new TCutG(*cut4he[7]);
+   // cut4he_1[7] = new TCutG(*cut4he[7]);
 
    cut4he[8] = new TCutG("cut4he_8",22);
    cut4he[8]->SetVarX("arCsI[8] ");
@@ -8252,7 +8278,7 @@ void create_alpha_cuts() {
    cut4he[8]->SetPoint(20,3.17135,52.5914);
    cut4he[8]->SetPoint(21,3.04399,56.2176);
 
-   cut4he_1[8] = new TCutG(*cut4he[8]);
+   // cut4he_1[8] = new TCutG(*cut4he[8]);
 
    cut4he[9] = new TCutG("cut4he_9",12);
    cut4he[9]->SetVarX("arCsI[9] ");
@@ -8272,18 +8298,18 @@ void create_alpha_cuts() {
    cut4he[9]->SetPoint(10,4.48082,51.3322);
    cut4he[9]->SetPoint(11,5.04268,55.2079);
 
-   cut4he_1[9] = new TCutG("cut4he_9_1",7);
-   cut4he_1[9]->SetVarX("arCsI[9] ");
-   cut4he_1[9]->SetVarY("X_C");
-   cut4he_1[9]->SetTitle("Graph");
-   cut4he_1[9]->SetFillColor(1);
-   cut4he_1[9]->SetPoint(0,101.401,22.7327);
-   cut4he_1[9]->SetPoint(1,114.465,21.5299);
-   cut4he_1[9]->SetPoint(2,132.865,19.3916);
-   cut4he_1[9]->SetPoint(3,132.163,16.3178);
-   cut4he_1[9]->SetPoint(4,113.2,18.1888);
-   cut4he_1[9]->SetPoint(5,99.5754,19.7925);
-   cut4he_1[9]->SetPoint(6,101.401,22.7327);
+   // cut4he_1[9] = new TCutG("cut4he_9_1",7);
+   // cut4he_1[9]->SetVarX("arCsI[9] ");
+   // cut4he_1[9]->SetVarY("X_C");
+   // cut4he_1[9]->SetTitle("Graph");
+   // cut4he_1[9]->SetFillColor(1);
+   // cut4he_1[9]->SetPoint(0,101.401,22.7327);
+   // cut4he_1[9]->SetPoint(1,114.465,21.5299);
+   // cut4he_1[9]->SetPoint(2,132.865,19.3916);
+   // cut4he_1[9]->SetPoint(3,132.163,16.3178);
+   // cut4he_1[9]->SetPoint(4,113.2,18.1888);
+   // cut4he_1[9]->SetPoint(5,99.5754,19.7925);
+   // cut4he_1[9]->SetPoint(6,101.401,22.7327);
 
    cut4he[10] = new TCutG("cut4he_10",10);
    cut4he[10]->SetVarX("arCsI[10] ");
@@ -8301,19 +8327,19 @@ void create_alpha_cuts() {
    cut4he[10]->SetPoint(8,9.02222,48.4715);
    cut4he[10]->SetPoint(9,8.86082,53.3972);
 
-   cut4he_1[10] = new TCutG("cut4he_10_1",8);
-   cut4he_1[10]->SetVarX("arCsI[10] ");
-   cut4he_1[10]->SetVarY("X_C");
-   cut4he_1[10]->SetTitle("Graph");
-   cut4he_1[10]->SetFillColor(1);
-   cut4he_1[10]->SetPoint(0,106.023,22.6449);
-   cut4he_1[10]->SetPoint(1,120.226,21.0474);
-   cut4he_1[10]->SetPoint(2,137.657,19.3167);
-   cut4he_1[10]->SetPoint(3,150.569,18.2517);
-   cut4he_1[10]->SetPoint(4,150.408,15.3229);
-   cut4he_1[10]->SetPoint(5,119.903,17.9854);
-   cut4he_1[10]->SetPoint(6,98.276,20.648);
-   cut4he_1[10]->SetPoint(7,106.023,22.6449);
+   // cut4he_1[10] = new TCutG("cut4he_10_1",8);
+   // cut4he_1[10]->SetVarX("arCsI[10] ");
+   // cut4he_1[10]->SetVarY("X_C");
+   // cut4he_1[10]->SetTitle("Graph");
+   // cut4he_1[10]->SetFillColor(1);
+   // cut4he_1[10]->SetPoint(0,106.023,22.6449);
+   // cut4he_1[10]->SetPoint(1,120.226,21.0474);
+   // cut4he_1[10]->SetPoint(2,137.657,19.3167);
+   // cut4he_1[10]->SetPoint(3,150.569,18.2517);
+   // cut4he_1[10]->SetPoint(4,150.408,15.3229);
+   // cut4he_1[10]->SetPoint(5,119.903,17.9854);
+   // cut4he_1[10]->SetPoint(6,98.276,20.648);
+   // cut4he_1[10]->SetPoint(7,106.023,22.6449);
 
    cut4he[11] = new TCutG("cut4he_11",14);
    cut4he[11]->SetVarX("arCsI[11] ");
@@ -8335,7 +8361,7 @@ void create_alpha_cuts() {
    cut4he[11]->SetPoint(12,25.2466,39.0019);
    cut4he[11]->SetPoint(13,26.3139,41.8812);
 
-   cut4he_1[11] = new TCutG(*cut4he[11]);
+   // cut4he_1[11] = new TCutG(*cut4he[11]);
 
    cut4he[12] = new TCutG("cut4he_12",16);
    cut4he[12]->SetVarX("arCsI[12] ");
@@ -8359,7 +8385,7 @@ void create_alpha_cuts() {
    cut4he[12]->SetPoint(14,7.09366,55.545);
    cut4he[12]->SetPoint(15,5.74034,54.9677);
 
-   cut4he_1[12] = new TCutG(*cut4he[12]);
+   // cut4he_1[12] = new TCutG(*cut4he[12]);
 
    cut4he[13] = new TCutG("cut4he_13",20);
    cut4he[13]->SetVarX("arCsI[13] ");
@@ -8387,7 +8413,7 @@ void create_alpha_cuts() {
    cut4he[13]->SetPoint(18,9.66271,52.7775);
    cut4he[13]->SetPoint(19,8.49712,49.9735);
 
-   cut4he_1[13] = new TCutG(*cut4he[13]);
+   // cut4he_1[13] = new TCutG(*cut4he[13]);
 
    cut4he[14] = new TCutG("cut4he_14",17);
    cut4he[14]->SetVarX("arCsI[14] ");
@@ -8412,7 +8438,7 @@ void create_alpha_cuts() {
    cut4he[14]->SetPoint(15,8.48553,49.9137);
    cut4he[14]->SetPoint(16,8.07387,53.8224);
 
-   cut4he_1[14] = new TCutG(*cut4he[14]);
+   // cut4he_1[14] = new TCutG(*cut4he[14]);
 
    cut4he[15] = new TCutG("cut4he_15",17);
    cut4he[15]->SetVarX("arCsI[15] ");
@@ -8437,7 +8463,879 @@ void create_alpha_cuts() {
    cut4he[15]->SetPoint(15,14.1373,49.4779);
    cut4he[15]->SetPoint(16,12.3687,49.9546);
 
-   cut4he_1[15] = new TCutG(*cut4he[15]);
+   // cut4he_1[15] = new TCutG(*cut4he[15]);
+
+}
+
+void create_9li_clb_fv() {
+
+   // TCutG *li_9_1_fv_clb[16],*li_9_2_fv_clb[16];
+
+   li_9_1_fv_clb[0] = new TCutG("li_9_1_fv_clb_0",22);
+   li_9_1_fv_clb[0]->SetVarX("aCsI");
+   li_9_1_fv_clb[0]->SetVarY("X_C");
+   li_9_1_fv_clb[0]->SetTitle("Graph");
+   li_9_1_fv_clb[0]->SetFillColor(1);
+   li_9_1_fv_clb[0]->SetPoint(0,591.005,96.7548);
+   li_9_1_fv_clb[0]->SetPoint(1,852.485,86.4484);
+   li_9_1_fv_clb[0]->SetPoint(2,1113.97,77.9525);
+   li_9_1_fv_clb[0]->SetPoint(3,1372.47,71.6851);
+   li_9_1_fv_clb[0]->SetPoint(4,1681.5,64.9998);
+   li_9_1_fv_clb[0]->SetPoint(5,1963.78,59.5681);
+   li_9_1_fv_clb[0]->SetPoint(6,2361.94,53.7185);
+   li_9_1_fv_clb[0]->SetPoint(7,2789.82,48.7045);
+   li_9_1_fv_clb[0]->SetPoint(8,3190.95,44.8048);
+   li_9_1_fv_clb[0]->SetPoint(9,3675.28,40.6265);
+   li_9_1_fv_clb[0]->SetPoint(10,4106.13,37.9803);
+   li_9_1_fv_clb[0]->SetPoint(11,4097.22,40.3479);
+   li_9_1_fv_clb[0]->SetPoint(12,3687.17,42.8549);
+   li_9_1_fv_clb[0]->SetPoint(13,2959.18,49.8187);
+   li_9_1_fv_clb[0]->SetPoint(14,2513.48,54.5541);
+   li_9_1_fv_clb[0]->SetPoint(15,2192.57,58.8717);
+   li_9_1_fv_clb[0]->SetPoint(16,1925.15,63.8856);
+   li_9_1_fv_clb[0]->SetPoint(17,1595.33,70.0138);
+   li_9_1_fv_clb[0]->SetPoint(18,1256.59,78.3704);
+   li_9_1_fv_clb[0]->SetPoint(19,992.139,85.6127);
+   li_9_1_fv_clb[0]->SetPoint(20,686.089,97.1727);
+   li_9_1_fv_clb[0]->SetPoint(21,591.005,96.7548);
+
+   li_9_1_fv_clb[1] = new TCutG("li_9_1_fv_clb_1",9);
+   li_9_1_fv_clb[1]->SetVarX("aCsI");
+   li_9_1_fv_clb[1]->SetVarY("X_C");
+   li_9_1_fv_clb[1]->SetTitle("Graph");
+   li_9_1_fv_clb[1]->SetFillColor(1);
+   li_9_1_fv_clb[1]->SetPoint(0,632.604,95.9443);
+   li_9_1_fv_clb[1]->SetPoint(1,926.769,84.822);
+   li_9_1_fv_clb[1]->SetPoint(2,1345.73,73.0047);
+   li_9_1_fv_clb[1]->SetPoint(3,1479.44,70.5022);
+   li_9_1_fv_clb[1]->SetPoint(4,1583.44,71.7534);
+   li_9_1_fv_clb[1]->SetPoint(5,1292.25,78.7048);
+   li_9_1_fv_clb[1]->SetPoint(6,923.798,89.688);
+   li_9_1_fv_clb[1]->SetPoint(7,736.602,96.5004);
+   li_9_1_fv_clb[1]->SetPoint(8,632.604,95.9443);
+
+   li_9_2_fv_clb[1] = new TCutG("li_9_2_fv_clb_1",17);
+   li_9_2_fv_clb[1]->SetVarX("aCsI");
+   li_9_2_fv_clb[1]->SetVarY("X_C");
+   li_9_2_fv_clb[1]->SetTitle("Graph");
+   li_9_2_fv_clb[1]->SetFillColor(1);
+   li_9_2_fv_clb[1]->SetPoint(0,1844.92,66.6094);
+   li_9_2_fv_clb[1]->SetPoint(1,2109.37,62.0215);
+   li_9_2_fv_clb[1]->SetPoint(2,2293.6,59.3799);
+   li_9_2_fv_clb[1]->SetPoint(3,2516.45,56.1823);
+   li_9_2_fv_clb[1]->SetPoint(4,2822.5,53.1237);
+   li_9_2_fv_clb[1]->SetPoint(5,3134.49,50.2041);
+   li_9_2_fv_clb[1]->SetPoint(6,3443.52,47.4235);
+   li_9_2_fv_clb[1]->SetPoint(7,4022.93,43.1137);
+   li_9_2_fv_clb[1]->SetPoint(8,4022.93,39.3599);
+   li_9_2_fv_clb[1]->SetPoint(9,3696.08,41.4453);
+   li_9_2_fv_clb[1]->SetPoint(10,3081.01,46.7284);
+   li_9_2_fv_clb[1]->SetPoint(11,2757.13,49.926);
+   li_9_2_fv_clb[1]->SetPoint(12,2323.31,55.0701);
+   li_9_2_fv_clb[1]->SetPoint(13,2058.86,58.9629);
+   li_9_2_fv_clb[1]->SetPoint(14,1812.24,63.1337);
+   li_9_2_fv_clb[1]->SetPoint(15,1693.38,65.7752);
+   li_9_2_fv_clb[1]->SetPoint(16,1844.92,66.6094);
+
+   li_9_1_fv_clb[2] = new TCutG("li_9_1_fv_clb_2",13);
+   li_9_1_fv_clb[2]->SetVarX("aCsI");
+   li_9_1_fv_clb[2]->SetVarY("X_C");
+   li_9_1_fv_clb[2]->SetTitle("Graph");
+   li_9_1_fv_clb[2]->SetFillColor(1);
+   li_9_1_fv_clb[2]->SetPoint(0,569.033,95.5016);
+   li_9_1_fv_clb[2]->SetPoint(1,759.368,86.8666);
+   li_9_1_fv_clb[2]->SetPoint(2,930.012,81.0171);
+   li_9_1_fv_clb[2]->SetPoint(3,1103.94,75.4461);
+   li_9_1_fv_clb[2]->SetPoint(4,1228.64,71.825);
+   li_9_1_fv_clb[2]->SetPoint(5,1327.09,71.6857);
+   li_9_1_fv_clb[2]->SetPoint(6,1271.3,74.1926);
+   li_9_1_fv_clb[2]->SetPoint(7,1077.68,79.9029);
+   li_9_1_fv_clb[2]->SetPoint(8,877.506,87.1451);
+   li_9_1_fv_clb[2]->SetPoint(9,700.298,94.5267);
+   li_9_1_fv_clb[2]->SetPoint(10,621.539,97.3121);
+   li_9_1_fv_clb[2]->SetPoint(11,572.315,96.8943);
+   li_9_1_fv_clb[2]->SetPoint(12,569.033,95.5016);
+
+   li_9_2_fv_clb[2] = new TCutG("li_9_2_fv_clb_2",15);
+   li_9_2_fv_clb[2]->SetVarX("aCsI");
+   li_9_2_fv_clb[2]->SetVarY("X_C");
+   li_9_2_fv_clb[2]->SetTitle("Graph");
+   li_9_2_fv_clb[2]->SetFillColor(1);
+   li_9_2_fv_clb[2]->SetPoint(0,1452.7,64.4435);
+   li_9_2_fv_clb[2]->SetPoint(1,1660.7,60.2652);
+   li_9_2_fv_clb[2]->SetPoint(2,1916.23,55.5299);
+   li_9_2_fv_clb[2]->SetPoint(3,2174.74,51.491);
+   li_9_2_fv_clb[2]->SetPoint(4,2403.54,48.0091);
+   li_9_2_fv_clb[2]->SetPoint(5,2632.33,45.0844);
+   li_9_2_fv_clb[2]->SetPoint(6,2899.76,41.1847);
+   li_9_2_fv_clb[2]->SetPoint(7,3294.95,36.5887);
+   li_9_2_fv_clb[2]->SetPoint(8,3428.66,35.1959);
+   li_9_2_fv_clb[2]->SetPoint(9,3416.77,38.9563);
+   li_9_2_fv_clb[2]->SetPoint(10,3063.18,42.7167);
+   li_9_2_fv_clb[2]->SetPoint(11,2561.02,49.6804);
+   li_9_2_fv_clb[2]->SetPoint(12,2049.95,57.2012);
+   li_9_2_fv_clb[2]->SetPoint(13,1639.9,64.722);
+   li_9_2_fv_clb[2]->SetPoint(14,1452.7,64.4435);
+
+   li_9_2_fv_clb[3] = new TCutG("li_9_1_fv_clb_3",19);
+   li_9_2_fv_clb[3]->SetVarX("aCsI");
+   li_9_2_fv_clb[3]->SetVarY("X_C");
+   li_9_2_fv_clb[3]->SetTitle("Graph");
+   li_9_2_fv_clb[3]->SetFillColor(1);
+   li_9_2_fv_clb[3]->SetPoint(0,1163.01,83.2027);
+   li_9_2_fv_clb[3]->SetPoint(1,1448.51,76.2956);
+   li_9_2_fv_clb[3]->SetPoint(2,1740.57,70.584);
+   li_9_2_fv_clb[3]->SetPoint(3,1993.26,65.935);
+   li_9_2_fv_clb[3]->SetPoint(4,2265.63,61.6844);
+   li_9_2_fv_clb[3]->SetPoint(5,2508.47,58.7622);
+   li_9_2_fv_clb[3]->SetPoint(6,2938.37,53.5819);
+   li_9_2_fv_clb[3]->SetPoint(7,3210.74,50.394);
+   li_9_2_fv_clb[3]->SetPoint(8,3578.28,48.003);
+   li_9_2_fv_clb[3]->SetPoint(9,3880.19,45.3464);
+   li_9_2_fv_clb[3]->SetPoint(10,4096.78,43.8853);
+   li_9_2_fv_clb[3]->SetPoint(11,4096.78,47.0732);
+   li_9_2_fv_clb[3]->SetPoint(12,3627.51,50.5268);
+   li_9_2_fv_clb[3]->SetPoint(13,2967.9,56.6369);
+   li_9_2_fv_clb[3]->SetPoint(14,2564.26,61.4188);
+   li_9_2_fv_clb[3]->SetPoint(15,2003.1,69.2557);
+   li_9_2_fv_clb[3]->SetPoint(16,1543.68,77.6239);
+   li_9_2_fv_clb[3]->SetPoint(17,1297.55,83.2027);
+   li_9_2_fv_clb[3]->SetPoint(18,1163.01,83.2027);
+
+   li_9_1_fv_clb[4] = new TCutG("li_9_1_fv_clb_4",22);
+   li_9_1_fv_clb[4]->SetVarX("aCsI");
+   li_9_1_fv_clb[4]->SetVarY("X_C");
+   li_9_1_fv_clb[4]->SetTitle("Graph");
+   li_9_1_fv_clb[4]->SetFillColor(1);
+   li_9_1_fv_clb[4]->SetPoint(0,900.027,92.8507);
+   li_9_1_fv_clb[4]->SetPoint(1,1214.99,84.6314);
+   li_9_1_fv_clb[4]->SetPoint(2,1553.73,76.6906);
+   li_9_1_fv_clb[4]->SetPoint(3,1895.43,69.725);
+   li_9_1_fv_clb[4]->SetPoint(4,2171.77,64.8491);
+   li_9_1_fv_clb[4]->SetPoint(5,2451.08,60.5305);
+   li_9_1_fv_clb[4]->SetPoint(6,2739.3,57.3263);
+   li_9_1_fv_clb[4]->SetPoint(7,3015.64,54.5401);
+   li_9_1_fv_clb[4]->SetPoint(8,3437.57,50.0821);
+   li_9_1_fv_clb[4]->SetPoint(9,3782.25,47.7138);
+   li_9_1_fv_clb[4]->SetPoint(10,4091.28,45.0669);
+   li_9_1_fv_clb[4]->SetPoint(11,4079.39,49.1069);
+   li_9_1_fv_clb[4]->SetPoint(12,3485.12,53.2863);
+   li_9_1_fv_clb[4]->SetPoint(13,2971.07,58.1622);
+   li_9_1_fv_clb[4]->SetPoint(14,2667.99,61.6449);
+   li_9_1_fv_clb[4]->SetPoint(15,2225.26,67.0781);
+   li_9_1_fv_clb[4]->SetPoint(16,1892.46,73.0685);
+   li_9_1_fv_clb[4]->SetPoint(17,1503.21,81.1486);
+   li_9_1_fv_clb[4]->SetPoint(18,1140.71,90.4824);
+   li_9_1_fv_clb[4]->SetPoint(19,959.454,95.9156);
+   li_9_1_fv_clb[4]->SetPoint(20,837.628,94.5225);
+   li_9_1_fv_clb[4]->SetPoint(21,900.027,92.8507);  
+
+   li_9_1_fv_clb[5] = new TCutG("li_9_1_fv_clb_5",8);
+   li_9_1_fv_clb[5]->SetVarX("aCsI");
+   li_9_1_fv_clb[5]->SetVarY("X_C");
+   li_9_1_fv_clb[5]->SetTitle("Graph");
+   li_9_1_fv_clb[5]->SetFillColor(1);
+   li_9_1_fv_clb[5]->SetPoint(0,2662.05,55.8211);
+   li_9_1_fv_clb[5]->SetPoint(1,3043.58,50.265);
+   li_9_1_fv_clb[5]->SetPoint(2,3431.69,46.1336);
+   li_9_1_fv_clb[5]->SetPoint(3,4079.64,41.4323);
+   li_9_1_fv_clb[5]->SetPoint(4,4069.78,45.4213);
+   li_9_1_fv_clb[5]->SetPoint(5,3263.95,51.6897);
+   li_9_1_fv_clb[5]->SetPoint(6,2671.92,59.0978);
+   li_9_1_fv_clb[5]->SetPoint(7,2662.05,55.8211);
+
+   li_9_1_fv_clb[6] = new TCutG("li_9_1_fv_clb_6",17);
+   li_9_1_fv_clb[6]->SetVarX("aCsI");
+   li_9_1_fv_clb[6]->SetVarY("X_C");
+   li_9_1_fv_clb[6]->SetTitle("Graph");
+   li_9_1_fv_clb[6]->SetFillColor(1);
+   li_9_1_fv_clb[6]->SetPoint(0,1508.54,62.1856);
+   li_9_1_fv_clb[6]->SetPoint(1,1958.24,53.4314);
+   li_9_1_fv_clb[6]->SetPoint(2,2151.82,50.6523);
+   li_9_1_fv_clb[6]->SetPoint(3,2425.8,47.0395);
+   li_9_1_fv_clb[6]->SetPoint(4,2815.94,43.4266);
+   li_9_1_fv_clb[6]->SetPoint(5,3158.42,40.0917);
+   li_9_1_fv_clb[6]->SetPoint(6,3548.56,37.7295);
+   li_9_1_fv_clb[6]->SetPoint(7,3724.26,36.4789);
+   li_9_1_fv_clb[6]->SetPoint(8,3718.31,32.5881);
+   li_9_1_fv_clb[6]->SetPoint(9,3423.47,34.3945);
+   li_9_1_fv_clb[6]->SetPoint(10,3206.07,35.5062);
+   li_9_1_fv_clb[6]->SetPoint(11,2836.78,38.9801);
+   li_9_1_fv_clb[6]->SetPoint(12,2440.69,43.0098);
+   li_9_1_fv_clb[6]->SetPoint(13,2056.52,47.8732);
+   li_9_1_fv_clb[6]->SetPoint(14,1770.62,53.0145);
+   li_9_1_fv_clb[6]->SetPoint(15,1389.42,61.3518);
+   li_9_1_fv_clb[6]->SetPoint(16,1508.54,62.1856);
+
+   li_9_1_fv_clb[7] = new TCutG("li_9_1_fv_clb_7",21);
+   li_9_1_fv_clb[7]->SetVarX("aCsI");
+   li_9_1_fv_clb[7]->SetVarY("X_C");
+   li_9_1_fv_clb[7]->SetTitle("Graph");
+   li_9_1_fv_clb[7]->SetFillColor(1);
+   li_9_1_fv_clb[7]->SetPoint(0,615.107,96.4831);
+   li_9_1_fv_clb[7]->SetPoint(1,1038,82.5624);
+   li_9_1_fv_clb[7]->SetPoint(2,1389.42,73.6532);
+   li_9_1_fv_clb[7]->SetPoint(3,1609.8,68.9202);
+   li_9_1_fv_clb[7]->SetPoint(4,1868.9,63.7696);
+   li_9_1_fv_clb[7]->SetPoint(5,2181.6,58.7581);
+   li_9_1_fv_clb[7]->SetPoint(6,2482.39,55.278);
+   li_9_1_fv_clb[7]->SetPoint(7,2792.11,51.3802);
+   li_9_1_fv_clb[7]->SetPoint(8,3220.96,46.7864);
+   li_9_1_fv_clb[7]->SetPoint(9,3634.92,43.7239);
+   li_9_1_fv_clb[7]->SetPoint(10,4045.9,40.3829);
+   li_9_1_fv_clb[7]->SetPoint(11,4066.75,40.5221);
+   li_9_1_fv_clb[7]->SetPoint(12,4054.84,43.8631);
+   li_9_1_fv_clb[7]->SetPoint(13,3411.56,48.5961);
+   li_9_1_fv_clb[7]->SetPoint(14,2652.14,56.5308);
+   li_9_1_fv_clb[7]->SetPoint(15,2142.88,63.2127);
+   li_9_1_fv_clb[7]->SetPoint(16,1788.49,68.781);
+   li_9_1_fv_clb[7]->SetPoint(17,1404.31,77.551);
+   li_9_1_fv_clb[7]->SetPoint(18,1106.5,85.0681);
+   li_9_1_fv_clb[7]->SetPoint(19,722.32,96.7615);
+   li_9_1_fv_clb[7]->SetPoint(20,615.107,96.4831);
+
+   li_9_1_fv_clb[8] = new TCutG("li_9_1_fv_clb_8",20);
+   li_9_1_fv_clb[8]->SetVarX("aCsI");
+   li_9_1_fv_clb[8]->SetVarY("X_C");
+   li_9_1_fv_clb[8]->SetTitle("Graph");
+   li_9_1_fv_clb[8]->SetFillColor(1);
+   li_9_1_fv_clb[8]->SetPoint(0,498.961,97.1694);
+   li_9_1_fv_clb[8]->SetPoint(1,793.795,83.7955);
+   li_9_1_fv_clb[8]->SetPoint(2,1035.02,74.4616);
+   li_9_1_fv_clb[8]->SetPoint(3,1326.88,66.7995);
+   li_9_1_fv_clb[8]->SetPoint(4,1645.54,59.416);
+   li_9_1_fv_clb[8]->SetPoint(5,1973.13,53.8435);
+   li_9_1_fv_clb[8]->SetPoint(6,2253.07,49.3855);
+   li_9_1_fv_clb[8]->SetPoint(7,2738.51,44.231);
+   li_9_1_fv_clb[8]->SetPoint(8,3119.71,41.0268);
+   li_9_1_fv_clb[8]->SetPoint(9,3911.89,34.6185);
+   li_9_1_fv_clb[8]->SetPoint(10,3908.91,37.8227);
+   li_9_1_fv_clb[8]->SetPoint(11,3384.76,41.4448);
+   li_9_1_fv_clb[8]->SetPoint(12,2732.55,47.2959);
+   li_9_1_fv_clb[8]->SetPoint(13,2354.33,51.3359);
+   li_9_1_fv_clb[8]->SetPoint(14,1976.11,56.9084);
+   li_9_1_fv_clb[8]->SetPoint(15,1517.48,65.685);
+   li_9_1_fv_clb[8]->SetPoint(16,1186.91,73.6257);
+   li_9_1_fv_clb[8]->SetPoint(17,921.854,82.681);
+   li_9_1_fv_clb[8]->SetPoint(18,582.348,97.448);
+   li_9_1_fv_clb[8]->SetPoint(19,498.961,97.1694);
+
+   li_9_1_fv_clb[9] = new TCutG("li_9_1_fv_clb_9",11);
+   li_9_1_fv_clb[9]->SetVarX("aCsI");
+   li_9_1_fv_clb[9]->SetVarY("X_C");
+   li_9_1_fv_clb[9]->SetTitle("Graph");
+   li_9_1_fv_clb[9]->SetFillColor(1);
+   li_9_1_fv_clb[9]->SetPoint(0,2435.1,55.3098);
+   li_9_1_fv_clb[9]->SetPoint(1,2879.13,50.023);
+   li_9_1_fv_clb[9]->SetPoint(2,3290.26,46.2666);
+   li_9_1_fv_clb[9]->SetPoint(3,3658.64,42.6493);
+   li_9_1_fv_clb[9]->SetPoint(4,4069.78,39.0321);
+   li_9_1_fv_clb[9]->SetPoint(5,4099.38,39.0321);
+   li_9_1_fv_clb[9]->SetPoint(6,4086.22,42.3711);
+   li_9_1_fv_clb[9]->SetPoint(7,3448.14,47.6579);
+   li_9_1_fv_clb[9]->SetPoint(8,2806.77,54.1968);
+   li_9_1_fv_clb[9]->SetPoint(9,2464.7,58.0923);
+   li_9_1_fv_clb[9]->SetPoint(10,2435.1,55.3098);
+
+   li_9_1_fv_clb[10] = new TCutG("li_9_1_fv_clb_10",13);
+   li_9_1_fv_clb[10]->SetVarX("aCsI");
+   li_9_1_fv_clb[10]->SetVarY("X_C");
+   li_9_1_fv_clb[10]->SetTitle("Graph");
+   li_9_1_fv_clb[10]->SetFillColor(1);
+   li_9_1_fv_clb[10]->SetPoint(0,1191.83,60.8343);
+   li_9_1_fv_clb[10]->SetPoint(1,1691.77,49.4166);
+   li_9_1_fv_clb[10]->SetPoint(2,1997.66,44.6824);
+   li_9_1_fv_clb[10]->SetPoint(3,2372.61,39.6698);
+   li_9_1_fv_clb[10]->SetPoint(4,2530.49,37.7204);
+   li_9_1_fv_clb[10]->SetPoint(5,2875.84,34.3787);
+   li_9_1_fv_clb[10]->SetPoint(6,3333.02,32.1508);
+   li_9_1_fv_clb[10]->SetPoint(7,3310,37.3027);
+   li_9_1_fv_clb[10]->SetPoint(8,2553.51,42.5938);
+   li_9_1_fv_clb[10]->SetPoint(9,2076.59,48.1634);
+   li_9_1_fv_clb[10]->SetPoint(10,1573.36,56.5179);
+   li_9_1_fv_clb[10]->SetPoint(11,1316.82,62.2267);
+   li_9_1_fv_clb[10]->SetPoint(12,1191.83,60.8343);
+
+   li_9_1_fv_clb[11] = new TCutG("li_9_1_fv_clb_11",19);
+   li_9_1_fv_clb[11]->SetVarX("aCsI");
+   li_9_1_fv_clb[11]->SetVarY("X_C");
+   li_9_1_fv_clb[11]->SetTitle("Graph");
+   li_9_1_fv_clb[11]->SetFillColor(1);
+   li_9_1_fv_clb[11]->SetPoint(0,418.551,96.2058);
+   li_9_1_fv_clb[11]->SetPoint(1,764.013,79.3633);
+   li_9_1_fv_clb[11]->SetPoint(2,1002.26,70.3157);
+   li_9_1_fv_clb[11]->SetPoint(3,1210.73,63.9128);
+   li_9_1_fv_clb[11]->SetPoint(4,1472.81,57.649);
+   li_9_1_fv_clb[11]->SetPoint(5,1740.84,52.0813);
+   li_9_1_fv_clb[11]->SetPoint(6,2107.15,46.5135);
+   li_9_1_fv_clb[11]->SetPoint(7,2378.15,43.0336);
+   li_9_1_fv_clb[11]->SetPoint(8,2812.96,38.5794);
+   li_9_1_fv_clb[11]->SetPoint(9,2988.67,37.3267);
+   li_9_1_fv_clb[11]->SetPoint(10,2979.73,39.9714);
+   li_9_1_fv_clb[11]->SetPoint(11,2547.91,44.5648);
+   li_9_1_fv_clb[11]->SetPoint(12,2068.43,50.2717);
+   li_9_1_fv_clb[11]->SetPoint(13,1535.35,59.7369);
+   li_9_1_fv_clb[11]->SetPoint(14,1252.43,66.5575);
+   li_9_1_fv_clb[11]->SetPoint(15,912.919,77.693);
+   li_9_1_fv_clb[11]->SetPoint(16,695.517,87.5758);
+   li_9_1_fv_clb[11]->SetPoint(17,516.829,96.7626);
+   li_9_1_fv_clb[11]->SetPoint(18,418.551,96.2058);
+
+   li_9_1_fv_clb[12] = new TCutG("li_9_1_fv_clb_12",22);
+   li_9_1_fv_clb[12]->SetVarX("aCsI");
+   li_9_1_fv_clb[12]->SetVarY("X_C");
+   li_9_1_fv_clb[12]->SetTitle("Graph");
+   li_9_1_fv_clb[12]->SetFillColor(1);
+   li_9_1_fv_clb[12]->SetPoint(0,513.749,95.5007);
+   li_9_1_fv_clb[12]->SetPoint(1,891.113,80.4582);
+   li_9_1_fv_clb[12]->SetPoint(2,1110.99,73.6333);
+   li_9_1_fv_clb[12]->SetPoint(3,1295.22,67.9227);
+   li_9_1_fv_clb[12]->SetPoint(4,1538.87,62.63);
+   li_9_1_fv_clb[12]->SetPoint(5,1761.72,58.5908);
+   li_9_1_fv_clb[12]->SetPoint(6,2005.38,54.273);
+   li_9_1_fv_clb[12]->SetPoint(7,2272.8,50.6517);
+   li_9_1_fv_clb[12]->SetPoint(8,2492.68,47.5874);
+   li_9_1_fv_clb[12]->SetPoint(9,2748.22,44.6625);
+   li_9_1_fv_clb[12]->SetPoint(10,3060.21,41.7376);
+   li_9_1_fv_clb[12]->SetPoint(11,3381.12,39.3698);
+   li_9_1_fv_clb[12]->SetPoint(12,3514.83,38.8126);
+   li_9_1_fv_clb[12]->SetPoint(13,3511.86,41.5983);
+   li_9_1_fv_clb[12]->SetPoint(14,3036.44,44.9411);
+   li_9_1_fv_clb[12]->SetPoint(15,2364.91,52.4623);
+   li_9_1_fv_clb[12]->SetPoint(16,1782.52,61.655);
+   li_9_1_fv_clb[12]->SetPoint(17,1449.73,68.3406);
+   li_9_1_fv_clb[12]->SetPoint(18,1182.31,75.3047);
+   li_9_1_fv_clb[12]->SetPoint(19,923.798,83.8009);
+   li_9_1_fv_clb[12]->SetPoint(20,614.776,95.9185);
+   li_9_1_fv_clb[12]->SetPoint(21,513.749,95.5007);
+
+   li_9_1_fv_clb[13] = new TCutG("li_9_1_fv_clb_13",8);
+   li_9_1_fv_clb[13]->SetVarX("aCsI");
+   li_9_1_fv_clb[13]->SetVarY("X_C");
+   li_9_1_fv_clb[13]->SetTitle("Graph");
+   li_9_1_fv_clb[13]->SetFillColor(1);
+   li_9_1_fv_clb[13]->SetPoint(0,678.734,96.362);
+   li_9_1_fv_clb[13]->SetPoint(1,1099.74,82.1817);
+   li_9_1_fv_clb[13]->SetPoint(2,1573.36,71.06);
+   li_9_1_fv_clb[13]->SetPoint(3,1747.68,71.616);
+   li_9_1_fv_clb[13]->SetPoint(4,1445.09,78.1501);
+   li_9_1_fv_clb[13]->SetPoint(5,997.774,90.8011);
+   li_9_1_fv_clb[13]->SetPoint(6,787.273,96.918);
+   li_9_1_fv_clb[13]->SetPoint(7,678.734,96.362);
+
+   li_9_2_fv_clb[13] = new TCutG("li_9_2_fv_clb_13",14);
+   li_9_2_fv_clb[13]->SetVarX("aCsI");
+   li_9_2_fv_clb[13]->SetVarY("X_C");
+   li_9_2_fv_clb[13]->SetTitle("Graph");
+   li_9_2_fv_clb[13]->SetFillColor(1);
+   li_9_2_fv_clb[13]->SetPoint(0,1823.33,65.4991);
+   li_9_2_fv_clb[13]->SetPoint(1,2168.69,59.9382);
+   li_9_2_fv_clb[13]->SetPoint(2,2477.86,56.0456);
+   li_9_2_fv_clb[13]->SetPoint(3,2803.48,52.153);
+   li_9_2_fv_clb[13]->SetPoint(4,3069.9,49.5116);
+   li_9_2_fv_clb[13]->SetPoint(5,3398.8,46.036);
+   li_9_2_fv_clb[13]->SetPoint(6,3813.23,43.8117);
+   li_9_2_fv_clb[13]->SetPoint(7,4109.25,42.1434);
+   li_9_2_fv_clb[13]->SetPoint(8,4096.09,46.4531);
+   li_9_2_fv_clb[13]->SetPoint(9,3392.23,50.6237);
+   li_9_2_fv_clb[13]->SetPoint(10,2895.57,55.2115);
+   li_9_2_fv_clb[13]->SetPoint(11,2428.52,60.4943);
+   li_9_2_fv_clb[13]->SetPoint(12,1997.66,66.0552);
+   li_9_2_fv_clb[13]->SetPoint(13,1823.33,65.4991);
+
+   li_9_1_fv_clb[14] = new TCutG("li_9_1_fv_clb_14",17);
+   li_9_1_fv_clb[14]->SetVarX("aCsI");
+   li_9_1_fv_clb[14]->SetVarY("X_C");
+   li_9_1_fv_clb[14]->SetTitle("Graph");
+   li_9_1_fv_clb[14]->SetFillColor(1);
+   li_9_1_fv_clb[14]->SetPoint(0,612.129,96.2181);
+   li_9_1_fv_clb[14]->SetPoint(1,927.81,85.3706);
+   li_9_1_fv_clb[14]->SetPoint(2,1145.21,78.417);
+   li_9_1_fv_clb[14]->SetPoint(3,1392.4,72.437);
+   li_9_1_fv_clb[14]->SetPoint(4,1499.61,68.8211);
+   li_9_1_fv_clb[14]->SetPoint(5,1618.73,61.7285);
+   li_9_1_fv_clb[14]->SetPoint(6,1708.08,55.4703);
+   li_9_1_fv_clb[14]->SetPoint(7,1865.92,45.7354);
+   li_9_1_fv_clb[14]->SetPoint(8,1901.66,44.0665);
+   li_9_1_fv_clb[14]->SetPoint(9,1937.39,43.6493);
+   li_9_1_fv_clb[14]->SetPoint(10,1746.79,57.8345);
+   li_9_1_fv_clb[14]->SetPoint(11,1609.8,66.8741);
+   li_9_1_fv_clb[14]->SetPoint(12,1550.24,70.7681);
+   li_9_1_fv_clb[14]->SetPoint(13,1329.86,77.5826);
+   li_9_1_fv_clb[14]->SetPoint(14,1008.22,86.0659);
+   li_9_1_fv_clb[14]->SetPoint(15,716.363,96.079);
+   li_9_1_fv_clb[14]->SetPoint(16,612.129,96.2181);
+
+   li_9_1_fv_clb[15] = new TCutG("li_9_1_fv_clb_15",22);
+   li_9_1_fv_clb[15]->SetVarX("aCsI");
+   li_9_1_fv_clb[15]->SetVarY("X_C");
+   li_9_1_fv_clb[15]->SetTitle("Graph");
+   li_9_1_fv_clb[15]->SetFillColor(1);
+   li_9_1_fv_clb[15]->SetPoint(0,534.549,96.358);
+   li_9_1_fv_clb[15]->SetPoint(1,867.342,83.6141);
+   li_9_1_fv_clb[15]->SetPoint(2,1149.62,74.0562);
+   li_9_1_fv_clb[15]->SetPoint(3,1351.67,68.7462);
+   li_9_1_fv_clb[15]->SetPoint(4,1586.41,63.1708);
+   li_9_1_fv_clb[15]->SetPoint(5,1830.06,58.2591);
+   li_9_1_fv_clb[15]->SetPoint(6,2011.32,55.0731);
+   li_9_1_fv_clb[15]->SetPoint(7,2308.45,50.8251);
+   li_9_1_fv_clb[15]->SetPoint(8,2629.36,46.9754);
+   li_9_1_fv_clb[15]->SetPoint(9,2870.04,44.5859);
+   li_9_1_fv_clb[15]->SetPoint(10,3277.12,41.1344);
+   li_9_1_fv_clb[15]->SetPoint(11,3690.14,39.5414);
+   li_9_1_fv_clb[15]->SetPoint(12,3684.2,41.9309);
+   li_9_1_fv_clb[15]->SetPoint(13,3179.07,45.2496);
+   li_9_1_fv_clb[15]->SetPoint(14,2733.36,49.6304);
+   li_9_1_fv_clb[15]->SetPoint(15,2347.08,53.6128);
+   li_9_1_fv_clb[15]->SetPoint(16,1966.75,59.852);
+   li_9_1_fv_clb[15]->SetPoint(17,1625.04,65.8258);
+   li_9_1_fv_clb[15]->SetPoint(18,1298.19,74.4544);
+   li_9_1_fv_clb[15]->SetPoint(19,977.283,83.7469);
+   li_9_1_fv_clb[15]->SetPoint(20,623.69,97.42);
+   li_9_1_fv_clb[15]->SetPoint(21,534.549,96.358);
+
+}
+
+void create_9li_clb_sv() {
+
+   li_9_1_sv_clb[0] = new TCutG("li_9_1_sv_clb_0",25);
+   li_9_1_sv_clb[0]->SetVarX("aCsI");
+   li_9_1_sv_clb[0]->SetVarY("X_C");
+   li_9_1_sv_clb[0]->SetTitle("Graph");
+   li_9_1_sv_clb[0]->SetFillColor(1);
+   li_9_1_sv_clb[0]->SetPoint(0,507.807,96.333);
+   li_9_1_sv_clb[0]->SetPoint(1,745.516,85.1877);
+   li_9_1_sv_clb[0]->SetPoint(2,956.483,76.968);
+   li_9_1_sv_clb[0]->SetPoint(3,1194.19,69.7235);
+   li_9_1_sv_clb[0]->SetPoint(4,1425.96,63.4543);
+   li_9_1_sv_clb[0]->SetPoint(5,1642.87,59.1354);
+   li_9_1_sv_clb[0]->SetPoint(6,1862.75,55.0952);
+   li_9_1_sv_clb[0]->SetPoint(7,2073.72,51.6123);
+   li_9_1_sv_clb[0]->SetPoint(8,2320.34,47.7115);
+   li_9_1_sv_clb[0]->SetPoint(9,2575.88,44.9251);
+   li_9_1_sv_clb[0]->SetPoint(10,2852.22,42.2781);
+   li_9_1_sv_clb[0]->SetPoint(11,3143.41,39.6311);
+   li_9_1_sv_clb[0]->SetPoint(12,3514.83,36.7054);
+   li_9_1_sv_clb[0]->SetPoint(13,3978.36,35.7302);
+   li_9_1_sv_clb[0]->SetPoint(14,3966.48,38.7952);
+   li_9_1_sv_clb[0]->SetPoint(15,3404.89,41.0242);
+   li_9_1_sv_clb[0]->SetPoint(16,2959.18,44.5072);
+   li_9_1_sv_clb[0]->SetPoint(17,2549.14,48.408);
+   li_9_1_sv_clb[0]->SetPoint(18,2156.92,53.5628);
+   li_9_1_sv_clb[0]->SetPoint(19,1830.06,58.8568);
+   li_9_1_sv_clb[0]->SetPoint(20,1446.76,67.2158);
+   li_9_1_sv_clb[0]->SetPoint(21,1182.31,74.5996);
+   li_9_1_sv_clb[0]->SetPoint(22,926.769,82.9586);
+   li_9_1_sv_clb[0]->SetPoint(23,614.776,96.1937);
+   li_9_1_sv_clb[0]->SetPoint(24,507.807,96.333);
+
+   li_9_1_sv_clb[1] = new TCutG("li_9_1_sv_clb_1",8);
+   li_9_1_sv_clb[1]->SetVarX("aCsI");
+   li_9_1_sv_clb[1]->SetVarY("X_C");
+   li_9_1_sv_clb[1]->SetTitle("Graph");
+   li_9_1_sv_clb[1]->SetFillColor(1);
+   li_9_1_sv_clb[1]->SetPoint(0,507.895,95.6526);
+   li_9_1_sv_clb[1]->SetPoint(1,814.641,83.2674);
+   li_9_1_sv_clb[1]->SetPoint(2,1106.5,73.5262);
+   li_9_1_sv_clb[1]->SetPoint(3,1219.67,74.0828);
+   li_9_1_sv_clb[1]->SetPoint(4,999.285,81.3191);
+   li_9_1_sv_clb[1]->SetPoint(5,749.123,90.2254);
+   li_9_1_sv_clb[1]->SetPoint(6,600.217,96.0701);
+   li_9_1_sv_clb[1]->SetPoint(7,507.895,95.6526);
+
+   li_9_2_sv_clb[1] = new TCutG("li_9_2_sv_clb_1",18);
+   li_9_2_sv_clb[1]->SetVarX("aCsI");
+   li_9_2_sv_clb[1]->SetVarY("X_C");
+   li_9_2_sv_clb[1]->SetTitle("Graph");
+   li_9_2_sv_clb[1]->SetFillColor(1);
+   li_9_2_sv_clb[1]->SetPoint(0,1398.35,65.4549);
+   li_9_2_sv_clb[1]->SetPoint(1,1606.82,60.8626);
+   li_9_2_sv_clb[1]->SetPoint(2,1809.33,56.9661);
+   li_9_2_sv_clb[1]->SetPoint(3,2029.71,53.3479);
+   li_9_2_sv_clb[1]->SetPoint(4,2282.85,49.8689);
+   li_9_2_sv_clb[1]->SetPoint(5,2452.61,47.6424);
+   li_9_2_sv_clb[1]->SetPoint(6,2687.88,44.9983);
+   li_9_2_sv_clb[1]->SetPoint(7,2997.6,42.076);
+   li_9_2_sv_clb[1]->SetPoint(8,3429.43,38.7361);
+   li_9_2_sv_clb[1]->SetPoint(9,3888.06,35.5355);
+   li_9_2_sv_clb[1]->SetPoint(10,3888.06,39.2928);
+   li_9_2_sv_clb[1]->SetPoint(11,3349.02,42.6326);
+   li_9_2_sv_clb[1]->SetPoint(12,2979.73,45.555);
+   li_9_2_sv_clb[1]->SetPoint(13,2610.45,49.3123);
+   li_9_2_sv_clb[1]->SetPoint(14,2205.42,54.6004);
+   li_9_2_sv_clb[1]->SetPoint(15,1767.64,61.6975);
+   li_9_2_sv_clb[1]->SetPoint(16,1544.28,66.1507);
+   li_9_2_sv_clb[1]->SetPoint(17,1398.35,65.4549);
+
+   li_9_1_sv_clb[2] = new TCutG("li_9_1_sv_clb_2",11);
+   li_9_1_sv_clb[2]->SetVarX("aCsI");
+   li_9_1_sv_clb[2]->SetVarY("X_C");
+   li_9_1_sv_clb[2]->SetTitle("Graph");
+   li_9_1_sv_clb[2]->SetFillColor(1);
+   li_9_1_sv_clb[2]->SetPoint(0,439.398,95.6478);
+   li_9_1_sv_clb[2]->SetPoint(1,674.67,83.9545);
+   li_9_1_sv_clb[2]->SetPoint(2,945.679,73.0964);
+   li_9_1_sv_clb[2]->SetPoint(3,975.46,72.122);
+   li_9_1_sv_clb[2]->SetPoint(4,1043.96,72.9572);
+   li_9_1_sv_clb[2]->SetPoint(5,930.788,77.551);
+   li_9_1_sv_clb[2]->SetPoint(6,787.838,83.8153);
+   li_9_1_sv_clb[2]->SetPoint(7,644.889,91.054);
+   li_9_1_sv_clb[2]->SetPoint(8,528.742,96.6223);
+   li_9_1_sv_clb[2]->SetPoint(9,460.245,96.0654);
+   li_9_1_sv_clb[2]->SetPoint(10,439.398,95.6478);
+
+   li_9_2_sv_clb[2] = new TCutG("li_9_2_sv_clb_2",18);
+   li_9_2_sv_clb[2]->SetVarX("aCsI");
+   li_9_2_sv_clb[2]->SetVarY("X_C");
+   li_9_2_sv_clb[2]->SetTitle("Graph");
+   li_9_2_sv_clb[2]->SetFillColor(1);
+   li_9_2_sv_clb[2]->SetPoint(0,2771.27,37.042);
+   li_9_2_sv_clb[2]->SetPoint(1,2970.8,35.5107);
+   li_9_2_sv_clb[2]->SetPoint(2,2988.67,37.4596);
+   li_9_2_sv_clb[2]->SetPoint(3,2961.87,38.9909);
+   li_9_2_sv_clb[2]->SetPoint(4,2589.6,42.7494);
+   li_9_2_sv_clb[2]->SetPoint(5,2133.95,49.1529);
+   li_9_2_sv_clb[2]->SetPoint(6,1731.9,56.8093);
+   li_9_2_sv_clb[2]->SetPoint(7,1371.55,64.3264);
+   li_9_2_sv_clb[2]->SetPoint(8,1264.34,66.5537);
+   li_9_2_sv_clb[2]->SetPoint(9,1127.34,66.5537);
+   li_9_2_sv_clb[2]->SetPoint(10,1282.21,62.6559);
+   li_9_2_sv_clb[2]->SetPoint(11,1505.57,57.2269);
+   li_9_2_sv_clb[2]->SetPoint(12,1684.25,53.0507);
+   li_9_2_sv_clb[2]->SetPoint(13,1931.44,49.0137);
+   li_9_2_sv_clb[2]->SetPoint(14,2196.49,44.8375);
+   li_9_2_sv_clb[2]->SetPoint(15,2452.61,41.2182);
+   li_9_2_sv_clb[2]->SetPoint(16,2684.9,38.0164);
+   li_9_2_sv_clb[2]->SetPoint(17,2771.27,37.042);
+
+   li_9_1_sv_clb[3] = new TCutG("li_9_1_sv_clb_3",18);
+   li_9_1_sv_clb[3]->SetVarX("aCsI");
+   li_9_1_sv_clb[3]->SetVarY("X_C");
+   li_9_1_sv_clb[3]->SetTitle("Graph");
+   li_9_1_sv_clb[3]->SetFillColor(1);
+   li_9_1_sv_clb[3]->SetPoint(0,1066.42,81.7296);
+   li_9_1_sv_clb[3]->SetPoint(1,1286.3,75.1875);
+   li_9_1_sv_clb[3]->SetPoint(2,1580.47,67.9494);
+   li_9_1_sv_clb[3]->SetPoint(3,1856.81,62.5208);
+   li_9_1_sv_clb[3]->SetPoint(4,2070.75,59.3194);
+   li_9_1_sv_clb[3]->SetPoint(5,2364.91,54.4476);
+   li_9_1_sv_clb[3]->SetPoint(6,2751.19,50.1325);
+   li_9_1_sv_clb[3]->SetPoint(7,3152.32,45.6783);
+   li_9_1_sv_clb[3]->SetPoint(8,3523.74,43.0336);
+   li_9_1_sv_clb[3]->SetPoint(9,4022.93,39.1362);
+   li_9_1_sv_clb[3]->SetPoint(10,4011.05,42.3377);
+   li_9_1_sv_clb[3]->SetPoint(11,3333.58,47.3487);
+   li_9_1_sv_clb[3]->SetPoint(12,2682.85,54.3084);
+   li_9_1_sv_clb[3]->SetPoint(13,2269.83,59.7369);
+   li_9_1_sv_clb[3]->SetPoint(14,1803.32,67.5318);
+   li_9_1_sv_clb[3]->SetPoint(15,1458.64,74.3523);
+   li_9_1_sv_clb[3]->SetPoint(16,1158.54,82.1472);
+   li_9_1_sv_clb[3]->SetPoint(17,1066.42,81.7296);
+
+   li_9_1_sv_clb[4] = new TCutG("li_9_1_sv_clb_4",25);
+   li_9_1_sv_clb[4]->SetVarX("aCsI");
+   li_9_1_sv_clb[4]->SetVarY("X_C");
+   li_9_1_sv_clb[4]->SetTitle("Graph");
+   li_9_1_sv_clb[4]->SetFillColor(1);
+   li_9_1_sv_clb[4]->SetPoint(0,588.304,94.5219);
+   li_9_1_sv_clb[4]->SetPoint(1,954.613,82.9586);
+   li_9_1_sv_clb[4]->SetPoint(2,1180.95,76.2714);
+   li_9_1_sv_clb[4]->SetPoint(3,1368.57,71.256);
+   li_9_1_sv_clb[4]->SetPoint(4,1562.15,66.6585);
+   li_9_1_sv_clb[4]->SetPoint(5,1767.64,62.6184);
+   li_9_1_sv_clb[4]->SetPoint(6,1979.09,58.7175);
+   li_9_1_sv_clb[4]->SetPoint(7,2241.16,54.9559);
+   li_9_1_sv_clb[4]->SetPoint(8,2494.3,51.891);
+   li_9_1_sv_clb[4]->SetPoint(9,2708.73,49.1046);
+   li_9_1_sv_clb[4]->SetPoint(10,3054.19,45.3431);
+   li_9_1_sv_clb[4]->SetPoint(11,3405.61,42.8354);
+   li_9_1_sv_clb[4]->SetPoint(12,3792.76,39.7704);
+   li_9_1_sv_clb[4]->SetPoint(13,4099.51,37.9593);
+   li_9_1_sv_clb[4]->SetPoint(14,4087.6,40.7456);
+   li_9_1_sv_clb[4]->SetPoint(15,3679.59,43.2533);
+   li_9_1_sv_clb[4]->SetPoint(16,3089.93,48.2687);
+   li_9_1_sv_clb[4]->SetPoint(17,2655.12,53.0055);
+   li_9_1_sv_clb[4]->SetPoint(18,2196.49,59.1354);
+   li_9_1_sv_clb[4]->SetPoint(19,1889.74,64.0115);
+   li_9_1_sv_clb[4]->SetPoint(20,1538.32,70.6987);
+   li_9_1_sv_clb[4]->SetPoint(21,1166.06,80.033);
+   li_9_1_sv_clb[4]->SetPoint(22,856.335,90.0638);
+   li_9_1_sv_clb[4]->SetPoint(23,695.517,94.9399);
+   li_9_1_sv_clb[4]->SetPoint(24,588.304,94.5219);
+
+   li_9_1_sv_clb[5] = new TCutG("li_9_1_sv_clb_5",11);
+   li_9_1_sv_clb[5]->SetVarX("aCsI");
+   li_9_1_sv_clb[5]->SetVarY("X_C");
+   li_9_1_sv_clb[5]->SetTitle("Graph");
+   li_9_1_sv_clb[5]->SetFillColor(1);
+   li_9_1_sv_clb[5]->SetPoint(0,2303.7,49.6991);
+   li_9_1_sv_clb[5]->SetPoint(1,2917.19,41.6237);
+   li_9_1_sv_clb[5]->SetPoint(2,3399.65,36.7506);
+   li_9_1_sv_clb[5]->SetPoint(3,4051.86,33.2698);
+   li_9_1_sv_clb[5]->SetPoint(4,4090.57,35.3583);
+   li_9_1_sv_clb[5]->SetPoint(5,4066.75,37.3075);
+   li_9_1_sv_clb[5]->SetPoint(6,4031.01,38.0037);
+   li_9_1_sv_clb[5]->SetPoint(7,3602.16,39.396);
+   li_9_1_sv_clb[5]->SetPoint(8,2944,45.6614);
+   li_9_1_sv_clb[5]->SetPoint(9,2360.29,52.9014);
+   li_9_1_sv_clb[5]->SetPoint(10,2303.7,49.6991);
+
+   li_9_1_sv_clb[6] = new TCutG("li_9_1_sv_clb_6",16);
+   li_9_1_sv_clb[6]->SetVarX("aCsI");
+   li_9_1_sv_clb[6]->SetVarY("X_C");
+   li_9_1_sv_clb[6]->SetTitle("Graph");
+   li_9_1_sv_clb[6]->SetFillColor(1);
+   li_9_1_sv_clb[6]->SetPoint(0,1663.41,46.6937);
+   li_9_1_sv_clb[6]->SetPoint(1,1922.5,42.3814);
+   li_9_1_sv_clb[6]->SetPoint(2,2214.36,38.4865);
+   li_9_1_sv_clb[6]->SetPoint(3,2473.45,35.5653);
+   li_9_1_sv_clb[6]->SetPoint(4,2777.22,33.757);
+   li_9_1_sv_clb[6]->SetPoint(5,2902.3,33.757);
+   li_9_1_sv_clb[6]->SetPoint(6,2893.37,37.3737);
+   li_9_1_sv_clb[6]->SetPoint(7,2464.52,40.1558);
+   li_9_1_sv_clb[6]->SetPoint(8,1919.52,45.9982);
+   li_9_1_sv_clb[6]->SetPoint(9,1472.81,53.5098);
+   li_9_1_sv_clb[6]->SetPoint(10,1100.54,63.2471);
+   li_9_1_sv_clb[6]->SetPoint(11,1032.04,62.5516);
+   li_9_1_sv_clb[6]->SetPoint(12,1163.08,58.3784);
+   li_9_1_sv_clb[6]->SetPoint(13,1416.22,51.8405);
+   li_9_1_sv_clb[6]->SetPoint(14,1583,48.2238);
+   li_9_1_sv_clb[6]->SetPoint(15,1663.41,46.6937);
+
+   li_9_1_sv_clb[7] = new TCutG("li_9_1_sv_clb_7",23);
+   li_9_1_sv_clb[7]->SetVarX("aCsI");
+   li_9_1_sv_clb[7]->SetVarY("X_C");
+   li_9_1_sv_clb[7]->SetTitle("Graph");
+   li_9_1_sv_clb[7]->SetFillColor(1);
+   li_9_1_sv_clb[7]->SetPoint(0,484.07,96.0673);
+   li_9_1_sv_clb[7]->SetPoint(1,662.757,87.5768);
+   li_9_1_sv_clb[7]->SetPoint(2,802.729,82.1484);
+   li_9_1_sv_clb[7]->SetPoint(3,960.569,76.3025);
+   li_9_1_sv_clb[7]->SetPoint(4,1142.23,71.1525);
+   li_9_1_sv_clb[7]->SetPoint(5,1341.77,65.585);
+   li_9_1_sv_clb[7]->SetPoint(6,1621.71,59.5999);
+   li_9_1_sv_clb[7]->SetPoint(7,1886.76,54.7283);
+   li_9_1_sv_clb[7]->SetPoint(8,2211.38,49.7175);
+   li_9_1_sv_clb[7]->SetPoint(9,2664.05,44.5676);
+   li_9_1_sv_clb[7]->SetPoint(10,3036.32,40.8095);
+   li_9_1_sv_clb[7]->SetPoint(11,3512.82,36.773);
+   li_9_1_sv_clb[7]->SetPoint(12,3804.67,35.3811);
+   li_9_1_sv_clb[7]->SetPoint(13,3792.76,38.1649);
+   li_9_1_sv_clb[7]->SetPoint(14,3194.16,42.6189);
+   li_9_1_sv_clb[7]->SetPoint(15,2756.38,47.2122);
+   li_9_1_sv_clb[7]->SetPoint(16,2312.64,52.2229);
+   li_9_1_sv_clb[7]->SetPoint(17,1865.92,58.7648);
+   li_9_1_sv_clb[7]->SetPoint(18,1505.57,66.0026);
+   li_9_1_sv_clb[7]->SetPoint(19,1145.21,75.0498);
+   li_9_1_sv_clb[7]->SetPoint(20,832.51,85.4889);
+   li_9_1_sv_clb[7]->SetPoint(21,576.392,96.7632);
+   li_9_1_sv_clb[7]->SetPoint(22,484.07,96.0673);
+
+   li_9_1_sv_clb[8] = new TCutG("li_9_1_sv_clb_8",27);
+   li_9_1_sv_clb[8]->SetVarX("aCsI");
+   li_9_1_sv_clb[8]->SetVarY("X_C");
+   li_9_1_sv_clb[8]->SetTitle("Graph");
+   li_9_1_sv_clb[8]->SetFillColor(1);
+   li_9_1_sv_clb[8]->SetPoint(0,418.551,95.7758);
+   li_9_1_sv_clb[8]->SetPoint(1,719.342,80.7295);
+   li_9_1_sv_clb[8]->SetPoint(2,868.248,75.2962);
+   li_9_1_sv_clb[8]->SetPoint(3,1040.98,68.7483);
+   li_9_1_sv_clb[8]->SetPoint(4,1252.43,62.6184);
+   li_9_1_sv_clb[8]->SetPoint(5,1377.51,59.4141);
+   li_9_1_sv_clb[8]->SetPoint(6,1559.17,55.0952);
+   li_9_1_sv_clb[8]->SetPoint(7,1776.57,51.0551);
+   li_9_1_sv_clb[8]->SetPoint(8,1886.76,49.3833);
+   li_9_1_sv_clb[8]->SetPoint(9,2116.08,46.0397);
+   li_9_1_sv_clb[8]->SetPoint(10,2357.31,43.114);
+   li_9_1_sv_clb[8]->SetPoint(11,2553.86,40.8849);
+   li_9_1_sv_clb[8]->SetPoint(12,2890.39,37.5413);
+   li_9_1_sv_clb[8]->SetPoint(13,3170.33,35.8695);
+   li_9_1_sv_clb[8]->SetPoint(14,3378.8,34.337);
+   li_9_1_sv_clb[8]->SetPoint(15,3545.58,34.0584);
+   li_9_1_sv_clb[8]->SetPoint(16,3530.69,36.5661);
+   li_9_1_sv_clb[8]->SetPoint(17,2908.26,40.6063);
+   li_9_1_sv_clb[8]->SetPoint(18,2369.22,46.3183);
+   li_9_1_sv_clb[8]->SetPoint(19,2068.43,49.8012);
+   li_9_1_sv_clb[8]->SetPoint(20,1684.25,56.3491);
+   li_9_1_sv_clb[8]->SetPoint(21,1371.55,63.3149);
+   li_9_1_sv_clb[8]->SetPoint(22,1124.37,70.2808);
+   li_9_1_sv_clb[8]->SetPoint(23,906.963,77.8039);
+   li_9_1_sv_clb[8]->SetPoint(24,731.254,84.7697);
+   li_9_1_sv_clb[8]->SetPoint(25,501.939,96.0544);
+   li_9_1_sv_clb[8]->SetPoint(26,418.551,95.7758);
+
+   li_9_1_sv_clb[9] = new TCutG("li_9_1_sv_clb_9",8);
+   li_9_1_sv_clb[9]->SetVarX("aCsI");
+   li_9_1_sv_clb[9]->SetVarY("X_C");
+   li_9_1_sv_clb[9]->SetTitle("Graph");
+   li_9_1_sv_clb[9]->SetFillColor(1);
+   li_9_1_sv_clb[9]->SetPoint(0,2485.37,52.1771);
+   li_9_1_sv_clb[9]->SetPoint(1,2932.08,47.441);
+   li_9_1_sv_clb[9]->SetPoint(2,3486.02,42.9834);
+   li_9_1_sv_clb[9]->SetPoint(3,4075.68,38.108);
+   li_9_1_sv_clb[9]->SetPoint(4,4072.7,34.2076);
+   li_9_1_sv_clb[9]->SetPoint(5,3268.61,40.8939);
+   li_9_1_sv_clb[9]->SetPoint(6,2470.48,49.809);
+   li_9_1_sv_clb[9]->SetPoint(7,2485.37,52.1771);
+
+   li_9_1_sv_clb[10] = new TCutG("li_9_1_sv_clb_10",12);
+   li_9_1_sv_clb[10]->SetVarX("aCsI");
+   li_9_1_sv_clb[10]->SetVarY("X_C");
+   li_9_1_sv_clb[10]->SetTitle("Graph");
+   li_9_1_sv_clb[10]->SetFillColor(1);
+   li_9_1_sv_clb[10]->SetPoint(0,1508.54,50.786);
+   li_9_1_sv_clb[10]->SetPoint(1,1913.57,43.2818);
+   li_9_1_sv_clb[10]->SetPoint(2,2196.49,39.8076);
+   li_9_1_sv_clb[10]->SetPoint(3,2473.45,36.7503);
+   li_9_1_sv_clb[10]->SetPoint(4,2553.86,35.4996);
+   li_9_1_sv_clb[10]->SetPoint(5,2550.89,34.11);
+   li_9_1_sv_clb[10]->SetPoint(6,2518.13,33.1372);
+   li_9_1_sv_clb[10]->SetPoint(7,1925.48,39.8076);
+   li_9_1_sv_clb[10]->SetPoint(8,1478.76,48.2846);
+   li_9_1_sv_clb[10]->SetPoint(9,1392.4,50.3691);
+   li_9_1_sv_clb[10]->SetPoint(10,1437.07,52.1757);
+   li_9_1_sv_clb[10]->SetPoint(11,1508.54,50.786);
+
+   li_9_1_sv_clb[11] = new TCutG("li_9_1_sv_clb_11",24);
+   li_9_1_sv_clb[11]->SetVarX("aCsI");
+   li_9_1_sv_clb[11]->SetVarY("X_C");
+   li_9_1_sv_clb[11]->SetTitle("Graph");
+   li_9_1_sv_clb[11]->SetFillColor(1);
+   li_9_1_sv_clb[11]->SetPoint(0,361.967,95.9579);
+   li_9_1_sv_clb[11]->SetPoint(1,513.851,85.734);
+   li_9_1_sv_clb[11]->SetPoint(2,638.932,78.564);
+   li_9_1_sv_clb[11]->SetPoint(3,772.948,72.5891);
+   li_9_1_sv_clb[11]->SetPoint(4,892.073,67.278);
+   li_9_1_sv_clb[11]->SetPoint(5,996.307,63.693);
+   li_9_1_sv_clb[11]->SetPoint(6,1195.84,58.1163);
+   li_9_1_sv_clb[11]->SetPoint(7,1359.64,53.8675);
+   li_9_1_sv_clb[11]->SetPoint(8,1541.3,50.2825);
+   li_9_1_sv_clb[11]->SetPoint(9,1788.49,45.768);
+   li_9_1_sv_clb[11]->SetPoint(10,2008.87,42.8469);
+   li_9_1_sv_clb[11]->SetPoint(11,2217.34,40.3242);
+   li_9_1_sv_clb[11]->SetPoint(12,2446.65,37.9342);
+   li_9_1_sv_clb[11]->SetPoint(13,2574.71,36.7392);
+   li_9_1_sv_clb[11]->SetPoint(14,2580.67,40.0586);
+   li_9_1_sv_clb[11]->SetPoint(15,1976.11,46.4319);
+   li_9_1_sv_clb[11]->SetPoint(16,1481.74,55.0625);
+   li_9_1_sv_clb[11]->SetPoint(17,1225.62,61.4358);
+   li_9_1_sv_clb[11]->SetPoint(18,942.701,70.1991);
+   li_9_1_sv_clb[11]->SetPoint(19,769.97,77.5018);
+   li_9_1_sv_clb[11]->SetPoint(20,624.042,84.539);
+   li_9_1_sv_clb[11]->SetPoint(21,469.179,94.099);
+   li_9_1_sv_clb[11]->SetPoint(22,433.442,96.3562);
+   li_9_1_sv_clb[11]->SetPoint(23,361.967,95.9579);
+
+   li_9_1_sv_clb[12] = new TCutG("li_9_1_sv_clb_12",20);
+   li_9_1_sv_clb[12]->SetVarX("aCsI");
+   li_9_1_sv_clb[12]->SetVarY("X_C");
+   li_9_1_sv_clb[12]->SetTitle("Graph");
+   li_9_1_sv_clb[12]->SetFillColor(1);
+   li_9_1_sv_clb[12]->SetPoint(0,448.333,96.4723);
+   li_9_1_sv_clb[12]->SetPoint(1,680.626,84.7697);
+   li_9_1_sv_clb[12]->SetPoint(2,874.204,77.2466);
+   li_9_1_sv_clb[12]->SetPoint(3,1121.39,69.7235);
+   li_9_1_sv_clb[12]->SetPoint(4,1282.21,65.1261);
+   li_9_1_sv_clb[12]->SetPoint(5,1508.54,60.1106);
+   li_9_1_sv_clb[12]->SetPoint(6,1702.12,56.2098);
+   li_9_1_sv_clb[12]->SetPoint(7,1979.09,50.9157);
+   li_9_1_sv_clb[12]->SetPoint(8,2262.01,47.4328);
+   li_9_1_sv_clb[12]->SetPoint(9,2506.21,44.6465);
+   li_9_1_sv_clb[12]->SetPoint(10,2905.28,39.6311);
+   li_9_1_sv_clb[12]->SetPoint(11,2908.26,42.8354);
+   li_9_1_sv_clb[12]->SetPoint(12,2202.45,51.1944);
+   li_9_1_sv_clb[12]->SetPoint(13,1731.9,58.8568);
+   li_9_1_sv_clb[12]->SetPoint(14,1338.79,67.7731);
+   li_9_1_sv_clb[12]->SetPoint(15,1073.74,75.2962);
+   li_9_1_sv_clb[12]->SetPoint(16,838.466,83.7945);
+   li_9_1_sv_clb[12]->SetPoint(17,621.064,93.686);
+   li_9_1_sv_clb[12]->SetPoint(18,540.654,97.0296);
+   li_9_1_sv_clb[12]->SetPoint(19,448.333,96.4723);
+
+   li_9_1_sv_clb[13] = new TCutG("li_9_1_sv_clb_13",9);
+   li_9_1_sv_clb[13]->SetVarX("aCsI");
+   li_9_1_sv_clb[13]->SetVarY("X_C");
+   li_9_1_sv_clb[13]->SetTitle("Graph");
+   li_9_1_sv_clb[13]->SetFillColor(1);
+   li_9_1_sv_clb[13]->SetPoint(0,635.954,95.7845);
+   li_9_1_sv_clb[13]->SetPoint(1,1023.11,81.8614);
+   li_9_1_sv_clb[13]->SetPoint(2,1228.6,75.4568);
+   li_9_1_sv_clb[13]->SetPoint(3,1431.11,70.5837);
+   li_9_1_sv_clb[13]->SetPoint(4,1529.39,71.2799);
+   li_9_1_sv_clb[13]->SetPoint(5,1243.49,78.9376);
+   li_9_1_sv_clb[13]->SetPoint(6,984.394,86.8737);
+   li_9_1_sv_clb[13]->SetPoint(7,734.232,96.2022);
+   li_9_1_sv_clb[13]->SetPoint(8,635.954,95.7845);
+
+   li_9_2_sv_clb[13] = new TCutG("li_9_2_sv_clb_13",14);
+   li_9_2_sv_clb[13]->SetVarX("aCsI");
+   li_9_2_sv_clb[13]->SetVarY("X_C");
+   li_9_2_sv_clb[13]->SetTitle("Graph");
+   li_9_2_sv_clb[13]->SetFillColor(1);
+   li_9_2_sv_clb[13]->SetPoint(0,1693.19,65.2929);
+   li_9_2_sv_clb[13]->SetPoint(1,2035.67,59.1668);
+   li_9_2_sv_clb[13]->SetPoint(2,2378.15,54.1545);
+   li_9_2_sv_clb[13]->SetPoint(3,2708.73,50.1168);
+   li_9_2_sv_clb[13]->SetPoint(4,3143.53,45.1044);
+   li_9_2_sv_clb[13]->SetPoint(5,3557.49,42.5983);
+   li_9_2_sv_clb[13]->SetPoint(6,3810.63,41.7629);
+   li_9_2_sv_clb[13]->SetPoint(7,3810.63,45.1044);
+   li_9_2_sv_clb[13]->SetPoint(8,3101.84,49.6991);
+   li_9_2_sv_clb[13]->SetPoint(9,2637.25,54.8506);
+   li_9_2_sv_clb[13]->SetPoint(10,2315.61,58.6098);
+   li_9_2_sv_clb[13]->SetPoint(11,1943.35,63.6222);
+   li_9_2_sv_clb[13]->SetPoint(12,1818.27,65.9891);
+   li_9_2_sv_clb[13]->SetPoint(13,1693.19,65.2929);
+
+   li_9_1_sv_clb[14] = new TCutG("li_9_1_sv_clb_14",20);
+   li_9_1_sv_clb[14]->SetVarX("aCsI");
+   li_9_1_sv_clb[14]->SetVarY("X_C");
+   li_9_1_sv_clb[14]->SetTitle("Graph");
+   li_9_1_sv_clb[14]->SetFillColor(1);
+   li_9_1_sv_clb[14]->SetPoint(0,613.752,93.9812);
+   li_9_1_sv_clb[14]->SetPoint(1,904.566,82.4299);
+   li_9_1_sv_clb[14]->SetPoint(2,1056,78.2547);
+   li_9_1_sv_clb[14]->SetPoint(3,1267.75,72.6878);
+   li_9_1_sv_clb[14]->SetPoint(4,1475.47,67.6776);
+   li_9_1_sv_clb[14]->SetPoint(5,1593.4,60.719);
+   li_9_1_sv_clb[14]->SetPoint(6,1708.66,52.6469);
+   li_9_1_sv_clb[14]->SetPoint(7,1837.31,44.1574);
+   li_9_1_sv_clb[14]->SetPoint(8,1866.8,42.4873);
+   li_9_1_sv_clb[14]->SetPoint(9,1880.2,43.044);
+   li_9_1_sv_clb[14]->SetPoint(10,1881.54,44.1574);
+   li_9_1_sv_clb[14]->SetPoint(11,1874.84,46.1058);
+   li_9_1_sv_clb[14]->SetPoint(12,1810.51,50.281);
+   li_9_1_sv_clb[14]->SetPoint(13,1648.35,60.5798);
+   li_9_1_sv_clb[14]->SetPoint(14,1563.92,65.7292);
+   li_9_1_sv_clb[14]->SetPoint(15,1458.05,70.6002);
+   li_9_1_sv_clb[14]->SetPoint(16,1133.73,79.2289);
+   li_9_1_sv_clb[14]->SetPoint(17,755.809,91.8936);
+   li_9_1_sv_clb[14]->SetPoint(18,660.658,95.5121);
+   li_9_1_sv_clb[14]->SetPoint(19,613.752,93.9812);
+
+   li_9_1_sv_clb[15] = new TCutG("li_9_1_sv_clb_15",18);
+   li_9_1_sv_clb[15]->SetVarX("aCsI");
+   li_9_1_sv_clb[15]->SetVarY("X_C");
+   li_9_1_sv_clb[15]->SetTitle("Graph");
+   li_9_1_sv_clb[15]->SetFillColor(1);
+   li_9_1_sv_clb[15]->SetPoint(0,528.742,96.2203);
+   li_9_1_sv_clb[15]->SetPoint(1,838.466,81.4768);
+   li_9_1_sv_clb[15]->SetPoint(2,1148.19,70.718);
+   li_9_1_sv_clb[15]->SetPoint(3,1413.24,63.8111);
+   li_9_1_sv_clb[15]->SetPoint(4,1761.68,56.2401);
+   li_9_1_sv_clb[15]->SetPoint(5,2077.36,50.7943);
+   li_9_1_sv_clb[15]->SetPoint(6,2416.87,46.1454);
+   li_9_1_sv_clb[15]->SetPoint(7,2824.87,41.7622);
+   li_9_1_sv_clb[15]->SetPoint(8,3277.55,37.9103);
+   li_9_1_sv_clb[15]->SetPoint(9,3917.84,33.9256);
+   li_9_1_sv_clb[15]->SetPoint(10,3923.8,37.5118);
+   li_9_1_sv_clb[15]->SetPoint(11,2720.64,46.8095);
+   li_9_1_sv_clb[15]->SetPoint(12,2059.5,55.1775);
+   li_9_1_sv_clb[15]->SetPoint(13,1487.7,65.6706);
+   li_9_1_sv_clb[15]->SetPoint(14,1154.15,75.6325);
+   li_9_1_sv_clb[15]->SetPoint(15,796.773,88.6493);
+   li_9_1_sv_clb[15]->SetPoint(16,621.064,96.8844);
+   li_9_1_sv_clb[15]->SetPoint(17,528.742,96.2203);
 
 }
 
@@ -8468,4 +9366,9 @@ void create_IDs(){
 
    create_6he_cut();
    create_6li_cut();
+
+   create_9li_clb_fv();
+   create_9li_clb_sv();
+
 }
+
