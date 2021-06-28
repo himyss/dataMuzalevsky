@@ -1,0 +1,1799 @@
+#include "/home/muzalevskii/work/macro/h7_1904/cuts/scripts/create_cuts.C"
+#include "/home/muzalevskii/work/macro/h7_1904/cuts/scripts/create_IDs.C"
+
+void calcVectorTel1(Int_t n20, Int_t n1);
+void calcVectorTel2(Int_t n20, Int_t n1);
+void calcVectorTel3(Int_t n20, Int_t n1);
+void calcVectorTel4(Int_t n20, Int_t n1);
+void calcVectorCent(Int_t nX,Int_t nY);
+void calcFrameCoordinates(Float_t* x, Float_t* y,Float_t distanance);
+
+void readCuts();
+// void recalibrateCsI(Float_t *oldpar1,Float_t *oldpar2,Float_t *newpar1,Float_t *newpar2);
+void recalibrateCsI(Float_t *newpar1,Float_t *newpar2);
+
+void zeroVars();
+void checkToF();
+
+void MWPCprojection();
+Float_t GetPosition(Float_t wire, Float_t wireStep,Float_t planeOffset);
+
+void CsI_max();
+void CsItimes();
+void trackCsI();
+void fillCsI();
+void CsI_reco();
+
+void DSD_Cselect();
+void correct();
+void X_Lselect();
+void Y_Lselect();
+
+void fillSi();
+void fillND();
+
+void readThickness();
+void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16);
+
+void check_litium9();
+void check_litium8();
+void neutronID();
+void triton();
+void proton();
+void deuterium();
+void alpha();
+void helium6();
+void checkHe3();
+void checkHe4();
+void check_side_h3();
+void checkLi6();
+void timesSQ20();
+void timesSQ1();
+
+void timesVeto();
+
+// reconstruction
+void GetXYLeft();
+void GetXYCent();
+
+//outtree vars
+Int_t trigger; 
+
+Float_t tF5,F5,tF3,F3;
+
+Float_t tMWPC;
+Float_t wirex1,wirex2,wirey1,wirey2;
+
+Int_t nCsI,nCsI_track;
+Float_t aCsI,tCsI;
+Float_t aCsI_reco;
+
+Float_t arCsI[16],trCsI[16];
+
+Float_t a20_1,t20_1,a20_1_un;
+Int_t n20_1;
+
+Float_t a1_1,t1_1;
+Int_t n1_1;
+
+Float_t av_1,tv_1;
+Int_t nv_1;
+
+Float_t a20_2,t20_2,a20_2_un;
+Int_t n20_2;
+
+Float_t a1_2,t1_2;
+Int_t n1_2;
+
+Float_t av_2,tv_2;
+Int_t nv_2;
+
+Float_t a20_3,t20_3,a20_3_un;
+Int_t n20_3;
+
+Float_t a1_3,t1_3;
+Int_t n1_3;
+
+Float_t av_3,tv_3;
+Int_t nv_3;
+
+Float_t a20_4,t20_4,a20_4_un;
+Int_t n20_4;
+
+Float_t a1_4,t1_4;
+Int_t n1_4;
+
+Float_t av_4,tv_4;
+Int_t nv_4;
+
+Float_t a1,t1;
+Int_t n1;
+
+Float_t a20,t20,a20_un;
+Int_t n20;
+
+Int_t multv_1,mult20_1,mult1_1;
+Int_t multv_2,mult20_2,mult1_2;
+Int_t multv_3,mult20_3,mult1_3;
+Int_t multv_4,mult20_4,mult1_4;
+Int_t multc_x,multc_y,multCsI;
+
+Int_t off_multv_1,off_multv_2,off_multv_3,off_multv_4;
+
+Float_t X_C,tX_C,Y_C,tY_C;
+Int_t nX_C,nY_C;
+//
+Float_t DSD_X[32],DSD_Y[32];
+Float_t tDSD_X[32],tDSD_Y[32];
+
+Float_t SSD1[16],SQ20_1[16],tSSD1[16],tSQ20_1[16],SSD_V1[16],tSSD_V1[16];
+Float_t SSD2[16],SQ20_2[16],tSSD2[16],tSQ20_2[16],SSD_V2[16],tSSD_V2[16];
+Float_t SSD3[16],SQ20_3[16],tSSD3[16],tSQ20_3[16],SSD_V3[16],tSSD_V3[16];
+Float_t SSD4[16],SQ20_4[16],tSSD4[16],tSQ20_4[16],SSD_V4[16],tSSD_V4[16];
+// reconstructed
+
+Float_t fXt,fYt;
+Float_t fXf,fYf;
+Float_t x1c, y1c, x2c, y2c;
+Float_t frame1X,frame1Y,frame2X,frame2Y,frame3X,frame3Y;
+// flags
+Bool_t timesToF,timesMWPC;
+
+Double_t fThickness1[16][16],fThickness2[16][16],fThickness3[16][16],fThickness4[16][16];
+
+Int_t flag1,flag2,flag3,flag4,flagCent,flagtCsI;
+Int_t flagVeto1, flagVeto2, flagVeto3, flagVeto4;
+Int_t nh3,nh2,nh1,nhe3_1,nhe3_2,nhe3_3,nhe3_4,neutron,n6li,nli8,nli9;
+Int_t nhe4_1,nhe4_2,nhe4_3,nhe4_4;
+Int_t nh3_1,nh3_2,nh3_3,nh3_4;
+Int_t nAlpha, nhe6;
+
+// TCutG *CsI_cut[16],*cut3h[16],*dssd_x_cut[32],*cut6he[16];
+// TCutG *cuthe3_1[16],*cutSQ20_1[16],*cutSQ1_1[16];
+// TCutG *cuthe3_2[16],*cutSQ20_2[16],*cutSQ1_2[16];
+// TCutG *cuthe3_3[16],*cutSQ20_3[16],*cutSQ1_3[16];
+// TCutG *cuthe3_4[16],*cutSQ20_4[16],*cutSQ1_4[16];
+// TCutG *cut6Li,*cutNeutron;
+
+
+Float_t th_he3_1,th_he3_2,th_he3_3,th_he3_4,th_h3;
+Float_t phi_he3_1,phi_he3_2,phi_he3_3,phi_he3_4,phi_h3;
+
+// Sipars
+Float_t pSQ201_1[16],pSQ201_2[16];
+Float_t pSQ202_1[16],pSQ202_2[16];
+
+Float_t pSQ202_1_new[16],pSQ202_2_new[16];
+
+Float_t pSQ203_1[16],pSQ203_2[16];
+Float_t pSQ204_1[16],pSQ204_2[16];
+
+Float_t pSSD1_1[16],pSSD1_2[16];
+Float_t pSSD2_1[16],pSSD2_2[16];
+Float_t pSSD3_1[16],pSSD3_2[16];
+Float_t pSSD4_1[16],pSSD4_2[16];
+
+Float_t pSSD_V1_1[16],pSSD_V1_2[16];
+Float_t pSSD_V2_1[16],pSSD_V2_2[16];
+Float_t pSSD_V3_1[16],pSSD_V3_2[16];
+Float_t pSSD_V4_1[16],pSSD_V4_2[16];
+
+Float_t pDSD_X1[32],pDSD_X2[32];
+Float_t pDSD_Y1[32],pDSD_Y2[32];
+
+Float_t pCsI_1[16],pCsI_2[16];
+
+Float_t pCsI_0_1[16],pCsI_0_2[16];
+Float_t pCsI_1_1[16],pCsI_1_2[16];
+Float_t pCsI_2_1[16],pCsI_2_2[16];
+Float_t pCsI_3_1[16],pCsI_3_2[16];
+Float_t pCsI_4_1[16],pCsI_4_2[16];
+Float_t pCsI_5_1[16],pCsI_5_2[16];
+Float_t pCsI_new_1[16],pCsI_new_2[16];
+
+Float_t NDpar[32],zeropar[32];
+
+Float_t x1t,y1t,x2t,y2t,x3t,y3t,x4t,y4t,xCt,yCt;
+Float_t x1t_1,y1t_1,x2t_1,y2t_1,x3t_1,y3t_1,x4t_1,y4t_1;
+
+TELoss *f3HSi;
+
+Float_t xOffset,yOffset,zOffset;
+Float_t centOffset;
+
+Float_t ND_time[32],ND_amp[32],ND_tac[32];
+Float_t tND,aND,tacND,numND;
+
+void selection_beam(Int_t nFile=0) {
+
+  create_IDs();
+  create_cuts();
+
+  xOffset = 0;
+  yOffset = -2.4;
+  zOffset = 0.;
+
+  centOffset = 0;
+
+  f3HSi = new TELoss();
+  f3HSi->SetEL(1, 2.321); // density in g/cm3
+  f3HSi->AddEL(14., 28.086, 1);  //Z, mass
+  f3HSi->SetZP(1., 3.);   //alphas, Z, A
+  f3HSi->SetEtab(100000, 200.); // ?, MeV calculate ranges
+  f3HSi->SetDeltaEtab(300);
+
+  readPar("ND_tac",NDpar,zeropar,32);
+  // readPar("empty16",pCsI_1,pCsI_2);
+
+  readPar("CsI_0",pCsI_0_1,pCsI_0_2);
+  readPar("CsI_1",pCsI_1_1,pCsI_1_2);
+  readPar("CsI_2",pCsI_2_1,pCsI_2_2);
+  readPar("CsI_3",pCsI_3_1,pCsI_3_2);
+  readPar("CsI_4",pCsI_4_1,pCsI_4_2);
+  readPar("CsI_5",pCsI_5_1,pCsI_5_2);
+
+/*switch (nFile)
+  {
+  case 0:
+    for (Int_t i=0;i<16;i++) {
+      pCsI_new_1[i] = pCsI_0_1[i];
+      pCsI_new_2[i] = pCsI_0_2[i];
+    }
+    break;
+  case 1:
+    for (Int_t i=0;i<16;i++) {
+      pCsI_new_1[i] = pCsI_1_1[i];
+      pCsI_new_2[i] = pCsI_1_2[i];
+    }
+    break;
+  case 2:
+    for (Int_t i=0;i<16;i++) {
+      pCsI_new_1[i] = pCsI_2_1[i];
+      pCsI_new_2[i] = pCsI_2_2[i];
+    }
+    break;
+  case 3:
+    for (Int_t i=0;i<16;i++) {
+      pCsI_new_1[i] = pCsI_3_1[i];
+      pCsI_new_2[i] = pCsI_3_2[i];
+    }
+    break;
+  case 4:
+    for (Int_t i=0;i<16;i++) {
+      pCsI_new_1[i] = pCsI_4_1[i];
+      pCsI_new_2[i] = pCsI_4_2[i];
+    }
+    break;
+  case 5:
+    for (Int_t i=0;i<16;i++) {
+      pCsI_new_1[i] = pCsI_5_1[i];
+      pCsI_new_2[i] = pCsI_5_2[i];
+    }
+    break;
+  case 6:
+    for (Int_t i=0;i<16;i++) {
+      pCsI_new_1[i] = pCsI_5_1[i];
+      pCsI_new_2[i] = pCsI_5_2[i];
+    }
+    break;
+  default:
+    break;
+  }
+  cout << endl << " new CsI recal pars: " << endl;
+  for (Int_t i=0;i<16;i++) {
+    cout << pCsI_new_1[i] << " " << pCsI_new_2[i] << endl;
+  }
+*/
+  // readCuts();
+
+  TChain *ch = new TChain("tree");
+  ch->Add(InFile.Data());
+
+  cout << ch->GetEntries() << endl;
+  //--------------------------------------------------------------------------------
+  ch->SetBranchAddress("trigger",&trigger);
+
+  ch->SetBranchAddress("arCsI",&arCsI);
+  ch->SetBranchAddress("trCsI",&trCsI);
+
+  ch->SetBranchAddress("F5.",&F5);
+  ch->SetBranchAddress("tF5.",&tF5);
+  ch->SetBranchAddress("F3.",&F3);
+  ch->SetBranchAddress("tF3.",&tF3);
+
+  ch->SetBranchAddress("tMWPC.",&tMWPC);
+  ch->SetBranchAddress("wirex1.",&wirex1);
+  ch->SetBranchAddress("wirex2.",&wirex2);
+  ch->SetBranchAddress("wirey1.",&wirey1);
+  ch->SetBranchAddress("wirey2.",&wirey2);
+
+  ch->SetBranchAddress("DSD_X",&DSD_X);
+  ch->SetBranchAddress("tDSD_X",&tDSD_X);
+  ch->SetBranchAddress("DSD_Y",&DSD_Y); 
+  ch->SetBranchAddress("tDSD_Y",&tDSD_Y);
+
+  ch->SetBranchAddress("SSD1",&SSD1);
+  ch->SetBranchAddress("SQ20_1",&SQ20_1);
+  ch->SetBranchAddress("tSSD1",&tSSD1);
+  ch->SetBranchAddress("tSQ20_1",&tSQ20_1);
+  ch->SetBranchAddress("SSD_V1",&SSD_V1);
+  ch->SetBranchAddress("tSSD_V1",&tSSD_V1);
+
+  ch->SetBranchAddress("SSD2",&SSD2);
+  ch->SetBranchAddress("SQ20_2",&SQ20_2);
+  ch->SetBranchAddress("tSSD2",&tSSD2);
+  ch->SetBranchAddress("tSQ20_2",&tSQ20_2);
+  ch->SetBranchAddress("SSD_V2",&SSD_V2);
+  ch->SetBranchAddress("tSSD_V2",&tSSD_V2);
+
+  ch->SetBranchAddress("SSD3",&SSD3);
+  ch->SetBranchAddress("SQ20_3",&SQ20_3);
+  ch->SetBranchAddress("tSSD3",&tSSD3);
+  ch->SetBranchAddress("tSQ20_3",&tSQ20_3);
+  ch->SetBranchAddress("SSD_V3",&SSD_V3);
+  ch->SetBranchAddress("tSSD_V3",&tSSD_V3);
+
+  ch->SetBranchAddress("SSD4",&SSD4);
+  ch->SetBranchAddress("SQ20_4",&SQ20_4);
+  ch->SetBranchAddress("tSSD4",&tSSD4);
+  ch->SetBranchAddress("tSQ20_4",&tSQ20_4);
+  ch->SetBranchAddress("SSD_V4",&SSD_V4);
+  ch->SetBranchAddress("tSSD_V4",&tSSD_V4);
+
+  ch->SetBranchAddress("multv_1",&multv_1);
+  ch->SetBranchAddress("mult20_1",&mult20_1);
+  ch->SetBranchAddress("mult1_1",&mult1_1);
+
+  ch->SetBranchAddress("multv_2",&multv_2);
+  ch->SetBranchAddress("mult20_2",&mult20_2);
+  ch->SetBranchAddress("mult1_2",&mult1_2);
+
+  ch->SetBranchAddress("multv_3",&multv_3);
+  ch->SetBranchAddress("mult20_3",&mult20_3);
+  ch->SetBranchAddress("mult1_3",&mult1_3);
+
+  ch->SetBranchAddress("multv_4",&multv_4);
+  ch->SetBranchAddress("mult20_4",&mult20_4);
+  ch->SetBranchAddress("mult1_4",&mult1_4);
+
+  ch->SetBranchAddress("multc_x",&multc_x);
+  ch->SetBranchAddress("multc_y",&multc_y);
+  ch->SetBranchAddress("multCsI",&multCsI);
+
+  ch->SetBranchAddress("ND_amp",&ND_amp);
+  ch->SetBranchAddress("ND_time",&ND_time);
+  ch->SetBranchAddress("ND_tac",&ND_tac);
+
+  readThickness();
+
+  TString outPutFileName;
+  outPutFileName.Form("/mnt/data/exp1904/analysed/selected/siTriggers/h7_ct_%d_cut.root",nFile);
+
+  TFile *fw = new TFile(outPutFileName.Data(), "RECREATE");
+  // TFile *fw = new TFile("test.root", "RECREATE");
+  TTree *tw = new TTree("tree", "data");
+
+  tw->Branch("trigger.",&trigger,"trigger/I");
+
+  tw->Branch("F5.",&F5,"F5/F");
+  tw->Branch("tF5.",&tF5,"tF5/F");
+  tw->Branch("F3.",&F3,"F3/F");
+  tw->Branch("tF3.",&tF3,"tF3/F");
+
+  tw->Branch("tMWPC.",&tMWPC,"tMWPC/F");
+  tw->Branch("wirex1.",&wirex1,"wirex1/F");
+  tw->Branch("wirex2.",&wirex2,"wirex2/F");
+  tw->Branch("wirey1.",&wirey1,"wirey1/F");
+  tw->Branch("wirey2.",&wirey2,"wirey2/F");
+ 
+  tw->Branch("aCsI.",&aCsI,"aCsI/F");
+  tw->Branch("tCsI.",&tCsI,"tCsI/F");
+  tw->Branch("nCsI.",&nCsI,"nCsI/I");
+
+  // tw->Branch("aCsI_reco.",&aCsI_reco,"aCsI_reco/F");
+
+  tw->Branch("nCsI_track.",&nCsI_track,"nCsI_track/I");
+  tw->Branch("arCsI",&arCsI,"arCsI[16]/F");
+  tw->Branch("trCsI",&trCsI,"trCsI[16]/F");
+
+  tw->Branch("X_C.",&X_C,"X_C/F");
+  tw->Branch("nX_C.",&nX_C,"nX_C/I");
+  tw->Branch("tX_C.",&tX_C,"tX_C/F");
+  tw->Branch("Y_C.",&Y_C,"Y_C/F");
+  tw->Branch("tY_C.",&tY_C,"tY_C/F");
+  tw->Branch("nY_C.",&nY_C,"nY_C/I");
+
+  tw->Branch("x1c.",&x1c,"x1c/F");
+  tw->Branch("y1c.",&y1c,"y1c/F");
+  tw->Branch("x2c.",&x2c,"x2c/F");
+  tw->Branch("y2c.",&y2c,"y2c/F"); 
+  tw->Branch("fXt.",&fXt,"fXt/F");
+  tw->Branch("fYt.",&fYt,"fYt/F"); 
+
+  tw->Branch("fXf.",&fXf,"fXf/F");
+  tw->Branch("fYf.",&fYf,"fYf/F"); 
+
+  tw->Branch("frame1X",&frame1X,"frame1X/F");
+  tw->Branch("frame2X",&frame2X,"frame2X/F");
+  tw->Branch("frame3X",&frame3X,"frame3X/F");
+  tw->Branch("frame1Y",&frame1Y,"frame1Y/F");
+  tw->Branch("frame2Y",&frame2Y,"frame2Y/F");
+  tw->Branch("frame3Y",&frame3Y,"frame3Y/F");
+
+  tw->Branch("a20_1.",&a20_1,"a20_1/F");
+  tw->Branch("a20_1_un.",&a20_1_un,"a20_1_un/F");
+  tw->Branch("t20_1.",&t20_1,"t20_1/F");
+  tw->Branch("n20_1.",&n20_1,"n20_1/I");
+
+  tw->Branch("a1_1.",&a1_1,"a1_1/F");
+  tw->Branch("t1_1.",&t1_1,"t1_1/F");
+  tw->Branch("n1_1.",&n1_1,"n1_1/I");
+
+  tw->Branch("av_1.",&av_1,"av_1/F");
+  tw->Branch("tv_1.",&tv_1,"tv_1/F");
+  tw->Branch("nv_1.",&nv_1,"nv_1/I");
+
+  tw->Branch("a20_2.",&a20_2,"a20_2/F");
+  tw->Branch("a20_2_un.",&a20_2_un,"a20_2_un/F");
+  tw->Branch("t20_2.",&t20_2,"t20_2/F");
+  tw->Branch("n20_2.",&n20_2,"n20_2/I");
+
+  tw->Branch("a1_2.",&a1_2,"a1_2/F");
+  tw->Branch("t1_2.",&t1_2,"t1_2/F");
+  tw->Branch("n1_2.",&n1_2,"n1_2/I");
+
+  tw->Branch("av_2.",&av_2,"av_2/F");
+  tw->Branch("tv_2.",&tv_2,"tv_2/F");
+  tw->Branch("nv_2.",&nv_2,"nv_2/I");
+
+  tw->Branch("a20_3.",&a20_3,"a20_3/F");
+  tw->Branch("a20_3_un.",&a20_3_un,"a20_3_un/F");
+  tw->Branch("t20_3.",&t20_3,"t20_3/F");
+  tw->Branch("n20_3.",&n20_3,"n20_3/I");
+
+  tw->Branch("a1_3.",&a1_3,"a1_3/F");
+  tw->Branch("t1_3.",&t1_3,"t1_3/F");
+  tw->Branch("n1_3.",&n1_3,"n1_3/I");
+
+  tw->Branch("av_3.",&av_3,"av_3/F");
+  tw->Branch("tv_3.",&tv_3,"tv_3/F");
+  tw->Branch("nv_3.",&nv_3,"nv_3/I");
+
+  tw->Branch("a20_4.",&a20_4,"a20_4/F");
+  tw->Branch("a20_4_un.",&a20_4_un,"a20_4_un/F");
+  tw->Branch("t20_4.",&t20_4,"t20_4/F");
+  tw->Branch("n20_4.",&n20_4,"n20_4/I");
+
+  tw->Branch("a1_4.",&a1_4,"a1_4/F");
+  tw->Branch("t1_4.",&t1_4,"t1_4/F");
+  tw->Branch("n1_4.",&n1_4,"n1_4/I");
+
+  tw->Branch("av_4.",&av_4,"av_4/F");
+  tw->Branch("tv_4.",&tv_4,"tv_4/F");
+  tw->Branch("nv_4.",&nv_4,"nv_4/I");
+
+  tw->Branch("flag1.",&flag1,"flag1/I");
+  tw->Branch("flag2.",&flag2,"flag2/I");
+  tw->Branch("flag3.",&flag3,"flag3/I");
+  tw->Branch("flag4.",&flag4,"flag4/I");
+
+  tw->Branch("flagVeto1.",&flagVeto1,"flagVeto1/I");
+  tw->Branch("flagVeto2.",&flagVeto2,"flagVeto2/I");
+  tw->Branch("flagVeto3.",&flagVeto3,"flagVeto3/I");
+  tw->Branch("flagVeto4.",&flagVeto4,"flagVeto4/I");
+
+  tw->Branch("flagCent.",&flagCent,"flagCent/I");
+
+  tw->Branch("a1.",&a1,"a1/F");
+  tw->Branch("t1.",&t1,"t1/F");
+  tw->Branch("n1.",&n1,"n1/I");
+
+  // tw->Branch("flagtCsI.",&flagtCsI,"flagtCsI/I");
+
+  tw->Branch("nhe6.",&nhe6,"nhe6/I");
+  tw->Branch("nAlpha.",&nAlpha,"nAlpha/I");
+  tw->Branch("neutron.",&neutron,"neutron/I");
+  tw->Branch("nh3.",&nh3,"nh3/I");
+  tw->Branch("nh2.",&nh2,"nh2/I");
+  tw->Branch("nh1.",&nh1,"nh1/I");
+  tw->Branch("nhe3_1.",&nhe3_1,"nhe3_1/I");
+  tw->Branch("nhe3_2.",&nhe3_2,"nhe3_2/I");
+  tw->Branch("nhe3_3.",&nhe3_3,"nhe3_3/I");
+  tw->Branch("nhe3_4.",&nhe3_4,"nhe3_4/I");
+  tw->Branch("nhe4_1.",&nhe4_1,"nhe4_1/I");
+  tw->Branch("nhe4_2.",&nhe4_2,"nhe4_2/I");
+  tw->Branch("nhe4_3.",&nhe4_3,"nhe4_3/I");
+  tw->Branch("nhe4_4.",&nhe4_4,"nhe4_4/I");  
+  tw->Branch("nh3_1.",&nh3_1,"nh3_1/I");
+  tw->Branch("nh3_2.",&nh3_2,"nh3_2/I");
+  tw->Branch("nh3_3.",&nh3_3,"nh3_3/I");
+  tw->Branch("nh3_4.",&nh3_4,"nh3_4/I");
+  tw->Branch("n6li.",&n6li,"n6li/I");
+
+  tw->Branch("th_he3_1.",&th_he3_1,"th_he3_1/F");
+  tw->Branch("th_he3_2.",&th_he3_2,"th_he3_2/F");
+  tw->Branch("th_he3_3.",&th_he3_3,"th_he3_3/F");
+  tw->Branch("th_he3_4.",&th_he3_4,"th_he3_4/F");
+  tw->Branch("th_h3.",&th_h3,"th_h3/F");
+
+  tw->Branch("phi_he3_1.",&phi_he3_1,"phi_he3_1/F");
+  tw->Branch("phi_he3_2.",&phi_he3_2,"phi_he3_2/F");
+  tw->Branch("phi_he3_3.",&phi_he3_3,"phi_he3_3/F");
+  tw->Branch("phi_he3_4.",&phi_he3_4,"phi_he3_4/F");
+  tw->Branch("phi_h3.",&phi_h3,"phi_h3/F");
+
+  tw->Branch("x1t",&x1t,"x1t/F");
+  tw->Branch("x2t",&x2t,"x2t/F");
+  tw->Branch("x3t",&x3t,"x3t/F");
+  tw->Branch("x4t",&x4t,"x4t/F");
+  tw->Branch("y1t",&y1t,"y1t/F");
+  tw->Branch("y2t",&y2t,"y2t/F");
+  tw->Branch("y3t",&y3t,"y3t/F");
+  tw->Branch("y4t",&y4t,"y4t/F");
+
+  tw->Branch("x1t_1",&x1t_1,"x1t_1/F");
+  tw->Branch("x2t_1",&x2t_1,"x2t_1/F");
+  tw->Branch("x3t_1",&x3t_1,"x3t_1/F");
+  tw->Branch("x4t_1",&x4t_1,"x4t_1/F");
+  tw->Branch("y1t_1",&y1t_1,"y1t_1/F");
+  tw->Branch("y2t_1",&y2t_1,"y2t_1/F");
+  tw->Branch("y3t_1",&y3t_1,"y3t_1/F");
+  tw->Branch("y4t_1",&y4t_1,"y4t_1/F");
+
+  tw->Branch("aND",&aND,"aND/F");
+  tw->Branch("tND",&tND,"tND/F");
+  tw->Branch("tacND",&tacND,"tacND/F");
+  tw->Branch("numND",&numND,"numND/F");
+
+  tw->Branch("ND_amp",&ND_amp,"ND_amp[32]/F");
+  tw->Branch("ND_time",&ND_time,"ND_time[32]/F");
+  tw->Branch("ND_tac",&ND_tac,"ND_tac[32]/F");
+
+  tw->Branch("xCt",&xCt,"xCt/F");
+  tw->Branch("yCt",&yCt,"yCt/F");
+
+  tw->Branch("multv_1",&multv_1,"multv_1/I");
+  tw->Branch("multv_2",&multv_2,"multv_2/I");
+  tw->Branch("multv_3",&multv_3,"multv_3/I");
+  tw->Branch("multv_4",&multv_4,"multv_4/I");
+
+  tw->Branch("off_multv_1",&off_multv_1,"off_multv_1/I");
+  tw->Branch("off_multv_2",&off_multv_2,"off_multv_2/I");
+  tw->Branch("off_multv_3",&off_multv_3,"off_multv_3/I");
+  tw->Branch("off_multv_4",&off_multv_4,"off_multv_4/I");
+
+  tw->Branch("SQ20_1",&SQ20_1,"SQ20_1[16]/F");
+  tw->Branch("tSQ20_1",&tSQ20_1,"tSQ20_1[16]/F");
+  tw->Branch("SSD1",&SSD1,"SSD1[16]/F");
+  tw->Branch("tSSD1",&tSSD1,"tSSD1[16]/F");
+  tw->Branch("SSD_V1",&SSD_V1,"SSD_V1[16]/F");
+  tw->Branch("tSSD_V1",&tSSD_V1,"tSSD_V1[16]/F");
+
+  tw->Branch("SQ20_2",&SQ20_2,"SQ20_2[16]/F");
+  tw->Branch("tSQ20_2",&tSQ20_2,"tSQ20_2[16]/F");
+  tw->Branch("SSD2",&SSD2,"SSD2[16]/F");
+  tw->Branch("tSSD2",&tSSD2,"tSSD2[16]/F");
+  tw->Branch("SSD_V2",&SSD_V2,"SSD_V2[16]/F");
+  tw->Branch("tSSD_V2",&tSSD_V2,"tSSD_V2[16]/F");
+
+  tw->Branch("SQ20_3",&SQ20_3,"SQ20_3[16]/F");
+  tw->Branch("tSQ20_3",&tSQ20_3,"tSQ20_3[16]/F");
+  tw->Branch("SSD3",&SSD3,"SSD3[16]/F");
+  tw->Branch("tSSD3",&tSSD3,"tSSD3[16]/F");
+  tw->Branch("SSD_V3",&SSD_V3,"SSD_V3[16]/F");
+  tw->Branch("tSSD_V3",&tSSD_V3,"tSSD_V3[16]/F");
+
+  tw->Branch("SQ20_4",&SQ20_4,"SQ20_4[16]/F");
+  tw->Branch("tSQ20_4",&tSQ20_4,"tSQ20_4[16]/F");
+  tw->Branch("SSD4",&SSD4,"SSD4[16]/F");
+  tw->Branch("tSSD4",&tSSD4,"tSSD4[16]/F");
+  tw->Branch("SSD_V4",&SSD_V4,"SSD_V4[16]/F");
+  tw->Branch("tSSD_V4",&tSSD_V4,"tSSD_V4[16]/F");
+
+  tw->Branch("multc_x",&multc_x,"multc_x/I");
+  tw->Branch("multc_y",&multc_y,"multc_y/I");  
+  tw->Branch("multCsI",&multCsI,"multCsI/I"); 
+
+  Float_t xCent,yCent;
+  xCent = 0.467;
+  yCent = 0.026;
+
+  for(Int_t nentry=0;nentry<ch->GetEntries();nentry++) { 
+  // for(Int_t nentry=0;nentry<200000;nentry++) {     
+    if(nentry%1000000==0) cout << "#ENTRY " << nentry << "#" << endl;
+
+    ch->GetEntry(nentry);
+
+    if (trigger==1) continue;
+
+    zeroVars();
+
+    MWPCprojection();
+    // if ( ((fXt-xCent)*(fXt-xCent) + (fYt-yCent)*(fYt-yCent))>9*9 ) continue;
+    if ( ((fXt-xCent)*(fXt-xCent) + (fYt-yCent)*(fYt-yCent))>10*10 ) continue;
+
+    //recalibrateCsI(pCsI_new_1,pCsI_new_2);
+
+    fillND();
+    fillSi();
+
+    if (nX_C>-1 && nY_C>-1) {
+      calcVectorCent(nX_C,nY_C);
+      calcFrameCoordinates(&frame1X,&frame1Y,173 - zOffset);
+      calcFrameCoordinates(&frame2X,&frame2Y,188 - zOffset);
+      calcFrameCoordinates(&frame3X,&frame3Y,198 - zOffset);       
+    }
+
+    // tmp swich the positions of the strips
+    switch (n20_3) {
+      case 7:
+        n20_3=8;
+        break;
+      case 8:
+        n20_3=7;
+        break;
+      default:
+        break;
+    }
+    
+    timesSQ20();
+    // if (flag1==1) cout << "fine1" << endl;
+    timesSQ1();
+    //if (flag1==1) cout << "fine2" << endl;
+    timesVeto();
+    //if (flag1==1) cout << "fine3" << endl;
+    DSD_Cselect();
+
+    if (flagCent && multCsI>0){
+      CsI_max();
+      trackCsI();
+    }
+
+    if (nCsI!=nCsI_track){
+      if (nCsI-nCsI_track==4 || nCsI-nCsI_track==-4) nCsI_track = nCsI;
+      if (nCsI-nCsI_track==1 || nCsI-nCsI_track==-1) nCsI_track = nCsI;
+    }
+    CsItimes();
+
+    if (flag1) calcVectorTel1(n20_1, n1_1);
+    if (flag2) calcVectorTel2(n20_2, n1_2);
+    if (flag3) calcVectorTel3(n20_3, n1_3);
+    if (flag4) calcVectorTel4(n20_4, n1_4);
+
+    correct();
+    checkHe3();
+    checkHe4();
+    check_side_h3();
+    checkLi6();
+
+    if (flagCent) {
+      // triton();
+      // deuterium();
+      // proton();
+      // alpha();
+      // helium6();
+      check_litium8();
+      check_litium9();
+    }
+    neutronID();
+    
+    tw->Fill();
+  }
+  fw->cd();
+  tw->Write();
+  fw->Close();
+
+  return;
+}
+
+void zeroVars() {
+
+  tND = -100;
+  aND = -100;
+  tacND = -100;
+  numND = -100;
+
+  frame1X = -1000.;
+  frame2X = -1000.;
+  frame3X = -1000.;
+  frame1Y = -1000.;
+  frame2Y = -1000.;
+  frame3Y = -1000.;
+
+  aCsI_reco = -10;
+  aCsI = -10;
+  nCsI = -1;
+  nCsI_track = -1;
+  tCsI = -10;
+
+  X_C = 0;
+  tX_C = 0;
+  Y_C = 0;
+  tY_C = 0;
+
+  nX_C = -1;
+  nY_C = -1;
+
+  x1c = -50;
+  y1c = -50;
+  x2c = -50;
+  y2c = -50;
+
+  fXt = -100;
+  fYt = -100;
+
+  fXf = -100;
+  fYf = -100;
+
+  a20_1 = 0;
+  t20_1 = 0;
+  n20_1 = -1;
+  a20_1_un = 0;
+
+  a20_2 = 0;
+  t20_2 = 0;
+  n20_2 = -1;
+  a20_2_un = 0;
+
+  a20_3 = 0;
+  t20_3 = 0;
+  n20_3 = -1;
+  a20_3_un = 0;
+
+  a20_4 = 0;
+  t20_4 = 0;
+  n20_4 = -1;
+  a20_4_un = 0;
+
+  flagVeto1 = 1;
+  flagVeto2 = 1;
+  flagVeto3 = 1;
+  flagVeto4 = 1;
+
+  flag1 = 1;
+  flag2 = 1;
+  flag3 = 1;
+  flag4 = 1;
+  flagCent = 1;
+  flagtCsI = 1;
+
+  neutron = 0;
+  nh3 = 0;
+  nh2 = 0;
+  nh1 = 0;
+  n6li = 0;
+  nhe3_1 = 0;
+  nhe3_2 = 0;
+  nhe3_3 = 0;
+  nhe3_4 = 0;
+  nli9 = 0;
+  nli8 = 0;
+
+  nhe4_1 = 0;
+  nhe4_2 = 0;
+  nhe4_3 = 0;
+  nhe4_4 = 0;
+
+  nh3_1 = 0;
+  nh3_2 = 0;
+  nh3_3 = 0;
+  nh3_4 = 0;
+
+  nAlpha = 0;
+  nhe6 = 0;
+
+  a1_1 = 0;
+  n1_1 = -1;
+  t1_1 = 0;
+
+  a1_2 = 0;
+  n1_2 = -1;
+  t1_2 = 0;  
+
+  a1_3 = 0;
+  n1_3 = -1;
+  t1_3 = 0; 
+
+  a1_4 = 0;
+  n1_4 = -1;
+  t1_4 = 0;
+
+  av_4 = -100;
+  nv_4 = -1;
+  tv_4 = 0;
+
+  av_3 = -100;
+  nv_3 = -1;
+  tv_3 = 0;  
+
+  av_2 = -100;
+  nv_2 = -1;
+  tv_2 = 0;  
+
+  av_1 = -100;
+  nv_1 = -1;
+  tv_1 = 0;  
+
+
+  th_he3_1 = -100;
+  th_he3_2 = -100;
+  th_he3_3 = -100;
+  th_he3_4 = -100;
+  th_h3 = -100;
+
+  phi_he3_1 = -100;
+  phi_he3_2 = -100;
+  phi_he3_3 = -100;
+  phi_he3_4 = -100;
+  phi_h3 = -100;
+
+  x1t = -1000;
+  y1t = -1000; 
+  x2t = -1000;
+  y2t = -1000;
+  x3t = -1000;
+  y3t = -1000;
+  x4t = -1000;
+  y4t = -1000;
+  xCt = -1000;
+  yCt = -1000;
+
+}
+
+void MWPCprojection() {
+
+  const Float_t fMWPCwireStepX1 = -1.25;
+  const Float_t fMWPCwireStepY1 = 1.25;   //step between two wires
+  const Float_t fMWPCwireStepX2 = -1.25;    //step between two wires
+  const Float_t fMWPCwireStepY2 = 1.25;   //step between two wires
+
+  const Float_t fMWPC1_X_offset = -0.9;
+  const Float_t fMWPC1_Y_offset = -3;
+  // const Float_t fMWPC2_X_offset = 0;
+  // const Float_t fMWPC2_Y_offset = 0;
+
+  const Float_t fMWPC2_X_offset = 0.3;
+  const Float_t fMWPC2_Y_offset = -1.55;
+
+  const Float_t fMWPCz1 = -815.;  //z coordinate of the center of MWPC1
+  const Float_t fMWPCz2 = -270.;  //z coordinate of the center of MWPC2
+
+  const Float_t fDiaZ = -209.5;  //z coordinate of the center of MWPC2
+
+  Float_t xtc, ytc;
+  //cluster multiplicity equal to 1
+  x1c = GetPosition(wirex1, fMWPCwireStepX1, fMWPC1_X_offset);
+  y1c = GetPosition(wirey1, fMWPCwireStepY1, fMWPC1_Y_offset);
+
+  x2c = GetPosition(wirex2, fMWPCwireStepX2, fMWPC2_X_offset);
+  y2c = GetPosition(wirey2, fMWPCwireStepY2, fMWPC2_Y_offset);
+
+  fXf = x1c + (x2c -x1c)*(fDiaZ-fMWPCz1)/(fMWPCz2-fMWPCz1);
+  fYf = y1c + (y2c -y1c)*(fDiaZ-fMWPCz1)/(fMWPCz2-fMWPCz1);
+
+  xtc = x1c - (x2c -x1c)*fMWPCz1/(fMWPCz2-fMWPCz1);
+  ytc = y1c + (xtc - x1c)*(y2c-y1c)/(x2c-x1c);
+
+  fXt = xtc;
+  fYt = ytc;
+
+}
+
+Float_t GetPosition(Float_t wire, Float_t wireStep,
+    Float_t planeOffset) {
+  //TODO: number of wires (16) as parameter
+  //TODO: omit gRandom
+  return (wire - 16.5)*wireStep + planeOffset;
+}
+
+void readThickness() {
+  cout << "thickness of the first detector " << endl;
+  TFile *f1 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/maps/thicknessMap_calib_90_all_SSD_1m_1_large.root","READ");
+  if (f1->IsZombie()) {
+    for(Int_t i = 0; i<16; i++) {
+      for(Int_t j = 0; j<16; j++) {
+        fThickness1[i][j] = 20.;
+        cout << fThickness1[i][j] << " ";
+      }
+      cout << endl;
+    }
+
+  }
+  else {
+    TH2F *hThick1 = (TH2F*)f1->Get("thicknessMap_calib_90_all_SSD_1m_1_realHist");
+    for(Int_t i = 0; i<16; i++) {
+      for(Int_t j = 0; j<16; j++) {
+        fThickness1[i][j] = hThick1->GetBinContent(i+1,j+1);
+        cout << fThickness1[i][j] << " ";
+      }
+      cout << endl;
+    }
+  }
+  delete f1;
+
+  cout  << endl << "thickness of the SECOND detector " << endl;
+  TFile *f2 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/maps/thicknessMap_alltel_90_SSD_1m_2_large.root","READ");
+  if (f2->IsZombie()) {
+    for(Int_t i = 0; i<16; i++) {
+      for(Int_t j = 0; j<16; j++) {
+        fThickness2[i][j] = 20.;
+        cout << fThickness2[i][j] << " ";
+      }
+      cout << endl;
+    }
+
+  }
+  else {
+    TH2F *hThick2 = (TH2F*)f2->Get("thicknessMap_alltel_90_SSD_1m_2_realHist");
+    for(Int_t i = 0; i<16; i++) {
+      for(Int_t j = 0; j<16; j++) {
+        fThickness2[i][j] = hThick2->GetBinContent(i+1,j+1);
+        cout << fThickness2[i][j] << " ";
+      }
+      cout << endl;
+    }
+  }
+  delete f2;
+
+
+  cout  << endl << "thickness of the THIRD detector " << endl;
+  TFile *f3 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/maps/thicknessMap_calib_90_all_SSD_1m_3_switch_large.root","READ");
+  if (f3->IsZombie()) {
+    for(Int_t i = 0; i<16; i++) {
+      for(Int_t j = 0; j<16; j++) {
+        fThickness3[i][j] = 20.;
+        cout << fThickness3[i][j] << " ";
+      }
+      cout << endl;
+    }
+
+  }
+  else {
+    TH2F *hThick3 = (TH2F*)f3->Get("thicknessMap_calib_90_all_SSD_1m_3_switch_realHist");
+    for(Int_t i = 0; i<16; i++) {
+      for(Int_t j = 0; j<16; j++) {
+        fThickness3[i][j] = hThick3->GetBinContent(i+1,j+1);
+        cout << fThickness3[i][j] << " ";
+      }
+      cout << endl;
+    }
+  }
+  delete f3;
+
+
+  cout  << endl << "thickness of the FOURTH detector " << endl;
+  TFile *f4 = new TFile("/home/muzalevskii/work/macro/h7_1904/parameters/maps/thicknessMap_calib_90_all_SSD_1m_4_large.root","READ");
+  if (f4->IsZombie()) {
+    for(Int_t i = 0; i<16; i++) {
+      for(Int_t j = 0; j<16; j++) {
+        fThickness4[i][j] = 20.;
+        cout << fThickness4[i][j] << " ";
+      }
+      cout << endl;
+    }
+
+  }
+  else {
+    TH2F *hThick4 = (TH2F*)f4->Get("thicknessMap_calib_90_all_SSD_1m_4_realHist");
+    for(Int_t i = 0; i<16; i++) {
+      for(Int_t j = 0; j<16; j++) {
+        fThickness4[i][j] = hThick4->GetBinContent(i+1,j+1);
+        cout << fThickness4[i][j] << " ";
+      }
+      cout << endl;
+    }
+  }
+  delete f4;
+
+}
+
+void fillND() {
+
+  Int_t multy = 0;
+  Float_t amp = -1;
+  Float_t time = -1;
+  Float_t tac = -1;
+  Int_t channel = -1;
+
+  for(Int_t i=0;i<32;i++) {
+    ND_tac[i] = ND_tac[i] + NDpar[i];
+    // if (ND_amp[i]>0 && ND_tac[i]>0 && ND_time[i]>0){ 
+    //   amp = ND_amp[i];
+    //   time = ND_time[i];
+    //   // tac = ND_tac[i]+NDpar[i];
+    //   tac = ND_tac[i];
+    //   channel = i;
+    //   multy++;
+    // } 
+  }
+
+}
+
+void fillSi() {
+ 
+  Int_t multy = 0;
+  Float_t amp = -1;
+  Float_t time = -1;
+  Int_t channel = -1;
+
+  for(Int_t i=0;i<32;i++) {
+    if (DSD_X[i]>2. && tDSD_X[i]>0){ // 1 MeV  offline-threshold
+      amp = DSD_X[i];
+      time = tDSD_X[i];
+      channel = i;
+      multy++;
+    } 
+  }
+  if (multy==1) {
+    X_C = amp;
+    tX_C = time;
+    nX_C = channel;
+  }
+
+  multy = 0;
+  amp = -1;
+  time = -1;
+  channel = -1;
+  for(Int_t i=0;i<32;i++) {
+    if (DSD_Y[i]>1. && tDSD_Y[i]>0){ // 1 MeV  offline-threshold
+      amp = DSD_Y[i];
+      time = tDSD_Y[i];
+      channel = i;
+      multy++;
+    } 
+  }
+  if (multy==1) {
+    Y_C = amp;
+    tY_C = time;
+    nY_C = channel;
+  }
+
+  // T1
+  multy = 0;
+  amp = -1;
+  time = -1;
+  channel = -1;
+  for(Int_t i=0;i<16;i++) {
+    if (SQ20_1[i]>0.2 && tSQ20_1[i]>0){ // 0.2 MeV  offline-threshold
+      amp = SQ20_1[i];
+      time = tSQ20_1[i];
+      channel = i;
+      multy++;
+    } 
+  }
+
+  if (multy==1) {
+    a20_1 = amp;
+    t20_1 = time;
+    n20_1 = channel;
+  }
+
+  multy = 0;
+  amp = -1;
+  time = -1;
+  channel = -1;
+  for(Int_t i=0;i<16;i++) {
+    if (SSD1[i]>0.2 && tSSD1[i]>0){ // 0.2 MeV  offline-threshold
+      amp = SSD1[i];
+      time = tSSD1[i];
+      channel = i;
+      multy++;
+    } 
+  }
+  if (multy==1) {
+    a1_1 = amp;
+    t1_1 = time;
+    n1_1 = channel;
+  }  
+
+  off_multv_1 = 0;
+  amp = -1;
+  time = -1;
+  channel = -1;
+  for(Int_t i=0;i<16;i++) {
+    if (SSD_V1[i]>4000){ // 0.2 MeV  offline-threshold
+      amp = SSD_V1[i];
+      time = tSSD_V1[i];
+      channel = i;
+      off_multv_1++;
+    } 
+  }
+
+  
+  if (off_multv_1==1) {
+    av_1 = amp;
+    tv_1 = time;
+    nv_1 = channel;
+  } 
+
+  // T2
+  multy = 0;
+  amp = -1;
+  time = -1;
+  channel = -1;  
+  for(Int_t i=0;i<16;i++) {
+    if (SQ20_2[i]>0.2 && tSQ20_2[i]>0){ // 0.2 MeV  offline-threshold
+      amp = SQ20_2[i];
+      time = tSQ20_2[i];
+      channel = i;
+      multy++;
+    } 
+  }
+  if (multy==1) {
+    a20_2 = amp;
+    t20_2 = time;
+    n20_2 = channel;
+  }    
+
+  multy = 0;
+  amp = -1;
+  time = -1;
+  channel = -1; 
+  for(Int_t i=0;i<16;i++) {
+    if (SSD2[i]>0.2 && tSSD2[i]>0){ // 0.2 MeV  offline-threshold
+      amp     = SSD2[i];
+      time    = tSSD2[i];
+      channel = i;
+      multy++;
+    } 
+  }
+  if (multy==1) {
+    a1_2 = amp;
+    t1_2 = time;
+    n1_2 = channel;
+  }   
+
+  off_multv_2 = 0;
+  amp = -1;
+  time = -1;
+  channel = -1; 
+  for(Int_t i=0;i<16;i++) {
+    if (SSD_V2[i]>65){ // 0.2 MeV  offline-threshold
+      amp     = SSD_V2[i];
+      time    = tSSD_V2[i];
+      channel = i;
+      off_multv_2++;
+    } 
+  }
+  if (off_multv_2==1) {
+    av_2 = amp;
+    tv_2 = time;
+    nv_2 = channel;
+  }   
+
+  // T3
+  multy = 0;
+  amp = -1;
+  time = -1;
+  channel = -1;  
+  for(Int_t i=0;i<16;i++) {
+    if (SQ20_3[i]>0.2 && tSQ20_3[i]>0){ // 0.2 MeV  offline-threshold
+      amp     = SQ20_3[i];
+      time    = tSQ20_3[i];
+      channel = i;
+      multy++;
+    } 
+  }
+  if (multy==1) {
+    a20_3 = amp;
+    t20_3 = time;
+    n20_3 = channel;
+  }   
+
+  multy = 0;
+  amp = -1;
+  time = -1;
+  channel = -1;  
+  for(Int_t i=0;i<16;i++) {
+    if (SSD3[i]>0.2 && tSSD3[i]>0){ // 0.2 MeV  offline-threshold
+      amp     = SSD3[i];
+      time    = tSSD3[i];
+      channel = i;
+      multy++;
+    } 
+  }
+  if (multy==1) {
+    a1_3 = amp;
+    t1_3 = time;
+    n1_3 = channel;
+  }         
+
+  off_multv_3 = 0;
+  amp = -1;
+  time = -1;
+  channel = -1;  
+  for(Int_t i=0;i<16;i++) {
+    if (SSD_V3[i]>4000){ // 0.2 MeV  offline-threshold
+      amp     = SSD_V3[i];
+      time    = tSSD_V3[i];
+      channel = i;
+      off_multv_3++;
+    } 
+  }
+  if (off_multv_3==1) {
+    av_3 = amp;
+    tv_3 = time;
+    nv_3 = channel;
+  }  
+
+  // T4
+  multy = 0;
+  amp = -1;
+  time = -1;
+  channel = -1;  
+  for(Int_t i=0;i<16;i++) {
+    if (SQ20_4[i]>0.2 && tSQ20_4[i]>0){ // 0.2 MeV  offline-threshold
+      amp     = SQ20_4[i];
+      time    = tSQ20_4[i];
+      channel = i;
+      multy++;
+    } 
+  }
+  if (multy==1) {
+    a20_4 = amp;
+    t20_4 = time;
+    n20_4 = channel;
+  }    
+
+  multy = 0;
+  amp = -1;
+  time = -1;
+  channel = -1;  
+  for(Int_t i=0;i<16;i++) {
+    if (SSD4[i]>0.2 && tSSD4[i]>0){ // 0.2 MeV  offline-threshold
+      amp     = SSD4[i];
+      time    = tSSD4[i];
+      channel = i;
+      multy++;
+    } 
+  }
+  if (multy==1) {
+    a1_4 = amp;
+    t1_4 = time;
+    n1_4 = channel;
+  }
+
+  off_multv_4 = 0;
+  amp = -1;
+  time = -1;
+  channel = -1;  
+  for(Int_t i=0;i<16;i++) {
+    if (SSD_V4[i]>4000){ // 0.2 MeV  offline-threshold
+      amp     = SSD_V4[i];
+      time    = tSSD_V4[i];
+      channel = i;
+      off_multv_4++;
+    } 
+  }
+  if (off_multv_4==1) {
+    av_4 = amp;
+    tv_4 = time;
+    nv_4 = channel;
+  }
+
+}
+
+
+void correct() {
+  if (n20_1>-1 && n1_1>-1) {
+    a20_1_un = a20_1;
+    a20_1 = a20_1*20./( (fThickness1[n20_1][n1_1])/cos(th_he3_1));
+    if (fThickness1[n20_1][n1_1]<10 || fThickness1[n20_1][n1_1] > 30) {
+      flag1 = 0;
+    }
+  }
+  else flag1 = 0;
+  
+  if (n20_2>-1 && n1_2>-1) {
+    a20_2_un = a20_2;
+    a20_2 = a20_2*20./( (fThickness2[n20_2][n1_2])/cos(th_he3_2));
+    if (fThickness2[n20_2][n1_2]<10 || fThickness2[n20_2][n1_2] > 30) {
+      flag2 = 0;
+    }
+  }
+  else flag2 = 0;
+
+  if (n20_3>-1 && n1_3>-1) {
+    a20_3_un = a20_3;
+    a20_3 = a20_3*20./( (fThickness3[n20_3][n1_3])/cos(th_he3_3));
+    if (fThickness3[n20_3][n1_3]<10 || fThickness3[n20_3][n1_3] > 30) {
+      flag3 = 0;
+    }
+  }
+  else flag3 = 0;
+
+  if (n20_4>-1 && n1_4>-1) {
+    a20_4_un = a20_4;
+    a20_4 = a20_4*20./( (fThickness4[n20_4][n1_4])/cos(th_he3_4));
+    if (fThickness4[n20_4][n1_4]<10 || fThickness3[n20_4][n1_4] > 30) {
+      flag4 = 0;
+    }
+  }
+  else flag4 = 0;
+
+  return;
+}
+
+void triton() {
+  if(nCsI_track>-1 && nX_C>-1 && cut3h[nCsI_track]->IsInside(arCsI[nCsI_track], X_C)) {
+    nh3 = 1;
+    return;
+  }
+  else {
+    nh3 = 0;
+    return;
+  }
+}
+
+void deuterium() {
+  if(nCsI_track>-1 && nX_C>-1 && cut2h[nCsI_track]->IsInside(arCsI[nCsI_track], X_C)) {
+    nh2 = 1;
+    return;
+  }
+  else {
+    nh2 = 0;
+    return;
+  }
+}
+
+void proton() {
+  if(nCsI_track>-1 && nX_C>-1 && cut1h[nCsI_track]->IsInside(arCsI[nCsI_track], X_C)) {
+    nh1 = 1;
+    return;
+  }
+  else {
+    nh1 = 0;
+    return;
+  }
+}
+
+void alpha() {
+  if(nCsI_track>-1 && nX_C>-1 && (cut4he[nCsI_track]->IsInside(arCsI[nCsI_track], X_C) || cut4he_1[nCsI_track]->IsInside(arCsI[nCsI_track], X_C) ) ) {
+    nAlpha = 1;
+    return;
+  }
+  else {
+    nAlpha = 0;
+    return;
+  }
+}
+
+void helium6() {
+  if(nCsI_track>-1 && nX_C>-1 && cut6he[nCsI_track]->IsInside(arCsI[nCsI_track], X_C)) {
+    nhe6 = 1;
+    return;
+  }
+  else {
+    nhe6 = 0;
+    return;
+  }
+}
+
+void check_litium8() {
+
+  if (nCsI_track>-1 && nX_C>-1 && li_8_1_fv_clb[nCsI_track]) {
+    if (li_8_1_fv_clb[nCsI_track]->IsInside(arCsI[nCsI_track], X_C)) {
+      nli8 = 1;
+    }
+  }
+
+  if (nCsI_track>-1 && nX_C>-1 && li_8_2_fv_clb[nCsI_track]) {
+    if (li_8_2_fv_clb[nCsI_track]->IsInside(arCsI[nCsI_track], X_C)) {
+      nli8 = 1;
+    }
+  }
+  return;
+}
+
+void check_litium9() {
+
+  if (nCsI_track>-1 && nX_C>-1 && li_9_1_fv_clb[nCsI_track]) {
+    if (li_9_1_fv_clb[nCsI_track]->IsInside(arCsI[nCsI_track], X_C)) {
+      nli9 = 1;
+    }
+  }
+
+  if (nCsI_track>-1 && nX_C>-1 && li_9_2_fv_clb[nCsI_track]) {
+    if (li_9_2_fv_clb[nCsI_track]->IsInside(arCsI[nCsI_track], X_C)) {
+      nli9 = 1;
+    }
+  }
+  return;
+}
+
+void neutronID() {
+
+  for (Int_t i=0;i<32;i++) {
+    if (cutNeutron->IsInside(ND_amp[i] , ND_tac[i]) ) {
+      neutron++;
+    }
+  }
+
+}
+
+void checkHe3() {
+  if(multv_1==0 && flag1 && n1_1>-1 && n20_1>-1 && cuthe3_1[n20_1]->IsInside(a1_1+a20_1_un, a20_1)) {
+    nhe3_1 = 1;
+    return;
+  }
+  else {
+    nhe3_1 = 0;
+  }
+
+  if(multv_2==0 && flag2 && n1_2>-1 && n20_2>-1 && cuthe3_2[n20_2]->IsInside(a1_2+a20_2_un, a20_2)) {
+    nhe3_2 = 1;
+    return;
+  }
+  else {
+    nhe3_2 = 0;
+  }
+
+  if(multv_3==0 && flag3 && n1_3>-1 && n20_3>-1 && cuthe3_3[n20_3]->IsInside(a1_3+a20_3_un, a20_3)) {
+    nhe3_3 = 1;
+    return;
+  }
+  else {
+    nhe3_3 = 0;
+  }
+
+  if(multv_4==0 && flag4 && n1_4>-1 && n20_4>-1 && cuthe3_4[n20_4]->IsInside(a1_4+a20_4_un, a20_4)) {
+    nhe3_4 = 1;
+    return;
+  }
+  else {
+    nhe3_4 = 0;
+  }
+  return;
+}
+
+void checkHe4() {
+  if(multv_1==0 && flag1 && n1_1>-1 && n20_1>-1 && cuthe4_1[n20_1]->IsInside(a1_1+a20_1_un, a20_1)) {
+    nhe4_1 = 1;
+    return;
+  }
+  else {
+    nhe4_1 = 0;
+  }
+
+  if(multv_2==0 && flag2 && n1_2>-1 && n20_2>-1 && cuthe4_2[n20_2]->IsInside(a1_2+a20_2_un, a20_2)) {
+    nhe4_2 = 1;
+    return;
+  }
+  else {
+    nhe4_2 = 0;
+  }
+
+  if(multv_3==0 && flag3 && n1_3>-1 && n20_3>-1 && cuthe4_3[n20_3]->IsInside(a1_3+a20_3_un, a20_3)) {
+    nhe4_3 = 1;
+    return;
+  }
+  else {
+    nhe4_3 = 0;
+  }
+
+  if(multv_4==0 && flag4 && n1_4>-1 && n20_4>-1 && cuthe4_4[n20_4]->IsInside(a1_4+a20_4_un, a20_4)) {
+    nhe4_4 = 1;
+    return;
+  }
+  else {
+    nhe4_4 = 0;
+  }
+  return;
+}
+
+void check_side_h3() {
+  if(flag1 && n1_1>-1 && n20_1>-1 && cut3h_side_1[n20_1]->IsInside(a1_1+a20_1_un, a20_1)) {
+    nh3_1 = 1;
+  }
+  else {
+    nh3_1 = 0;
+  }
+
+  if(flag2 && n1_2>-1 && n20_2>-1 && cut3h_side_2[n20_2]->IsInside(a1_2+a20_2_un, a20_2)) {
+    nh3_2 = 1;
+  }
+  else {
+    nh3_2 = 0;
+  }
+
+  if(flag3 && n1_3>-1 && n20_3>-1 && cut3h_side_3[n20_3]->IsInside(a1_3+a20_3_un, a20_3)) {
+    nh3_3 = 1;
+  }
+  else {
+    nh3_3 = 0;
+  }
+
+  if(flag4 && n1_4>-1 && n20_4>-1 && cut3h_side_4[n20_4]->IsInside(a1_4+a20_4_un, a20_4)) {
+    nh3_4 = 1;
+  }
+  else {
+    nh3_4 = 0;
+  }
+  return;
+}
+
+void checkLi6() {
+  if(flag1 && n1_1>-1 && n20_1>-1 && cut6Li->IsInside(a1_1+a20_1_un, a20_1)) {
+    n6li = 1;
+    return;
+  }
+  else {
+    n6li = 0;
+  }
+
+  if(flag2 && n1_2>-1 && n20_2>-1 && cut6Li->IsInside(a1_2+a20_2_un, a20_2)) {
+    n6li = 1;
+    return;
+  }
+  else {
+    n6li = 0;
+  }
+
+  if(flag3 && n1_3>-1 && n20_3>-1 && cut6Li->IsInside(a1_3+a20_3_un, a20_3)) {
+    n6li = 1;
+    return;
+  }
+  else {
+    n6li = 0;
+  }
+
+  if(flag4 && n1_4>-1 && n20_4>-1 && cut6Li->IsInside(a1_4+a20_4_un, a20_4)) {
+    n6li = 1;
+    return;
+  }
+  else {
+    n6li = 0;
+  }
+  return;
+}
+
+
+void CsItimes() {
+  if(nCsI_track>-1 && CsI_cut[nCsI_track]->IsInside(trCsI[nCsI_track]-tF5, arCsI[nCsI_track] )) { 
+    return;
+  }
+  else {
+    flagCent = 0;  
+    return; 
+  }
+}  
+
+void DSD_Cselect() {
+  if(nX_C>-1 && dssd_x_cut[nX_C]->IsInside(tX_C-tF5, X_C)) { 
+    return;
+  }
+  else {
+    flagCent = 0;  
+    return; 
+  }
+}  
+
+void timesSQ20() {
+
+  if (t20_1-tF5<-5 || t20_1-tF5>40) flag1 = 0;
+
+  if (t20_2-tF5<-5 || t20_2-tF5>40) flag2 = 0;
+
+  if (t20_3-tF5<0 || t20_3-tF5>40) flag3 = 0;
+
+  if (t20_4-tF5<0 || t20_4-tF5>45) flag4 = 0;
+
+}  
+
+void timesSQ1() {
+
+  if (t1_1-tF5 < 0 || t1_1-tF5>60) flag1=0;
+
+  if (t1_2-tF5 < 0 || t1_2-tF5>60) flag2=0;
+
+  if (t1_3-tF5 < 0 || t1_3-tF5>60) flag3=0;
+
+  if (t1_4-tF5 < -100 || t1_4-tF5>200) flag4=0;
+
+}  
+
+void timesVeto() {
+
+  if (tv_1-tF5>-40 || tv_1-tF5<-120) flagVeto1=0;
+
+  if (tv_2-tF5>0 || tv_2-tF5<-120) flagVeto2=0;
+
+  if (tv_3-tF5<-120) flagVeto3=0;
+
+  if (tv_4-tF5>-40 || tv_4-tF5<-120) flagVeto4=0;
+
+}  
+
+void calcVectorTel1(Int_t n20, Int_t n1) {
+
+  Double_t x20;
+  x20 = -(22.8625 + n20*50./16) + xOffset;
+
+  Double_t y1;
+  y1 = 51.625 - n1*60./16 + yOffset;
+
+  TVector3 tel1V;
+  tel1V.SetXYZ(x20 - fXt,(y1 - fYt)*(173-zOffset)/(188-zOffset),(173-zOffset));
+
+  x1t = x20;
+  y1t = (y1 - fYt)*(173-zOffset)/(188-zOffset) + fYt;
+
+  th_he3_1 = tel1V.Theta();
+  phi_he3_1 = tel1V.Phi();
+
+  return;
+}
+
+void calcVectorTel2(Int_t n20, Int_t n1) {
+
+  Double_t y20;
+  y20 = -(22.8625 + n20*50./16) + yOffset;
+
+  Double_t x1;
+  x1 = -(51.625 - n1*60./16) + xOffset;
+
+  TVector3 tel1V;
+  tel1V.SetXYZ((173-zOffset)/(188-zOffset)*(x1 - fXt),y20 - fYt,(173-zOffset));
+
+  x2t = (173-zOffset)/(188-zOffset)*(x1 - fXt) + fXt;
+  y2t = y20;
+
+  th_he3_2 = tel1V.Theta();
+  phi_he3_2 = tel1V.Phi();
+
+  return;
+}
+
+void calcVectorTel3(Int_t n20, Int_t n1) {
+
+  Double_t x20;
+  x20 = 22.8625 + n20*50./16 + xOffset;
+
+  Double_t y1;
+  y1 = -(51.625 - n1*60./16) + yOffset;
+
+  TVector3 tel1V;
+  tel1V.SetXYZ(x20 - fXt,(y1 - fYt)*(173-zOffset)/(188-zOffset),(173-zOffset));
+
+  x3t = x20;
+  y3t = (y1 - fYt)*(173-zOffset)/(188-zOffset) + fYt;
+
+  th_he3_3 = tel1V.Theta();
+  phi_he3_3 = tel1V.Phi();
+
+  return;
+}
+
+void calcVectorTel4(Int_t n20, Int_t n1) {
+
+  Double_t y20;
+  y20 = 22.8625 + n20*50./16 + yOffset;
+
+  Double_t x1;
+  x1 = 51.625 - n1*60./16 + xOffset;
+
+  TVector3 tel1V;
+  tel1V.SetXYZ((x1 - fXt)*(173-zOffset)/(188-zOffset),y20 - fYt,(173-zOffset));
+
+  x4t = (x1 - fXt)*(173-zOffset)/(188-zOffset) + fXt;
+  y4t = y20;
+
+  x4t_1 = x1;
+
+  th_he3_4 = tel1V.Theta();
+  phi_he3_4 = tel1V.Phi();
+
+  return tel1V.Theta();
+}
+
+void calcVectorCent(Int_t nX,Int_t nY) {
+
+  Double_t xC = 31. - nX*64./32;
+  Double_t yC = 31. - nY*64./32 + centOffset;
+  Double_t zC = 323.;
+
+  TVector3 tel1V;
+  tel1V.SetXYZ(xC - fXt,yC - fYt,zC);
+
+  xCt = xC;
+  yCt = yC;
+
+  th_h3 = tel1V.Theta();
+  phi_h3 = tel1V.Phi();
+
+  return;
+}
+
+void readPar(TString fileName,Float_t *par1,Float_t *par2,Int_t size=16){
+
+  TString line;
+  ifstream myfile;
+  Int_t count=-2;
+  TString file = "/home/muzalevskii/work/macro/h7_1904/parameters/" + fileName + ".cal";
+  myfile.open(file.Data());
+  while (! myfile.eof() ){
+    line.ReadLine(myfile);
+    if(count < 0){
+      count++;
+      continue;
+    }
+    if(line.IsNull()) break;
+    sscanf(line.Data(),"%g %g", par1+count,par2+count);
+    count++;
+  }
+  cout << endl << fileName.Data() << endl;
+  for(Int_t i=0;i<size;i++) cout << par1[i] << " " << par2[i] << endl;
+
+  return;
+}
+
+void trackCsI() {
+  Float_t step = 0.;
+
+  if ( xCt<(33.-step) && xCt>(16.5+step) ) {
+    if ( yCt<(33.-step) && yCt>(16.5+step) ) nCsI_track = 0;
+    if ( yCt<(16.5-step) && yCt>step ) nCsI_track = 4;
+    if ( yCt<(-step) && yCt>-(16.5-step) ) nCsI_track = 8;
+    if ( yCt<-(16.5+step) && yCt>-(33-step) ) nCsI_track = 12;
+  }
+
+  if ( xCt<(16.5-step) && xCt>(step) ) {
+    if ( yCt<(33.-step) && yCt>(16.5+step) ) nCsI_track = 1;
+    if ( yCt<(16.5-step) && yCt>step ) nCsI_track = 5;
+    if ( yCt<(-step) && yCt>-(16.5-step) ) nCsI_track = 9;
+    if ( yCt<-(16.5+step) && yCt>-(33-step) ) nCsI_track = 13;
+  }
+
+  if ( xCt<(-step) && xCt>-(16.5-step) ) {
+    if ( yCt<(33.-step) && yCt>(16.5+step) ) nCsI_track = 2;
+    if ( yCt<(16.5-step) && yCt>step ) nCsI_track = 6;
+    if ( yCt<(-step) && yCt>-(16.5-step) ) nCsI_track = 10;
+    if ( yCt<-(16.5+step) && yCt>-(33-step) ) nCsI_track = 14;
+  }
+
+  if ( xCt<-(16.5+step) && xCt>-(33-step) ) {
+    if ( yCt<(33.-step) && yCt>(16.5+step) ) nCsI_track = 3;
+    if ( yCt<(16.5-step) && yCt>step ) nCsI_track = 7;
+    if ( yCt<(-step) && yCt>-(16.5-step) ) nCsI_track = 11;
+    if ( yCt<-(16.5+step) && yCt>-(33-step) ) nCsI_track = 15;
+  }
+}
+
+void CsI_max() {
+
+  Int_t nMax;
+  for(Int_t i=0;i<16;i++){
+    if (arCsI[i]>aCsI) {
+      tCsI = trCsI[i];
+      nCsI = i;
+      aCsI = arCsI[i];
+      nMax = 1;
+    }
+    else if (arCsI[i]==aCsI) {
+      nMax++;
+    }
+  }
+
+  if (nMax>1) {
+
+    nCsI = -1;
+    tCsI = -10;
+    aCsI = -10;
+  } 
+ 
+  return;
+}
+
+void calcFrameCoordinates(Float_t* x, Float_t* y,Float_t distanance) {
+  *x = fXt + (xCt-fXt)*distanance/323.;
+  *y = fYt + (yCt-fYt)*distanance/323.;
+}
+
+// void recalibrateCsI(Float_t *oldpar1,Float_t *oldpar2,Float_t *newpar1,Float_t *newpar2) {
+void recalibrateCsI(Float_t *newpar1,Float_t *newpar2) {
+  for (Int_t i=0;i<16;i++) {
+    // arCsI[i] = (arCsI[i]-*(oldpar1+i))/(*(oldpar2+i)); // into channels
+    arCsI[i] = arCsI[i]*(*(newpar2+i)) + (*(newpar1+i)); // into MeVs
+  }
+  return;
+}
