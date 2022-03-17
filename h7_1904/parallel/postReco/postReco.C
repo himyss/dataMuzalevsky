@@ -234,7 +234,8 @@ void postReco(Int_t nRun = 0) {
 
   lv_d2.SetXYZT(0.,0.,0.,1875.612);
 
-  for (Int_t nentry=0;nentry<chReco->GetEntries();nentry++) {
+  // for (Int_t nentry=0;nentry<chReco->GetEntries();nentry++) {
+  for (Int_t nentry=0;nentry<1000;nentry++) {
 
     zeroVars();
 
@@ -287,6 +288,9 @@ void postReco(Int_t nRun = 0) {
       if (n20_1>-1 && n20_1<16 && n1_1>-1 && n1_1<16) flag1=1;
       else flag1=0;
 
+      Double_t vertex1 = ((ERTelescopeTrack*)v_track_t1->At(0))->GetXStationLocalVertex().Y();
+      if (vertex1 >= 2.5 - 5./16) flag1 = 0; 
+
       if (flag1) sideID_1();
       if (nhe3_1) lv_he3 = ((ERTelescopeParticle*)v_par_he3_t1->At(0))->GetLVInteraction();
       if (nhe4_1) lv_he4 = ((ERTelescopeParticle*)v_par_he4_t1->At(0))->GetLVInteraction();
@@ -310,6 +314,9 @@ void postReco(Int_t nRun = 0) {
 
       if (n20_2>-1 && n20_2<16 && n1_2>-1 && n1_2<16) flag2=1;
       else flag2=0;
+
+      Double_t vertex2 = ((ERTelescopeTrack*)v_track_t2->At(0))->GetYStationLocalVertex().Y();
+      if (vertex2 >= 2.5 - 5./16) flag2 = 0; 
 
       if (flag2) sideID_2();
       if (nhe3_2) lv_he3 = ((ERTelescopeParticle*)v_par_he3_t2->At(0))->GetLVInteraction();
@@ -335,6 +342,10 @@ void postReco(Int_t nRun = 0) {
       if (n20_3>-1 && n20_3<16 && n1_3>-1 && n1_3<16) flag3=1;
       else flag3=0;
 
+      Double_t vertex3 = ((ERTelescopeTrack*)v_track_t3->At(0))->GetXStationLocalVertex().Y();
+      if (vertex3 <= -2.5 + 5./16) flag3 = 0; 
+
+
       if (flag3) sideID_3();
       if (nhe3_3) lv_he3 = ((ERTelescopeParticle*)v_par_he3_t3->At(0))->GetLVInteraction();
       if (nhe4_3) lv_he4 = ((ERTelescopeParticle*)v_par_he4_t3->At(0))->GetLVInteraction();
@@ -358,6 +369,9 @@ void postReco(Int_t nRun = 0) {
 
       if (n20_4>-1 && n20_4<16 && n1_4>-1 && n1_4<16) flag4=1;
       else flag4=0;
+
+      Double_t vertex4 = ((ERTelescopeTrack*)v_track_t4->At(0))->GetYStationLocalVertex().Y();
+      if (vertex4 <= -2.5 + 5./16) flag4 = 0;
 
       if (flag4) sideID_4();
       if (nhe3_4) lv_he3 = ((ERTelescopeParticle*)v_par_he3_t4->At(0))->GetLVInteraction();
