@@ -17,11 +17,12 @@ auto create_h3_cut = []() {
         {14, 4},
         {15, 0}
     };
+
     TString cut = "(";
     for (ushort i = 0; i < 16; i++) {
         TString channel_cut;
         const ushort er_channel = csiMapping[i];
-        channel_cut.Form("(CsI_ch == %d && cut3h_%d)", er_channel, i);
+        channel_cut.Form("(nCsI == %d && cut3h_%d)", er_channel, i);
         cut += channel_cut;
         if (i != 15)
             cut += " || ";
